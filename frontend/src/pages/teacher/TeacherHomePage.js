@@ -1,18 +1,17 @@
-import { Container, Grid, Paper } from '@mui/material'
+import { Container, Grid, Box } from '@mui/material'
 import SeeNotice from '../../components/SeeNotice';
-import CountUp from 'react-countup';
-import styled from 'styled-components';
-import Students from "../../assets/img1.png";
-import Lessons from "../../assets/subjects.svg";
-import Tests from "../../assets/assignment.svg";
-import Time from "../../assets/time.svg";
-import { getClassStudents, getSubjectDetails } from '../../redux/sclassRelated/sclassHandle';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { getClassStudents, getSubjectDetails } from '../../redux/sclassRelated/sclassHandle';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import TopicOutlinedIcon from '@mui/icons-material/TopicOutlined';
+import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
+import DashboardCard from '../../components/common/DashboardCard';
+import AppHeader from '../../components/common/AppHeader';
+import styled from 'styled-components';
 
 const TeacherHomePage = () => {
     const dispatch = useDispatch();
-
     const { currentUser } = useSelector((state) => state.user);
     const { subjectDetails, sclassStudents } = useSelector((state) => state.sclass);
 
@@ -24,76 +23,45 @@ const TeacherHomePage = () => {
         dispatch(getClassStudents(classID));
     }, [dispatch, subjectID, classID]);
 
-    const numberOfStudents = sclassStudents && sclassStudents.length;
-    const numberOfSessions = subjectDetails && subjectDetails.sessions
+    const stats = [
+        { title: 'Class Students', value: sclassStudents?.length, icon: <PeopleAltOutlinedIcon />, color: '#845EC2' },
+        { title: 'Total Topics', value: subjectDetails?.sessions, icon: <TopicOutlinedIcon />, color: '#FF8066' },
+        { title: 'Tests Taken', value: 24, icon: <AssignmentOutlinedIcon />, color: '#C34A36' },
+    ];
 
     return (
-        <>
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                <Grid container spacing={3} style={{display: 'flex', justifyContent: 'center'}}>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Students} alt="Students" />
-                            <Title>
-                               Class Students
-                            </Title>
-                            <Data start={0} end={numberOfStudents} duration={2.5} />
-                        </StyledPaper>
+        <Container maxWidth="lg" sx={{ mt: 2, mb: 4 }}>
+            <AppHeader 
+                title={`Welcome, Prof. ${currentUser.name}`} 
+                subtitle={`Managing ${currentUser.teachSubject?.subName} for ${currentUser.teachSclass?.sclassName}.`} 
+            />
+
+            <Grid container spacing={3} sx={{ mb: 4 }}>
+                {stats.map((stat, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={index}>
+                        <DashboardCard {...stat} />
                     </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Lessons} alt="Lessons" />
-                            <Title>
-                                Total Topics
-                            </Title>
-                            <Data start={0} end={numberOfSessions} duration={5} />
-                        </StyledPaper>
-                    </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Tests} alt="Tests" />
-                            <Title>
-                                Tests Taken
-                            </Title>
-                            <Data start={0} end={24} duration={4} />
-                        </StyledPaper>
-                    </Grid>
-                    {/* <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Time} alt="Time" />
-                            <Title>
-                                Total Hours
-                            </Title>
-                            <Data start={0} end={30} duration={4} suffix="hrs"/>                        </StyledPaper>
-                    </Grid> */}
-                    <Grid item xs={12}>
-                        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                            <SeeNotice />
-                        </Paper>
-                    </Grid>
+                ))}
+            </Grid>
+
+            <Grid container spacing={3}>
+                <Grid item xs={12}>
+                    <SectionPaper>
+                        <SeeNotice />
+                    </SectionPaper>
                 </Grid>
-            </Container>
-        </>
-    )
-}
+            </Grid>
+        </Container>
+    );
+};
 
-const StyledPaper = styled(Paper)`
+export default TeacherHomePage;
+
+const SectionPaper = styled(Box)`
+  background: rgba(176, 168, 185, 0.03);
+  border-radius: 32px;
+  border: 1px solid var(--border);
   padding: 16px;
-  display: flex;
-  flex-direction: column;
-  height: 200px;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(10px);
 `;
-
-const Title = styled.p`
-  font-size: 1.25rem;
-`;
-
-const Data = styled(CountUp)`
-  font-size: calc(1.3rem + .6vw);
-  color: green;
-`;
-
-export default TeacherHomePage

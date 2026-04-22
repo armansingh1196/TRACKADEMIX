@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom'
 import { getClassDetails, getClassStudents, getSubjectList } from "../../../redux/sclassRelated/sclassHandle";
-import { deleteUser } from '../../../redux/userRelated/userHandle';
+import { deleteUser } from '../../../redux/userRelated/userHandle'; // Assuming deleteUser is a valid action
 import {
-    Box, Container, Typography, Tab, IconButton
+    Box, Container, Typography, Tab, IconButton, CircularProgress // Import CircularProgress
 } from '@mui/material';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
@@ -32,10 +32,6 @@ const ClassDetails = () => {
         dispatch(getSubjectList(classID, "ClassSubjects"))
         dispatch(getClassStudents(classID));
     }, [dispatch, classID])
-
-    if (error) {
-        console.log(error)
-    }
 
     const [value, setValue] = useState('1');
 
@@ -105,7 +101,10 @@ const ClassDetails = () => {
         return (
             <>
                 {response ?
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', mt: 4, minHeight: '200px' }}> {/* Added minHeight for better centering */}
+                        <Typography variant="h6" color="textSecondary" sx={{ mb: 2 }}>
+                            No subjects found for this class.
+                        </Typography>
                         <GreenButton
                             variant="contained"
                             onClick={() => navigate("/Admin/addsubject/" + classID)}
@@ -179,7 +178,10 @@ const ClassDetails = () => {
         return (
             <>
                 {getresponse ? (
-                    <>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', mt: 4, minHeight: '200px' }}> {/* Added minHeight for better centering */}
+                        <Typography variant="h6" color="textSecondary" sx={{ mb: 2 }}>
+                            No students found for this class.
+                        </Typography>
                         <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
                             <GreenButton
                                 variant="contained"
@@ -188,7 +190,7 @@ const ClassDetails = () => {
                                 Add Students
                             </GreenButton>
                         </Box>
-                    </>
+                    </Box>
                 ) : (
                     <>
                         <Typography variant="h5" gutterBottom>
@@ -251,8 +253,10 @@ const ClassDetails = () => {
 
     return (
         <>
-            {loading ? (
-                <div>Loading...</div>
+            {loading ? ( // Display loading spinner when loading is true
+                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+                    <CircularProgress />
+                </Box>
             ) : (
                 <>
                     <Box sx={{ width: '100%', typography: 'body1', }} >

@@ -1,95 +1,148 @@
-* {
-  font-family: 'Poppins', sans-serif;
-  margin: 0;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-::-webkit-scrollbar {
-  display: none;
-}
-
+/* TRACADEMIX Unified Design System - High Readability Institutional Edition */
 :root {
-  --color-bg: #1f1f38;
-  --color-bg-variant: #2c2c6c;
-  --color-primary: #4db5ff;
-  --color-primary-variant: rgba(77, 181, 255, 0.4);
-  --color-light: rgba(255, 255, 255, 0.6);
+  /* Color Palette - The Verified Classy Palette */
+  --primary: #845EC2;        /* Royal Purple */
+  --primary-light: #B0A8B9;  /* Silver Lavender (Muted Accent) */
+  --secondary: #FF8066;      /* Vibrant Salmon (CTA Accent) */
+  --accent: #C34A36;         /* Terracotta (Critical Accent) */
+  --muted: #B0A8B9;          /* Silver Lavender */
+  
+  /* System Tokens - Optimized for Institutional Depth */
+  --bg-main: #1A181F;        /* Deep Obsidian Foundation */
+  --bg-surface: #4B4453;     /* Deep Obsidian Surface (Cards/Sidebars) */
+  --bg-card: rgba(75, 68, 83, 0.6);
+  
+  --text-main: #FFFFFF;      /* Pure white for primary headings */
+  --text-secondary: rgba(255, 255, 255, 0.85); /* Slightly transparent for body readability */
+  --text-muted: #B0A8B9;     /* Silver Lavender for labels */
+  
+  --success: #00C9A7;
+  --error: #C34A36;          /* Using Terracotta for error states */
+  --warning: #FFBC11;
+  
+  /* Gradations */
+  --gradient-primary: linear-gradient(135deg, #845EC2 0%, #B0A8B9 100%);
+  --gradient-vibrant: linear-gradient(135deg, #845EC2 0%, #FF8066 100%);
+  --gradient-surface: linear-gradient(180deg, #4B4453 0%, #1A181F 100%);
+  
+  /* Borders & Shadows */
+  --border: rgba(176, 168, 185, 0.15);
+  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 25px 60px rgba(0, 0, 0, 0.6);
+  
+  /* Modern Fast Transition */
+  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* FORM */
-.register {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /* color: #ffffff; */
-  /* background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://images.unsplash.com/photo-1510936111840-65e151ad71bb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=890&q=80"); */
-  /* background-color: var(--color-bg);
-  background-size: cover;
-  background-blend-mode: darken; */
-  font-family: "Josefin Sans", sans-serif;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
 }
 
-.registerTitle {
-  font-size: 50px;
+body {
+  background-color: var(--bg-main);
+  color: var(--text-secondary);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  line-height: 1.6;
 }
 
-.registerForm {
-  margin-top: -50px;
-  display: flex;
-  flex-direction: column;
+/* Typography Standards */
+h1 { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 3.5rem; color: var(--text-main); letter-spacing: -1.5px; line-height: 1; }
+h2 { font-family: 'Outfit', sans-serif; font-weight: 900; font-size: 2.75rem; color: var(--text-main); letter-spacing: -1px; }
+h3 { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 2.25rem; color: var(--text-main); letter-spacing: -0.5px; }
+h4 { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.75rem; color: var(--text-main); }
+h5 { font-family: 'Outfit', sans-serif; font-weight: 800; font-size: 1.25rem; color: var(--text-main); }
+
+.title-gradient {
+  background: var(--gradient-vibrant);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.registerForm>label {
-  margin: 10px 0;
-  color: rgb(0, 0, 0);
+/* UI Components Overrides */
+.MuiTypography-root { color: var(--text-secondary) !important; }
+.MuiTypography-h1, .MuiTypography-h2, .MuiTypography-h3, .MuiTypography-h4, .MuiTypography-h5, .MuiTypography-h6 { color: var(--text-main) !important; }
+.MuiBreadcrumbs-root { color: var(--text-muted) !important; }
+.MuiLink-root { color: inherit !important; }
+
+.MuiPaper-root {
+  background-color: var(--bg-card) !important;
+  backdrop-filter: blur(24px);
+  color: var(--text-secondary) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 20px !important;
+  box-shadow: var(--shadow-md) !important;
 }
 
-.registerInput {
-  padding: 10px;
-  background-color: white;
-  border: none;
-  border-radius: 10px;
+/* Button Refinement */
+.MuiButton-root {
+  border-radius: 12px !important;
+  font-family: 'Outfit', sans-serif !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: 0.5px !important;
+  transition: var(--transition) !important;
 }
 
-.registerInput:focus {
-  outline: none;
+.MuiButton-containedPrimary {
+  background: var(--gradient-vibrant) !important;
+  color: white !important;
+  box-shadow: 0 8px 24px rgba(132, 94, 194, 0.2) !important;
 }
 
-.registerButton {
-  margin-top: 20px;
-  cursor: pointer;
-  background-color: #000000;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 10px;
-  text-align: center;
+.MuiButton-containedPrimary:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(132, 94, 194, 0.3) !important;
 }
 
-.registerButton:hover {
-  background-color: #313131;
+/* Form Readability */
+.MuiInputLabel-root {
+  color: var(--text-muted) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 500 !important;
 }
 
-@media screen and (max-width: 480px) {
-  .register {
-    background-position: right;
-  }
+.MuiOutlinedInput-root {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-radius: 16px !important;
+  transition: var(--transition) !important;
+}
 
-  .registerInput {
-    font-size: 15px;
-    padding: 15px;
-    border-radius: 8px;
-  }
+.MuiOutlinedInput-notchedOutline { border-color: var(--border) !important; transition: var(--transition) !important; }
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline { border-color: var(--primary) !important; }
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline { border-color: var(--primary) !important; border-width: 2px !important; }
 
-  .registerButton {
-    font-size: 16px;
-    padding: 20px;
-    border-radius: 12px;
-  }
+/* Scrollbar Customization */
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg-main); }
+::-webkit-scrollbar-thumb { background: var(--bg-surface); border-radius: 10px; border: 3px solid var(--bg-main); }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+/* Sidebar Transition Helpers */
+.sidebar-content-exit {
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+}
+
+.sidebar-content-enter {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.3s 0.1s, transform 0.3s 0.1s;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

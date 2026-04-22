@@ -1,23 +1,22 @@
-import { Container, Grid, Paper } from '@mui/material'
+import { Container, Grid, Box } from '@mui/material'
 import SeeNotice from '../../components/SeeNotice';
-import Students from "../../assets/img1.png";
-import Classes from "../../assets/img2.png";
-import Teachers from "../../assets/img3.png";
-import Fees from "../../assets/img4.png";
-import styled from 'styled-components';
-import CountUp from 'react-countup';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getAllSclasses } from '../../redux/sclassRelated/sclassHandle';
 import { getAllStudents } from '../../redux/studentRelated/studentHandle';
 import { getAllTeachers } from '../../redux/teacherRelated/teacherHandle';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
+import AccountBalanceOutlinedIcon from '@mui/icons-material/AccountBalanceOutlined';
+import DashboardCard from '../../components/common/DashboardCard';
+import AppHeader from '../../components/common/AppHeader';
+import styled from 'styled-components';
 
 const AdminHomePage = () => {
     const dispatch = useDispatch();
     const { studentsList } = useSelector((state) => state.student);
     const { sclassesList } = useSelector((state) => state.sclass);
     const { teachersList } = useSelector((state) => state.teacher);
-
     const { currentUser } = useSelector(state => state.user)
 
     const adminID = currentUser._id
@@ -28,78 +27,45 @@ const AdminHomePage = () => {
         dispatch(getAllTeachers(adminID));
     }, [adminID, dispatch]);
 
-    const numberOfStudents = studentsList && studentsList.length;
-    const numberOfClasses = sclassesList && sclassesList.length;
-    const numberOfTeachers = teachersList && teachersList.length;
+    const stats = [
+        { title: 'Total Students', value: studentsList?.length, icon: <PeopleAltOutlinedIcon />, color: '#845EC2' },
+        { title: 'Total Classes', value: sclassesList?.length, icon: <SchoolOutlinedIcon />, color: '#FF8066' },
+        { title: 'Total Professors', value: teachersList?.length, icon: <AccountBalanceOutlinedIcon />, color: '#C34A36' },
+    ];
 
     return (
-        <>
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                <Grid container spacing={3} style={{display: 'flex', justifyContent: 'center'}}>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Students} alt="Students" />
-                            <Title>
-                                Total Students
-                            </Title>
-                            <Data start={0} end={numberOfStudents} duration={2.5} />
-                        </StyledPaper>
+        <Container maxWidth="lg" sx={{ mt: 2, mb: 4 }}>
+            <AppHeader 
+                title="Institutional Overview" 
+                subtitle={`Welcome back, ${currentUser.name}. Here is what's happening at ${currentUser.schoolName}.`} 
+            />
+            
+            <Grid container spacing={3} sx={{ mb: 4 }}>
+                {stats.map((stat, index) => (
+                    <Grid item xs={12} sm={6} md={4} key={index}>
+                        <DashboardCard {...stat} />
                     </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Classes} alt="Classes" />
-                            <Title>
-                                Total Classes
-                            </Title>
-                            <Data start={0} end={numberOfClasses} duration={5} />
-                        </StyledPaper>
-                    </Grid>
-                    <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Teachers} alt="Teachers" />
-                            <Title>
-                                Total Professors
-                            </Title>
-                            <Data start={0} end={numberOfTeachers} duration={2.5} />
-                        </StyledPaper>
-                    </Grid>
-                    {/* <Grid item xs={12} md={3} lg={3}>
-                        <StyledPaper>
-                            <img src={Fees} alt="Fees" />
-                            <Title>
-                                Fees Collection
-                            </Title>
-                            <Data start={0} end={23000} duration={2.5} prefix="$" />                        </StyledPaper>
-                    </Grid> */}
-                    <Grid item xs={12} md={12} lg={12}>
-                        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                            <SeeNotice />
-                        </Paper>
-                    </Grid>
+                ))}
+            </Grid>
+
+            <Grid container spacing={3}>
+                <Grid item xs={12}>
+                    <SectionPaper>
+                        <SeeNotice />
+                    </SectionPaper>
                 </Grid>
-            </Container>
-        </>
+            </Grid>
+        </Container>
     );
 };
 
+export default AdminHomePage;
 
-const StyledPaper = styled(Paper)`
+const SectionPaper = styled(Box)`
+  background: rgba(176, 168, 185, 0.03);
+  border-radius: 32px;
+  border: 1px solid var(--border);
   padding: 16px;
-  display: flex;
-  flex-direction: column;
-  height: 200px;
-  justify-content: space-between;
-  align-items: center;
-  text-align: center;
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(10px);
 `;
-
-const Title = styled.p`
-  font-size: 1.25rem;
-`;
-
-const Data = styled(CountUp)`
-  font-size: calc(1.3rem + .6vw);
-  color: green;
-`;
-
-export default AdminHomePage

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { getClassStudents, getSubjectDetails } from '../../../redux/sclassRelated/sclassHandle';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Tab, Container, Typography, BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
+import { Box, Tab, Container, Typography, BottomNavigation, BottomNavigationAction, Paper, CircularProgress } from '@mui/material'; // Import CircularProgress
 import { BlueButton, GreenButton, PurpleButton } from '../../../components/buttonStyles';
 import TableTemplate from '../../../components/TableTemplate';
 import TabContext from '@mui/lab/TabContext';
@@ -26,10 +26,6 @@ const ViewSubject = () => {
     dispatch(getSubjectDetails(subjectID, "Subject"));
     dispatch(getClassStudents(classID));
   }, [dispatch, subjectID, classID]);
-
-  if (error) {
-    console.log(error)
-  }
 
   const [value, setValue] = useState('1');
 
@@ -97,7 +93,10 @@ const ViewSubject = () => {
     return (
       <>
         {getresponse ? (
-          <>
+          <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', mt: 4, minHeight: '200px' }}> {/* Added minHeight for better centering */}
+            <Typography variant="h6" color="textSecondary" sx={{ mb: 2 }}>
+              No students found for this subject.
+            </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginTop: '16px' }}>
               <GreenButton
                 variant="contained"
@@ -106,7 +105,7 @@ const ViewSubject = () => {
                 Add Students
               </GreenButton>
             </Box>
-          </>
+          </Box>
         ) : (
           <>
             <Typography variant="h5" gutterBottom>
@@ -180,9 +179,11 @@ const ViewSubject = () => {
 
   return (
     <>
-      {subloading ?
-        < div > Loading...</div >
-        :
+      {subloading ? ( // Display loading spinner when subloading is true
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+          <CircularProgress />
+        </Box>
+      ) : (
         <>
           <Box sx={{ width: '100%', typography: 'body1', }} >
             <TabContext value={value}>
@@ -203,7 +204,7 @@ const ViewSubject = () => {
             </TabContext>
           </Box>
         </>
-      }
+      )}
     </>
   )
 }

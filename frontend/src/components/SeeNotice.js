@@ -1,27 +1,29 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllNotices } from '../redux/noticeRelated/noticeHandle';
-import { Paper } from '@mui/material';
+import { Paper, Typography, Box, CircularProgress } from '@mui/material';
 import TableViewTemplate from './TableViewTemplate';
+import styled from 'styled-components';
 
 const SeeNotice = () => {
     const dispatch = useDispatch();
 
     const { currentUser, currentRole } = useSelector(state => state.user);
-    const { noticesList, loading, error, response } = useSelector((state) => state.notice);
+    const { noticesList, loading, response } = useSelector((state) => state.notice);
 
     useEffect(() => {
         if (currentRole === "Admin") {
-            dispatch(getAllNotices(currentUser._id, "Notice"));
+            if (currentUser?._id) {
+                dispatch(getAllNotices(currentUser._id, "Notice"));
+            }
         }
         else {
-            dispatch(getAllNotices(currentUser.school._id, "Notice"));
+            const schoolID = currentUser?.school?._id || currentUser?.school;
+            if (schoolID) {
+                dispatch(getAllNotices(schoolID, "Notice"));
+            }
         }
-    }, [dispatch]);
-
-    if (error) {
-        console.log(error);
-    }
+    }, [dispatch, currentRole, currentUser]);
 
     const noticeColumns = [
         { id: 'title', label: 'Title', minWidth: 170 },
@@ -29,35 +31,60 @@ const SeeNotice = () => {
         { id: 'date', label: 'Date', minWidth: 170 },
     ];
 
-    const noticeRows = noticesList.map((notice) => {
+    const noticeRows = Array.isArray(noticesList) ? noticesList.map((notice) => {
         const date = new Date(notice.date);
         const dateString = date.toString() !== "Invalid Date" ? date.toISOString().substring(0, 10) : "Invalid Date";
         return {
-            title: notice.title,
-            details: notice.details,
+            title: notice.title || "No Title",
+            details: notice.details || "No Details",
             date: dateString,
-            id: notice._id,
+            id: notice._id || Math.random(),
         };
-    });
+    }) : [];
+
     return (
-        <div style={{ marginTop: '50px', marginRight: '20px' }}>
+        <Box sx={{ mt: 2 }}>
             {loading ? (
-                <div style={{ fontSize: '20px' }}>Loading...</div>
-            ) : response ? (
-                <div style={{ fontSize: '20px' }}>No Notices to Show Right Now</div>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, p: 3 }}>
+                    <CircularProgress size={24} sx={{ color: 'var(--primary)' }} />
+                    <Typography sx={{ color: 'var(--text-secondary)', fontWeight: 600 }}>Syncing Announcements...</Typography>
+                </Box>
+            ) : response || noticeRows.length === 0 ? (
+                <EmptyBox>
+                    <Typography variant="body1" sx={{ color: 'var(--text-muted)', fontWeight: 600 }}>
+                        No institutional notices or announcements to display at this time.
+                    </Typography>
+                </EmptyBox>
             ) : (
                 <>
-                    <h3 style={{ fontSize: '30px', marginBottom: '40px' }}>Notices</h3>
-                    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                        {Array.isArray(noticesList) && noticesList.length > 0 &&
-                            <TableViewTemplate columns={noticeColumns} rows={noticeRows} />
-                        }
+                    <Typography variant="h5" sx={{ fontWeight: 900, mb: 3, fontFamily: 'Outfit', color: 'white', letterSpacing: '-0.5px' }}>
+                        Institutional Notices
+                    </Typography>
+                    <Paper sx={{ 
+                        width: '100%', 
+                        overflow: 'hidden', 
+                        background: 'rgba(255,255,255,0.02) !important', 
+                        border: '1px solid var(--border) !important', 
+                        borderRadius: '24px !important',
+                        boxShadow: 'var(--shadow-md) !important'
+                    }}>
+                        <TableViewTemplate columns={noticeColumns} rows={noticeRows} />
                     </Paper>
                 </>
             )}
-        </div>
-
+        </Box>
     )
 }
 
 export default SeeNotice
+
+const EmptyBox = styled(Box)`
+  padding: 40px;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--border);
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;

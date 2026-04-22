@@ -1,25 +1,35 @@
-const Sclass = require('../models/sclassSchema.js');
-const Student = require('../models/studentSchema.js');
-const Subject = require('../models/subjectSchema.js');
-const Teacher = require('../models/teacherSchema.js');
+const supabase = require('../supabaseClient.js');
 
 const sclassCreate = async (req, res) => {
     try {
-        const sclass = new Sclass({
-            sclassName: req.body.sclassName,
-            school: req.body.adminID
-        });
+        const { sclassName, adminID } = req.body;
 
-        const existingSclassByName = await Sclass.findOne({
-            sclassName: req.body.sclassName,
-            school: req.body.adminID
-        });
+        const { data: existingSclass } = await supabase
+            .from('sclasses')
+            .select('*')
+            .eq('sclass_name', sclassName)
+            .eq('admin_id', adminID)
+            .single();
 
-        if (existingSclassByName) {
+        if (existingSclass) {
             res.send({ message: 'Sorry this class name already exists' });
-        }
-        else {
-            const result = await sclass.save();
+        } else {
+            const { data, error } = await supabase
+                .from('sclasses')
+                .insert([
+                    { sclass_name: sclassName, admin_id: adminID }
+                ])
+                .select()
+                .single();
+
+            if (error) throw error;
+            
+            // Map to frontend format
+            const result = {
+                ...data,
+                sclassName: data.sclass_name,
+                school: data.admin_id
+            };
             res.send(result);
         }
     } catch (err) {
@@ -29,9 +39,20 @@ const sclassCreate = async (req, res) => {
 
 const sclassList = async (req, res) => {
     try {
-        let sclasses = await Sclass.find({ school: req.params.id })
-        if (sclasses.length > 0) {
-            res.send(sclasses)
+        const { data: sclasses, error } = await supabase
+            .from('sclasses')
+            .select('*')
+            .eq('admin_id', req.params.id);
+
+        if (error) throw error;
+
+        if (sclasses && sclasses.length > 0) {
+            const result = sclasses.map(item => ({
+                ...item,
+                sclassName: item.sclass_name,
+                school: item.admin_id
+            }));
+            res.send(result);
         } else {
             res.send({ message: "No sclasses found" });
         }
@@ -42,64 +63,96 @@ const sclassList = async (req, res) => {
 
 const getSclassDetail = async (req, res) => {
     try {
-        let sclass = await Sclass.findById(req.params.id);
-        if (sclass) {
-            sclass = await sclass.populate("school", "schoolName")
-            res.send(sclass);
+        const { data: sclass, error } = await supabase
+            .from('sclasses')
+            .select(`
+                *,
+                admins (
+                    id,
+                    school_name
+                )
+            `)
+            .eq('id', req.params.id)
+            .single();
+
+        if (error || !sclass) {
+            return res.send({ message: "No class found" });
         }
-        else {
-            res.send({ message: "No class found" });
-        }
+
+        const result = {
+            ...sclass,
+            sclassName: sclass.sclass_name,
+            school: {
+                _id: sclass.admins.id,
+                schoolName: sclass.admins.school_name
+            }
+        };
+        res.send(result);
     } catch (err) {
         res.status(500).json(err);
     }
-}
+};
 
 const getSclassStudents = async (req, res) => {
     try {
-        let students = await Student.find({ sclassName: req.params.id })
-        if (students.length > 0) {
-            let modifiedStudents = students.map((student) => {
-                return { ...student._doc, password: undefined };
-            });
-            res.send(modifiedStudents);
+        const { data: students, error } = await supabase
+            .from('students')
+            .select('*')
+            .eq('sclass_id', req.params.id);
+
+        if (error) throw error;
+
+        if (students && students.length > 0) {
+            const result = students.map(student => ({
+                ...student,
+                sclassName: student.sclass_id,
+                password: undefined
+            }));
+            res.send(result);
         } else {
             res.send({ message: "No students found" });
         }
     } catch (err) {
         res.status(500).json(err);
     }
-}
+};
 
 const deleteSclass = async (req, res) => {
     try {
-        const deletedClass = await Sclass.findByIdAndDelete(req.params.id);
-        if (!deletedClass) {
+        const { data, error } = await supabase
+            .from('sclasses')
+            .delete()
+            .eq('id', req.params.id)
+            .select()
+            .single();
+
+        if (error || !data) {
             return res.send({ message: "Class not found" });
         }
-        const deletedStudents = await Student.deleteMany({ sclassName: req.params.id });
-        const deletedSubjects = await Subject.deleteMany({ sclassName: req.params.id });
-        const deletedTeachers = await Teacher.deleteMany({ teachSclass: req.params.id });
-        res.send(deletedClass);
+        
+        // Cascading deletes are handled by PostgreSQL (ON DELETE CASCADE)
+        // so we don't need to manually delete students/subjects here
+        res.send(data);
     } catch (error) {
         res.status(500).json(error);
     }
-}
+};
 
 const deleteSclasses = async (req, res) => {
     try {
-        const deletedClasses = await Sclass.deleteMany({ school: req.params.id });
-        if (deletedClasses.deletedCount === 0) {
+        const { data, error } = await supabase
+            .from('sclasses')
+            .delete()
+            .eq('admin_id', req.params.id)
+            .select();
+
+        if (error || !data || data.length === 0) {
             return res.send({ message: "No classes found to delete" });
         }
-        const deletedStudents = await Student.deleteMany({ school: req.params.id });
-        const deletedSubjects = await Subject.deleteMany({ school: req.params.id });
-        const deletedTeachers = await Teacher.deleteMany({ school: req.params.id });
-        res.send(deletedClasses);
+        res.send(data);
     } catch (error) {
         res.status(500).json(error);
     }
-}
-
+};
 
 module.exports = { sclassCreate, sclassList, deleteSclass, deleteSclasses, getSclassDetail, getSclassStudents };

@@ -3,102 +3,84 @@ import { Button } from '@mui/material';
 
 export const RedButton = styled(Button)`
   && {
-    background-color: #f00;
+    background-color: var(--error);
     color: white;
-    margin-left: 4px;
+    border-radius: 10px;
     &:hover {
-      background-color: #eb7979;
-      border-color: #f26767;
-      box-shadow: none;
+      background-color: #d32f2f;
+      box-shadow: 0 4px 12px rgba(211, 47, 47, 0.2);
     }
   }
 `;
 
 export const BlackButton = styled(Button)`
   && {
-    background-color: #000000;
+    background-color: var(--bg-surface);
     color: white;
-    margin-left: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
     &:hover {
-      background-color: #212020;
-      border-color: #212020;
-      box-shadow: none;
-    }
-  }
-`;
-
-export const DarkRedButton = styled(Button)`
-  && {
-    background-color: #650909;
-    color: white;
-    &:hover {
-      background-color: #eb7979;
-      border-color: #f26767;
-      box-shadow: none;
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: var(--text-muted);
     }
   }
 `;
 
 export const BlueButton = styled(Button)`
   && {
-    background-color: #080a43;
+    background: var(--gradient-primary);
     color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(132, 94, 194, 0.3);
     &:hover {
-      background-color: #0a1e82;
+      filter: brightness(1.1);
+      transform: translateY(-1px);
     }
   }
 `;
 
 export const PurpleButton = styled(Button)`
   && {
-    background-color: #270843;
+    background-color: var(--primary);
     color: #fff;
+    border-radius: 10px;
     &:hover {
-      background-color: #3f1068;
+      background-color: var(--primary-light);
     }
   }
 `;
 
 export const LightPurpleButton = styled(Button)`
   && {
-    background-color: #7f56da;
+    background: var(--gradient-vibrant);
     color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(255, 128, 102, 0.3);
     &:hover {
-      background-color: #7a1ccb;
+      filter: brightness(1.1);
+      transform: translateY(-1px);
     }
   }
 `;
 
 export const GreenButton = styled(Button)`
   && {
-    background-color: #133104;
+    background-color: var(--success);
     color: #fff;
+    border-radius: 10px;
     &:hover {
-      background-color: #266810;
-    }
-  }
-`;
-
-export const BrownButton = styled(Button)`
-  && {
-    background-color: #2c1006;
-    color: white;
-    &:hover {
-      background-color: #40220c;
-      border-color: #40220c;
-      box-shadow: none;
+      filter: brightness(0.9);
     }
   }
 `;
 
 export const IndigoButton = styled(Button)`
   && {
-    background-color: #2f2b80;
+    background-color: #3F51B5;
     color: white;
+    border-radius: 10px;
     &:hover {
-      background-color: #534ea6;
-      border-color: #473d90;
-      box-shadow: none;
+      background-color: #303F9F;
     }
   }
 `;

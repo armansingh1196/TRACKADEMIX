@@ -32,11 +32,11 @@ useEffect(() => {
             </StyledSpeedDial>
         } */}
 
-const StyledSpeedDial = styled(SpeedDial)`
-  .MuiSpeedDial-fab {
-    background-color: #240439;
-    &:hover {
-      background-color: #440080;
-    }
-  }
-`;
+const StyledSpeedDial = styled(SpeedDial)(({ theme }) => ({
+  '& .MuiSpeedDial-fab': {
+    backgroundColor: '#240439', // Consider using theme.palette.primary.main or a custom color from the theme
+    '&:hover': {
+      backgroundColor: '#440080', // Consider using theme.palette.primary.dark or a custom color from the theme
+    },
+  },
+}));

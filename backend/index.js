@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
-const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const supabase = require("./supabaseClient.js");
 
 dotenv.config();
 
@@ -19,19 +19,16 @@ app.use(cors({
 
 app.use(express.json({ limit: "10mb" }));
 
-
 app.get("/", (req, res) => {
-  res.status(200).send("Backend running successfully");
+  res.status(200).send("TRACADEMIX Backend running successfully with Supabase");
 });
 
+app.use("/", Routes);
 
-app.use("/api", Routes);
-
-
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+// Verify Supabase Initialization
+if (supabase) {
+  console.log("Supabase Client Initialized");
+}
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
