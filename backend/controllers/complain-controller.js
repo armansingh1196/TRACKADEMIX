@@ -17,7 +17,7 @@ const complainCreate = async (req, res) => {
             .single();
 
         if (error) throw error;
-        res.send(data);
+        res.send({ ...data, _id: data.id });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -40,6 +40,7 @@ const complainList = async (req, res) => {
             // Map to include user name from either student or teacher table
             const result = complaints.map(item => ({
                 ...item,
+                _id: item.id,
                 user: item.students ? { _id: item.students.id, name: item.students.name } : 
                       (item.teachers ? { _id: item.teachers.id, name: item.teachers.name } : null)
             }));

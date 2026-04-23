@@ -2,31 +2,42 @@ const supabase = require('../supabaseClient.js');
 
 const sclassCreate = async (req, res) => {
     try {
-        const { sclassName, adminID } = req.body;
+        const { sclassName, batch, year, semester, adminID } = req.body;
 
-        const { data: existingSclass } = await supabase
+        if (!sclassName || !batch || !adminID) {
+            return res.send({ message: 'Class name, batch, and Admin ID are required' });
+        }
+
+        const { data: existingSclasses } = await supabase
             .from('sclasses')
             .select('*')
             .eq('sclass_name', sclassName)
             .eq('admin_id', adminID)
-            .single();
+            .eq('batch', batch);
 
-        if (existingSclass) {
-            res.send({ message: 'Sorry this class name already exists' });
+        if (existingSclasses && existingSclasses.length > 0) {
+            res.send({ message: 'Sorry this class name already exists for this batch' });
         } else {
             const { data, error } = await supabase
                 .from('sclasses')
                 .insert([
-                    { sclass_name: sclassName, admin_id: adminID }
+                    { 
+                        sclass_name: sclassName, 
+                        batch, 
+                        year: parseInt(year) || 1, 
+                        semester: parseInt(semester) || 1, 
+                        admin_id: adminID 
+                    }
                 ])
                 .select()
                 .single();
 
             if (error) throw error;
+
             
-            // Map to frontend format
             const result = {
                 ...data,
+                _id: data.id,
                 sclassName: data.sclass_name,
                 school: data.admin_id
             };
@@ -42,13 +53,16 @@ const sclassList = async (req, res) => {
         const { data: sclasses, error } = await supabase
             .from('sclasses')
             .select('*')
-            .eq('admin_id', req.params.id);
+            .eq('admin_id', req.params.id)
+            .order('batch', { ascending: false })
+            .order('sclass_name', { ascending: true });
 
         if (error) throw error;
 
         if (sclasses && sclasses.length > 0) {
             const result = sclasses.map(item => ({
                 ...item,
+                _id: item.id,
                 sclassName: item.sclass_name,
                 school: item.admin_id
             }));
@@ -60,6 +74,7 @@ const sclassList = async (req, res) => {
         res.status(500).json(err);
     }
 };
+
 
 const getSclassDetail = async (req, res) => {
     try {
@@ -81,6 +96,7 @@ const getSclassDetail = async (req, res) => {
 
         const result = {
             ...sclass,
+            _id: sclass.id,
             sclassName: sclass.sclass_name,
             school: {
                 _id: sclass.admins.id,
@@ -105,6 +121,7 @@ const getSclassStudents = async (req, res) => {
         if (students && students.length > 0) {
             const result = students.map(student => ({
                 ...student,
+                _id: student.id,
                 sclassName: student.sclass_id,
                 password: undefined
             }));

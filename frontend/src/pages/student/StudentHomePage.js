@@ -10,6 +10,7 @@ import SubjectIcon from "@mui/icons-material/AssignmentOutlined";
 import AssignmentIcon from "@mui/icons-material/TaskOutlined";
 import DashboardCard from '../../components/common/DashboardCard';
 import AppHeader from '../../components/common/AppHeader';
+import AttendanceHeatmap from '../../components/AttendanceHeatmap';
 import styled from 'styled-components';
 
 const StudentHomePage = () => {
@@ -45,29 +46,36 @@ const StudentHomePage = () => {
     ];
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 2, mb: 4 }}>
+        <Container maxWidth="lg" sx={{ mt: 1, mb: 2 }}>
             <AppHeader 
                 title={`Hello, ${currentUser.name}`} 
                 subtitle={`Track your progress and attendance at ${currentUser.schoolName}.`} 
             />
 
-            <Grid container spacing={3} sx={{ mb: 4 }}>
-                {stats.map((stat, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
-                        <DashboardCard {...stat} />
+            <Grid container spacing={2} sx={{ mb: 2 }}>
+                <Grid item xs={12} md={8}>
+                    <Grid container spacing={2}>
+                        {stats.map((stat, index) => (
+                            <Grid item xs={12} sm={6} key={index}>
+                                <DashboardCard {...stat} />
+                            </Grid>
+                        ))}
+                        <Grid item xs={12}>
+                            <AttendanceHeatmap studentID={currentUser._id} />
+                        </Grid>
                     </Grid>
-                ))}
-                <Grid item xs={12} sm={12} md={4}>
-                    <ChartPaper>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                    <ChartPaper sx={{ height: '100%', minHeight: '300px' }}>
                         <Typography variant="overline" sx={{ fontWeight: 800, mb: 2, display: 'block', textAlign: 'center', color: 'var(--secondary)', letterSpacing: 1 }}>
                             Overall Attendance
                         </Typography>
-                        <Box sx={{ height: 160, display: 'flex', justifyContent: 'center' }}>
+                        <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             {subjectAttendance.length > 0 ? (
                                 <CustomPieChart data={chartData} />
                             ) : (
-                                <Box sx={{ display: 'flex', alignItems: 'center', color: 'var(--text-muted)' }}>
-                                    No records available
+                                <Box sx={{ textAlign: 'center', color: 'var(--text-muted)' }}>
+                                    <Typography variant="body2" sx={{ fontWeight: 700 }}>No Session Records</Typography>
                                 </Box>
                             )}
                         </Box>
@@ -75,7 +83,7 @@ const StudentHomePage = () => {
                 </Grid>
             </Grid>
 
-            <Grid container spacing={3}>
+            <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <SectionPaper>
                         <SeeNotice />
@@ -85,6 +93,8 @@ const StudentHomePage = () => {
         </Container>
     );
 };
+
+
 
 export default StudentHomePage;
 

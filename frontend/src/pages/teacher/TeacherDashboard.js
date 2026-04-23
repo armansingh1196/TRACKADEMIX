@@ -22,6 +22,7 @@ import TeacherHomePage from './TeacherHomePage';
 import TeacherProfile from './TeacherProfile';
 import TeacherViewStudent from './TeacherViewStudent';
 import StudentExamMarks from '../admin/studentRelated/StudentExamMarks';
+import MarkAttendance from './MarkAttendance';
 import styled from 'styled-components';
 
 const TeacherDashboard = () => {
@@ -84,6 +85,7 @@ const TeacherDashboard = () => {
                         <Route path="/Teacher/profile" element={<TeacherProfile />} />
                         <Route path="/Teacher/complain" element={<TeacherComplain />} />
                         <Route path="/Teacher/class" element={<TeacherClassDetails />} />
+                        <Route path="/Teacher/attendance" element={<MarkAttendance />} />
                         <Route path="/Teacher/class/student/:id" element={<TeacherViewStudent />} />
                         <Route path="/Teacher/class/student/attendance/:studentID/:subjectID" element={<StudentAttendance situation="Subject" />} />
                         <Route path="/Teacher/class/student/marks/:studentID/:subjectID" element={<StudentExamMarks situation="Subject" />} />
@@ -94,6 +96,7 @@ const TeacherDashboard = () => {
         </Box>
     );
 }
+
 
 export default TeacherDashboard;
 

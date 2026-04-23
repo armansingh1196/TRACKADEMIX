@@ -1,9 +1,10 @@
 import { useEffect, useState, Fragment } from 'react';
-import { IconButton, Box, Menu, MenuItem, ListItemIcon, Tooltip, Container, CircularProgress } from '@mui/material';
+import { IconButton, Box, Menu, MenuItem, ListItemIcon, Tooltip, Container, CircularProgress, Typography, Grid, Paper } from '@mui/material';
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { getAllSclasses } from '../../../redux/sclassRelated/sclassHandle';
+import { deleteUser } from '../../../redux/userRelated/userHandle';
 import TableTemplate from '../../../components/TableTemplate';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import PostAddIcon from '@mui/icons-material/PostAdd';
@@ -32,18 +33,33 @@ const ShowClasses = () => {
   const [message, setMessage] = useState("");
 
   const deleteHandler = (deleteID, address) => {
-    setMessage("Sorry the delete function has been disabled for now.");
-    setShowPopup(true);
+    dispatch(deleteUser(deleteID, address))
+      .then(() => {
+        dispatch(getAllSclasses(adminID, "Sclass"));
+        setMessage("Operation completed successfully");
+        setShowPopup(true);
+      })
+      .catch(() => {
+        setMessage("Failed to delete class");
+        setShowPopup(true);
+      });
   };
 
   const sclassColumns = [
-    { id: 'name', label: 'Class Name', minWidth: 170 },
+    { id: 'name', label: 'Class Name', minWidth: 100 },
+    { id: 'batch', label: 'Batch', minWidth: 120 },
+    { id: 'year', label: 'Year', minWidth: 100 },
+    { id: 'semester', label: 'Semester', minWidth: 100 },
   ];
 
   const sclassRows = sclassesList && sclassesList.length > 0 && sclassesList.map((sclass) => ({
     name: sclass.sclassName,
+    batch: sclass.batch || "N/A",
+    year: sclass.year ? `${sclass.year}${sclass.year === 1 ? 'st' : sclass.year === 2 ? 'nd' : sclass.year === 3 ? 'rd' : 'th'} Year` : "N/A",
+    semester: sclass.semester ? `Sem ${sclass.semester}` : "N/A",
     id: sclass._id,
   }));
+
 
   const SclassButtonHaver = ({ row }) => {
     const actions = [
@@ -51,17 +67,16 @@ const ShowClasses = () => {
       { icon: <PersonAddAlt1Icon />, name: 'Add Student', action: () => navigate("/Admin/class/addstudents/" + row.id) },
     ];
     return (
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         <IconButton onClick={() => deleteHandler(row.id, "Sclass")} size="small">
-          <DeleteIcon color="error" />
+          <DeleteIcon color="error" sx={{ fontSize: 20 }} />
         </IconButton>
         <AppButton 
             variant="contained" 
-            color="secondary" 
             size="small"
             onClick={() => navigate("/Admin/classes/class/" + row.id)}
         >
-          View
+          View Details
         </AppButton>
         <ActionMenu actions={actions} />
       </Box>
@@ -78,6 +93,7 @@ const ShowClasses = () => {
           <AppButton
             variant="outlined"
             size="small"
+            sx={{ borderColor: 'var(--border)', color: 'white' }}
             onClick={(e) => setAnchorEl(e.currentTarget)}
             endIcon={<SpeedDialIcon sx={{ fontSize: '16px !important' }} />}
           >
@@ -90,17 +106,28 @@ const ShowClasses = () => {
           onClose={() => setAnchorEl(null)}
           PaperProps={{
             elevation: 8,
-            sx: { borderRadius: '12px', mt: 1, minWidth: 180 },
+            sx: { 
+                borderRadius: '16px', 
+                mt: 1, 
+                minWidth: 180,
+                background: 'var(--bg-surface) !important',
+                border: '1px solid var(--border)',
+                '& .MuiMenuItem-root': {
+                    color: 'white',
+                    py: 1.5,
+                    '&:hover': { background: 'rgba(255,255,255,0.05)' }
+                }
+            },
           }}
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         >
           {actions.map((action, index) => (
             <MenuItem key={index} onClick={action.action}>
-              <ListItemIcon sx={{ minWidth: 32 }}>
+              <ListItemIcon sx={{ minWidth: 32, color: 'var(--primary-light)' }}>
                 {action.icon}
               </ListItemIcon>
-              <Typography variant="body2">{action.name}</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>{action.name}</Typography>
             </MenuItem>
           ))}
         </Menu>
@@ -114,42 +141,58 @@ const ShowClasses = () => {
   ];
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 2, mb: 4 }}>
+    <Box sx={{ p: 4 }}>
         <AppHeader 
             title="Class Management" 
             subtitle="Organize your institution's classes and their academic structures." 
         />
         
         {loading ? (
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
-                <CircularProgress />
+            <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
+                <CircularProgress sx={{ color: 'var(--primary)' }} />
             </Box>
         ) : (
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mt: 4 }}>
                 {getresponse ? (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 8, gap: 2 }}>
-                        <Typography variant="h6" color="textSecondary">No classes found.</Typography>
-                        <AppButton variant="contained" color="primary" onClick={() => navigate("/Admin/addclass")}>
+                    <EmptyStateBox>
+                        <Typography variant="h6" sx={{ color: 'var(--text-muted)', mb: 2 }}>
+                            No academic classes have been defined yet.
+                        </Typography>
+                        <AppButton variant="contained" onClick={() => navigate("/Admin/addclass")}>
                             Create Your First Class
                         </AppButton>
-                    </Box>
+                    </EmptyStateBox>
                 ) : (
-                    <>
+                    <GlassCard>
                         {Array.isArray(sclassesList) && sclassesList.length > 0 && (
                             <TableTemplate buttonHaver={SclassButtonHaver} columns={sclassColumns} rows={sclassRows} />
                         )}
                         <SpeedDialTemplate actions={actions} />
-                    </>
+                    </GlassCard>
                 )}
             </Box>
         )}
         <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
-    </Container>
+    </Box>
   );
 };
 
 export default ShowClasses;
 
-const Typography = ({ children, variant, sx, color }) => (
-    <Box component="div" sx={{ typography: variant, color, ...sx }}>{children}</Box>
-);
+const GlassCard = styled(Paper)`
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 24px !important;
+  overflow: hidden;
+`;
+
+const EmptyStateBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 32px;
+  border: 2px dashed var(--border);
+`;

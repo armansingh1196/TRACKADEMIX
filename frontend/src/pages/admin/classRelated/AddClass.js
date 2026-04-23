@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, CircularProgress, Stack, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Stack, Typography, Grid, MenuItem } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addStuff } from '../../../redux/userRelated/userHandle';
 import { underControl } from '../../../redux/userRelated/userSlice';
-import { BlueButton } from "../../../components/buttonStyles";
 import Popup from "../../../components/Popup";
 import AppTextField from "../../../components/common/AppTextField";
+import AppButton from "../../../components/common/AppButton";
+import AppHeader from "../../../components/common/AppHeader";
 import styled, { keyframes } from "styled-components";
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 
 const AddClass = () => {
     const [sclassName, setSclassName] = useState("");
+    const [batch, setBatch] = useState("2022-26");
+    const [year, setYear] = useState(1);
+    const [semester, setSemester] = useState(1);
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const { status, response, tempDetails } = useSelector(state => state.user);
+    const { status, response, tempDetails, currentUser } = useSelector(state => state.user);
+    const adminID = currentUser._id;
 
     const [loader, setLoader] = useState(false)
     const [message, setMessage] = useState("");
@@ -25,13 +30,14 @@ const AddClass = () => {
     const submitHandler = (event) => {
         event.preventDefault()
         setLoader(true)
-        dispatch(addStuff({ sclassName, adminID: useSelector(state => state.user.currentUser._id) }, "Sclass"))
+        const fields = { sclassName, batch, year, semester, adminID };
+        dispatch(addStuff(fields, "Sclass"))
     };
 
     useEffect(() => {
         if (status === 'added' && tempDetails) {
-            navigate("/Admin/classes/class/" + tempDetails._id)
             dispatch(underControl())
+            navigate("/Admin/classes")
             setLoader(false)
         }
         else if (status === 'failed') {
@@ -42,100 +48,121 @@ const AddClass = () => {
     }, [status, navigate, response, dispatch, tempDetails]);
 
     return (
-        <StyledContainer>
+        <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <AppHeader 
+                title="Institutional Expansion" 
+                subtitle="Define a new academic batch and semester for tracking."
+            />
+            
             <FormWrapper>
-                <HeaderBox>
-                    <IconCircle>
-                        <ClassOutlinedIcon sx={{ fontSize: 32, color: 'var(--primary)' }} />
-                    </IconCircle>
-                    <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white', mb: 1 }}>
-                        Create New Class
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
-                        Establish a new academic section to manage students and subjects.
-                    </Typography>
-                </HeaderBox>
+                <IconCircle>
+                    <ClassOutlinedIcon sx={{ fontSize: 32, color: 'var(--primary)' }} />
+                </IconCircle>
                 
                 <form onSubmit={submitHandler}>
                     <Stack spacing={4}>
                         <AppTextField
-                            label="Class Name"
-                            variant="outlined"
-                            placeholder="e.g. Grade 10-A or B.Tech CSE"
+                            label="Class / Section Name"
+                            placeholder="e.g. CSE-A"
                             value={sclassName}
                             onChange={(event) => setSclassName(event.target.value)}
                             required
                             fullWidth
                             autoFocus
                         />
-                        <Box sx={{ pt: 2 }}>
-                            <BlueButton
+
+                        <AppTextField
+                            label="Batch Period"
+                            placeholder="e.g. 2022-2026"
+                            value={batch}
+                            onChange={(event) => setBatch(event.target.value)}
+                            required
+                            fullWidth
+                        />
+
+                        <Grid container spacing={3}>
+                            <Grid item xs={6}>
+                                <AppTextField
+                                    select
+                                    label="Academic Year"
+                                    value={year}
+                                    onChange={(e) => setYear(e.target.value)}
+                                    fullWidth
+                                >
+                                    {[1, 2, 3, 4].map((y) => (
+                                        <MenuItem key={y} value={y}>{y}{y === 1 ? 'st' : y === 2 ? 'nd' : y === 3 ? 'rd' : 'th'} Year</MenuItem>
+                                    ))}
+                                </AppTextField>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <AppTextField
+                                    select
+                                    label="Semester"
+                                    value={semester}
+                                    onChange={(e) => setSemester(e.target.value)}
+                                    fullWidth
+                                >
+                                    {[1, 2, 3, 4, 5, 6, 7, 8].map((s) => (
+                                        <MenuItem key={s} value={s}>Sem {s}</MenuItem>
+                                    ))}
+                                </AppTextField>
+                            </Grid>
+                        </Grid>
+
+                        <Box sx={{ pt: 2, display: 'flex', gap: 2 }}>
+                            <AppButton 
+                                variant="outlined" 
+                                fullWidth 
+                                onClick={() => navigate(-1)}
+                                sx={{ color: 'white', borderColor: 'var(--border)' }}
+                            >
+                                Cancel
+                            </AppButton>
+                            <AppButton
                                 fullWidth
-                                size="large"
                                 variant="contained"
                                 type="submit"
                                 disabled={loader}
-                                sx={{ py: 1.8, fontSize: '1rem', fontWeight: 800 }}
                             >
-                                {loader ? <CircularProgress size={24} color="inherit" /> : "Establish Class"}
-                            </BlueButton>
-                            <Button 
-                                fullWidth 
-                                variant="text" 
-                                onClick={() => navigate(-1)}
-                                sx={{ mt: 2, color: 'var(--text-muted)', fontWeight: 700 }}
-                            >
-                                Cancel & Return
-                            </Button>
+                                {loader ? <CircularProgress size={24} color="inherit" /> : "Establish Batch"}
+                            </AppButton>
                         </Box>
                     </Stack>
                 </form>
             </FormWrapper>
             <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
-        </StyledContainer>
+        </Box>
     )
 }
 
 export default AddClass
 
 const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
-`;
-
-const StyledContainer = styled(Box)`
-  height: calc(100vh - 64px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 24px;
 `;
 
 const FormWrapper = styled(Box)`
   width: 100%;
-  max-width: 480px;
-  background: rgba(176, 168, 185, 0.03);
-  backdrop-filter: blur(20px);
+  max-width: 560px;
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
   padding: 48px;
-  border-radius: 32px;
+  border-radius: 40px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow-xl);
-  animation: ${fadeIn} 0.6s ease-out;
-`;
-
-const HeaderBox = styled(Box)`
-  text-align: center;
-  margin-bottom: 40px;
+  margin-top: 40px;
+  animation: ${fadeIn} 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 `;
 
 const IconCircle = styled(Box)`
-  width: 72px;
-  height: 72px;
+  width: 80px;
+  height: 80px;
   background: rgba(132, 94, 194, 0.1);
-  border-radius: 50%;
+  border-radius: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 24px;
+  margin: 0 auto 40px;
   border: 1px solid rgba(132, 94, 194, 0.2);
 `;

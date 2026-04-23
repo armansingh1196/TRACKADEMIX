@@ -18,7 +18,14 @@ const subjectCreate = async (req, res) => {
             .select();
 
         if (error) throw error;
-        res.send(data);
+        
+        const result = data.map(item => ({
+            ...item,
+            _id: item.id,
+            subName: item.sub_name,
+            subCode: item.sub_code
+        }));
+        res.send(result);
     } catch (err) {
         res.status(500).json(err);
     }
@@ -39,6 +46,7 @@ const allSubjects = async (req, res) => {
         if (subjects && subjects.length > 0) {
             const result = subjects.map(item => ({
                 ...item,
+                _id: item.id,
                 subName: item.sub_name,
                 subCode: item.sub_code,
                 sclassName: {
@@ -67,6 +75,7 @@ const classSubjects = async (req, res) => {
         if (subjects && subjects.length > 0) {
             const result = subjects.map(item => ({
                 ...item,
+                _id: item.id,
                 subName: item.sub_name,
                 subCode: item.sub_code
             }));
@@ -92,6 +101,7 @@ const freeSubjectList = async (req, res) => {
         if (subjects && subjects.length > 0) {
             const result = subjects.map(item => ({
                 ...item,
+                _id: item.id,
                 subName: item.sub_name,
                 subCode: item.sub_code
             }));
@@ -122,6 +132,7 @@ const getSubjectDetail = async (req, res) => {
 
         const result = {
             ...subject,
+            _id: subject.id,
             subName: subject.sub_name,
             subCode: subject.sub_code,
             sclassName: {

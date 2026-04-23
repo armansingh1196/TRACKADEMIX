@@ -17,7 +17,7 @@ const noticeCreate = async (req, res) => {
             .single();
 
         if (error) throw error;
-        res.send(data);
+        res.send({ ...data, _id: data.id });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -33,7 +33,8 @@ const noticeList = async (req, res) => {
         if (error) throw error;
 
         if (notices && notices.length > 0) {
-            res.send(notices);
+            const result = notices.map(notice => ({ ...notice, _id: notice.id }));
+            res.send(result);
         } else {
             res.send({ message: "No notices found" });
         }
@@ -52,7 +53,7 @@ const updateNotice = async (req, res) => {
             .single();
 
         if (error) throw error;
-        res.send(data);
+        res.send({ ...data, _id: data.id });
     } catch (error) {
         res.status(500).json(error);
     }
@@ -68,7 +69,7 @@ const deleteNotice = async (req, res) => {
             .single();
 
         if (error) throw error;
-        res.send(data);
+        res.send({ ...data, _id: data.id });
     } catch (error) {
         res.status(500).json(error);
     }

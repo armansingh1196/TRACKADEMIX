@@ -18,9 +18,9 @@ const StudentSideBar = ({ open }) => {
     const menuItems = [
         { text: 'Dashboard', icon: <HomeIcon />, path: '/Student/dashboard' },
         { text: 'Subjects', icon: <AssignmentIcon />, path: '/Student/subjects' },
-        { text: 'Attendance', icon: <ClassOutlinedIcon />, path: '/Student/attendance' },
         { text: 'Complains', icon: <AnnouncementOutlinedIcon />, path: '/Student/complain' },
     ];
+
 
     return (
         <StyledNav>

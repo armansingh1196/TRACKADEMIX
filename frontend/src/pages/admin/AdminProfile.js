@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Container, Paper, Box, Avatar, Grid, Divider, Typography } from '@mui/material';
 import styled from 'styled-components';
@@ -10,6 +11,7 @@ import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const AdminProfile = () => {
+    const navigate = useNavigate();
     const { currentUser } = useSelector((state) => state.user);
 
     return (
@@ -37,18 +39,28 @@ const AdminProfile = () => {
                         </Typography>
                         
                         <Box sx={{ mt: 5, width: '100%', px: 2 }}>
-                            <AppButton variant="contained" fullWidth sx={{ 
-                                mb: 2, 
-                                background: 'var(--gradient-vibrant) !important',
-                                boxShadow: '0 8px 20px rgba(132, 94, 194, 0.2)'
-                            }}>
+                            <AppButton 
+                                variant="contained" 
+                                fullWidth 
+                                onClick={() => navigate("/Admin/editprofile")}
+                                sx={{ 
+                                    mb: 2, 
+                                    background: 'var(--gradient-vibrant) !important',
+                                    boxShadow: '0 8px 20px rgba(132, 94, 194, 0.2)'
+                                }}
+                            >
                                 Edit Profile
                             </AppButton>
-                            <AppButton variant="outlined" fullWidth sx={{ 
-                                color: 'white', 
-                                borderColor: 'var(--border)',
-                                '&:hover': { borderColor: 'var(--primary)' }
-                            }}>
+                            <AppButton 
+                                variant="outlined" 
+                                fullWidth 
+                                onClick={() => navigate("/Admin/settings")}
+                                sx={{ 
+                                    color: 'white', 
+                                    borderColor: 'var(--border)',
+                                    '&:hover': { borderColor: 'var(--primary)' }
+                                }}
+                            >
                                 Security Settings
                             </AppButton>
                         </Box>

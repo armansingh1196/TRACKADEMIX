@@ -15,6 +15,7 @@ import Logout from '../Logout';
 import SideBar from './SideBar';
 import AdminProfile from './AdminProfile';
 import AdminHomePage from './AdminHomePage';
+import ProfileForm from './ProfileForm';
 
 import AddStudent from './studentRelated/AddStudent';
 import SeeComplains from './studentRelated/SeeComplains';
@@ -22,6 +23,7 @@ import ShowStudents from './studentRelated/ShowStudents';
 import StudentAttendance from './studentRelated/StudentAttendance';
 import StudentExamMarks from './studentRelated/StudentExamMarks';
 import ViewStudent from './studentRelated/ViewStudent';
+import BulkImportStudents from './studentRelated/BulkImportStudents';
 
 import AddNotice from './noticeRelated/AddNotice';
 import ShowNotices from './noticeRelated/ShowNotices';
@@ -100,6 +102,8 @@ const AdminDashboard = () => {
                         <Route path='*' element={<Navigate to="/" />} />
                         <Route path="/Admin/dashboard" element={<AdminHomePage />} />
                         <Route path="/Admin/profile" element={<AdminProfile />} />
+                        <Route path="/Admin/editprofile" element={<ProfileForm />} />
+                        <Route path="/Admin/settings" element={<ProfileForm />} />
                         <Route path="/Admin/complains" element={<SeeComplains />} />
 
                         {/* Notice */}
@@ -124,6 +128,7 @@ const AdminDashboard = () => {
                         {/* Student */}
                         <Route path="/Admin/addstudents" element={<AddStudent situation="Student" />} />
                         <Route path="/Admin/students" element={<ShowStudents />} />
+                        <Route path="/Admin/students/bulkimport" element={<BulkImportStudents />} />
                         <Route path="/Admin/students/student/:id" element={<ViewStudent />} />
                         <Route path="/Admin/students/student/attendance/:id" element={<StudentAttendance situation="Student" />} />
                         <Route path="/Admin/students/student/marks/:id" element={<StudentExamMarks situation="Student" />} />

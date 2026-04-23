@@ -9,6 +9,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const TeacherSideBar = ({ open }) => {
     const { currentUser } = useSelector((state) => state.user);
@@ -18,8 +19,10 @@ const TeacherSideBar = ({ open }) => {
     const menuItems = [
         { text: 'Dashboard', icon: <HomeIcon />, path: '/Teacher/dashboard' },
         { text: `Class ${sclassName?.sclassName || ''}`, icon: <ClassOutlinedIcon />, path: '/Teacher/class' },
+        { text: 'Mark Attendance', icon: <CheckCircleOutlineIcon />, path: '/Teacher/attendance' },
         { text: 'Complains', icon: <AnnouncementOutlinedIcon />, path: '/Teacher/complain' },
     ];
+
 
     return (
         <StyledNav>

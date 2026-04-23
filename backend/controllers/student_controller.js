@@ -1,27 +1,31 @@
 const supabase = require('../supabaseClient.js');
+const bcrypt = require('bcryptjs');
 
 const studentRegister = async (req, res) => {
     try {
         const { name, rollNum, password, sclassName, adminID, attendance, examResult } = req.body;
 
-        const { data: existingStudent } = await supabase
+        const { data: existingStudents } = await supabase
             .from('students')
             .select('*')
             .eq('roll_num', rollNum)
             .eq('admin_id', adminID)
-            .eq('sclass_id', sclassName)
-            .single();
+            .eq('sclass_id', sclassName);
 
-        if (existingStudent) {
+        if (existingStudents && existingStudents.length > 0) {
             res.send({ message: 'Roll Number already exists' });
         } else {
+            // Hash password
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+
             const { data, error } = await supabase
                 .from('students')
                 .insert([
                     { 
                         name, 
                         roll_num: rollNum, 
-                        password, // Note: In production, hash this!
+                        password: hashedPassword,
                         sclass_id: sclassName, 
                         admin_id: adminID,
                         attendance: attendance || [],
@@ -35,6 +39,8 @@ const studentRegister = async (req, res) => {
 
             const result = {
                 ...data,
+                _id: data.id,
+                role: "Student",
                 rollNum: data.roll_num,
                 sclassName: data.sclass_id,
                 school: data.admin_id,
@@ -66,9 +72,13 @@ const studentLogIn = async (req, res) => {
             return res.send({ message: "Student not found" });
         }
 
-        if (password === student.password) {
+        const isPasswordValid = await bcrypt.compare(password, student.password);
+
+        if (isPasswordValid) {
             const result = {
                 ...student,
+                _id: student.id,
+                role: "Student",
                 school: {
                     _id: student.admins.id,
                     schoolName: student.admins.school_name
@@ -105,6 +115,7 @@ const getStudents = async (req, res) => {
         if (students && students.length > 0) {
             const result = students.map(student => ({
                 ...student,
+                _id: student.id,
                 sclassName: {
                     _id: student.sclasses.id,
                     sclassName: student.sclasses.sclass_name
@@ -138,6 +149,8 @@ const getStudentDetail = async (req, res) => {
 
         const result = {
             ...student,
+            _id: student.id,
+            role: "Student",
             rollNum: student.roll_num,
             school: {
                 _id: student.admins.id,
@@ -357,8 +370,68 @@ const removeStudentAttendance = async (req, res) => {
     }
 };
 
+const getAttendanceHeatmap = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { data, error } = await supabase
+            .from('attendance_records')
+            .select('date, status')
+            .eq('student_id', id);
+
+        if (error) throw error;
+
+        // Group by date and calculate intensity
+        const heatmapData = data.reduce((acc, curr) => {
+            const date = curr.date;
+            if (!acc[date]) {
+                acc[date] = { date, count: 0, total: 0 };
+            }
+            acc[date].total += 1;
+            if (curr.status === 'Present') {
+                acc[date].count += 1;
+            }
+            return acc;
+        }, {});
+
+        res.status(200).json(Object.values(heatmapData));
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
+const studentBulkRegister = async (req, res) => {
+    try {
+        const { students, adminID } = req.body;
+        
+        const salt = await bcrypt.genSalt(10);
+        const processedStudents = await Promise.all(students.map(async (student) => {
+            const hashedPassword = await bcrypt.hash(String(student.password || "123456"), salt);
+            return {
+                name: student.name,
+                roll_num: student.rollNum,
+                password: hashedPassword,
+                sclass_id: student.sclassName,
+                admin_id: adminID,
+                attendance: [],
+                exam_marks: []
+            };
+        }));
+
+        const { data, error } = await supabase
+            .from('students')
+            .insert(processedStudents)
+            .select();
+
+        if (error) throw error;
+        res.send({ message: `${data.length} students registered successfully`, count: data.length });
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
 module.exports = {
     studentRegister,
+    studentBulkRegister,
     studentLogIn,
     getStudents,
     getStudentDetail,
@@ -372,4 +445,5 @@ module.exports = {
     clearAllStudentsAttendance,
     removeStudentAttendanceBySubject,
     removeStudentAttendance,
+    getAttendanceHeatmap
 };

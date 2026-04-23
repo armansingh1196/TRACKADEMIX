@@ -1,17 +1,21 @@
 const supabase = require('../supabaseClient.js');
+const bcrypt = require('bcryptjs');
 
 const teacherRegister = async (req, res) => {
     const { name, email, password, school, teachSubject, teachSclass } = req.body;
     try {
-        const { data: existingTeacher } = await supabase
+        const { data: existingTeachers } = await supabase
             .from('teachers')
             .select('*')
-            .eq('email', email)
-            .single();
+            .eq('email', email);
 
-        if (existingTeacher) {
+        if (existingTeachers && existingTeachers.length > 0) {
             return res.send({ message: 'Email already exists' });
         }
+
+        // Hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         const { data, error } = await supabase
             .from('teachers')
@@ -19,7 +23,7 @@ const teacherRegister = async (req, res) => {
                 { 
                     name, 
                     email, 
-                    password, // Hash this in production!
+                    password: hashedPassword,
                     school_name: school, 
                     teach_sclass_id: teachSclass, 
                     teach_subject_id: teachSubject,
@@ -37,7 +41,12 @@ const teacherRegister = async (req, res) => {
             .update({ teacher_id: data.id })
             .eq('id', teachSubject);
 
-        res.send({ ...data, password: undefined });
+        res.send({ 
+            ...data, 
+            _id: data.id,
+            role: "Teacher",
+            password: undefined 
+        });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -61,22 +70,26 @@ const teacherLogIn = async (req, res) => {
             return res.send({ message: "Teacher not found" });
         }
 
-        if (password === teacher.password) {
+        const isPasswordValid = await bcrypt.compare(password, teacher.password);
+
+        if (isPasswordValid) {
             const result = {
                 ...teacher,
-                teachSubject: {
+                _id: teacher.id,
+                role: "Teacher",
+                teachSubject: teacher.subjects ? {
                     _id: teacher.subjects.id,
                     subName: teacher.subjects.sub_name,
                     sessions: teacher.subjects.sessions
-                },
-                school: {
+                } : null,
+                school: teacher.admins ? {
                     _id: teacher.admins.id,
                     schoolName: teacher.admins.school_name
-                },
-                teachSclass: {
+                } : null,
+                teachSclass: teacher.sclasses ? {
                     _id: teacher.sclasses.id,
                     sclassName: teacher.sclasses.sclass_name
-                },
+                } : null,
                 password: undefined
             };
             res.send(result);
@@ -103,6 +116,7 @@ const getTeachers = async (req, res) => {
 
         const result = teachers.map(teacher => ({
             ...teacher,
+            _id: teacher.id,
             teachSubject: teacher.subjects ? {
                 _id: teacher.subjects.id,
                 subName: teacher.subjects.sub_name
@@ -138,19 +152,21 @@ const getTeacherDetail = async (req, res) => {
 
         const result = {
             ...teacher,
+            _id: teacher.id,
+            role: "Teacher",
             teachSubject: teacher.subjects ? {
                 _id: teacher.subjects.id,
                 subName: teacher.subjects.sub_name,
                 sessions: teacher.subjects.sessions
             } : null,
-            school: {
+            school: teacher.admins ? {
                 _id: teacher.admins.id,
                 schoolName: teacher.admins.school_name
-            },
-            teachSclass: {
+            } : null,
+            teachSclass: teacher.sclasses ? {
                 _id: teacher.sclasses.id,
                 sclassName: teacher.sclasses.sclass_name
-            },
+            } : null,
             password: undefined
         };
         res.send(result);
@@ -254,8 +270,52 @@ const deleteTeachersByClass = async (req, res) => {
 };
 
 const teacherAttendance = async (req, res) => {
-    // Attendance for teachers can be implemented similarly to students using JSONB or a separate table
-    res.status(501).send({ message: "Not implemented yet" });
+    const { status, date } = req.body;
+    try {
+        const { data: teacher } = await supabase
+            .from('teachers')
+            .select('attendance')
+            .eq('id', req.params.id)
+            .single();
+
+        if (!teacher) return res.send({ message: 'Teacher not found' });
+
+        let attendance = teacher.attendance || [];
+        attendance.push({ date, status });
+
+        const { data, error } = await supabase
+            .from('teachers')
+            .update({ attendance })
+            .eq('id', req.params.id)
+            .select()
+            .single();
+
+        if (error) throw error;
+        res.send(data);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+};
+
+const bulkMarkAttendance = async (req, res) => {
+    try {
+        const { attendanceData } = req.body; // Array of { student_id, subject_id, teacher_id, sclass_id, date, status }
+
+        if (!Array.isArray(attendanceData) || attendanceData.length === 0) {
+            return res.status(400).json({ message: "Invalid attendance data" });
+        }
+
+        const { data, error } = await supabase
+            .from('attendance_records')
+            .insert(attendanceData)
+            .select();
+
+        if (error) throw error;
+
+        res.status(200).json({ message: "Attendance marked successfully", data });
+    } catch (err) {
+        res.status(500).json(err);
+    }
 };
 
 module.exports = {
@@ -267,5 +327,6 @@ module.exports = {
     deleteTeacher,
     deleteTeachers,
     deleteTeachersByClass,
-    teacherAttendance
+    teacherAttendance,
+    bulkMarkAttendance
 };

@@ -80,6 +80,10 @@ const LoginPage = ({ role }) => {
             setMessage(response);
             setShowPopup(true);
             setLoader(false);
+        } else if (status === 'error') {
+            setMessage("Network Error or Server is down");
+            setShowPopup(true);
+            setLoader(false);
         }
     }, [status, currentUser, currentRole, navigate, response]);
 

@@ -58,14 +58,22 @@ const AdminRegisterPage = () => {
         const email = event.target.email.value;
         const password = event.target.password.value;
 
-        if (!name || !schoolName || !email || !password || !branch) {
-            if (!name) setAdminNameError(true);
-            if (!schoolName) setSchoolNameError(true);
-            if (!email) setEmailError(true);
-            if (!password) setPasswordError(true);
-            if (!branch) setBranchError(true);
-            return;
+        let hasError = false;
+
+        if (!name) { setAdminNameError(true); hasError = true; }
+        if (!schoolName) { setSchoolNameError(true); hasError = true; }
+        if (!branch) { setBranchError(true); hasError = true; }
+        if (!password) { setPasswordError(true); hasError = true; }
+
+        const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!email || !emailRegex.test(String(email).toLowerCase())) {
+            setEmailError(true);
+            hasError = true;
+            setMessage("Please enter a valid email address.");
+            setShowPopup(true);
         }
+
+        if (hasError) return;
 
         const fields = { name, email, password, role, schoolName, branch };
         setLoader(true);

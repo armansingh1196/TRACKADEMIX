@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { authLogout } from '../redux/userRelated/userSlice';
 import styled, { keyframes } from 'styled-components';
-import { Box, Typography, Avatar } from '@mui/material';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import { Box, Typography, Avatar, Dialog, DialogContent, Stack } from '@mui/material';
 import AppButton from '../components/common/AppButton';
 
 const Logout = () => {
@@ -22,106 +21,140 @@ const Logout = () => {
     };
 
     return (
-        <LogoutPage>
-            <LogoutCard>
-                <IconWrapper>
-                    <ExitToAppIcon sx={{ fontSize: 40, color: 'var(--primary)' }} />
-                </IconWrapper>
-                
-                <Box sx={{ mb: 3, textAlign: 'center' }}>
-                    <StyledAvatar sx={{ background: 'var(--gradient-primary)', mx: 'auto', mb: 2 }}>
-                        {String(currentUser?.name).charAt(0)}
-                    </StyledAvatar>
-                    <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white' }}>
-                        {currentUser?.name}
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'var(--text-muted)', mt: 0.5 }}>
-                        Are you sure you want to end your session?
-                    </Typography>
-                </Box>
+        <Dialog 
+            open={true} 
+            onClose={handleCancel}
+            PaperProps={{
+                sx: {
+                    background: 'transparent',
+                    boxShadow: 'none',
+                    maxWidth: '440px',
+                    width: '100%',
+                    overflow: 'visible',
+                    margin: '16px'
+                }
+            }}
+            BackdropProps={{
+                sx: {
+                    backgroundColor: 'rgba(10, 9, 12, 0.95)',
+                    backdropFilter: 'blur(20px)'
+                }
+            }}
+        >
+            <DialogContent sx={{ p: 0, overflow: 'visible' }}>
+                <LogoutCard>
+                    <AvatarGlow>
+                        <StyledAvatar sx={{ background: 'var(--gradient-vibrant)' }}>
+                            {String(currentUser?.name).charAt(0)}
+                        </StyledAvatar>
+                    </AvatarGlow>
+                    
+                    <Box sx={{ mb: 5, textAlign: 'center', zIndex: 1 }}>
+                        <Typography variant="h4" sx={{ 
+                            fontWeight: 900, 
+                            fontFamily: 'Outfit', 
+                            color: 'white',
+                            mb: 1.5,
+                            letterSpacing: '-0.5px'
+                        }}>
+                            Sign Out?
+                        </Typography>
+                        <Typography variant="body1" sx={{ 
+                            color: 'rgba(255,255,255,0.6)', 
+                            maxWidth: '280px',
+                            mx: 'auto',
+                            lineHeight: 1.6,
+                            fontWeight: 500
+                        }}>
+                            Hey <span style={{ color: 'var(--primary-light)' }}>{currentUser?.name}</span>, are you sure you want to end your session?
+                        </Typography>
+                    </Box>
 
-                <ActionStack>
-                    <AppButton 
-                        variant="contained" 
-                        fullWidth 
-                        onClick={handleLogout}
-                        sx={{ 
-                            py: 1.5, 
-                            background: 'var(--gradient-vibrant) !important',
-                            fontWeight: 800,
-                            boxShadow: '0 8px 24px rgba(255, 128, 102, 0.2)'
-                        }}
-                    >
-                        Sign Out
-                    </AppButton>
-                    <AppButton 
-                        variant="text" 
-                        fullWidth 
-                        onClick={handleCancel}
-                        sx={{ color: 'var(--text-muted)', fontWeight: 700 }}
-                    >
-                        Keep Browsing
-                    </AppButton>
-                </ActionStack>
-            </LogoutCard>
-        </LogoutPage>
+                    <ActionStack>
+                        <AppButton 
+                            variant="contained" 
+                            fullWidth 
+                            onClick={handleLogout}
+                            sx={{ 
+                                py: 2, 
+                                background: 'var(--gradient-vibrant) !important',
+                                fontWeight: 800,
+                                fontSize: '1rem',
+                                borderRadius: '18px',
+                                boxShadow: '0 12px 30px rgba(255, 128, 102, 0.3)'
+                            }}
+                        >
+                            Sign Out Securely
+                        </AppButton>
+                        <AppButton 
+                            variant="text" 
+                            fullWidth 
+                            onClick={handleCancel}
+                            sx={{ 
+                                py: 1.5,
+                                color: 'rgba(255,255,255,0.4)', 
+                                fontWeight: 700,
+                                '&:hover': { color: 'white' }
+                            }}
+                        >
+                            Cancel
+                        </AppButton>
+                    </ActionStack>
+                </LogoutCard>
+            </DialogContent>
+        </Dialog>
     );
 };
 
 export default Logout;
 
-const fadeIn = keyframes`
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-`;
-
-const LogoutPage = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--bg-main);
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 9999;
+const scaleIn = keyframes`
+  from { opacity: 0; transform: scale(0.9) translateY(30px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
 `;
 
 const LogoutCard = styled.div`
-  background: rgba(176, 168, 185, 0.03);
-  backdrop-filter: blur(24px);
-  padding: 48px;
-  border-radius: 40px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-xl);
-  width: 100%;
-  max-width: 420px;
-  animation: ${fadeIn} 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(30, 28, 36, 0.6);
+  backdrop-filter: blur(40px) saturate(180%);
+  padding: 60px 40px 40px;
+  border-radius: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+  animation: ${scaleIn} 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
 `;
 
-const IconWrapper = styled.div`
-  width: 80px;
-  height: 80px;
-  background: rgba(132, 94, 194, 0.1);
-  border-radius: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const AvatarGlow = styled.div`
+  position: relative;
   margin-bottom: 32px;
-  border: 1px solid rgba(132, 94, 194, 0.2);
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120%;
+    height: 120%;
+    background: var(--gradient-vibrant);
+    filter: blur(30px);
+    opacity: 0.3;
+    z-index: 0;
+  }
 `;
 
 const StyledAvatar = styled(Avatar)`
-  width: 64px;
-  height: 64px;
-  border: 3px solid var(--bg-surface);
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  font-weight: 800;
+  width: 96px;
+  height: 96px;
+  position: relative;
+  z-index: 1;
+  border: 4px solid rgba(255,255,255,0.1);
+  font-weight: 900;
   font-family: 'Outfit';
+  font-size: 2.5rem;
 `;
 
 const ActionStack = styled.div`
@@ -129,5 +162,7 @@ const ActionStack = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-top: 24px;
+  z-index: 1;
 `;
+
+

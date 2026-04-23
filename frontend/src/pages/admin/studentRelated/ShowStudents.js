@@ -10,6 +10,7 @@ import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import { KeyboardArrowUp, KeyboardArrowDown } from '@mui/icons-material';
 import TableTemplate from '../../../components/TableTemplate';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 import SpeedDialTemplate from '../../../components/SpeedDialTemplate';
 import Popup from '../../../components/Popup';
 import AppHeader from '../../../components/common/AppHeader';
@@ -124,8 +125,10 @@ const ShowStudents = () => {
 
     const actions = [
         { icon: <PersonAddAlt1Icon />, name: 'Add New Student', action: () => navigate("/Admin/addstudents") },
+        { icon: <FileUploadIcon />, name: 'Bulk Import CSV', action: () => navigate("/Admin/students/bulkimport") },
         { icon: <PersonRemoveIcon />, name: 'Delete All Students', action: () => deleteHandler(currentUser._id, "Students") },
     ];
+
 
     return (
         <Box sx={{ p: 4 }}>
