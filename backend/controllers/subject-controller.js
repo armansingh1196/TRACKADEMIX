@@ -2,14 +2,15 @@ const supabase = require('../supabaseClient.js');
 
 const subjectCreate = async (req, res) => {
     try {
-        const { subjects, sclassName, adminID } = req.body;
+        const { subjects, sclassName, adminID, semester } = req.body;
 
         const newSubjects = subjects.map((subject) => ({
             sub_name: subject.subName,
             sub_code: subject.subCode,
             sessions: subject.sessions,
             sclass_id: sclassName,
-            admin_id: adminID
+            admin_id: adminID,
+            semester: parseInt(semester) || 1
         }));
 
         const { data, error } = await supabase
@@ -23,10 +24,12 @@ const subjectCreate = async (req, res) => {
             ...item,
             _id: item.id,
             subName: item.sub_name,
-            subCode: item.sub_code
+            subCode: item.sub_code,
+            semester: item.semester
         }));
         res.send(result);
     } catch (err) {
+        console.error("Error in subjectCreate:", err);
         res.status(500).json(err);
     }
 };
@@ -49,6 +52,7 @@ const allSubjects = async (req, res) => {
                 _id: item.id,
                 subName: item.sub_name,
                 subCode: item.sub_code,
+                semester: item.semester,
                 sclassName: {
                     _id: item.sclasses.id,
                     sclassName: item.sclasses.sclass_name
@@ -77,7 +81,8 @@ const classSubjects = async (req, res) => {
                 ...item,
                 _id: item.id,
                 subName: item.sub_name,
-                subCode: item.sub_code
+                subCode: item.sub_code,
+                semester: item.semester
             }));
             res.send(result);
         } else {
@@ -103,7 +108,8 @@ const freeSubjectList = async (req, res) => {
                 ...item,
                 _id: item.id,
                 subName: item.sub_name,
-                subCode: item.sub_code
+                subCode: item.sub_code,
+                semester: item.semester
             }));
             res.send(result);
         } else {
@@ -121,7 +127,7 @@ const getSubjectDetail = async (req, res) => {
             .select(`
                 *,
                 sclasses ( id, sclass_name ),
-                teachers ( id, name )
+                teachers!subjects_teacher_id_fkey ( id, name )
             `)
             .eq('id', req.params.id)
             .single();
@@ -135,6 +141,7 @@ const getSubjectDetail = async (req, res) => {
             _id: subject.id,
             subName: subject.sub_name,
             subCode: subject.sub_code,
+            semester: subject.semester,
             sclassName: {
                 _id: subject.sclasses.id,
                 sclassName: subject.sclasses.sclass_name

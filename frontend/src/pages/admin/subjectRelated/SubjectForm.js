@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Grid, Box, Typography, CircularProgress, Container, IconButton, Tooltip } from "@mui/material";
+import { Button, Grid, Box, Typography, CircularProgress, Container, IconButton, Tooltip, MenuItem } from "@mui/material";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addStuff } from '../../../redux/userRelated/userHandle';
@@ -14,6 +14,7 @@ import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 
 const SubjectForm = () => {
     const [subjects, setSubjects] = useState([{ subName: "", subCode: "", sessions: "" }]);
+    const [targetSemester, setTargetSemester] = useState(1);
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -22,7 +23,7 @@ const SubjectForm = () => {
     const { status, currentUser, response } = useSelector(state => state.user);
 
     const sclassName = params.id
-    const adminID = currentUser._id
+    const adminID = currentUser?._id
     const address = "Subject"
 
     const [showPopup, setShowPopup] = useState(false);
@@ -47,6 +48,11 @@ const SubjectForm = () => {
 
     const submitHandler = (event) => {
         event.preventDefault();
+        if (!adminID) {
+            setMessage("Session expired. Please login again.");
+            setShowPopup(true);
+            return;
+        }
         const fields = {
             sclassName,
             subjects: subjects.map((subject) => ({
@@ -55,6 +61,7 @@ const SubjectForm = () => {
                 sessions: subject.sessions,
             })),
             adminID,
+            semester: targetSemester
         };
         setLoader(true)
         dispatch(addStuff(fields, address))
@@ -67,96 +74,121 @@ const SubjectForm = () => {
             setLoader(false)
         }
         else if (status === 'failed') {
-            setMessage(response)
+            setMessage(response || "Failed to add subjects")
             setShowPopup(true)
             setLoader(false)
+            dispatch(underControl())
         }
     }, [status, navigate, response, dispatch]);
 
     return (
-        <Container maxWidth="md" sx={{ py: 4 }}>
-            <StyledPaper elevation={0}>
+        <Container maxWidth="md" sx={{ py: { xs: 2, md: 4 } }}>
+            <StyledPaper className="fade-in">
                 <HeaderBox>
                     <IconCircle>
                         <AssignmentOutlinedIcon sx={{ fontSize: 32, color: 'var(--primary)' }} />
                     </IconCircle>
-                    <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white', mb: 1 }}>
+                    <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: 'var(--font-heading)', color: 'white', mb: 1 }}>
                         Configure Subjects
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
-                        Assign core academic subjects and weekly session requirements.
+                    <Typography variant="body2" sx={{ color: 'var(--text-muted)', fontFamily: 'var(--font-body)' }}>
+                        Assign academic content for a specific semester in the B.Tech timeline.
                     </Typography>
                 </HeaderBox>
 
                 <form onSubmit={submitHandler}>
-                    {subjects.map((subject, index) => (
-                        <SubjectCard key={index}>
-                            <Grid container spacing={3} alignItems="center">
-                                <Grid item xs={12} sm={4}>
-                                    <AppTextField
-                                        fullWidth
-                                        label="Subject Name"
-                                        placeholder="e.g. Mathematics"
-                                        value={subject.subName}
-                                        onChange={handleSubjectChange(index, 'subName')}
-                                        required
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={3}>
-                                    <AppTextField
-                                        fullWidth
-                                        label="Code"
-                                        placeholder="e.g. MATH101"
-                                        value={subject.subCode}
-                                        onChange={handleSubjectChange(index, 'subCode')}
-                                        required
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={3}>
-                                    <AppTextField
-                                        fullWidth
-                                        label="Sessions"
-                                        type="number"
-                                        placeholder="Weekly"
-                                        value={subject.sessions}
-                                        onChange={handleSubjectChange(index, 'sessions')}
-                                        required
-                                    />
-                                </Grid>
-                                <Grid item xs={12} sm={2} sx={{ display: 'flex', justifyContent: 'center' }}>
-                                    {index > 0 ? (
-                                        <Tooltip title="Remove Subject">
-                                            <IconButton onClick={handleRemoveSubject(index)} color="error">
-                                                <RemoveCircleOutlineIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                    ) : (
-                                        <Tooltip title="Add Another Subject">
-                                            <IconButton onClick={handleAddSubject} sx={{ color: 'var(--secondary)' }}>
-                                                <AddCircleOutlineIcon />
-                                            </IconButton>
-                                        </Tooltip>
-                                    )}
-                                </Grid>
-                            </Grid>
-                        </SubjectCard>
-                    ))}
+                    <Box sx={{ mb: 6, p: 3, background: 'rgba(255,255,255,0.03)', borderRadius: '24px', border: '1px dashed var(--border)' }}>
+                        <Typography variant="subtitle2" sx={{ color: 'var(--primary)', mb: 2, fontWeight: 700 }}>
+                            GLOBAL PARAMETERS
+                        </Typography>
+                        <AppTextField
+                            select
+                            fullWidth
+                            label="Target Semester"
+                            value={targetSemester}
+                            onChange={(e) => setTargetSemester(e.target.value)}
+                            helperText="All subjects below will be assigned to this semester."
+                        >
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map(s => (
+                                <MenuItem key={s} value={s}>Semester {s}</MenuItem>
+                            ))}
+                        </AppTextField>
+                    </Box>
 
-                    <Box sx={{ mt: 5, display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-                        <Button onClick={() => navigate(-1)} sx={{ color: 'var(--text-muted)', fontWeight: 700 }}>
+                    <Stack spacing={2}>
+                        <Typography variant="subtitle2" sx={{ color: 'var(--primary)', px: 1, fontWeight: 700 }}>
+                            SUBJECT LIST
+                        </Typography>
+                        {subjects.map((subject, index) => (
+                            <SubjectCard key={index}>
+                                <Grid container spacing={3} alignItems="center">
+                                    <Grid item xs={12} sm={4}>
+                                        <AppTextField
+                                            fullWidth
+                                            label="Subject Name"
+                                            placeholder="e.g. Data Structures"
+                                            value={subject.subName}
+                                            onChange={handleSubjectChange(index, 'subName')}
+                                            required
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={3}>
+                                        <AppTextField
+                                            fullWidth
+                                            label="Code"
+                                            placeholder="e.g. CS201"
+                                            value={subject.subCode}
+                                            onChange={handleSubjectChange(index, 'subCode')}
+                                            required
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={3}>
+                                        <AppTextField
+                                            fullWidth
+                                            label="Sessions"
+                                            type="number"
+                                            placeholder="Weekly"
+                                            value={subject.sessions}
+                                            onChange={handleSubjectChange(index, 'sessions')}
+                                            required
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12} sm={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+                                        {index > 0 ? (
+                                            <Tooltip title="Remove Subject">
+                                                <IconButton onClick={handleRemoveSubject(index)} sx={{ color: '#ef4444' }}>
+                                                    <RemoveCircleOutlineIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        ) : (
+                                            <Tooltip title="Add Another Subject">
+                                                <IconButton onClick={handleAddSubject} sx={{ color: 'var(--secondary)' }}>
+                                                    <AddCircleOutlineIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        )}
+                                    </Grid>
+                                </Grid>
+                            </SubjectCard>
+                        ))}
+                    </Stack>
+
+                    <Box sx={{ mt: 5, display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
+                        <AppButton 
+                            variant="outlined" 
+                            fullWidth 
+                            onClick={() => navigate(-1)}
+                            sx={{ color: 'white', borderColor: 'var(--border)' }}
+                        >
                             Cancel
-                        </Button>
+                        </AppButton>
                         <AppButton 
                             variant="contained" 
+                            fullWidth
                             type="submit" 
                             disabled={loader}
-                            sx={{ 
-                                minWidth: 160,
-                                background: 'var(--gradient-vibrant) !important',
-                                boxShadow: '0 8px 24px rgba(255, 128, 102, 0.2)'
-                            }}
                         >
-                            {loader ? <CircularProgress size={24} color="inherit" /> : 'Save Subjects'}
+                            {loader ? <CircularProgress size={24} color="inherit" /> : 'Register Subjects'}
                         </AppButton>
                     </Box>
                 </form>
@@ -169,18 +201,22 @@ const SubjectForm = () => {
 export default SubjectForm
 
 const fadeIn = keyframes`
-  from { opacity: 0; transform: scale(0.98); }
-  to { opacity: 1; transform: scale(1); }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 `;
 
 const StyledPaper = styled(Box)`
-  background: rgba(176, 168, 185, 0.03);
-  backdrop-filter: blur(20px);
+  background: var(--bg-card);
+  backdrop-filter: blur(24px);
   padding: 48px;
   border-radius: 40px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow-xl);
-  animation: ${fadeIn} 0.8s ease-out;
+  
+  @media (max-width: 600px) {
+    padding: 24px;
+    border-radius: 24px;
+  }
 `;
 
 const HeaderBox = styled(Box)`
@@ -203,13 +239,22 @@ const IconCircle = styled(Box)`
 const SubjectCard = styled(Box)`
   background: rgba(255, 255, 255, 0.02);
   padding: 24px;
-  border-radius: 20px;
+  border-radius: 24px;
   border: 1px solid var(--border);
-  margin-bottom: 16px;
-  transition: var(--transition);
+  transition: all 0.3s ease;
   
   &:hover {
-    border-color: rgba(132, 94, 194, 0.3);
+    border-color: var(--secondary);
     background: rgba(255, 255, 255, 0.04);
   }
+
+  @media (max-width: 600px) {
+    padding: 16px;
+  }
+`;
+
+const Stack = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 `;

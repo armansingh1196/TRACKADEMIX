@@ -82,6 +82,15 @@ const ShowNotices = () => {
             <AppHeader 
                 title="Notice Board" 
                 subtitle="Dispatch important updates and institutional announcements." 
+                rightSide={
+                    <AppButton 
+                        variant="contained" 
+                        startIcon={<NoteAddIcon />}
+                        onClick={() => navigate("/Admin/addnotice")}
+                    >
+                        Add Notice
+                    </AppButton>
+                }
             />
             
             {loading ? (

@@ -64,15 +64,13 @@ const AdminHomePage = () => {
 
             <Grid container spacing={3}>
                 <Grid item xs={12} md={7}>
-                    <SectionPaper sx={{ minHeight: 460 }}>
-                        <Box sx={{ p: 2 }}>
-                            <SeeNotice />
-                        </Box>
-                    </SectionPaper>
+                    <GlassCard sx={{ height: '100%', p: 3, display: 'flex', flexDirection: 'column' }}>
+                        <SeeNotice />
+                    </GlassCard>
                 </Grid>
                 <Grid item xs={12} md={5}>
-                    <GlassCard sx={{ height: '100%', p: 4, display: 'flex', flexDirection: 'column' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 4 }}>
+                    <GlassCard sx={{ height: '100%', p: 3, display: 'flex', flexDirection: 'column' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
                             <AssessmentOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 28 }} />
                             <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: 'Outfit', color: 'white' }}>
                                 Batch Distribution

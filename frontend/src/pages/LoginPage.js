@@ -165,6 +165,11 @@ const LoginPage = ({ role }) => {
                                         ),
                                     }}
                                 />
+                                {role === "Student" && (
+                                    <Typography variant="caption" sx={{ color: 'var(--secondary)', display: 'block', mt: 1, fontWeight: 600 }}>
+                                        First time? Password is: CapitalizedFirstName@BirthYearLast3Roll (e.g. Arman@2004002)
+                                    </Typography>
+                                )}
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', my: 3 }}>
                                     <FormControlLabel
                                         control={<Checkbox value="remember" sx={{ color: 'var(--text-muted)', '&.Mui-checked': { color: 'var(--secondary)' } }} />}

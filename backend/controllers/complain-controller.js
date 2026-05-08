@@ -27,22 +27,32 @@ const complainList = async (req, res) => {
     try {
         const { data: complaints, error } = await supabase
             .from('complaints')
-            .select(`
-                *,
-                students ( id, name ),
-                teachers ( id, name )
-            `)
+            .select('*')
             .eq('admin_id', req.params.id);
 
         if (error) throw error;
 
         if (complaints && complaints.length > 0) {
-            // Map to include user name from either student or teacher table
+            const userIds = [...new Set(complaints.map(c => c.user_id).filter(Boolean))];
+            
+            const { data: students } = await supabase
+                .from('students')
+                .select('id, name')
+                .in('id', userIds);
+                
+            const { data: teachers } = await supabase
+                .from('teachers')
+                .select('id, name')
+                .in('id', userIds);
+                
+            const userMap = {};
+            if (students) students.forEach(s => userMap[s.id] = { _id: s.id, name: s.name });
+            if (teachers) teachers.forEach(t => userMap[t.id] = { _id: t.id, name: t.name });
+
             const result = complaints.map(item => ({
                 ...item,
                 _id: item.id,
-                user: item.students ? { _id: item.students.id, name: item.students.name } : 
-                      (item.teachers ? { _id: item.teachers.id, name: item.teachers.name } : null)
+                user: userMap[item.user_id] || { _id: item.user_id, name: "Unknown User" }
             }));
             res.send(result);
         } else {

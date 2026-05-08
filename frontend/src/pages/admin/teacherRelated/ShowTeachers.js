@@ -86,6 +86,15 @@ const ShowTeachers = () => {
             <AppHeader 
                 title="Professor Directory" 
                 subtitle="Manage faculty assignments, subjects, and profiles." 
+                rightSide={
+                    <AppButton 
+                        variant="contained" 
+                        startIcon={<PersonAddAlt1Icon />}
+                        onClick={() => navigate("/Admin/teachers/chooseclass")}
+                    >
+                        Add Professor
+                    </AppButton>
+                }
             />
             
             {loading ? (

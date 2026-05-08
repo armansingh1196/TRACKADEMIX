@@ -19,7 +19,16 @@ const theme = createTheme({
 });
 
 const branches = [
-    "CSE", "IT", "Mechanical", "Mining", "Metallurgy", "Electrical", "Electronics and Communication", "Cybersecurity"
+    "Computer Science & Engineering", 
+    "Information Technology", 
+    "Mechanical Engineering", 
+    "Mining Engineering", 
+    "Metallurgical Engineering", 
+    "Electrical Engineering", 
+    "Electronics and Communication Engineering", 
+    "Cybersecurity",
+    "Civil Engineering",
+    "Chemical Engineering"
 ];
 
 const AdminRegisterPage = () => {
@@ -92,6 +101,10 @@ const AdminRegisterPage = () => {
             navigate('/Admin/dashboard');
         } else if (status === 'failed') {
             setMessage(response);
+            setShowPopup(true);
+            setLoader(false);
+        } else if (status === 'error') {
+            setMessage("Network Error or Server is down");
             setShowPopup(true);
             setLoader(false);
         }

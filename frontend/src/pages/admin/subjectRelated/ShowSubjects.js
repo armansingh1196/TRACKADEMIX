@@ -82,6 +82,15 @@ const ShowSubjects = () => {
             <AppHeader 
                 title="Subject Catalog" 
                 subtitle="View and manage academic subjects across different classes." 
+                rightSide={
+                    <AppButton 
+                        variant="contained" 
+                        startIcon={<PostAddIcon />}
+                        onClick={() => navigate("/Admin/subjects/chooseclass")}
+                    >
+                        Add Subject
+                    </AppButton>
+                }
             />
             
             {loading ? (

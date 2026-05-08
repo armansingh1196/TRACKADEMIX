@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { api } from '../../api/client';
 import {
     authRequest,
     stuffAdded,
@@ -49,10 +49,12 @@ const mockUsers = {
 export const loginUser = (fields, role) => async (dispatch) => {
     dispatch(authRequest());
 
-    // Guest Demo Bypass: If the password is 'zxc' (our demo password), use mock data
-    if (fields.password === "zxc") {
+    const guestEnabled = import.meta.env.VITE_ENABLE_GUEST_DEMO === "true";
+
+    // Guest Demo (opt-in via env)
+    if (guestEnabled && fields.password === "zxc") {
         setTimeout(() => {
-            const mockUser = mockUsers[role === "HOD" ? "Admin" : role];
+            const mockUser = mockUsers[role];
             if (mockUser) {
                 dispatch(authSuccess(mockUser));
             } else {
@@ -63,9 +65,7 @@ export const loginUser = (fields, role) => async (dispatch) => {
     }
 
     try {
-        const result = await axios.post(`${process.env.REACT_APP_BASE_URL}/${role}Login`, fields, {
-            headers: { 'Content-Type': 'application/json' },
-        });
+        const result = await api.post(`/${role}Login`, fields);
         if (result.data.role) {
             dispatch(authSuccess(result.data));
         } else {
@@ -80,9 +80,7 @@ export const registerUser = (fields, role) => async (dispatch) => {
     dispatch(authRequest());
 
     try {
-        const result = await axios.post(`${process.env.REACT_APP_BASE_URL}/${role}Reg`, fields, {
-            headers: { 'Content-Type': 'application/json' },
-        });
+        const result = await api.post(`/${role}Reg`, fields);
         if (result.data.schoolName) {
             dispatch(authSuccess(result.data));
         }
@@ -111,7 +109,7 @@ export const getUserDetails = (id, address) => async (dispatch) => {
 
     dispatch(getRequest());
     try {
-        const result = await axios.get(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`);
+        const result = await api.get(`/${address}/${id}`);
         if (result.data) {
             dispatch(doneSuccess(result.data));
         }
@@ -123,7 +121,7 @@ export const getUserDetails = (id, address) => async (dispatch) => {
 export const deleteUser = (id, address) => async (dispatch) => {
      dispatch(getRequest());
      try {
-         const result = await axios.delete(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`);
+         const result = await api.delete(`/${address}/${id}`);
          if (result.data.message) {
              dispatch(getFailed(result.data.message));
          } else {
@@ -137,9 +135,7 @@ export const deleteUser = (id, address) => async (dispatch) => {
 export const updateUser = (fields, id, address) => async (dispatch) => {
     dispatch(getRequest());
     try {
-        const result = await axios.put(`${process.env.REACT_APP_BASE_URL}/${address}/${id}`, fields, {
-            headers: { 'Content-Type': 'application/json' },
-        });
+        const result = await api.put(`/${address}/${id}`, fields);
         if (result.data.schoolName) {
             dispatch(authSuccess(result.data));
         }
@@ -154,9 +150,7 @@ export const updateUser = (fields, id, address) => async (dispatch) => {
 export const addStuff = (fields, address) => async (dispatch) => {
     dispatch(authRequest());
     try {
-        const result = await axios.post(`${process.env.REACT_APP_BASE_URL}/${address}Create`, fields, {
-            headers: { 'Content-Type': 'application/json' },
-        });
+        const result = await api.post(`/${address}Create`, fields);
         if (result.data.message) {
             dispatch(authFailed(result.data.message));
         } else {

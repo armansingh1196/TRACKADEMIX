@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     CssBaseline,
     Box,
@@ -7,6 +7,8 @@ import {
     Typography,
     Divider,
     IconButton,
+    useMediaQuery,
+    useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -23,10 +25,19 @@ import TeacherProfile from './TeacherProfile';
 import TeacherViewStudent from './TeacherViewStudent';
 import StudentExamMarks from '../admin/studentRelated/StudentExamMarks';
 import MarkAttendance from './MarkAttendance';
+import AttendanceRecord from './AttendanceRecord';
+import BulkMarkMarks from './BulkMarkMarks';
 import styled from 'styled-components';
 
 const TeacherDashboard = () => {
-    const [open, setOpen] = useState(true);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    const [open, setOpen] = useState(!isMobile);
+
+    useEffect(() => {
+        setOpen(!isMobile);
+    }, [isMobile]);
+
     const toggleDrawer = () => setOpen(!open);
 
     return (
@@ -56,8 +67,9 @@ const TeacherDashboard = () => {
                             fontFamily: 'Outfit', 
                             color: 'white',
                             opacity: 0.8,
-                            fontSize: '1rem',
-                            letterSpacing: '1px'
+                            fontSize: { xs: '0.8rem', sm: '1rem' },
+                            letterSpacing: '1px',
+                            display: { xs: 'none', sm: 'block' }
                         }}
                     >
                         PROFESSOR PORTAL
@@ -66,7 +78,7 @@ const TeacherDashboard = () => {
                 </Toolbar>
             </AppBar>
             
-            <Drawer variant="permanent" open={open}>
+            <Drawer variant={isMobile ? "temporary" : "permanent"} open={open} onClose={() => setOpen(false)}>
                 <Toolbar />
                 <Box sx={{ overflow: 'hidden', height: '100%' }}>
                     <List component="nav" sx={{ p: 0 }}>
@@ -86,6 +98,8 @@ const TeacherDashboard = () => {
                         <Route path="/Teacher/complain" element={<TeacherComplain />} />
                         <Route path="/Teacher/class" element={<TeacherClassDetails />} />
                         <Route path="/Teacher/attendance" element={<MarkAttendance />} />
+                        <Route path="/Teacher/attendance-record" element={<AttendanceRecord />} />
+                        <Route path="/Teacher/marks" element={<BulkMarkMarks />} />
                         <Route path="/Teacher/class/student/:id" element={<TeacherViewStudent />} />
                         <Route path="/Teacher/class/student/attendance/:studentID/:subjectID" element={<StudentAttendance situation="Subject" />} />
                         <Route path="/Teacher/class/student/marks/:studentID/:subjectID" element={<StudentExamMarks situation="Subject" />} />
@@ -106,6 +120,10 @@ const BrandLogo = styled(Typography)`
   font-family: 'Outfit', sans-serif !important;
   letter-spacing: 1px !important;
   font-size: 1.25rem !important;
+
+  @media (max-width: 600px) {
+    font-size: 1rem !important;
+  }
   
   span {
     color: var(--primary);
@@ -115,4 +133,8 @@ const BrandLogo = styled(Typography)`
 const ContentWrapper = styled(Box)`
   padding: 32px;
   animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @media (max-width: 600px) {
+    padding: 16px;
+  }
 `;

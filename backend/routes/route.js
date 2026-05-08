@@ -1,8 +1,9 @@
 const router = require('express').Router();
+const { authRequired } = require('../lib/auth.js');
 
 const { adminRegister, adminLogIn, getAdminDetail, updateAdmin } = require('../controllers/admin-controller.js');
 
-const { sclassCreate, sclassList, deleteSclass, deleteSclasses, getSclassDetail, getSclassStudents } = require('../controllers/class-controller.js');
+const { sclassCreate, sclassList, promoteBatch, deleteSclass, deleteSclasses, getSclassDetail, getSclassStudents } = require('../controllers/class-controller.js');
 const { complainCreate, complainList } = require('../controllers/complain-controller.js');
 const { noticeCreate, noticeList, deleteNotices, deleteNotice, updateNotice } = require('../controllers/notice-controller.js');
 const {
@@ -23,11 +24,16 @@ const {
     removeStudentAttendance,
     getAttendanceHeatmap } = require('../controllers/student_controller.js');
 const { subjectCreate, classSubjects, deleteSubjectsByClass, getSubjectDetail, deleteSubject, freeSubjectList, allSubjects, deleteSubjects } = require('../controllers/subject-controller.js');
-const { teacherRegister, teacherLogIn, getTeachers, getTeacherDetail, deleteTeachers, deleteTeachersByClass, deleteTeacher, updateTeacherSubject, teacherAttendance, bulkMarkAttendance } = require('../controllers/teacher-controller.js');
+const { teacherRegister, teacherLogIn, getTeachers, getTeacherDetail, deleteTeachers, deleteTeachersByClass, deleteTeacher, updateTeacherSubject, teacherAttendance, bulkMarkAttendance, getAttendanceRecords, bulkMarkMarks } = require('../controllers/teacher-controller.js');
 
 // Admin
 router.post('/AdminReg', adminRegister);
 router.post('/AdminLogin', adminLogIn);
+router.post('/StudentLogin', studentLogIn);
+router.post('/TeacherLogin', teacherLogIn);
+
+// Everything below requires an auth token
+router.use(authRequired);
 
 router.get("/Admin/:id", getAdminDetail)
 router.put("/Admin/:id", updateAdmin)
@@ -36,7 +42,6 @@ router.put("/Admin/:id", updateAdmin)
 
 router.post('/StudentReg', studentRegister);
 router.post('/StudentBulkReg', studentBulkRegister);
-router.post('/StudentLogin', studentLogIn)
 
 router.get("/Students/:id", getStudents)
 router.get("/Student/:id", getStudentDetail)
@@ -61,7 +66,6 @@ router.get("/Student/Heatmap/:id", getAttendanceHeatmap)
 // Teacher
 
 router.post('/TeacherReg', teacherRegister);
-router.post('/TeacherLogin', teacherLogIn)
 
 router.get("/Teachers/:id", getTeachers)
 router.get("/Teacher/:id", getTeacherDetail)
@@ -74,6 +78,8 @@ router.put("/TeacherSubject", updateTeacherSubject)
 
 router.post('/TeacherAttendance/:id', teacherAttendance)
 router.post('/Teacher/BulkAttendance', bulkMarkAttendance)
+router.get('/Teacher/AttendanceRecords/:subjectId', getAttendanceRecords)
+router.post('/Teacher/BulkMarks', bulkMarkMarks)
 
 // Notice
 
@@ -98,6 +104,7 @@ router.post('/SclassCreate', sclassCreate);
 
 router.get('/SclassList/:id', sclassList);
 router.get("/Sclass/:id", getSclassDetail)
+router.post("/Sclass/Promote", promoteBatch)
 
 router.get("/Sclass/Students/:id", getSclassStudents)
 

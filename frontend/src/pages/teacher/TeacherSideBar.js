@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Divider, ListItemButton, ListItemIcon, ListItemText, Box, Typography as MuiTypography } from '@mui/material';
+import { Divider, ListItemButton, ListItemIcon, ListItemText, Box, Typography as MuiTypography, Collapse, List } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
@@ -10,16 +10,21 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
 const TeacherSideBar = ({ open }) => {
     const { currentUser } = useSelector((state) => state.user);
     const sclassName = currentUser.teachSclass;
     const location = useLocation();
 
+    const [openAttendance, setOpenAttendance] = React.useState(false);
+
     const menuItems = [
         { text: 'Dashboard', icon: <HomeIcon />, path: '/Teacher/dashboard' },
         { text: `Class ${sclassName?.sclassName || ''}`, icon: <ClassOutlinedIcon />, path: '/Teacher/class' },
-        { text: 'Mark Attendance', icon: <CheckCircleOutlineIcon />, path: '/Teacher/attendance' },
+        { text: 'Upload Marks', icon: <AssignmentIcon />, path: '/Teacher/marks' },
         { text: 'Complains', icon: <AnnouncementOutlinedIcon />, path: '/Teacher/complain' },
     ];
 
@@ -45,6 +50,45 @@ const TeacherSideBar = ({ open }) => {
                         </StyledListItem>
                     );
                 })}
+                
+                {/* Attendance Submenu */}
+                <StyledListItem 
+                    onClick={() => setOpenAttendance(!openAttendance)}
+                    sx={{ justifyContent: open ? 'initial' : 'center' }}
+                >
+                    <ListItemIcon className="icon" sx={{ mr: open ? 3 : 'auto' }}>
+                        <CheckCircleOutlineIcon />
+                    </ListItemIcon>
+                    {open && <ListItemText primary="Attendance" />}
+                    {open && (openAttendance ? <ExpandLess sx={{color:'var(--text-muted)'}} /> : <ExpandMore sx={{color:'var(--text-muted)'}} />)}
+                </StyledListItem>
+                
+                <Collapse in={openAttendance} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                        <StyledListItem 
+                            component={Link} 
+                            to="/Teacher/attendance"
+                            className={location.pathname === "/Teacher/attendance" ? 'active' : ''}
+                            sx={{ pl: open ? 4 : 'initial', justifyContent: open ? 'initial' : 'center' }}
+                        >
+                            <ListItemIcon className="icon" sx={{ mr: open ? 3 : 'auto' }}>
+                                <CheckCircleOutlineIcon sx={{ fontSize: 18 }} />
+                            </ListItemIcon>
+                            {open && <ListItemText primary="Mark Attendance" />}
+                        </StyledListItem>
+                        <StyledListItem 
+                            component={Link} 
+                            to="/Teacher/attendance-record"
+                            className={location.pathname === "/Teacher/attendance-record" ? 'active' : ''}
+                            sx={{ pl: open ? 4 : 'initial', justifyContent: open ? 'initial' : 'center' }}
+                        >
+                            <ListItemIcon className="icon" sx={{ mr: open ? 3 : 'auto' }}>
+                                <HistoryOutlinedIcon sx={{ fontSize: 18 }} />
+                            </ListItemIcon>
+                            {open && <ListItemText primary="Attendance Record" />}
+                        </StyledListItem>
+                    </List>
+                </Collapse>
             </Box>
             
             <Divider sx={{ my: 1, borderColor: 'var(--border)', opacity: open ? 1 : 0 }} />

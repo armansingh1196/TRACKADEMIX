@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     CssBaseline,
     Box,
@@ -7,6 +7,8 @@ import {
     Typography,
     Divider,
     IconButton,
+    useMediaQuery,
+    useTheme,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Navigate, Route, Routes } from 'react-router-dom';
@@ -16,13 +18,19 @@ import StudentSideBar from './StudentSideBar';
 import StudentHomePage from './StudentHomePage';
 import StudentProfile from './StudentProfile';
 import StudentSubjects from './StudentSubjects';
-import StudentAttendance from '../admin/studentRelated/StudentAttendance';
 import StudentComplain from './StudentComplain';
 import AccountMenu from '../../components/AccountMenu';
 import styled from 'styled-components';
 
 const StudentDashboard = () => {
-    const [open, setOpen] = useState(true);
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    const [open, setOpen] = useState(!isMobile);
+
+    useEffect(() => {
+        setOpen(!isMobile);
+    }, [isMobile]);
+
     const toggleDrawer = () => setOpen(!open);
 
     return (
@@ -52,8 +60,9 @@ const StudentDashboard = () => {
                             fontFamily: 'Outfit', 
                             color: 'white',
                             opacity: 0.8,
-                            fontSize: '1rem',
-                            letterSpacing: '1px'
+                            fontSize: { xs: '0.8rem', sm: '1rem' },
+                            letterSpacing: '1px',
+                            display: { xs: 'none', sm: 'block' }
                         }}
                     >
                         STUDENT PORTAL
@@ -62,7 +71,7 @@ const StudentDashboard = () => {
                 </Toolbar>
             </AppBar>
             
-            <Drawer variant="permanent" open={open}>
+            <Drawer variant={isMobile ? "temporary" : "permanent"} open={open} onClose={() => setOpen(false)}>
                 <Toolbar />
                 <Box sx={{ overflow: 'hidden', height: '100%' }}>
                     <List component="nav" sx={{ p: 0 }}>
@@ -98,6 +107,10 @@ const BrandLogo = styled(Typography)`
   font-family: 'Outfit', sans-serif !important;
   letter-spacing: 1px !important;
   font-size: 1.25rem !important;
+
+  @media (max-width: 600px) {
+    font-size: 1rem !important;
+  }
   
   span {
     color: var(--primary);
@@ -107,4 +120,8 @@ const BrandLogo = styled(Typography)`
 const ContentWrapper = styled(Box)`
   padding: 32px;
   animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @media (max-width: 600px) {
+    padding: 16px;
+  }
 `;

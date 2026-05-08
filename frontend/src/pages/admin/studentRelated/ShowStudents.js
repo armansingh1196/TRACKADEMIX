@@ -51,16 +51,6 @@ const ShowStudents = () => {
     })) : [];
 
     const StudentButtonHaver = ({ row }) => {
-        const options = ['Take Attendance', 'Provide Marks'];
-        const [open, setOpen] = useState(false);
-        const anchorRef = useRef(null);
-        const [selectedIndex, setSelectedIndex] = useState(0);
-
-        const handleClick = () => {
-            if (selectedIndex === 0) navigate("/Admin/students/student/attendance/" + row.id);
-            else if (selectedIndex === 1) navigate("/Admin/students/student/marks/" + row.id);
-        };
-
         return (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <IconButton onClick={() => deleteHandler(row.id, "Student")} size="small" sx={{ color: 'var(--accent)' }}>
@@ -74,51 +64,6 @@ const ShowStudents = () => {
                 >
                     View
                 </AppButton>
-                <Fragment>
-                    <ButtonGroup 
-                        variant="outlined" 
-                        ref={anchorRef} 
-                        size="small"
-                        sx={{ 
-                            borderColor: 'var(--border)',
-                            '& .MuiButton-root': { borderColor: 'var(--border)', color: 'white' }
-                        }}
-                    >
-                        <Button onClick={handleClick} sx={{ textTransform: 'none', fontWeight: 700 }}>{options[selectedIndex]}</Button>
-                        <Button
-                            size="small"
-                            onClick={() => setOpen((prevOpen) => !prevOpen)}
-                            sx={{ px: 0, minWidth: '32px' }}
-                        >
-                            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
-                        </Button>
-                    </ButtonGroup>
-                    <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal sx={{ zIndex: 1300 }}>
-                        {({ TransitionProps, placement }) => (
-                            <Grow {...TransitionProps} style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}>
-                                <Paper sx={{ borderRadius: '12px', mt: 1, background: 'var(--bg-surface) !important' }}>
-                                    <ClickAwayListener onClickAway={() => setOpen(false)}>
-                                        <MenuList id="split-button-menu" autoFocusItem>
-                                            {options.map((option, index) => (
-                                                <MenuItem
-                                                    key={option}
-                                                    selected={index === selectedIndex}
-                                                    onClick={() => {
-                                                        setSelectedIndex(index);
-                                                        setOpen(false);
-                                                    }}
-                                                    sx={{ fontWeight: 600, fontSize: '0.85rem' }}
-                                                >
-                                                    {option}
-                                                </MenuItem>
-                                            ))}
-                                        </MenuList>
-                                    </ClickAwayListener>
-                                </Paper>
-                            </Grow>
-                        )}
-                    </Popper>
-                </Fragment>
             </Box>
         );
     };
@@ -135,6 +80,25 @@ const ShowStudents = () => {
             <AppHeader 
                 title="Student Management" 
                 subtitle="View, add, and manage student records and performance tracking." 
+                rightSide={
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                        <AppButton 
+                            variant="outlined" 
+                            startIcon={<FileUploadIcon />}
+                            onClick={() => navigate("/Admin/students/bulkimport")}
+                            sx={{ borderColor: 'var(--border)', color: 'white' }}
+                        >
+                            Bulk Import
+                        </AppButton>
+                        <AppButton 
+                            variant="contained" 
+                            startIcon={<PersonAddAlt1Icon />}
+                            onClick={() => navigate("/Admin/addstudents")}
+                        >
+                            Add Student
+                        </AppButton>
+                    </Box>
+                }
             />
             
             {loading ? (

@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getSubjectList } from '../../redux/sclassRelated/sclassHandle';
 import { 
     BottomNavigation, BottomNavigationAction, Container, 
-    Box, Typography, CircularProgress, Grid, Paper, Stack 
+    Box, Typography, CircularProgress, Grid, Paper, Stack,
+    Table, TableHead, TableBody
 } from '@mui/material';
 import { getUserDetails } from '../../redux/userRelated/userHandle';
 import CustomBarChart from '../../components/CustomBarChart'
@@ -36,75 +37,105 @@ const StudentSubjects = () => {
     }, [userDetails])
 
     useEffect(() => {
-        if (subjectMarks.length === 0) {
-            dispatch(getSubjectList(currentUser.sclassName._id, "ClassSubjects"));
+        if (subjectMarks.length === 0 && currentUser?.sclassName) {
+            const classId = currentUser?.sclassName?._id || currentUser?.sclassName;
+            dispatch(getSubjectList(classId, "ClassSubjects"));
         }
-    }, [subjectMarks, dispatch, currentUser.sclassName._id]);
+    }, [subjectMarks, dispatch, currentUser?.sclassName]);
+
+    const currentSemester = currentUser?.sclassName?.semester || 1;
+    const currentBatch = currentUser?.sclassName?.batch || "N/A";
+
+    // Group marks by semester using the new relational structure
+    // result shape: { subject_id, marks_obtained, subjects: { sub_name, semester } }
+    const groupedMarks = subjectMarks.reduce((acc, result) => {
+        if (!result.subjects) return acc;
+        const sem = result.subjects.semester || 'Unknown';
+        if (!acc[sem]) {
+            acc[sem] = [];
+        }
+        acc[sem].push(result);
+        return acc;
+    }, {});
+
+    const sortedSemesters = Object.keys(groupedMarks).sort((a, b) => parseInt(a) - parseInt(b));
 
     const handleSectionChange = (event, newSection) => {
         setSelectedSection(newSection);
     };
 
     const renderTableSection = () => (
-        <GlassCard sx={{ p: 4 }}>
-            <SectionHeader>
-                <TableChartIcon sx={{ color: 'var(--primary)', fontSize: 32 }} />
-                <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white' }}>
-                    Academic Scorecard
-                </Typography>
-            </SectionHeader>
-            <Table sx={{ mt: 2 }}>
-                <TableHead>
-                    <StyledTableRow>
-                        <StyledTableCell>Subject Name</StyledTableCell>
-                        <StyledTableCell align="center">Obtained Marks</StyledTableCell>
-                        <StyledTableCell align="right">Status</StyledTableCell>
-                    </StyledTableRow>
-                </TableHead>
-                <TableBody>
-                    {subjectMarks.map((result, index) => {
-                        if (!result.subName || !result.marksObtained) return null;
-                        const isPassing = parseInt(result.marksObtained) >= 40;
-                        return (
-                            <StyledTableRow key={index}>
-                                <StyledTableCell sx={{ color: 'white', fontWeight: 600 }}>
-                                    {result.subName.subName}
-                                </StyledTableCell>
-                                <StyledTableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800, fontSize: '1.1rem' }}>
-                                    {result.marksObtained}
-                                </StyledTableCell>
-                                <StyledTableCell align="right">
-                                    <StatusBadge className={isPassing ? 'pass' : 'fail'}>
-                                        {isPassing ? 'Qualified' : 'Requires Improvement'}
-                                    </StatusBadge>
-                                </StyledTableCell>
+        <Stack spacing={4}>
+            {sortedSemesters.map(semester => (
+                <GlassCard sx={{ p: 4 }} key={semester}>
+                    <SectionHeader>
+                        <TableChartIcon sx={{ color: 'var(--primary)', fontSize: 32 }} />
+                        <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white' }}>
+                            Semester {semester} Performance
+                        </Typography>
+                    </SectionHeader>
+                    <Table sx={{ mt: 2 }}>
+                        <TableHead>
+                            <StyledTableRow>
+                                <StyledTableCell>Subject Name</StyledTableCell>
+                                <StyledTableCell align="center">Obtained Marks</StyledTableCell>
+                                <StyledTableCell align="right">Status</StyledTableCell>
                             </StyledTableRow>
-                        );
-                    })}
-                </TableBody>
-            </Table>
-        </GlassCard>
+                        </TableHead>
+                        <TableBody>
+                            {groupedMarks[semester].map((result, index) => {
+                                const marks = result.marks_obtained || 0;
+                                const isPassing = marks >= 40;
+                                return (
+                                    <StyledTableRow key={index}>
+                                        <StyledTableCell sx={{ color: 'white', fontWeight: 600 }}>
+                                            {result.subjects.sub_name}
+                                        </StyledTableCell>
+                                        <StyledTableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800, fontSize: '1.1rem' }}>
+                                            {marks}
+                                        </StyledTableCell>
+                                        <StyledTableCell align="right">
+                                            <StatusBadge className={isPassing ? 'pass' : 'fail'}>
+                                                {isPassing ? 'Qualified' : 'Requires Improvement'}
+                                            </StatusBadge>
+                                        </StyledTableCell>
+                                    </StyledTableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+                </GlassCard>
+            ))}
+        </Stack>
     );
 
-    const renderChartSection = () => (
-        <GlassCard sx={{ p: 4, minHeight: 400, display: 'flex', flexDirection: 'column' }}>
-            <SectionHeader>
-                <InsertChartIcon sx={{ color: 'var(--secondary)', fontSize: 32 }} />
-                <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white' }}>
-                    Performance Analytics
-                </Typography>
-            </SectionHeader>
-            <Box sx={{ flexGrow: 1, mt: 4, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <CustomBarChart chartData={subjectMarks} dataKey="marksObtained" />
-            </Box>
-        </GlassCard>
-    );
+    const renderChartSection = () => {
+        // Flatten marks and rename properties for the chart to consume them easily
+        const chartData = subjectMarks.map(result => ({
+            subName: { subName: result.subjects?.sub_name || "Unknown" },
+            marksObtained: result.marks_obtained || 0
+        }));
+
+        return (
+            <GlassCard sx={{ p: 4, minHeight: 400, display: 'flex', flexDirection: 'column' }}>
+                <SectionHeader>
+                    <InsertChartIcon sx={{ color: 'var(--secondary)', fontSize: 32 }} />
+                    <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white' }}>
+                        Cumulative Performance Analytics
+                    </Typography>
+                </SectionHeader>
+                <Box sx={{ flexGrow: 1, mt: 4, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <CustomBarChart chartData={chartData} dataKey="marksObtained" />
+                </Box>
+            </GlassCard>
+        );
+    };
 
     return (
         <Container maxWidth="lg" sx={{ mt: 2, mb: 10 }}>
             <AppHeader 
                 title="Subject Analytics" 
-                subtitle="Review your academic performance and subject-wise score distribution." 
+                subtitle={`Current Semester: ${currentSemester} | Batch: ${currentBatch}`} 
             />
 
             {loading ? (

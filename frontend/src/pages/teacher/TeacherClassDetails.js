@@ -8,6 +8,7 @@ import TableTemplate from "../../components/TableTemplate";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
 import AppHeader from "../../components/common/AppHeader";
 import AppButton from "../../components/common/AppButton";
+import AssignmentIcon from '@mui/icons-material/Assignment';
 import styled from "styled-components";
 
 const TeacherClassDetails = () => {
@@ -140,12 +141,21 @@ const TeacherClassDetails = () => {
     return (
         <Box sx={{ p: 4 }}>
             {loading ? (
-                <Typography sx={{ color: 'var(--text-muted)' }}>Loading Faculty Data...</Typography>
+                <Typography sx={{ color: 'var(--text-muted)' }}>Loading Students Data...</Typography>
             ) : (
                 <>
                     <AppHeader 
                         title={`${currentUser.teachSclass?.sclassName} Details`} 
                         subtitle={`Managing students and academic records for ${currentUser.teachSubject?.subName}`}
+                        rightSide={
+                            <AppButton 
+                                variant="contained" 
+                                startIcon={<AssignmentIcon />}
+                                onClick={() => navigate("/Teacher/marks")}
+                            >
+                                Upload Marks
+                            </AppButton>
+                        }
                     />
 
                     {getresponse ? (

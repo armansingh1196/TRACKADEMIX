@@ -1,5 +1,5 @@
 import { useEffect, useState, Fragment } from 'react';
-import { IconButton, Box, Menu, MenuItem, ListItemIcon, Tooltip, Container, CircularProgress, Typography, Grid, Paper } from '@mui/material';
+import { IconButton, Box, Menu, MenuItem, ListItemIcon, Tooltip, CircularProgress, Typography, Grid, Paper, Chip } from '@mui/material';
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +15,8 @@ import SpeedDialTemplate from '../../../components/SpeedDialTemplate';
 import Popup from '../../../components/Popup';
 import AppHeader from '../../../components/common/AppHeader';
 import AppButton from '../../../components/common/AppButton';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import { api } from '../../../api/client';
 
 const ShowClasses = () => {
   const navigate = useNavigate();
@@ -23,14 +25,17 @@ const ShowClasses = () => {
   const { sclassesList, loading, getresponse } = useSelector((state) => state.sclass);
   const { currentUser } = useSelector(state => state.user);
 
-  const adminID = currentUser._id;
+  const adminID = currentUser?._id;
 
   useEffect(() => {
-    dispatch(getAllSclasses(adminID, "Sclass"));
+    if (adminID) {
+      dispatch(getAllSclasses(adminID, "Sclass"));
+    }
   }, [adminID, dispatch]);
 
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
+  const [promoting, setPromoting] = useState(false);
 
   const deleteHandler = (deleteID, address) => {
     dispatch(deleteUser(deleteID, address))
@@ -45,21 +50,40 @@ const ShowClasses = () => {
       });
   };
 
+  const handlePromoteBatch = async (batchName) => {
+    if (!window.confirm(`Are you sure you want to promote all sections in Batch ${batchName} to the next semester?`)) return;
+    
+    setPromoting(true);
+    try {
+        const result = await api.post(`/Sclass/Promote`, {
+            batch: batchName,
+            adminID: adminID
+        });
+        setMessage(result.data.message || "Batch promoted successfully");
+        setShowPopup(true);
+        dispatch(getAllSclasses(adminID, "Sclass"));
+    } catch (err) {
+        console.error(err);
+        setMessage("Failed to promote batch. Check server logs.");
+        setShowPopup(true);
+    } finally {
+        setPromoting(false);
+    }
+  };
+
+  // Group classes by batch
+  const groupedClasses = sclassesList && Array.isArray(sclassesList) ? sclassesList.reduce((acc, curr) => {
+    const batch = curr.batch || "Legacy / Unassigned";
+    if (!acc[batch]) acc[batch] = [];
+    acc[batch].push(curr);
+    return acc;
+  }, {}) : {};
+
   const sclassColumns = [
-    { id: 'name', label: 'Class Name', minWidth: 100 },
-    { id: 'batch', label: 'Batch', minWidth: 120 },
-    { id: 'year', label: 'Year', minWidth: 100 },
+    { id: 'name', label: 'Section Name', minWidth: 100 },
+    { id: 'year', label: 'Academic Year', minWidth: 100 },
     { id: 'semester', label: 'Semester', minWidth: 100 },
   ];
-
-  const sclassRows = sclassesList && sclassesList.length > 0 && sclassesList.map((sclass) => ({
-    name: sclass.sclassName,
-    batch: sclass.batch || "N/A",
-    year: sclass.year ? `${sclass.year}${sclass.year === 1 ? 'st' : sclass.year === 2 ? 'nd' : sclass.year === 3 ? 'rd' : 'th'} Year` : "N/A",
-    semester: sclass.semester ? `Sem ${sclass.semester}` : "N/A",
-    id: sclass._id,
-  }));
-
 
   const SclassButtonHaver = ({ row }) => {
     const actions = [
@@ -76,7 +100,7 @@ const ShowClasses = () => {
             size="small"
             onClick={() => navigate("/Admin/classes/class/" + row.id)}
         >
-          View Details
+          View
         </AppButton>
         <ActionMenu actions={actions} />
       </Box>
@@ -89,17 +113,13 @@ const ShowClasses = () => {
 
     return (
       <Fragment>
-        <Tooltip title="Manage Students & Subjects">
-          <AppButton
-            variant="outlined"
+          <IconButton
             size="small"
-            sx={{ borderColor: 'var(--border)', color: 'white' }}
+            sx={{ border: '1px solid var(--border)' }}
             onClick={(e) => setAnchorEl(e.currentTarget)}
-            endIcon={<SpeedDialIcon sx={{ fontSize: '16px !important' }} />}
           >
-            Manage
-          </AppButton>
-        </Tooltip>
+            <SpeedDialIcon sx={{ fontSize: '16px' }} />
+          </IconButton>
         <Menu
           anchorEl={anchorEl}
           open={open}
@@ -135,16 +155,25 @@ const ShowClasses = () => {
     );
   }
 
-  const actions = [
-    { icon: <AddCardIcon />, name: 'Add New Class', action: () => navigate("/Admin/addclass") },
-    { icon: <DeleteIcon />, name: 'Delete All Classes', action: () => deleteHandler(adminID, "Sclasses") },
+  const globalActions = [
+    { icon: <AddCardIcon />, name: 'Add New Section', action: () => navigate("/Admin/addclass") },
+    { icon: <DeleteIcon />, name: 'Wipe All Data', action: () => deleteHandler(adminID, "Sclasses") },
   ];
 
   return (
-    <Box sx={{ p: 4 }}>
+    <Box sx={{ p: { xs: 2, md: 4 } }}>
         <AppHeader 
-            title="Class Management" 
-            subtitle="Organize your institution's classes and their academic structures." 
+            title="Institutional Batches" 
+            subtitle="Manage academic sections and track semester-wise progression." 
+            rightSide={
+                <AppButton 
+                    variant="contained" 
+                    startIcon={<AddCardIcon />}
+                    onClick={() => navigate("/Admin/addclass")}
+                >
+                    Establish Section
+                </AppButton>
+            }
         />
         
         {loading ? (
@@ -152,24 +181,61 @@ const ShowClasses = () => {
                 <CircularProgress sx={{ color: 'var(--primary)' }} />
             </Box>
         ) : (
-            <Box sx={{ mt: 4 }}>
-                {getresponse ? (
-                    <EmptyStateBox>
-                        <Typography variant="h6" sx={{ color: 'var(--text-muted)', mb: 2 }}>
-                            No academic classes have been defined yet.
+            <Box sx={{ mt: 2 }}>
+                {Object.keys(groupedClasses).length === 0 ? (
+                    <EmptyStateBox className="fade-in">
+                        <Typography variant="h6" sx={{ color: 'var(--text-muted)', mb: 2, fontFamily: 'var(--font-heading)' }}>
+                            No active batches found in the system.
                         </Typography>
                         <AppButton variant="contained" onClick={() => navigate("/Admin/addclass")}>
-                            Create Your First Class
+                            Establish Your First Section
                         </AppButton>
                     </EmptyStateBox>
                 ) : (
-                    <GlassCard>
-                        {Array.isArray(sclassesList) && sclassesList.length > 0 && (
-                            <TableTemplate buttonHaver={SclassButtonHaver} columns={sclassColumns} rows={sclassRows} />
-                        )}
-                        <SpeedDialTemplate actions={actions} />
-                    </GlassCard>
+                    <Grid container spacing={4}>
+                        {Object.entries(groupedClasses).map(([batchName, classes]) => (
+                            <Grid item xs={12} key={batchName}>
+                                <BatchGroup className="fade-in">
+                                    <BatchHeader>
+                                        <Box>
+                                            <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, fontFamily: 'var(--font-heading)' }}>
+                                                Batch {batchName}
+                                            </Typography>
+                                            <Chip 
+                                                label={`${classes.length} Active Sections`} 
+                                                size="small" 
+                                                sx={{ background: 'rgba(132, 94, 194, 0.1)', color: 'var(--primary)', fontWeight: 700 }} 
+                                            />
+                                        </Box>
+                                        <AppButton 
+                                            variant="outlined" 
+                                            startIcon={promoting ? <CircularProgress size={16} /> : <TrendingUpIcon />}
+                                            onClick={() => handlePromoteBatch(batchName)}
+                                            disabled={promoting}
+                                            sx={{ borderColor: 'var(--primary)', color: 'var(--primary)' }}
+                                        >
+                                            Promote Semester
+                                        </AppButton>
+                                    </BatchHeader>
+                                    
+                                    <GlassCard sx={{ mt: 2 }}>
+                                        <TableTemplate 
+                                            buttonHaver={SclassButtonHaver} 
+                                            columns={sclassColumns} 
+                                            rows={classes.map(s => ({
+                                                name: s.sclassName,
+                                                year: `${s.year}${s.year === 1 ? 'st' : s.year === 2 ? 'nd' : s.year === 3 ? 'rd' : 'th'} Year`,
+                                                semester: `Sem ${s.semester}`,
+                                                id: s._id
+                                            }))} 
+                                        />
+                                    </GlassCard>
+                                </BatchGroup>
+                            </Grid>
+                        ))}
+                    </Grid>
                 )}
+                <SpeedDialTemplate actions={globalActions} />
             </Box>
         )}
         <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
@@ -182,8 +248,19 @@ export default ShowClasses;
 const GlassCard = styled(Paper)`
   background: var(--bg-card) !important;
   border: 1px solid var(--border) !important;
-  border-radius: 24px !important;
+  border-radius: 20px !important;
   overflow: hidden;
+`;
+
+const BatchGroup = styled(Box)`
+  margin-bottom: 8px;
+`;
+
+const BatchHeader = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 0 8px;
 `;
 
 const EmptyStateBox = styled(Box)`
@@ -192,7 +269,7 @@ const EmptyStateBox = styled(Box)`
   align-items: center;
   justify-content: center;
   min-height: 400px;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(255, 255, 255, 0.01);
   border-radius: 32px;
   border: 2px dashed var(--border);
 `;

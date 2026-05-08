@@ -19,6 +19,7 @@ import TeacherDashboard from './pages/teacher/TeacherDashboard';
 
 const App = () => {
   const { currentRole } = useSelector(state => state.user);
+  console.log("App rendering, role:", currentRole);
 
   // Authenticated Routes
   if (currentRole === "Admin") {

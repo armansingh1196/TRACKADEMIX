@@ -100,6 +100,7 @@ const SectionLabel = styled(MuiTypography)`
   padding: 8px 16px;
   font-size: 0.7rem !important;
   font-weight: 800 !important;
+  font-family: var(--font-heading) !important;
   color: var(--text-muted) !important;
   letter-spacing: 2px !important;
   text-transform: uppercase;
@@ -170,6 +171,6 @@ const StyledListItem = styled(ListItemButton)`
   .MuiListItemText-primary {
     font-size: 0.9rem !important;
     font-weight: 600;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-body);
   }
 `;

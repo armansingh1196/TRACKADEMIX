@@ -1,5 +1,6 @@
 const supabase = require('../supabaseClient.js');
 const bcrypt = require('bcryptjs');
+const { signAuthToken } = require('../lib/auth.js');
 
 const validateEmail = (email) => {
     return String(email)
@@ -71,7 +72,8 @@ const adminRegister = async (req, res) => {
             password: undefined
         };
 
-        res.send(result);
+        const token = signAuthToken({ sub: data.id, role: "Admin" });
+        res.send({ ...result, token });
     } catch (err) {
         console.error(err);
         res.status(500).json(err);
@@ -104,7 +106,8 @@ const adminLogIn = async (req, res) => {
                     schoolName: admin.school_name,
                     password: undefined
                 };
-                res.send(result);
+                const token = signAuthToken({ sub: admin.id, role: "Admin" });
+                res.send({ ...result, token });
             } else {
                 res.send({ message: "Invalid password" });
             }
@@ -147,7 +150,10 @@ const updateAdmin = async (req, res) => {
         const updateData = {};
         if (name) updateData.name = name;
         if (email) updateData.email = email;
-        if (password) updateData.password = password;
+        if (password) {
+            const salt = await bcrypt.genSalt(10);
+            updateData.password = await bcrypt.hash(password, salt);
+        }
         if (schoolName) updateData.school_name = schoolName;
         if (branch) updateData.branch = branch;
 

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { 
     Box, Typography, CircularProgress, Stack, 
-    Checkbox, Table, TableBody, TableCell, 
-    TableContainer, TableHead, TableRow, Paper 
+    Paper, TextField, Grid, Switch
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { getClassStudents } from "../../redux/sclassRelated/sclassHandle";
@@ -10,7 +9,7 @@ import AppButton from "../../components/common/AppButton";
 import AppHeader from "../../components/common/AppHeader";
 import Popup from "../../components/Popup";
 import styled, { keyframes } from 'styled-components';
-import axios from 'axios';
+import { api } from '../../api/client';
 
 const MarkAttendance = () => {
     const dispatch = useDispatch();
@@ -21,6 +20,7 @@ const MarkAttendance = () => {
     const [loader, setLoader] = useState(false);
     const [message, setMessage] = useState("");
     const [showPopup, setShowPopup] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
 
     const classID = currentUser.teachSclass?._id;
     const subjectID = currentUser.teachSubject?._id;
@@ -52,17 +52,16 @@ const MarkAttendance = () => {
     const submitHandler = async () => {
         setLoader(true);
         try {
-            const today = new Date().toISOString().split('T')[0];
             const attendanceData = attendanceList.map(item => ({
                 student_id: item.student_id,
                 subject_id: subjectID,
                 teacher_id: teacherID,
                 sclass_id: classID,
-                date: today,
+                date: selectedDate,
                 status: item.status
             }));
 
-            await axios.post(`${process.env.REACT_APP_BASE_URL}/Teacher/BulkAttendance`, { attendanceData });
+            await api.post(`/Teacher/BulkAttendance`, { attendanceData });
             setMessage("Attendance records submitted successfully!");
             setShowPopup(true);
         } catch (err) {
@@ -80,48 +79,77 @@ const MarkAttendance = () => {
                 subtitle={`Mark attendance for ${currentUser.teachSclass?.sclassName} - ${currentUser.teachSubject?.subName}`}
             />
 
+            <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+                <TextField
+                    label="Class Date"
+                    type="date"
+                    value={selectedDate}
+                    onChange={(e) => setSelectedDate(e.target.value)}
+                    InputLabelProps={{ shrink: true }}
+                    sx={{ 
+                        minWidth: 200, 
+                        bgcolor: 'rgba(255, 255, 255, 0.03)', 
+                        borderRadius: '12px',
+                        '& .MuiOutlinedInput-root': {
+                            color: 'white',
+                            '& fieldset': { borderColor: 'var(--border)' },
+                            '&:hover fieldset': { borderColor: 'var(--primary)' },
+                        },
+                        '& .MuiInputLabel-root': { color: 'var(--text-muted)' }
+                    }}
+                />
+            </Box>
+
             {loading ? (
                 <Box sx={{ display: 'flex', justifyContent: 'center', py: 10 }}>
                     <CircularProgress sx={{ color: 'var(--primary)' }} />
                 </Box>
             ) : (
                 <Stack spacing={4} sx={{ mt: 4 }}>
-                    <GlassCard>
-                        <TableContainer>
-                            <Table sx={{ minWidth: 650 }}>
-                                <TableHead sx={{ background: 'rgba(132, 94, 194, 0.1)' }}>
-                                    <TableRow>
-                                        <TableCell sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Roll No</TableCell>
-                                        <TableCell sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Student Name</TableCell>
-                                        <TableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Present</TableCell>
-                                        <TableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Absent</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {attendanceList.map((row) => (
-                                        <StyledTableRow key={row.student_id}>
-                                            <TableCell sx={{ color: 'white', fontWeight: 600 }}>{row.rollNum}</TableCell>
-                                            <TableCell sx={{ color: 'white', fontWeight: 600 }}>{row.name}</TableCell>
-                                            <TableCell align="center">
-                                                <Checkbox 
-                                                    checked={row.status === 'Present'} 
-                                                    onChange={() => toggleStatus(row.student_id)}
-                                                    sx={{ color: 'var(--primary)', '&.Mui-checked': { color: '#4BB543' } }}
-                                                />
-                                            </TableCell>
-                                            <TableCell align="center">
-                                                <Checkbox 
-                                                    checked={row.status === 'Absent'} 
-                                                    onChange={() => toggleStatus(row.student_id)}
-                                                    sx={{ color: 'var(--border)', '&.Mui-checked': { color: '#ff4b2b' } }}
-                                                />
-                                            </TableCell>
-                                        </StyledTableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </GlassCard>
+                    <Grid container spacing={2}>
+                        {attendanceList.map((row) => (
+                            <Grid item xs={12} md={6} key={row.student_id}>
+                                <Paper sx={{ 
+                                    p: 2, 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'space-between',
+                                    background: 'var(--bg-card)',
+                                    borderRadius: '16px',
+                                    border: '1px solid var(--border)',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': { 
+                                        borderColor: 'var(--primary)',
+                                        transform: 'translateY(-2px)',
+                                        boxShadow: 'var(--shadow-md)'
+                                    }
+                                }}>
+                                    <Box>
+                                        <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.5px' }}>
+                                            {row.rollNum}
+                                        </Typography>
+                                        <Typography variant="body1" sx={{ color: 'white', fontWeight: 700 }}>
+                                            {row.name}
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                        <Typography variant="body2" sx={{ color: row.status === 'Present' ? '#4BB543' : '#ff4b2b', fontWeight: 700 }}>
+                                            {row.status}
+                                        </Typography>
+                                        <Switch 
+                                            checked={row.status === 'Present'} 
+                                            onChange={() => toggleStatus(row.student_id)}
+                                            sx={{ 
+                                                '& .MuiSwitch-switchBase.Mui-checked': { color: '#4BB543' },
+                                                '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { backgroundColor: '#4BB543' },
+                                                '& .MuiSwitch-track': { backgroundColor: 'rgba(255,255,255,0.1)' }
+                                            }}
+                                        />
+                                    </Box>
+                                </Paper>
+                            </Grid>
+                        ))}
+                    </Grid>
 
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
                         <AppButton 
@@ -154,13 +182,4 @@ const GlassCard = styled(Paper)`
   border-radius: 24px !important;
   overflow: hidden;
   animation: ${fadeIn} 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-`;
-
-const StyledTableRow = styled(TableRow)`
-  &:hover {
-    background: rgba(255, 255, 255, 0.02);
-  }
-  td {
-    border-bottom: 1px solid rgba(176, 168, 185, 0.05) !important;
-  }
 `;

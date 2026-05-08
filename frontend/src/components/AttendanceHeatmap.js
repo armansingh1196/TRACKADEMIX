@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Box, Typography, Tooltip, ToggleButtonGroup, ToggleButton, CircularProgress } from '@mui/material';
-import axios from 'axios';
+import { api } from '../api/client';
 
 const AttendanceHeatmap = ({ studentID }) => {
     const [data, setData] = useState([]);
@@ -12,7 +12,7 @@ const AttendanceHeatmap = ({ studentID }) => {
         const fetchHeatmap = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/Student/Heatmap/${studentID}`);
+                const response = await api.get(`/Student/Heatmap/${studentID}`);
                 setData(response.data);
             } catch (err) {
                 console.error("Failed to fetch heatmap", err);

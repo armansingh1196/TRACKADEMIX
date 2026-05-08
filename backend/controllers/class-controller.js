@@ -5,46 +5,71 @@ const sclassCreate = async (req, res) => {
         const { sclassName, batch, year, semester, adminID } = req.body;
 
         if (!sclassName || !batch || !adminID) {
-            return res.send({ message: 'Class name, batch, and Admin ID are required' });
+            return res.status(400).send({ message: 'Class name, batch, and Admin ID are required' });
         }
 
-        const { data: existingSclasses } = await supabase
+        // 1. Check for existing class
+        const { data: existingSclasses, error: checkError } = await supabase
             .from('sclasses')
             .select('*')
             .eq('sclass_name', sclassName)
             .eq('admin_id', adminID)
             .eq('batch', batch);
 
-        if (existingSclasses && existingSclasses.length > 0) {
-            res.send({ message: 'Sorry this class name already exists for this batch' });
-        } else {
-            const { data, error } = await supabase
-                .from('sclasses')
-                .insert([
-                    { 
-                        sclass_name: sclassName, 
-                        batch, 
-                        year: parseInt(year) || 1, 
-                        semester: parseInt(semester) || 1, 
-                        admin_id: adminID 
-                    }
-                ])
-                .select()
-                .single();
-
-            if (error) throw error;
-
-            
-            const result = {
-                ...data,
-                _id: data.id,
-                sclassName: data.sclass_name,
-                school: data.admin_id
-            };
-            res.send(result);
+        if (checkError) {
+            console.error("Database Check Error:", checkError);
+            throw checkError;
         }
+
+        if (existingSclasses && existingSclasses.length > 0) {
+            return res.send({ message: 'Sorry this class name already exists for this batch' });
+        }
+
+        // 2. Prepare Insert Object (with fallbacks for older schemas)
+        const insertData = { 
+            sclass_name: sclassName, 
+            batch, 
+            year: parseInt(year) || 1, 
+            semester: parseInt(semester) || 1, 
+            admin_id: adminID 
+        };
+
+        const { data, error } = await supabase
+            .from('sclasses')
+            .insert([insertData])
+            .select()
+            .single();
+
+        if (error) {
+            console.error("Database Insert Error:", error);
+            // If error indicates missing columns (year/semester/batch), try inserting without them
+            if (error.code === '42703') { // undefined_column
+                console.warn("Attempting fallback insert due to missing columns...");
+                const fallbackData = { sclass_name: sclassName, admin_id: adminID };
+                const { data: fbData, error: fbError } = await supabase
+                    .from('sclasses')
+                    .insert([fallbackData])
+                    .select()
+                    .single();
+                if (fbError) throw fbError;
+                return res.send({ ...fbData, _id: fbData.id, sclassName: fbData.sclass_name, school: fbData.admin_id, message: "Class created with legacy schema (batch/year ignored)" });
+            }
+            throw error;
+        }
+
+        const result = {
+            ...data,
+            _id: data.id,
+            sclassName: data.sclass_name,
+            school: data.admin_id
+        };
+        res.send(result);
     } catch (err) {
-        res.status(500).json(err);
+        console.error("CRITICAL: Error in sclassCreate:", err);
+        res.status(500).json({ 
+            message: "Failed to create class. Possible database schema mismatch.", 
+            error: err.message || err 
+        });
     }
 };
 
@@ -71,10 +96,51 @@ const sclassList = async (req, res) => {
             res.send({ message: "No sclasses found" });
         }
     } catch (err) {
-        res.status(500).json(err);
+        console.error("CRITICAL: Error in sclassList:", err);
+        res.status(500).json({ message: "Failed to fetch classes.", error: err.message || err });
     }
 };
 
+const promoteBatch = async (req, res) => {
+    try {
+        const { batch, adminID } = req.body;
+        
+        // Fetch all classes in this batch
+        const { data: sclasses, error: fetchError } = await supabase
+            .from('sclasses')
+            .select('*')
+            .eq('batch', batch)
+            .eq('admin_id', adminID);
+
+        if (fetchError) throw fetchError;
+
+        const results = await Promise.all(sclasses.map(async (sclass) => {
+            const nextSemester = (sclass.semester || 1) + 1;
+            const nextYear = Math.ceil(nextSemester / 2);
+            
+            if (nextSemester > 8) {
+                return { id: sclass.id, status: 'graduated' };
+            }
+
+            const { data, error } = await supabase
+                .from('sclasses')
+                .update({ 
+                    semester: nextSemester,
+                    year: nextYear
+                })
+                .eq('id', sclass.id)
+                .select()
+                .single();
+            
+            return error ? { id: sclass.id, error } : data;
+        }));
+
+        res.send({ message: "Batch promoted successfully", results });
+    } catch (err) {
+        console.error("Error in promoteBatch:", err);
+        res.status(500).json(err);
+    }
+};
 
 const getSclassDetail = async (req, res) => {
     try {
@@ -82,26 +148,21 @@ const getSclassDetail = async (req, res) => {
             .from('sclasses')
             .select(`
                 *,
-                admins (
-                    id,
-                    school_name
-                )
+                admins ( id, school_name )
             `)
             .eq('id', req.params.id)
             .single();
 
-        if (error || !sclass) {
-            return res.send({ message: "No class found" });
-        }
+        if (error || !sclass) return res.send({ message: "No class found" });
 
         const result = {
             ...sclass,
             _id: sclass.id,
             sclassName: sclass.sclass_name,
-            school: {
+            school: sclass.admins ? {
                 _id: sclass.admins.id,
                 schoolName: sclass.admins.school_name
-            }
+            } : null
         };
         res.send(result);
     } catch (err) {
@@ -143,12 +204,7 @@ const deleteSclass = async (req, res) => {
             .select()
             .single();
 
-        if (error || !data) {
-            return res.send({ message: "Class not found" });
-        }
-        
-        // Cascading deletes are handled by PostgreSQL (ON DELETE CASCADE)
-        // so we don't need to manually delete students/subjects here
+        if (error || !data) return res.send({ message: "Class not found" });
         res.send(data);
     } catch (error) {
         res.status(500).json(error);
@@ -163,13 +219,19 @@ const deleteSclasses = async (req, res) => {
             .eq('admin_id', req.params.id)
             .select();
 
-        if (error || !data || data.length === 0) {
-            return res.send({ message: "No classes found to delete" });
-        }
+        if (error || !data || data.length === 0) return res.send({ message: "No classes found to delete" });
         res.send(data);
     } catch (error) {
         res.status(500).json(error);
     }
 };
 
-module.exports = { sclassCreate, sclassList, deleteSclass, deleteSclasses, getSclassDetail, getSclassStudents };
+module.exports = { 
+    sclassCreate, 
+    sclassList, 
+    promoteBatch,
+    deleteSclass, 
+    deleteSclasses, 
+    getSclassDetail, 
+    getSclassStudents 
+};

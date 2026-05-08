@@ -11,8 +11,8 @@ import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 
 const StudentProfile = () => {
     const { currentUser } = useSelector((state) => state.user);
-    const sclassName = currentUser.sclassName;
-    const studentSchool = currentUser.school;
+    const sclassName = currentUser?.sclassName;
+    const studentSchool = currentUser?.school;
 
     return (
         <Container maxWidth="md" sx={{ mt: 2, mb: 4 }}>

@@ -5,8 +5,22 @@ const initialState = {
     userDetails: [],
     tempDetails: [],
     loading: false,
-    currentUser: JSON.parse(localStorage.getItem('user')) || null,
-    currentRole: (JSON.parse(localStorage.getItem('user')) || {}).role || null,
+    currentUser: (() => {
+        try {
+            const user = localStorage.getItem('user');
+            return user ? JSON.parse(user) : null;
+        } catch (e) {
+            return null;
+        }
+    })(),
+    currentRole: (() => {
+        try {
+            const user = localStorage.getItem('user');
+            return user ? JSON.parse(user).role : null;
+        } catch (e) {
+            return null;
+        }
+    })(),
     error: null,
     response: null,
     darkMode: true

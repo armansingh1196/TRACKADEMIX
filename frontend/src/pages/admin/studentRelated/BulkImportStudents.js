@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
 import FileDownloadOutlinedIcon from '@mui/icons-material/FileDownloadOutlined';
-import axios from 'axios';
+import { api } from '../../../api/client';
 import styled, { keyframes } from 'styled-components';
 import AppHeader from '../../../components/common/AppHeader';
 import AppButton from '../../../components/common/AppButton';
@@ -40,14 +40,15 @@ const BulkImportStudents = () => {
                 const text = event.target.result;
                 const rows = text.split('\n').slice(1); // Skip header
                 const data = rows.map(row => {
-                    const [name, rollNum, password] = row.split(',');
+                    const [name, rollNum, dob] = row.split(',');
                     const cleanedName = name?.trim();
                     const cleanedRoll = rollNum?.trim();
-                    const isValid = cleanedName && cleanedRoll && !isNaN(cleanedRoll);
+                    const cleanedDob = dob?.trim();
+                    const isValid = cleanedName && cleanedRoll && cleanedDob && !isNaN(cleanedRoll);
                     return { 
                         name: cleanedName, 
                         rollNum: cleanedRoll, 
-                        password: password?.trim() || "123456",
+                        dob: cleanedDob,
                         isValid 
                     };
                 }).filter(item => item.name || item.rollNum);
@@ -73,18 +74,19 @@ const BulkImportStudents = () => {
             let hasInvalidRows = false;
 
             rows.forEach(row => {
-                const [name, rollNum, password] = row.split(',');
+                const [name, rollNum, dob] = row.split(',');
                 const cleanedName = name?.trim();
                 const cleanedRoll = rollNum?.trim();
+                const cleanedDob = dob?.trim();
                 
-                if (cleanedName && cleanedRoll) {
+                if (cleanedName && cleanedRoll && cleanedDob) {
                     if (isNaN(cleanedRoll)) {
                         hasInvalidRows = true;
                     } else {
                         students.push({ 
                             name: cleanedName, 
                             rollNum: cleanedRoll, 
-                            password: password?.trim() || "123456",
+                            dob: cleanedDob,
                             sclassName: sclassName 
                         });
                     }
@@ -106,7 +108,7 @@ const BulkImportStudents = () => {
             }
 
             try {
-                const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/StudentBulkReg`, {
+                const res = await api.post(`/StudentBulkReg`, {
                     students,
                     adminID: currentUser._id
                 });
@@ -124,7 +126,7 @@ const BulkImportStudents = () => {
     };
 
     const downloadTemplate = () => {
-        const csvContent = "data:text/csv;charset=utf-8,Name,RollNumber,Password\nArjun Kumar,2022001,bit123\nSneha Kumari,2022002,bit123";
+        const csvContent = "data:text/csv;charset=utf-8,Name,RollNumber,DOB\nArjun Kumar,2022001,2004-05-15\nSneha Kumari,2022002,2003-11-20";
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
@@ -211,7 +213,7 @@ const BulkImportStudents = () => {
                                     <PreviewItem key={i} style={{ opacity: item.isValid ? 1 : 0.5, border: item.isValid ? '1px solid var(--border)' : '1px solid var(--accent)' }}>
                                         <Box>
                                             <Typography variant="subtitle2" sx={{ color: 'white', fontWeight: 800 }}>{item.name || "Missing Name"}</Typography>
-                                            <Typography variant="caption" sx={{ color: 'var(--text-muted)' }}>Roll: {item.rollNum || "Missing Roll"}</Typography>
+                                            <Typography variant="caption" sx={{ color: 'var(--text-muted)' }}>Roll: {item.rollNum || "Missing Roll"} | DOB: {item.dob || "Missing DOB"}</Typography>
                                         </Box>
                                         <Typography variant="caption" sx={{ color: item.isValid ? 'var(--primary-light)' : 'var(--accent)', fontWeight: 700 }}>
                                             {item.isValid ? "Valid Row" : "Invalid Format"}

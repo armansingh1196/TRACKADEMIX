@@ -19,36 +19,47 @@ export const AppBar = styled(MuiAppBar, {
     borderBottom: '1px solid var(--border)',
     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
     width: '100%',
+    [theme.breakpoints.down('sm')]: {
+        padding: '0 8px',
+    }
 }));
 
 export const Drawer = styled(MuiDrawer, { 
     shouldForwardProp: (prop) => prop !== 'open' 
 })(({ theme, open }) => ({
     '& .MuiDrawer-paper': {
-        position: 'relative',
+        position: 'fixed',
         whiteSpace: 'nowrap',
         width: drawerWidth,
-        transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+        transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1), transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
         boxSizing: 'border-box',
         background: 'var(--bg-main) !important',
         borderRight: '1px solid var(--border)',
         overflowX: 'hidden',
+        height: '100vh',
+        zIndex: theme.zIndex.drawer,
         ...(!open && {
-            overflowX: 'hidden',
-            transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
             width: collapsedWidth,
+            [theme.breakpoints.down('md')]: {
+                width: 0,
+                transform: 'translateX(-100%)',
+            },
         }),
     },
 }));
 
 export const MainContent = styled('main', {
     shouldForwardProp: (prop) => prop !== 'open',
-})(({ open }) => ({
+})(({ theme, open }) => ({
     flexGrow: 1,
     height: '100vh',
     overflow: 'auto',
     backgroundColor: 'var(--bg-main)',
     transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+    marginLeft: open ? drawerWidth : collapsedWidth,
+    [theme.breakpoints.down('md')]: {
+        marginLeft: 0,
+    }
 }));
 
 export const StyledTableCell = styled(TableCell)(({ theme }) => ({

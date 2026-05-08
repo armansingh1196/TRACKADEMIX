@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, CircularProgress, Stack, Typography, Grid, MenuItem } from "@mui/material";
+import { Box, CircularProgress, Stack, Typography, Grid, MenuItem } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addStuff } from '../../../redux/userRelated/userHandle';
@@ -13,22 +13,36 @@ import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 
 const AddClass = () => {
     const [sclassName, setSclassName] = useState("");
-    const [batch, setBatch] = useState("2022-26");
+    const [batch, setBatch] = useState("2024-2028");
     const [year, setYear] = useState(1);
     const [semester, setSemester] = useState(1);
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const { status, response, tempDetails, currentUser } = useSelector(state => state.user);
-    const adminID = currentUser._id;
+    const { status, response, tempDetails, currentUser, error } = useSelector(state => state.user);
+    const adminID = currentUser?._id;
 
     const [loader, setLoader] = useState(false)
     const [message, setMessage] = useState("");
     const [showPopup, setShowPopup] = useState(false);
 
+    // Dynamic Batch Options based on current year
+    const currentYear = new Date().getFullYear();
+    const batchOptions = [
+        `${currentYear}-${currentYear + 4}`,
+        `${currentYear - 1}-${currentYear + 3}`,
+        `${currentYear - 2}-${currentYear + 2}`,
+        `${currentYear - 3}-${currentYear + 1}`,
+    ];
+
     const submitHandler = (event) => {
         event.preventDefault()
+        if (!adminID) {
+            setMessage("Session expired. Please login again.");
+            setShowPopup(true);
+            return;
+        }
         setLoader(true)
         const fields = { sclassName, batch, year, semester, adminID };
         dispatch(addStuff(fields, "Sclass"))
@@ -41,20 +55,32 @@ const AddClass = () => {
             setLoader(false)
         }
         else if (status === 'failed') {
-            setMessage(response)
+            setMessage(response || "Failed to create class");
             setShowPopup(true)
             setLoader(false)
+            dispatch(underControl())
+        }
+        else if (status === 'error') {
+            setMessage("Network error or server misconfiguration. Please check if database migrations are applied.");
+            setShowPopup(true)
+            setLoader(false)
+            dispatch(underControl())
         }
     }, [status, navigate, response, dispatch, tempDetails]);
 
+    const handleSemesterChange = (val) => {
+        setSemester(val);
+        setYear(Math.ceil(val / 2));
+    }
+
     return (
-        <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Box sx={{ p: { xs: 2, md: 4 }, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <AppHeader 
-                title="Institutional Expansion" 
-                subtitle="Define a new academic batch and semester for tracking."
+                title="Establish Batch" 
+                subtitle="Define a new academic section within the 4-year institutional cycle."
             />
             
-            <FormWrapper>
+            <FormWrapper className="fade-in">
                 <IconCircle>
                     <ClassOutlinedIcon sx={{ fontSize: 32, color: 'var(--primary)' }} />
                 </IconCircle>
@@ -62,7 +88,7 @@ const AddClass = () => {
                 <form onSubmit={submitHandler}>
                     <Stack spacing={4}>
                         <AppTextField
-                            label="Class / Section Name"
+                            label="Section / Class Name"
                             placeholder="e.g. CSE-A"
                             value={sclassName}
                             onChange={(event) => setSclassName(event.target.value)}
@@ -72,44 +98,43 @@ const AddClass = () => {
                         />
 
                         <AppTextField
-                            label="Batch Period"
-                            placeholder="e.g. 2022-2026"
+                            select
+                            label="Academic Batch Cycle"
                             value={batch}
                             onChange={(event) => setBatch(event.target.value)}
                             required
                             fullWidth
-                        />
+                        >
+                            {batchOptions.map(opt => (
+                                <MenuItem key={opt} value={opt}>{opt} Batch</MenuItem>
+                            ))}
+                        </AppTextField>
 
                         <Grid container spacing={3}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} md={6}>
                                 <AppTextField
                                     select
-                                    label="Academic Year"
-                                    value={year}
-                                    onChange={(e) => setYear(e.target.value)}
-                                    fullWidth
-                                >
-                                    {[1, 2, 3, 4].map((y) => (
-                                        <MenuItem key={y} value={y}>{y}{y === 1 ? 'st' : y === 2 ? 'nd' : y === 3 ? 'rd' : 'th'} Year</MenuItem>
-                                    ))}
-                                </AppTextField>
-                            </Grid>
-                            <Grid item xs={6}>
-                                <AppTextField
-                                    select
-                                    label="Semester"
+                                    label="Current Semester"
                                     value={semester}
-                                    onChange={(e) => setSemester(e.target.value)}
+                                    onChange={(e) => handleSemesterChange(e.target.value)}
                                     fullWidth
                                 >
                                     {[1, 2, 3, 4, 5, 6, 7, 8].map((s) => (
-                                        <MenuItem key={s} value={s}>Sem {s}</MenuItem>
+                                        <MenuItem key={s} value={s}>Semester {s}</MenuItem>
                                     ))}
                                 </AppTextField>
                             </Grid>
+                            <Grid item xs={12} md={6}>
+                                <AppTextField
+                                    disabled
+                                    label="Calculated Year"
+                                    value={`${year}${year === 1 ? 'st' : year === 2 ? 'nd' : year === 3 ? 'rd' : 'th'} Year`}
+                                    fullWidth
+                                />
+                            </Grid>
                         </Grid>
 
-                        <Box sx={{ pt: 2, display: 'flex', gap: 2 }}>
+                        <Box sx={{ pt: 2, display: 'flex', gap: 2, flexDirection: { xs: 'column', sm: 'row' } }}>
                             <AppButton 
                                 variant="outlined" 
                                 fullWidth 
@@ -124,7 +149,7 @@ const AddClass = () => {
                                 type="submit"
                                 disabled={loader}
                             >
-                                {loader ? <CircularProgress size={24} color="inherit" /> : "Establish Batch"}
+                                {loader ? <CircularProgress size={24} color="inherit" /> : "Establish Section"}
                             </AppButton>
                         </Box>
                     </Stack>
@@ -151,8 +176,12 @@ const FormWrapper = styled(Box)`
   border-radius: 40px;
   border: 1px solid var(--border);
   box-shadow: var(--shadow-xl);
-  margin-top: 40px;
-  animation: ${fadeIn} 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-top: 20px;
+  
+  @media (max-width: 600px) {
+    padding: 24px;
+    border-radius: 24px;
+  }
 `;
 
 const IconCircle = styled(Box)`

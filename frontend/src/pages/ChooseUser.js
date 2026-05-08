@@ -21,6 +21,7 @@ const ChooseUser = ({ visitor }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const password = "zxc";
+  const guestEnabled = import.meta.env.VITE_ENABLE_GUEST_DEMO === "true";
 
   const { status, currentUser, currentRole } = useSelector(state => state.user);
 
@@ -29,8 +30,12 @@ const ChooseUser = ({ visitor }) => {
   const [message, setMessage] = useState("");
 
   const navigateHandler = (user) => {
-    if (user === "HOD") {
+    if (user === "Admin") {
       if (visitor === "guest") {
+        if (!guestEnabled) {
+          navigate('/Adminlogin');
+          return;
+        }
         const email = "yogendra@12";
         const fields = { email, password };
         setLoader(true);
@@ -40,6 +45,10 @@ const ChooseUser = ({ visitor }) => {
       }
     } else if (user === "Student") {
       if (visitor === "guest") {
+        if (!guestEnabled) {
+          navigate('/Studentlogin');
+          return;
+        }
         const rollNum = "1";
         const studentName = "Dipesh Awasthi";
         const fields = { rollNum, studentName, password };
@@ -50,6 +59,10 @@ const ChooseUser = ({ visitor }) => {
       }
     } else if (user === "Teacher") {
       if (visitor === "guest") {
+        if (!guestEnabled) {
+          navigate('/Teacherlogin');
+          return;
+        }
         const email = "tony@12";
         const fields = { email, password };
         setLoader(true);
@@ -62,7 +75,7 @@ const ChooseUser = ({ visitor }) => {
 
   useEffect(() => {
     if (status === 'success' || currentUser !== null) {
-      if (currentRole === 'HOD') navigate('/Admin/dashboard');
+      if (currentRole === 'Admin') navigate('/Admin/dashboard');
       else if (currentRole === 'Student') navigate('/Student/dashboard');
       else if (currentRole === 'Teacher') navigate('/Teacher/dashboard');
     } else if (status === 'error') {
@@ -73,7 +86,7 @@ const ChooseUser = ({ visitor }) => {
   }, [status, currentRole, navigate, currentUser]);
 
   const roles = [
-    { name: 'HOD', label: 'Head of Department', icon: <AccountCircle />, desc: 'Manage institutional data, students, and faculty assignments.' },
+    { name: 'Admin', label: 'Head of Department', icon: <AccountCircle />, desc: 'Manage institutional data, students, and faculty assignments.' },
     { name: 'Student', label: 'Student', icon: <School />, desc: 'Access your courses, attendance, and exam performance records.' },
     { name: 'Teacher', label: 'Professor', icon: <Group />, desc: 'Manage class sessions, track assignments, and evaluate student progress.' },
   ];

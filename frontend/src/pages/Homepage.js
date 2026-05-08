@@ -116,13 +116,19 @@ const float = keyframes`
 `;
 
 const StyledMain = styled.div`
-  height: 100vh;
+  min-height: 100vh;
   background-color: var(--bg-main);
   color: var(--text-main);
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
+  padding: 80px 0;
+
+  @media (min-width: 900px) {
+    height: 100vh;
+    padding: 0;
+  }
 `;
 
 const BackgroundDecor = styled.div`
@@ -159,7 +165,8 @@ const MainTitle = styled(Typography)`
   font-size: clamp(3rem, 7vw, 5rem) !important;
   line-height: 1 !important;
   margin-bottom: 28px !important;
-  font-weight: 900 !important;
+  font-weight: 800 !important;
+  font-family: var(--font-heading) !important;
   
   span {
     color: var(--primary);
@@ -178,6 +185,16 @@ const ActionButtons = styled(Box)`
   display: flex;
   gap: 24px;
   margin-bottom: 48px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 16px;
+    
+    button {
+        width: 100%;
+        font-size: 1rem !important;
+    }
+  }
 `;
 
 const SignUpText = styled(Typography)`
@@ -258,8 +275,8 @@ const StatBox = styled(Box)`
   border: 1px solid rgba(132, 94, 194, 0.1);
   text-align: center;
 
-  .val { font-size: 1.8rem; font-weight: 900; color: white; font-family: 'Outfit'; }
-  .lab { font-size: 0.8rem; text-transform: uppercase; color: var(--secondary); font-weight: 800; margin-top: 4px; }
+  .val { font-size: 1.8rem; font-weight: 800; color: white; font-family: var(--font-heading); }
+  .lab { font-size: 0.8rem; text-transform: uppercase; color: var(--secondary); font-weight: 800; margin-top: 4px; font-family: var(--font-heading); }
 `;
 
 const GlowBall = styled.div`

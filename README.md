@@ -27,7 +27,14 @@ cd backend
 npm install
 npm start
 ```
-*Ensure you have a `.env` file in the `backend` directory with your `SUPABASE_URL` and `SUPABASE_ANON_KEY`.*
+Create `backend/.env` (or copy from `backend/.env.example`) and set:
+
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+- `JWT_SECRET` (required)
+- `ORIGIN` (usually `http://localhost:3000`)
+
+By default the backend runs on `PORT=5501` (recommended for local dev).
 
 ### 2. Frontend Setup
 ```bash
@@ -35,7 +42,13 @@ cd frontend
 npm install
 npm start
 ```
-*Ensure you have a `.env` file in the `frontend` directory with `REACT_APP_BASE_URL=http://localhost:5501`.*
+Create `frontend/.env` (or copy from `frontend/.env.example`) and set:
+
+- `VITE_API_BASE_URL=http://localhost:5501`
+
+Optional:
+
+- `VITE_ENABLE_GUEST_DEMO=true` to enable the guest demo password (`zxc`).
 
 ---
 

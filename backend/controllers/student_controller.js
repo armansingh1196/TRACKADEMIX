@@ -1,5 +1,6 @@
 const supabase = require('../supabaseClient.js');
 const bcrypt = require('bcryptjs');
+const { signAuthToken } = require('../lib/auth.js');
 
 const studentRegister = async (req, res) => {
     try {
@@ -25,6 +26,7 @@ const studentRegister = async (req, res) => {
                     { 
                         name, 
                         roll_num: rollNum, 
+                        dob: req.body.dob || null,
                         password: hashedPassword,
                         sclass_id: sclassName, 
                         admin_id: adminID,
@@ -62,7 +64,8 @@ const studentLogIn = async (req, res) => {
             .select(`
                 *,
                 admins ( id, school_name ),
-                sclasses ( id, sclass_name )
+                sclasses ( id, sclass_name, semester, batch ),
+                exam_results ( subject_id, marks_obtained, subjects ( sub_name, semester ) )
             `)
             .eq('roll_num', rollNum)
             .eq('name', studentName)
@@ -85,13 +88,16 @@ const studentLogIn = async (req, res) => {
                 },
                 sclassName: {
                     _id: student.sclasses.id,
-                    sclassName: student.sclasses.sclass_name
+                    sclassName: student.sclasses.sclass_name,
+                    semester: student.sclasses.semester,
+                    batch: student.sclasses.batch
                 },
                 password: undefined,
                 examResult: undefined,
                 attendance: undefined
             };
-            res.send(result);
+            const token = signAuthToken({ sub: student.id, role: "Student" });
+            res.send({ ...result, token });
         } else {
             res.send({ message: "Invalid password" });
         }
@@ -106,7 +112,7 @@ const getStudents = async (req, res) => {
             .from('students')
             .select(`
                 *,
-                sclasses ( id, sclass_name )
+                sclasses ( id, sclass_name, semester, batch )
             `)
             .eq('admin_id', req.params.id);
 
@@ -116,9 +122,12 @@ const getStudents = async (req, res) => {
             const result = students.map(student => ({
                 ...student,
                 _id: student.id,
+                rollNum: student.roll_num,
                 sclassName: {
                     _id: student.sclasses.id,
-                    sclassName: student.sclasses.sclass_name
+                    sclassName: student.sclasses.sclass_name,
+                    semester: student.sclasses.semester,
+                    batch: student.sclasses.batch
                 },
                 password: undefined
             }));
@@ -138,7 +147,9 @@ const getStudentDetail = async (req, res) => {
             .select(`
                 *,
                 admins ( id, school_name ),
-                sclasses ( id, sclass_name )
+                sclasses ( id, sclass_name, semester, batch ),
+                exam_results ( subject_id, marks_obtained, subjects ( sub_name, semester ) ),
+                attendance_records ( date, status, subject_id, subjects ( sub_name ) )
             `)
             .eq('id', req.params.id)
             .single();
@@ -158,11 +169,18 @@ const getStudentDetail = async (req, res) => {
             },
             sclassName: {
                 _id: student.sclasses.id,
-                sclassName: student.sclasses.sclass_name
+                sclassName: student.sclasses.sclass_name,
+                semester: student.sclasses.semester,
+                batch: student.sclasses.batch
             },
             password: undefined,
-            examResult: student.exam_marks || [],
-            attendance: student.attendance || []
+            examResult: student.exam_results || [],
+            attendance: (student.attendance_records || []).map(a => ({
+                date: a.date,
+                status: a.status,
+                subName: a.subjects?.sub_name || "N/A",
+                subId: a.subject_id
+            }))
         };
         res.send(result);
     } catch (err) {
@@ -239,28 +257,15 @@ const updateStudent = async (req, res) => {
 };
 
 const updateExamResult = async (req, res) => {
-    const { subName, marksObtained } = req.body;
+    const { subName, marksObtained } = req.body; // Actually subName is the subject_id from frontend
     try {
-        const { data: student } = await supabase
-            .from('students')
-            .select('exam_marks')
-            .eq('id', req.params.id)
-            .single();
-
-        if (!student) return res.send({ message: 'Student not found' });
-
-        let examMarks = student.exam_marks || [];
-        const index = examMarks.findIndex(item => item.subName === subName);
-        if (index > -1) {
-            examMarks[index].marksObtained = marksObtained;
-        } else {
-            examMarks.push({ subName, marksObtained });
-        }
-
         const { data, error } = await supabase
-            .from('students')
-            .update({ exam_marks: examMarks })
-            .eq('id', req.params.id)
+            .from('exam_results')
+            .upsert({ 
+                student_id: req.params.id, 
+                subject_id: subName, 
+                marks_obtained: marksObtained 
+            }, { onConflict: 'student_id,subject_id' })
             .select()
             .single();
 
@@ -405,10 +410,24 @@ const studentBulkRegister = async (req, res) => {
         
         const salt = await bcrypt.genSalt(10);
         const processedStudents = await Promise.all(students.map(async (student) => {
-            const hashedPassword = await bcrypt.hash(String(student.password || "123456"), salt);
+            // Generate Deterministic Password
+            const firstName = student.name.split(' ')[0];
+            const capitalizedFirst = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+            
+            // Extract Year from DOB (assumes YYYY-MM-DD or DD-MM-YYYY)
+            // A simple regex to find a 4 digit year
+            const yearMatch = student.dob.match(/\d{4}/);
+            const year = yearMatch ? yearMatch[0] : "0000";
+            
+            const rollStr = String(student.rollNum);
+            const rollSuffix = rollStr.length >= 3 ? rollStr.slice(-3) : rollStr;
+            const generatedPassword = `${capitalizedFirst}@${year}${rollSuffix}`;
+
+            const hashedPassword = await bcrypt.hash(generatedPassword, salt);
             return {
                 name: student.name,
                 roll_num: student.rollNum,
+                dob: student.dob,
                 password: hashedPassword,
                 sclass_id: student.sclassName,
                 admin_id: adminID,

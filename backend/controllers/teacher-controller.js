@@ -1,5 +1,6 @@
 const supabase = require('../supabaseClient.js');
 const bcrypt = require('bcryptjs');
+const { signAuthToken } = require('../lib/auth.js');
 
 const teacherRegister = async (req, res) => {
     const { name, email, password, school, teachSubject, teachSclass } = req.body;
@@ -60,8 +61,8 @@ const teacherLogIn = async (req, res) => {
             .select(`
                 *,
                 admins ( id, school_name ),
-                sclasses ( id, sclass_name ),
-                subjects ( id, sub_name, sessions )
+                sclasses ( id, sclass_name, semester, batch ),
+                subjects!teachers_teach_subject_id_fkey ( id, sub_name, sessions )
             `)
             .eq('email', email)
             .single();
@@ -88,11 +89,14 @@ const teacherLogIn = async (req, res) => {
                 } : null,
                 teachSclass: teacher.sclasses ? {
                     _id: teacher.sclasses.id,
-                    sclassName: teacher.sclasses.sclass_name
+                    sclassName: teacher.sclasses.sclass_name,
+                    semester: teacher.sclasses.semester,
+                    batch: teacher.sclasses.batch
                 } : null,
                 password: undefined
             };
-            res.send(result);
+            const token = signAuthToken({ sub: teacher.id, role: "Teacher" });
+            res.send({ ...result, token });
         } else {
             res.send({ message: "Invalid password" });
         }
@@ -107,8 +111,8 @@ const getTeachers = async (req, res) => {
             .from('teachers')
             .select(`
                 *,
-                subjects ( id, sub_name ),
-                sclasses ( id, sclass_name )
+                subjects!teachers_teach_subject_id_fkey ( id, sub_name ),
+                sclasses ( id, sclass_name, semester, batch )
             `)
             .eq('admin_id', req.params.id);
 
@@ -123,7 +127,9 @@ const getTeachers = async (req, res) => {
             } : null,
             teachSclass: teacher.sclasses ? {
                 _id: teacher.sclasses.id,
-                sclassName: teacher.sclasses.sclass_name
+                sclassName: teacher.sclasses.sclass_name,
+                semester: teacher.sclasses.semester,
+                batch: teacher.sclasses.batch
             } : null,
             password: undefined
         }));
@@ -139,9 +145,9 @@ const getTeacherDetail = async (req, res) => {
             .from('teachers')
             .select(`
                 *,
-                subjects ( id, sub_name, sessions ),
+                subjects!teachers_teach_subject_id_fkey ( id, sub_name, sessions ),
                 admins ( id, school_name ),
-                sclasses ( id, sclass_name )
+                sclasses ( id, sclass_name, semester, batch )
             `)
             .eq('id', req.params.id)
             .single();
@@ -165,7 +171,9 @@ const getTeacherDetail = async (req, res) => {
             } : null,
             teachSclass: teacher.sclasses ? {
                 _id: teacher.sclasses.id,
-                sclassName: teacher.sclasses.sclass_name
+                sclassName: teacher.sclasses.sclass_name,
+                semester: teacher.sclasses.semester,
+                batch: teacher.sclasses.batch
             } : null,
             password: undefined
         };
@@ -307,12 +315,59 @@ const bulkMarkAttendance = async (req, res) => {
 
         const { data, error } = await supabase
             .from('attendance_records')
-            .insert(attendanceData)
+            .upsert(attendanceData, { onConflict: 'student_id,subject_id,date' })
             .select();
 
         if (error) throw error;
 
         res.status(200).json({ message: "Attendance marked successfully", data });
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
+const getAttendanceRecords = async (req, res) => {
+    try {
+        const { subjectId } = req.params;
+
+        const { data, error } = await supabase
+            .from('attendance_records')
+            .select(`
+                id,
+                date,
+                status,
+                students (
+                    id,
+                    name,
+                    roll_num
+                )
+            `)
+            .eq('subject_id', subjectId)
+            .order('date', { ascending: false });
+
+        if (error) throw error;
+
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+};
+
+const bulkMarkMarks = async (req, res) => {
+    try {
+        const { marksData } = req.body; // Array of { student_id, subject_id, marks_obtained }
+
+        if (!Array.isArray(marksData) || marksData.length === 0) {
+            return res.status(400).json({ message: "Invalid marks data" });
+        }
+
+        const { data, error } = await supabase
+            .from('exam_results')
+            .upsert(marksData, { onConflict: 'student_id,subject_id' });
+
+        if (error) throw error;
+
+        res.status(200).json({ message: "Marks updated successfully" });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -328,5 +383,7 @@ module.exports = {
     deleteTeachers,
     deleteTeachersByClass,
     teacherAttendance,
-    bulkMarkAttendance
+    bulkMarkAttendance,
+    getAttendanceRecords,
+    bulkMarkMarks
 };

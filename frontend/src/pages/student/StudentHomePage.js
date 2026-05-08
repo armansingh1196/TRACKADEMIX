@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Grid, Box } from '@mui/material'
+import { Container, Grid, Box, Typography } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux';
 import { calculateOverallAttendancePercentage } from '../../components/attendanceCalculator';
 import CustomPieChart from '../../components/CustomPieChart';
@@ -19,12 +19,14 @@ const StudentHomePage = () => {
     const { subjectsList } = useSelector((state) => state.sclass);
 
     const [subjectAttendance, setSubjectAttendance] = useState([]);
-    const classID = currentUser.sclassName._id
+    const classID = currentUser?.sclassName?._id
 
     useEffect(() => {
-        dispatch(getUserDetails(currentUser._id, "Student"));
-        dispatch(getSubjectList(classID, "ClassSubjects"));
-    }, [dispatch, currentUser._id, classID]);
+        if (currentUser?._id && classID) {
+            dispatch(getUserDetails(currentUser._id, "Student"));
+            dispatch(getSubjectList(classID, "ClassSubjects"));
+        }
+    }, [dispatch, currentUser?._id, classID]);
 
     useEffect(() => {
         if (userDetails) {
@@ -41,15 +43,15 @@ const StudentHomePage = () => {
     ];
 
     const stats = [
-        { title: 'Total Subjects', value: subjectsList?.length, icon: <SubjectIcon />, color: '#845EC2' },
-        { title: 'Performance', value: 85, icon: <AssignmentIcon />, color: '#FF8066' },
+        { title: 'Current Semester', value: `Sem ${currentUser?.sclassName?.semester || 1}`, icon: <SubjectIcon />, color: '#845EC2' },
+        { title: 'Total Subjects', value: subjectsList?.filter(s => s.semester === (currentUser?.sclassName?.semester || 1)).length || 0, icon: <AssignmentIcon />, color: '#FF8066' },
     ];
 
     return (
         <Container maxWidth="lg" sx={{ mt: 1, mb: 2 }}>
             <AppHeader 
                 title={`Hello, ${currentUser.name}`} 
-                subtitle={`Track your progress and attendance at ${currentUser.schoolName}.`} 
+                subtitle={`${currentUser.schoolName} | ${currentUser?.sclassName?.sclassName} (Batch ${currentUser?.sclassName?.batch || 'N/A'})`} 
             />
 
             <Grid container spacing={2} sx={{ mb: 2 }}>
@@ -67,7 +69,7 @@ const StudentHomePage = () => {
                 </Grid>
                 <Grid item xs={12} md={4}>
                     <ChartPaper sx={{ height: '100%', minHeight: '300px' }}>
-                        <Typography variant="overline" sx={{ fontWeight: 800, mb: 2, display: 'block', textAlign: 'center', color: 'var(--secondary)', letterSpacing: 1 }}>
+                        <Typography variant="overline" sx={{ fontWeight: 800, mb: 2, display: 'block', textAlign: 'center', color: 'var(--secondary)', letterSpacing: 1, fontFamily: 'var(--font-heading)' }}>
                             Overall Attendance
                         </Typography>
                         <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -82,7 +84,6 @@ const StudentHomePage = () => {
                     </ChartPaper>
                 </Grid>
             </Grid>
-
             <Grid container spacing={2}>
                 <Grid item xs={12}>
                     <SectionPaper>
@@ -94,13 +95,8 @@ const StudentHomePage = () => {
     );
 };
 
-
-
 export default StudentHomePage;
 
-const Typography = ({ children, variant, sx }) => (
-    <Box component="div" sx={{ typography: variant, ...sx }}>{children}</Box>
-);
 
 const SectionPaper = styled(Box)`
   background: rgba(176, 168, 185, 0.03);
