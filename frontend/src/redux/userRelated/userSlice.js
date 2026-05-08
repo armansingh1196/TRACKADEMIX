@@ -1,26 +1,23 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+const getUserFromStorage = () => {
+    try {
+        const user = localStorage.getItem('user');
+        return user ? JSON.parse(user) : null;
+    } catch (e) {
+        return null;
+    }
+};
+
+const storedUser = getUserFromStorage();
+
 const initialState = {
     status: 'idle',
     userDetails: [],
     tempDetails: [],
     loading: false,
-    currentUser: (() => {
-        try {
-            const user = localStorage.getItem('user');
-            return user ? JSON.parse(user) : null;
-        } catch (e) {
-            return null;
-        }
-    })(),
-    currentRole: (() => {
-        try {
-            const user = localStorage.getItem('user');
-            return user ? JSON.parse(user).role : null;
-        } catch (e) {
-            return null;
-        }
-    })(),
+    currentUser: storedUser,
+    currentRole: storedUser ? storedUser.role : null,
     error: null,
     response: null,
     darkMode: true
