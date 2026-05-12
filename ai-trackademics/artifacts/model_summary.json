@@ -1,0 +1,95 @@
+{
+  "problem_statement": "Predict student performance bands and identify students who are academically at risk.",
+  "target_definition": {
+    "Low": "Performance score below 105",
+    "Medium": "Performance score between 105 and 123",
+    "High": "Performance score above 123"
+  },
+  "feature_columns": [
+    "attendance_rate",
+    "assignment_average",
+    "quiz_average",
+    "internal_exam_score",
+    "lab_performance",
+    "study_hours_per_week",
+    "lms_logins_per_week",
+    "previous_gpa",
+    "project_score",
+    "department",
+    "study_mode",
+    "internet_access",
+    "part_time_job",
+    "extracurricular_activity"
+  ],
+  "top_features": [
+    {
+      "feature": "numeric__previous_gpa",
+      "importance": 0.2929000074477718
+    },
+    {
+      "feature": "numeric__study_hours_per_week",
+      "importance": 0.10749861079413787
+    },
+    {
+      "feature": "numeric__internal_exam_score",
+      "importance": 0.09135148694699871
+    },
+    {
+      "feature": "numeric__lms_logins_per_week",
+      "importance": 0.09095137518080111
+    },
+    {
+      "feature": "numeric__attendance_rate",
+      "importance": 0.07275517333790948
+    },
+    {
+      "feature": "numeric__quiz_average",
+      "importance": 0.06407635676094213
+    },
+    {
+      "feature": "numeric__assignment_average",
+      "importance": 0.058159189076997714
+    },
+    {
+      "feature": "numeric__lab_performance",
+      "importance": 0.05382455139540448
+    },
+    {
+      "feature": "numeric__project_score",
+      "importance": 0.051643098978631036
+    },
+    {
+      "feature": "categorical__internet_access_Yes",
+      "importance": 0.017922224818603637
+    }
+  ],
+  "model_choice": "Random Forest Classifier",
+  "key_metrics": {
+    "accuracy": 0.7917,
+    "weighted_f1": 0.7754,
+    "confusion_matrix": [
+      [
+        22,
+        23,
+        0
+      ],
+      [
+        3,
+        144,
+        3
+      ],
+      [
+        0,
+        21,
+        24
+      ]
+    ],
+    "class_labels": [
+      "Low",
+      "Medium",
+      "High"
+    ],
+    "train_rows": 960,
+    "test_rows": 240
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "attendance_rate": 80,
+  "assignment_average": 70,
+  "quiz_average": 70,
+  "internal_exam_score": 60,
+  "lab_performance": 65,
+  "study_hours_per_week": 10,
+  "lms_logins_per_week": 5,
+  "previous_gpa": 7.0,
+  "project_score": 75,
+  "department": "CSE"
+}

@@ -38,17 +38,18 @@ const BulkMarkMarks = () => {
                     student_id: student._id,
                     name: student.name,
                     rollNum: student.rollNum,
-                    marksObtained: existingMark ? existingMark.marksObtained : 0
+                    internalMarks: existingMark ? existingMark.internal_marks : 0,
+                    externalMarks: existingMark ? existingMark.external_marks : 0
                 };
             }));
         }
     }, [sclassStudents, subjectID]);
 
-    const handleMarkChange = (id, value) => {
-        const mark = Math.min(100, Math.max(0, parseInt(value) || 0));
+    const handleMarkChange = (id, field, value, max) => {
+        const mark = Math.min(max, Math.max(0, parseInt(value) || 0));
         setMarksList(prev => prev.map(item => 
             item.student_id === id 
-                ? { ...item, marksObtained: mark }
+                ? { ...item, [field]: mark }
                 : item
         ));
     };
@@ -59,7 +60,8 @@ const BulkMarkMarks = () => {
             const marksData = marksList.map(item => ({
                 student_id: item.student_id,
                 subject_id: subjectID,
-                marks_obtained: item.marksObtained
+                internal_marks: item.internalMarks,
+                external_marks: item.externalMarks
             }));
 
             await api.post(`/Teacher/BulkMarks`, { marksData });
@@ -93,7 +95,8 @@ const BulkMarkMarks = () => {
                                     <TableRow>
                                         <TableCell sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Roll No</TableCell>
                                         <TableCell sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Student Name</TableCell>
-                                        <TableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Marks (Out of 100)</TableCell>
+                                        <TableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Internal (30)</TableCell>
+                                        <TableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>External (70)</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -106,10 +109,30 @@ const BulkMarkMarks = () => {
                                                     type="number"
                                                     variant="outlined"
                                                     size="small"
-                                                    value={row.marksObtained}
-                                                    onChange={(e) => handleMarkChange(row.student_id, e.target.value)}
+                                                    value={row.internalMarks}
+                                                    onChange={(e) => handleMarkChange(row.student_id, 'internalMarks', e.target.value, 30)}
                                                     InputProps={{
-                                                        inputProps: { min: 0, max: 100 },
+                                                        inputProps: { min: 0, max: 30 },
+                                                        sx: { 
+                                                            color: 'white', 
+                                                            fontWeight: 800,
+                                                            textAlign: 'center',
+                                                            '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
+                                                            '&:hover fieldset': { borderColor: 'var(--primary) !important' },
+                                                        }
+                                                    }}
+                                                    sx={{ width: 100 }}
+                                                />
+                                            </TableCell>
+                                            <TableCell align="center">
+                                                <TextField 
+                                                    type="number"
+                                                    variant="outlined"
+                                                    size="small"
+                                                    value={row.externalMarks}
+                                                    onChange={(e) => handleMarkChange(row.student_id, 'externalMarks', e.target.value, 70)}
+                                                    InputProps={{
+                                                        inputProps: { min: 0, max: 70 },
                                                         sx: { 
                                                             color: 'white', 
                                                             fontWeight: 800,

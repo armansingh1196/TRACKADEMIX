@@ -355,15 +355,26 @@ const getAttendanceRecords = async (req, res) => {
 
 const bulkMarkMarks = async (req, res) => {
     try {
-        const { marksData } = req.body; // Array of { student_id, subject_id, marks_obtained }
+        const { marksData } = req.body; // Array of { student_id, subject_id, internal_marks, external_marks, marks_obtained }
 
         if (!Array.isArray(marksData) || marksData.length === 0) {
             return res.status(400).json({ message: "Invalid marks data" });
         }
 
+        const enrichedMarksData = marksData.map(item => {
+            const internal = parseFloat(item.internal_marks) || 0;
+            const external = parseFloat(item.external_marks) || 0;
+            // If marks_obtained is not provided, calculate it as sum of internal and external
+            const total = item.marks_obtained !== undefined ? item.marks_obtained : (internal + external);
+            return {
+                ...item,
+                marks_obtained: total
+            };
+        });
+
         const { data, error } = await supabase
             .from('exam_results')
-            .upsert(marksData, { onConflict: 'student_id,subject_id' });
+            .upsert(enrichedMarksData, { onConflict: 'student_id,subject_id' });
 
         if (error) throw error;
 

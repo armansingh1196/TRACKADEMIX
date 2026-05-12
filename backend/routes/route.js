@@ -18,6 +18,9 @@ const {
     studentAttendance,
     deleteStudentsByClass,
     updateExamResult,
+    updateSemesterResult,
+    addStudyLog,
+    checkStudyLog,
     clearAllStudentsAttendanceBySubject,
     clearAllStudentsAttendance,
     removeStudentAttendanceBySubject,
@@ -38,6 +41,8 @@ router.use(authRequired);
 router.get("/Admin/:id", getAdminDetail)
 router.put("/Admin/:id", updateAdmin)
 
+const { getAIRecommendations } = require('../controllers/ai_controller.js');
+
 // Student
 
 router.post('/StudentReg', studentRegister);
@@ -45,6 +50,10 @@ router.post('/StudentBulkReg', studentBulkRegister);
 
 router.get("/Students/:id", getStudents)
 router.get("/Student/:id", getStudentDetail)
+router.get("/Student/AIRecommendations/:id", getAIRecommendations)
+router.put('/Student/StudyLog/:id', addStudyLog)
+router.get('/Student/StudyLogCheck/:id', checkStudyLog)
+router.put('/Student/SemesterResult/:id', updateSemesterResult)
 
 router.delete("/Students/:id", deleteStudents)
 router.delete("/StudentsClass/:id", deleteStudentsByClass)

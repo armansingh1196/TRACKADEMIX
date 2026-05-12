@@ -257,14 +257,25 @@ const updateStudent = async (req, res) => {
 };
 
 const updateExamResult = async (req, res) => {
-    const { subName, marksObtained } = req.body; // Actually subName is the subject_id from frontend
+    const { subName, internalMarks, externalMarks, marksObtained } = req.body; 
     try {
+        // Fallback to marksObtained if old UI is used, else sum internal/external
+        let totalMarks = marksObtained ? parseInt(marksObtained) : 0;
+        let intMarks = internalMarks !== undefined ? parseInt(internalMarks) : null;
+        let extMarks = externalMarks !== undefined ? parseInt(externalMarks) : null;
+        
+        if (intMarks !== null && extMarks !== null) {
+            totalMarks = intMarks + extMarks;
+        }
+
         const { data, error } = await supabase
             .from('exam_results')
             .upsert({ 
                 student_id: req.params.id, 
                 subject_id: subName, 
-                marks_obtained: marksObtained 
+                internal_marks: intMarks,
+                external_marks: extMarks,
+                marks_obtained: totalMarks 
             }, { onConflict: 'student_id,subject_id' })
             .select()
             .single();
@@ -448,6 +459,77 @@ const studentBulkRegister = async (req, res) => {
     }
 };
 
+const updateSemesterResult = async (req, res) => {
+    const { semester, sgpa, cgpa } = req.body;
+    try {
+        const { data, error } = await supabase
+            .from('semester_results')
+            .upsert({ 
+                student_id: req.params.id, 
+                semester: parseInt(semester),
+                sgpa: parseFloat(sgpa),
+                cgpa: parseFloat(cgpa)
+            }, { onConflict: 'student_id,semester' })
+            .select()
+            .single();
+
+        if (error) throw error;
+        res.send(data);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+};
+
+const addStudyLog = async (req, res) => {
+    const { date, hoursLogged } = req.body;
+    try {
+        // Check if log already exists for today
+        const { data: existingLog } = await supabase
+            .from('study_logs')
+            .select('*')
+            .eq('student_id', req.params.id)
+            .eq('date', date);
+
+        if (existingLog && existingLog.length > 0) {
+            return res.status(400).json({ message: "You have already logged study hours for today." });
+        }
+
+        const { data, error } = await supabase
+            .from('study_logs')
+            .insert({ 
+                student_id: req.params.id, 
+                date: date,
+                hours_logged: parseFloat(hoursLogged)
+            })
+            .select()
+            .single();
+
+        if (error) throw error;
+        res.send(data);
+    } catch (error) {
+        console.error("Error in addStudyLog:", error);
+        res.status(500).json({ message: error.message || error });
+    }
+};
+
+const checkStudyLog = async (req, res) => {
+    const date = new Date().toISOString().slice(0, 10);
+    try {
+        const { data: existingLog } = await supabase
+            .from('study_logs')
+            .select('*')
+            .eq('student_id', req.params.id)
+            .eq('date', date);
+
+        if (existingLog && existingLog.length > 0) {
+            return res.send({ hasLogged: true });
+        }
+        res.send({ hasLogged: false });
+    } catch (error) {
+        res.status(500).json(error);
+    }
+};
+
 module.exports = {
     studentRegister,
     studentBulkRegister,
@@ -460,6 +542,9 @@ module.exports = {
     studentAttendance,
     deleteStudentsByClass,
     updateExamResult,
+    updateSemesterResult,
+    addStudyLog,
+    checkStudyLog,
     clearAllStudentsAttendanceBySubject,
     clearAllStudentsAttendance,
     removeStudentAttendanceBySubject,

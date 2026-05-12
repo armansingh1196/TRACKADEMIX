@@ -10,6 +10,7 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
 import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const StudentSideBar = ({ open }) => {
     const location = useLocation();
@@ -18,6 +19,7 @@ const StudentSideBar = ({ open }) => {
     const menuItems = [
         { text: 'Dashboard', icon: <HomeIcon />, path: '/Student/dashboard' },
         { text: 'Subjects', icon: <AssignmentIcon />, path: '/Student/subjects' },
+        { text: 'AI Insights', icon: <AutoAwesomeIcon />, path: '/Student/ai-insights' },
         { text: 'Complains', icon: <AnnouncementOutlinedIcon />, path: '/Student/complain' },
     ];
 
