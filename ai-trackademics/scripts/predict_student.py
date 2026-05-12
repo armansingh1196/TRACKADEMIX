@@ -33,26 +33,20 @@ def main():
         
         df = pd.DataFrame([{
             "attendance_rate": input_data.get("attendance_rate", 75),
-            "assignment_average": input_data.get("assignment_average", 70),
-            "quiz_average": input_data.get("quiz_average", 70),
-            "internal_exam_score": input_data.get("internal_exam_score", 60),
-            "lab_performance": input_data.get("lab_performance", 65),
-            "study_hours_per_week": input_data.get("study_hours_per_week", 10),
-            "lms_logins_per_week": input_data.get("lms_logins_per_week", 5),
-            "previous_gpa": input_data.get("previous_gpa", 7.0),
-            "project_score": input_data.get("project_score", 75),
+            "internal_avg_theory": input_data.get("internal_avg_theory", 20),
+            "external_avg_theory": input_data.get("external_avg_theory", 45),
+            "internal_avg_practical": input_data.get("internal_avg_practical", 18),
+            "external_avg_practical": input_data.get("external_avg_practical", 18),
+            "study_hours_per_week": input_data.get("study_hours_per_week", 15),
+            "previous_gpa": input_data.get("previous_gpa", 7.5),
             "department": input_data.get("department", "CSE"),
-            "study_mode": "Regular",
-            "internet_access": "Yes",
-            "part_time_job": "No",
-            "extracurricular_activity": "No"
         }])
         
         # Cast numeric features to float to avoid type errors in comparisons
         numeric_features = [
-            "attendance_rate", "assignment_average", "quiz_average", 
-            "internal_exam_score", "lab_performance", "study_hours_per_week", 
-            "lms_logins_per_week", "previous_gpa", "project_score"
+            "attendance_rate", "internal_avg_theory", "external_avg_theory",
+            "internal_avg_practical", "external_avg_practical", "study_hours_per_week",
+            "previous_gpa"
         ]
         for feat in numeric_features:
             df[feat] = pd.to_numeric(df[feat], errors='coerce').fillna(0)

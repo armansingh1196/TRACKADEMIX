@@ -1,87 +1,81 @@
 {
   "problem_statement": "Predict student performance bands and identify students who are academically at risk.",
   "target_definition": {
-    "Low": "Performance score below 105",
-    "Medium": "Performance score between 105 and 123",
-    "High": "Performance score above 123"
+    "Low": "Performance score below 50",
+    "Medium": "Performance score between 50 and 75",
+    "High": "Performance score above 75"
   },
   "feature_columns": [
     "attendance_rate",
-    "assignment_average",
-    "quiz_average",
-    "internal_exam_score",
-    "lab_performance",
+    "internal_avg_theory",
+    "external_avg_theory",
+    "internal_avg_practical",
+    "external_avg_practical",
     "study_hours_per_week",
-    "lms_logins_per_week",
     "previous_gpa",
-    "project_score",
-    "department",
-    "study_mode",
-    "internet_access",
-    "part_time_job",
-    "extracurricular_activity"
+    "department"
   ],
   "top_features": [
     {
-      "feature": "numeric__previous_gpa",
-      "importance": 0.2929000074477718
-    },
-    {
-      "feature": "numeric__study_hours_per_week",
-      "importance": 0.10749861079413787
-    },
-    {
-      "feature": "numeric__internal_exam_score",
-      "importance": 0.09135148694699871
-    },
-    {
-      "feature": "numeric__lms_logins_per_week",
-      "importance": 0.09095137518080111
+      "feature": "numeric__external_avg_theory",
+      "importance": 0.35066905264753717
     },
     {
       "feature": "numeric__attendance_rate",
-      "importance": 0.07275517333790948
+      "importance": 0.25071493280406126
     },
     {
-      "feature": "numeric__quiz_average",
-      "importance": 0.06407635676094213
+      "feature": "numeric__internal_avg_theory",
+      "importance": 0.11555739984733068
     },
     {
-      "feature": "numeric__assignment_average",
-      "importance": 0.058159189076997714
+      "feature": "numeric__previous_gpa",
+      "importance": 0.07033547849474467
     },
     {
-      "feature": "numeric__lab_performance",
-      "importance": 0.05382455139540448
+      "feature": "numeric__internal_avg_practical",
+      "importance": 0.06585060113950608
     },
     {
-      "feature": "numeric__project_score",
-      "importance": 0.051643098978631036
+      "feature": "numeric__external_avg_practical",
+      "importance": 0.05836987535715102
     },
     {
-      "feature": "categorical__internet_access_Yes",
-      "importance": 0.017922224818603637
+      "feature": "numeric__study_hours_per_week",
+      "importance": 0.05427941562385049
+    },
+    {
+      "feature": "categorical__department_ECE",
+      "importance": 0.01350406604145839
+    },
+    {
+      "feature": "categorical__department_CSE",
+      "importance": 0.011397725004125255
+    },
+    {
+      "feature": "categorical__department_CE",
+      "importance": 0.0034223237338369115
     }
   ],
   "model_choice": "Random Forest Classifier",
   "key_metrics": {
-    "accuracy": 0.7917,
-    "weighted_f1": 0.7754,
+    "accuracy": 0.9275,
+    "weighted_f1": 0.9236,
     "confusion_matrix": [
       [
-        22,
-        23,
+        0,
+        2,
         0
       ],
       [
-        3,
-        144,
-        3
+        0,
+        309,
+        9
       ],
       [
         0,
-        21,
-        24
+        18,
+        62
       ]
     ],
     "class_labels": [
@@ -89,7 +83,7 @@
       "Medium",
       "High"
     ],
-    "train_rows": 960,
-    "test_rows": 240
+    "train_rows": 1600,
+    "test_rows": 400
   }
 }

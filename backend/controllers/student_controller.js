@@ -65,7 +65,7 @@ const studentLogIn = async (req, res) => {
                 *,
                 admins ( id, school_name ),
                 sclasses ( id, sclass_name, semester, batch ),
-                exam_results ( subject_id, marks_obtained, subjects ( sub_name, semester ) )
+                exam_results ( subject_id, marks_obtained, subjects ( sub_name, semester, subject_type ) )
             `)
             .eq('roll_num', rollNum)
             .eq('name', studentName)
@@ -148,7 +148,7 @@ const getStudentDetail = async (req, res) => {
                 *,
                 admins ( id, school_name ),
                 sclasses ( id, sclass_name, semester, batch ),
-                exam_results ( subject_id, marks_obtained, subjects ( sub_name, semester ) ),
+                exam_results ( subject_id, marks_obtained, subjects ( sub_name, semester, subject_type ) ),
                 attendance_records ( date, status, subject_id, subjects ( sub_name ) )
             `)
             .eq('id', req.params.id)

@@ -1,73 +1,135 @@
-# TRACKADEMIX | Institutional Management System
+# TRACADEMIX - Centralized Academic Records & Performance Tracking System
 
-Streamlining BIT management, class organization, and performance tracking for Students and Professors. Seamlessly track attendance, assess performance, and provide feedback in a modern, Supabase-powered environment.
+TRACADEMIX is a modern, feature-rich academic management platform designed to track student performance, attendance, and provide AI-driven insights and recommendations. It is built to handle complex academic structures (like Theory and Practical splits) and use Machine Learning to predict student success.
 
-## 🚀 About
-TRACKADEMIX is a comprehensive institutional management system built with the **SERN** stack (Supabase, Express.js, React.js, Node.js). It replaces the legacy MongoDB backend with a robust, relational PostgreSQL architecture provided by Supabase, ensuring high performance, security, and scalability.
+---
 
-## ✨ Features
-- **User Roles:** Distinct dashboards for HOD (Admin), Professors, and Students.
-- **Admin Dashboard:** HODs can manage students, professors, classes, and subjects.
-- **Attendance Tracking:** Real-time attendance management for professors.
-- **Performance Assessment:** Integrated marks and feedback system.
-- **Data Visualization:** Interactive charts for student performance tracking.
-- **Modern Security:** Row Level Security (RLS) and secure authentication.
+## 🚀 Key Features
 
-## 🛠️ Technologies Used
-- **Frontend:** React.js, Material UI
-- **Backend:** Node.js, Express.js
-- **Database:** Supabase (PostgreSQL)
-- **State Management:** Redux Toolkit
+### 👨‍🎓 Student Portal
+- **Dashboard**: A premium, glassmorphic dashboard with quick stats.
+- **Attendance Heatmap**: Visualizes daily session participation over a year.
+- **Subject Performance**: Split Radar charts for Theory and Practical subjects.
+- **Daily Study Tracker**: Log study hours directly from the dashboard.
+- **AI Insights**: Personalized performance predictions (High/Medium/Low) and recommendations based on study habits, attendance, and marks.
 
-## 📦 Installation & Setup
+### 🔐 Admin Portal
+- **Management**: Manage students, teachers, classes, and subjects.
+- **Academic Setup**: Configure batches, semesters, and subject types (Theory vs Practical).
 
-### 1. Backend Setup
-```bash
-cd backend
-npm install
-npm start
+### 🤖 AI Performance Predictor
+- **High Accuracy**: Powered by a Random Forest Classifier achieving **~93% accuracy**.
+- **Transparent Metrics**: Shows students exactly what metrics (Attendance, Theory scores, etc.) are being analyzed.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React.js, Material-UI (MUI), Styled Components, Recharts (for analytics).
+- **Backend**: Node.js, Express.js.
+- **Database**: Supabase (PostgreSQL) with Row-Level Security.
+- **AI/ML**: Python 3.12, Scikit-Learn, Pandas, NumPy.
+
+---
+
+## 📂 Project Structure
+
+```text
+Trackademics/
+├── frontend/             # React application
+├── backend/              # Node.js Express server
+│   └── database/         # Contains complete_schema.sql
+└── ai-trackademics/      # Python AI model & scripts
 ```
-Create `backend/.env` (or copy from `backend/.env.example`) and set:
 
-- `SUPABASE_URL`
-- `SUPABASE_ANON_KEY`
-- `JWT_SECRET` (required)
-- `ORIGIN` (usually `http://localhost:3000`)
+---
 
-By default the backend runs on `PORT=5501` (recommended for local dev).
+## ⚙️ Installation & Setup
 
-### 2. Frontend Setup
-```bash
-cd frontend
-npm install
-npm start
-```
-Create `frontend/.env` (or copy from `frontend/.env.example`) and set:
+### Prerequisites
+- Node.js (v18+)
+- Python 3.12+
+- Supabase Account
 
-- `VITE_API_BASE_URL=http://localhost:5501`
+### 1. Database Setup
+1. Go to your Supabase project.
+2. Open the **SQL Editor**.
+3. Copy the contents of `backend/database/complete_schema.sql` and run it to initialize all tables and relationships.
 
-Optional:
+### 2. Backend Setup
+1. Navigate to the `backend` directory:
+   ```bash
+   cd backend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file and add your Supabase URL and Anon Key:
+   ```env
+   SUPABASE_URL=your_supabase_url
+   SUPABASE_ANON_KEY=your_supabase_anon_key
+   PORT=3001
+   ```
+4. Start the server:
+   ```bash
+   npm start
+   ```
 
-- `VITE_ENABLE_GUEST_DEMO=true` to enable the guest demo password (`zxc`).
+### 3. Frontend Setup
+1. Navigate to the `frontend` directory:
+   ```bash
+   cd frontend
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file and set the backend API URL:
+   ```env
+   REACT_APP_API_URL=http://localhost:3001
+   ```
+4. Start the development server:
+   ```bash
+   npm start
+   ```
+
+### 4. AI Setup (Optional for execution)
+The backend automatically spawns the Python process to run predictions. However, to retrain the model:
+1. Navigate to `ai-trackademics`.
+2. Create a virtual environment and install requirements:
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+3. Run the training script:
+   ```bash
+   python -m src.student_performance_ai.training
+   ```
 
 ---
 
 ## 📸 Screenshots
 
-### Home Page
-![Home Page](docs/images/homepage.png)
+Here are the screenshots of the new, modern UI of TRACADEMIX:
 
-### Choose User Role
-![Choose User](docs/images/choose_user.png)
+### 🏠 Homepage & Portal Selection
+![Homepage](docs/homepage.png)
+![Portal Selection](docs/portal_selection.png)
 
-### HOD Registration
-![HOD Register](docs/images/admin_register.png)
+### 👨‍🎓 Student Portal
+![Student Dashboard](docs/student_dashboard.png)
+![Student AI Insights](docs/student_ai_insights.png)
+![Student Profile](docs/student_profile.png)
 
-### HOD Login
-![HOD Login](docs/images/admin_login.png)
+### 🔐 Admin Portal
+![Admin Dashboard](docs/admin_dashboard.png)
+![Admin Profile](docs/admin_profile.png)
 
-### HOD Dashboard
-![HOD Dashboard](docs/images/admin_dashboard.png)
+### 👨‍🏫 Professor Portal
+![Professor Dashboard](docs/professor_dashboard.png)
+![Professor Attendance](docs/professor_attendance.png)
+![Professor Profile](docs/professor_profile.png)
 
----
-© 2024 TRACKADEMIX - Empowering Education through Technology.
+

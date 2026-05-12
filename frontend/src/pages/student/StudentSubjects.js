@@ -66,46 +66,96 @@ const StudentSubjects = () => {
 
     const renderTableSection = () => (
         <Stack spacing={4}>
-            {sortedSemesters.map(semester => (
-                <GlassCard sx={{ p: 4 }} key={semester}>
-                    <SectionHeader>
-                        <TableChartIcon sx={{ color: 'var(--primary)', fontSize: 32 }} />
-                        <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white' }}>
-                            Semester {semester} Performance
+            {sortedSemesters.map(semester => {
+                const semesterMarks = groupedMarks[semester];
+                const theoryMarks = semesterMarks.filter(r => r.subjects?.subject_type === 'Theory' || !r.subjects?.subject_type);
+                const practicalMarks = semesterMarks.filter(r => r.subjects?.subject_type === 'Practical');
+
+                return (
+                    <GlassCard sx={{ p: 4 }} key={semester}>
+                        <SectionHeader>
+                            <TableChartIcon sx={{ color: 'var(--primary)', fontSize: 32 }} />
+                            <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white' }}>
+                                Semester {semester} Performance
+                            </Typography>
+                        </SectionHeader>
+
+                        {/* Theory Table */}
+                        <Typography variant="subtitle1" sx={{ color: 'var(--primary)', mt: 2, mb: 1, fontWeight: 700 }}>
+                            THEORY SUBJECTS
                         </Typography>
-                    </SectionHeader>
-                    <Table sx={{ mt: 2 }}>
-                        <TableHead>
-                            <StyledTableRow>
-                                <StyledTableCell>Subject Name</StyledTableCell>
-                                <StyledTableCell align="center">Obtained Marks</StyledTableCell>
-                                <StyledTableCell align="right">Status</StyledTableCell>
-                            </StyledTableRow>
-                        </TableHead>
-                        <TableBody>
-                            {groupedMarks[semester].map((result, index) => {
-                                const marks = result.marks_obtained || 0;
-                                const isPassing = marks >= 40;
-                                return (
-                                    <StyledTableRow key={index}>
-                                        <StyledTableCell sx={{ color: 'white', fontWeight: 600 }}>
-                                            {result.subjects.sub_name}
-                                        </StyledTableCell>
-                                        <StyledTableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800, fontSize: '1.1rem' }}>
-                                            {marks}
-                                        </StyledTableCell>
-                                        <StyledTableCell align="right">
-                                            <StatusBadge className={isPassing ? 'pass' : 'fail'}>
-                                                {isPassing ? 'Qualified' : 'Requires Improvement'}
-                                            </StatusBadge>
-                                        </StyledTableCell>
-                                    </StyledTableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
-                </GlassCard>
-            ))}
+                        <Table sx={{ mt: 1 }}>
+                            <TableHead>
+                                <StyledTableRow>
+                                    <StyledTableCell>Subject Name</StyledTableCell>
+                                    <StyledTableCell align="center">Obtained Marks</StyledTableCell>
+                                    <StyledTableCell align="right">Status</StyledTableCell>
+                                </StyledTableRow>
+                            </TableHead>
+                            <TableBody>
+                                {theoryMarks.map((result, index) => {
+                                    const marks = result.marks_obtained || 0;
+                                    const isPassing = marks >= 40;
+                                    return (
+                                        <StyledTableRow key={index}>
+                                            <StyledTableCell sx={{ color: 'white', fontWeight: 600 }}>
+                                                {result.subjects.sub_name}
+                                            </StyledTableCell>
+                                            <StyledTableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800, fontSize: '1.1rem' }}>
+                                                {marks}
+                                            </StyledTableCell>
+                                            <StyledTableCell align="right">
+                                                <StatusBadge className={isPassing ? 'pass' : 'fail'}>
+                                                    {isPassing ? 'Qualified' : 'Requires Improvement'}
+                                                </StatusBadge>
+                                            </StyledTableCell>
+                                        </StyledTableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+
+                        {/* Practical Table */}
+                        {practicalMarks.length > 0 && (
+                            <>
+                                <Typography variant="subtitle1" sx={{ color: 'var(--secondary)', mt: 4, mb: 1, fontWeight: 700 }}>
+                                    PRACTICAL / LAB SUBJECTS
+                                </Typography>
+                                <Table sx={{ mt: 1 }}>
+                                    <TableHead>
+                                        <StyledTableRow>
+                                            <StyledTableCell>Subject Name</StyledTableCell>
+                                            <StyledTableCell align="center">Obtained Marks</StyledTableCell>
+                                            <StyledTableCell align="right">Status</StyledTableCell>
+                                        </StyledTableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {practicalMarks.map((result, index) => {
+                                            const marks = result.marks_obtained || 0;
+                                            const isPassing = marks >= 20; // 40% of 50 is 20
+                                            return (
+                                                <StyledTableRow key={index}>
+                                                    <StyledTableCell sx={{ color: 'white', fontWeight: 600 }}>
+                                                        {result.subjects.sub_name}
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800, fontSize: '1.1rem' }}>
+                                                        {marks}
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="right">
+                                                        <StatusBadge className={isPassing ? 'pass' : 'fail'}>
+                                                            {isPassing ? 'Qualified' : 'Requires Improvement'}
+                                                        </StatusBadge>
+                                                    </StyledTableCell>
+                                                </StyledTableRow>
+                                            );
+                                        })}
+                                    </TableBody>
+                                </Table>
+                            </>
+                        )}
+                    </GlassCard>
+                );
+            })}
         </Stack>
     );
 
@@ -168,6 +218,26 @@ const StudentSubjects = () => {
                                 </BottomNavigation>
                             </NavigationWrapper>
                         </>
+                    ) : subjectsList && subjectsList.length > 0 ? (
+                        <GlassCard sx={{ p: 4 }}>
+                            <Typography variant="h5" sx={{ fontWeight: 800, color: 'white', mb: 3, fontFamily: 'Outfit' }}>
+                                Assigned Subjects
+                            </Typography>
+                            <Grid container spacing={2}>
+                                {subjectsList.map((sub, index) => (
+                                    <Grid item xs={12} sm={6} md={4} key={index}>
+                                        <Paper sx={{ p: 3, bgcolor: 'rgba(255,255,255,0.03)', borderRadius: '16px', border: '1px solid var(--border)' }}>
+                                            <Typography variant="subtitle1" sx={{ color: 'white', fontWeight: 700 }}>
+                                                {sub.sub_name}
+                                            </Typography>
+                                            <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
+                                                Code: {sub.sub_code} | Sem: {sub.semester}
+                                            </Typography>
+                                        </Paper>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        </GlassCard>
                     ) : (
                         <GlassCard sx={{ p: 8, textAlign: 'center' }}>
                             <AssignmentIcon sx={{ fontSize: 64, color: 'var(--text-muted)', mb: 3 }} />

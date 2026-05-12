@@ -1,241 +1,401 @@
-attendance_rate,assignment_average,quiz_average,internal_exam_score,lab_performance,study_hours_per_week,lms_logins_per_week,previous_gpa,project_score,department,study_mode,internet_access,part_time_job,extracurricular_activity,actual_band,predicted_band,predicted_risk,actual_risk,confidence,recommendations
-78.75,82.18,87.9,57.47,76.71,18.65,11.35,3.13,69.64,BIT,Regular,Yes,No,Yes,High,Medium,No,No,0.6019,Maintain the current support plan and consider advanced enrichment tasks.
-75.08,64.16,72.14,64.36,65.14,17.83,15.8,2.92,69.8,SE,Hybrid,Yes,No,No,Medium,Medium,No,No,0.7004,Maintain the current support plan and consider advanced enrichment tasks.
-85.27,56.56,49.13,70.52,82.14,10.26,11.96,3.89,70.16,BCA,Regular,Yes,No,Yes,High,Medium,No,No,0.4789,Track assignment completion weekly and offer deadline coaching. | Recommend additional topic-wise quiz practice.
-45.73,66.45,45.54,96.54,58.11,16.16,13.89,3.81,67.85,CS,Regular,Yes,No,No,High,Medium,No,Yes,0.5329,Schedule attendance mentoring and alert the advisor. | Recommend additional topic-wise quiz practice.
-69.23,66.8,85.49,60.21,54.58,8.01,17.94,2.85,73.86,SE,Regular,No,Yes,No,Low,Low,Yes,Yes,0.478,Schedule attendance mentoring and alert the advisor. | Offer offline material access or campus connectivity support. | Review workload balance and suggest time-management support.
-97.42,69.78,71.16,71.15,69.26,15.29,10.49,2.28,84.09,BIT,Regular,Yes,No,Yes,Medium,Medium,No,No,0.7436,Maintain the current support plan and consider advanced enrichment tasks.
-84.94,90.18,44.16,84.84,83.25,20.17,22.05,3.14,72.69,AI,Regular,Yes,No,Yes,High,High,No,No,0.6167,Recommend additional topic-wise quiz practice.
-70.01,68.98,55.13,81.4,71.3,17.32,12.88,1.95,79.91,BIT,Regular,Yes,No,Yes,Medium,Medium,No,No,0.6251,Recommend additional topic-wise quiz practice.
-100.0,51.4,71.23,35.61,59.66,19.34,12.89,1.92,60.57,SE,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.5932,Provide remedial support for internal exam preparation. | Track assignment completion weekly and offer deadline coaching.
-79.95,73.93,71.16,40.32,88.84,16.99,15.71,1.87,50.59,BCA,Regular,Yes,No,Yes,Low,Medium,No,Yes,0.4917,Provide remedial support for internal exam preparation.
-69.29,55.26,65.8,71.07,55.92,11.34,10.04,2.49,84.24,BCA,Regular,Yes,No,No,Medium,Medium,No,No,0.5961,Schedule attendance mentoring and alert the advisor. | Track assignment completion weekly and offer deadline coaching.
-90.48,85.98,63.04,71.51,60.5,17.21,24.55,3.65,72.98,BIT,Regular,No,No,No,High,High,No,No,0.7178,Offer offline material access or campus connectivity support.
-100.0,47.39,61.61,86.4,82.79,6.93,13.45,2.79,74.95,BIT,Hybrid,Yes,Yes,Yes,Medium,Medium,No,Yes,0.7162,Track assignment completion weekly and offer deadline coaching. | Encourage a structured weekly self-study plan. | Review workload balance and suggest time-management support.
-77.3,59.62,82.81,63.0,51.74,13.48,1.0,3.29,82.34,BIT,Regular,Yes,No,No,Medium,Medium,No,No,0.7808,Track assignment completion weekly and offer deadline coaching. | Increase LMS engagement through digital learning prompts.
-90.68,80.13,70.95,71.2,55.23,8.28,8.97,2.07,82.9,BCA,Regular,Yes,Yes,Yes,Low,Medium,No,Yes,0.5573,Review workload balance and suggest time-management support.
-87.94,71.26,63.78,60.09,82.45,10.8,12.39,2.78,77.33,BIT,Regular,Yes,No,No,Medium,Medium,No,No,0.8131,Maintain the current support plan and consider advanced enrichment tasks.
-94.38,58.36,97.69,89.69,56.93,9.0,12.95,2.47,65.5,BIT,Regular,Yes,No,Yes,Medium,Medium,No,No,0.7088,Track assignment completion weekly and offer deadline coaching.
-62.13,68.49,61.68,65.05,51.04,3.91,4.69,3.68,71.11,AI,Regular,Yes,Yes,No,Low,Medium,No,Yes,0.6749,Schedule attendance mentoring and alert the advisor. | Encourage a structured weekly self-study plan. | Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-62.54,63.59,40.07,57.77,72.07,6.71,11.89,2.42,60.0,SE,Regular,Yes,No,No,Low,Low,Yes,Yes,0.8128,Schedule attendance mentoring and alert the advisor. | Recommend additional topic-wise quiz practice. | Encourage a structured weekly self-study plan.
-57.99,81.3,60.11,70.68,57.2,10.46,12.47,2.4,87.6,CS,Regular,No,No,No,Low,Low,Yes,Yes,0.5456,Schedule attendance mentoring and alert the advisor. | Offer offline material access or campus connectivity support.
-80.3,55.35,60.11,60.82,75.1,13.31,12.84,3.28,86.6,BCA,Hybrid,Yes,Yes,Yes,Medium,Medium,No,No,0.727,Track assignment completion weekly and offer deadline coaching. | Review workload balance and suggest time-management support.
-89.97,79.2,66.69,43.88,82.62,11.08,11.91,4.0,69.42,CS,Regular,Yes,No,Yes,High,High,No,Yes,0.6234,Provide remedial support for internal exam preparation.
-91.36,85.94,46.39,68.41,58.44,12.84,6.54,4.0,93.63,AI,Regular,Yes,No,No,High,High,No,No,0.5192,Recommend additional topic-wise quiz practice.
-63.36,53.53,69.41,50.26,71.78,15.48,5.53,2.67,54.53,BCA,Regular,Yes,No,Yes,Low,Medium,No,Yes,0.6865,Schedule attendance mentoring and alert the advisor. | Provide remedial support for internal exam preparation. | Track assignment completion weekly and offer deadline coaching. | Increase LMS engagement through digital learning prompts.
-73.81,100.0,91.7,68.58,52.39,12.18,1.0,3.23,76.29,AI,Regular,Yes,Yes,No,Medium,Medium,No,No,0.7204,Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-82.2,76.63,67.38,97.65,85.57,18.01,13.44,2.99,69.96,CS,Regular,Yes,No,No,High,High,No,No,0.5906,Maintain the current support plan and consider advanced enrichment tasks.
-59.38,71.31,68.58,83.98,80.31,18.4,7.82,2.67,94.52,CS,Regular,Yes,No,No,Medium,Medium,No,Yes,0.6257,Schedule attendance mentoring and alert the advisor.
-90.59,60.19,85.54,60.15,73.18,15.42,6.58,3.66,57.09,BIT,Regular,No,No,No,Medium,Medium,No,No,0.5322,Offer offline material access or campus connectivity support.
-65.65,47.6,73.92,89.43,71.74,20.72,14.4,2.51,95.16,BCA,Regular,Yes,No,No,High,Medium,No,Yes,0.6739,Schedule attendance mentoring and alert the advisor. | Track assignment completion weekly and offer deadline coaching.
-80.07,64.68,94.95,79.12,79.29,13.84,13.67,3.37,86.96,BIT,Regular,No,Yes,No,High,High,No,No,0.4826,Offer offline material access or campus connectivity support. | Review workload balance and suggest time-management support.
-81.49,77.94,51.22,40.77,64.02,8.22,4.43,2.35,87.26,AI,Regular,Yes,No,Yes,Low,Low,Yes,Yes,0.6361,Provide remedial support for internal exam preparation. | Recommend additional topic-wise quiz practice. | Increase LMS engagement through digital learning prompts.
-76.96,85.8,70.17,53.16,69.21,13.17,9.61,3.18,87.32,BCA,Regular,Yes,No,No,Medium,Medium,No,No,0.7281,Provide remedial support for internal exam preparation.
-72.03,62.16,61.37,42.01,95.65,7.73,6.28,3.02,70.26,BCA,Hybrid,Yes,Yes,No,Low,Low,Yes,Yes,0.6086,Provide remedial support for internal exam preparation. | Encourage a structured weekly self-study plan. | Review workload balance and suggest time-management support.
-74.17,72.13,73.22,46.8,100.0,7.08,12.38,2.79,65.99,CS,Hybrid,Yes,No,No,Medium,Medium,No,Yes,0.5021,Provide remedial support for internal exam preparation. | Encourage a structured weekly self-study plan.
-74.68,78.87,64.72,46.22,84.25,9.04,16.01,2.92,65.46,SE,Regular,No,No,No,Medium,Medium,No,Yes,0.5409,Provide remedial support for internal exam preparation. | Offer offline material access or campus connectivity support.
-100.0,79.06,75.75,86.15,52.28,13.07,11.85,2.87,58.9,BIT,Hybrid,No,No,No,Medium,Medium,No,No,0.6231,Offer offline material access or campus connectivity support.
-85.19,69.46,72.9,63.63,70.33,17.12,7.03,3.15,73.35,AI,Regular,Yes,Yes,Yes,Medium,Medium,No,No,0.6695,Review workload balance and suggest time-management support.
-78.9,73.12,49.98,68.94,65.95,12.3,8.75,1.48,56.62,BIT,Regular,Yes,No,No,Low,Low,Yes,Yes,0.5818,Recommend additional topic-wise quiz practice.
-74.39,62.92,67.12,65.14,69.07,7.45,8.81,2.79,67.69,CS,Regular,Yes,No,Yes,Medium,Medium,No,No,0.5597,Encourage a structured weekly self-study plan.
-62.49,67.62,88.83,64.12,57.2,16.23,1.67,2.4,64.72,BIT,Regular,Yes,Yes,No,Low,Low,Yes,Yes,0.5441,Schedule attendance mentoring and alert the advisor. | Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-95.02,50.63,65.12,50.97,45.96,13.31,18.65,2.18,81.42,CS,Regular,Yes,No,No,Medium,Medium,No,Yes,0.6035,Provide remedial support for internal exam preparation. | Track assignment completion weekly and offer deadline coaching.
-66.78,81.42,53.38,55.89,74.12,15.58,6.53,3.59,63.9,BIT,Regular,Yes,No,No,Medium,Medium,No,No,0.4702,Schedule attendance mentoring and alert the advisor. | Recommend additional topic-wise quiz practice.
-81.77,88.08,62.51,59.39,57.12,14.58,10.36,1.83,59.33,AI,Regular,Yes,No,Yes,Medium,Medium,No,No,0.527,Maintain the current support plan and consider advanced enrichment tasks.
-78.28,77.0,54.92,68.61,48.57,10.73,4.01,3.64,82.81,BCA,Hybrid,No,No,No,Low,Medium,No,Yes,0.5767,Recommend additional topic-wise quiz practice. | Increase LMS engagement through digital learning prompts. | Offer offline material access or campus connectivity support.
-91.24,63.81,94.65,64.55,57.14,13.78,14.29,2.35,62.83,CS,Regular,No,No,No,Medium,Medium,No,No,0.5843,Offer offline material access or campus connectivity support.
-66.67,65.18,66.16,76.45,69.08,12.2,20.07,2.82,87.58,BIT,Hybrid,Yes,No,Yes,Medium,Medium,No,No,0.608,Schedule attendance mentoring and alert the advisor.
-84.32,63.96,55.99,66.94,47.25,13.66,10.41,3.25,72.3,SE,Regular,Yes,No,Yes,Medium,Medium,No,No,0.7078,Recommend additional topic-wise quiz practice.
-73.59,52.71,79.1,100.0,40.67,14.5,6.52,2.75,80.27,CS,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.6618,Track assignment completion weekly and offer deadline coaching.
-69.94,74.71,68.89,43.3,65.35,12.41,11.76,2.7,82.22,BIT,Regular,Yes,Yes,Yes,Medium,Medium,No,Yes,0.7478,Schedule attendance mentoring and alert the advisor. | Provide remedial support for internal exam preparation. | Review workload balance and suggest time-management support.
-80.02,66.79,59.66,72.6,70.92,8.45,15.21,2.25,80.85,BIT,Regular,Yes,Yes,No,Low,Medium,No,Yes,0.5405,Recommend additional topic-wise quiz practice. | Review workload balance and suggest time-management support.
-75.7,74.83,100.0,69.08,50.78,10.44,10.21,3.97,49.04,BCA,Regular,Yes,No,Yes,High,Medium,No,No,0.4868,Maintain the current support plan and consider advanced enrichment tasks.
-82.0,66.68,70.83,76.57,85.86,18.31,13.63,3.86,74.49,BCA,Hybrid,No,No,No,High,High,No,No,0.5912,Offer offline material access or campus connectivity support.
-76.98,78.41,72.58,37.37,62.76,10.66,9.09,2.7,76.05,BIT,Regular,Yes,No,Yes,Low,Medium,No,Yes,0.7677,Provide remedial support for internal exam preparation.
-58.66,60.13,55.99,38.22,55.81,11.02,7.75,3.5,93.34,CS,Regular,Yes,No,No,Medium,Medium,No,Yes,0.7407,Schedule attendance mentoring and alert the advisor. | Provide remedial support for internal exam preparation. | Recommend additional topic-wise quiz practice.
-66.45,67.67,85.09,70.9,85.14,12.12,8.32,2.99,86.03,BIT,Regular,Yes,No,Yes,Medium,Medium,No,No,0.7337,Schedule attendance mentoring and alert the advisor.
-68.75,67.78,64.63,93.38,87.22,21.62,15.55,2.78,80.66,BCA,Regular,No,Yes,No,Medium,Medium,No,No,0.5236,Schedule attendance mentoring and alert the advisor. | Offer offline material access or campus connectivity support. | Review workload balance and suggest time-management support.
-100.0,73.3,63.47,48.1,81.02,20.13,11.46,2.37,68.23,CS,Regular,Yes,No,No,Medium,Medium,No,Yes,0.5827,Provide remedial support for internal exam preparation.
-92.1,81.51,67.73,54.32,87.87,14.55,6.19,2.15,79.37,BIT,Regular,Yes,Yes,No,Medium,Medium,No,No,0.6584,Provide remedial support for internal exam preparation. | Review workload balance and suggest time-management support.
-71.66,52.29,95.81,61.96,78.56,17.36,9.04,2.75,89.16,CS,Regular,No,No,No,Medium,Medium,No,Yes,0.5706,Track assignment completion weekly and offer deadline coaching. | Offer offline material access or campus connectivity support.
-84.24,77.14,45.0,69.1,67.46,8.9,14.74,3.73,65.95,CS,Hybrid,Yes,No,Yes,Medium,Medium,No,No,0.5194,Recommend additional topic-wise quiz practice.
-84.04,100.0,84.21,67.4,69.27,9.35,4.84,3.37,74.54,SE,Regular,Yes,No,Yes,Medium,Medium,No,No,0.695,Increase LMS engagement through digital learning prompts.
-81.73,62.0,56.21,65.22,74.32,2.0,8.45,3.51,63.16,AI,Regular,Yes,Yes,No,Medium,Medium,No,No,0.59,Recommend additional topic-wise quiz practice. | Encourage a structured weekly self-study plan. | Review workload balance and suggest time-management support.
-86.44,76.38,55.2,81.92,71.88,6.43,14.21,3.51,62.99,BIT,Hybrid,Yes,No,Yes,Medium,High,No,No,0.5345,Recommend additional topic-wise quiz practice. | Encourage a structured weekly self-study plan.
-94.35,95.14,64.6,91.62,88.16,14.77,7.02,2.71,76.68,CS,Hybrid,Yes,No,Yes,High,Medium,No,No,0.7919,Maintain the current support plan and consider advanced enrichment tasks.
-77.16,69.52,67.62,72.04,67.21,7.57,5.67,2.38,92.27,BIT,Regular,Yes,No,No,Low,Medium,No,Yes,0.4968,Encourage a structured weekly self-study plan. | Increase LMS engagement through digital learning prompts.
-85.95,74.51,62.66,34.65,50.99,20.46,11.24,3.07,62.97,CS,Regular,Yes,No,No,Medium,Medium,No,Yes,0.6363,Provide remedial support for internal exam preparation.
-98.47,72.56,59.46,63.33,74.48,12.17,15.77,3.8,75.4,BIT,Regular,Yes,No,No,High,High,No,No,0.7565,Recommend additional topic-wise quiz practice.
-74.58,50.56,74.91,61.33,100.0,15.6,10.12,2.65,91.2,SE,Regular,Yes,No,No,Medium,Medium,No,Yes,0.7305,Track assignment completion weekly and offer deadline coaching.
-80.94,66.16,62.82,54.99,92.73,20.38,14.5,2.64,78.47,CS,Regular,Yes,No,No,Medium,Medium,No,No,0.6525,Provide remedial support for internal exam preparation.
-54.75,85.08,59.08,68.63,58.34,18.2,15.0,2.98,84.62,BIT,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.609,Schedule attendance mentoring and alert the advisor. | Recommend additional topic-wise quiz practice.
-62.91,72.52,59.15,41.27,78.66,19.5,13.72,2.49,52.58,AI,Regular,Yes,Yes,No,Medium,Medium,No,Yes,0.5033,Schedule attendance mentoring and alert the advisor. | Provide remedial support for internal exam preparation. | Recommend additional topic-wise quiz practice. | Review workload balance and suggest time-management support.
-79.83,53.45,81.66,64.31,78.14,14.79,19.74,2.09,85.85,AI,Regular,Yes,No,No,Medium,Medium,No,Yes,0.5182,Track assignment completion weekly and offer deadline coaching.
-76.99,67.58,61.4,57.84,87.5,9.02,8.98,2.5,77.16,AI,Hybrid,Yes,No,No,Low,Low,Yes,Yes,0.6094,Maintain the current support plan and consider advanced enrichment tasks.
-88.03,56.82,88.04,55.36,60.38,11.15,16.56,2.84,69.46,CS,Regular,Yes,No,Yes,Medium,Medium,No,No,0.6627,Track assignment completion weekly and offer deadline coaching.
-80.71,87.91,52.86,77.47,70.0,9.67,15.16,2.53,63.48,BIT,Hybrid,Yes,Yes,Yes,Low,Medium,No,Yes,0.6567,Recommend additional topic-wise quiz practice. | Review workload balance and suggest time-management support.
-88.63,60.61,76.11,75.22,56.45,12.02,9.46,3.54,78.82,BIT,Regular,Yes,Yes,No,Medium,Medium,No,No,0.569,Review workload balance and suggest time-management support.
-81.38,66.93,52.27,50.12,70.59,9.76,6.51,3.28,75.48,CS,Regular,Yes,Yes,Yes,Medium,Medium,No,No,0.6688,Provide remedial support for internal exam preparation. | Recommend additional topic-wise quiz practice. | Review workload balance and suggest time-management support.
-71.49,69.07,47.79,72.41,89.24,8.23,7.46,3.35,86.99,SE,Regular,Yes,No,Yes,Medium,Medium,No,No,0.6264,Recommend additional topic-wise quiz practice.
-84.93,69.61,72.81,15.0,64.08,7.18,7.35,2.35,75.56,BIT,Regular,Yes,No,No,Low,Low,Yes,Yes,0.6006,Provide remedial support for internal exam preparation. | Encourage a structured weekly self-study plan.
-82.74,52.89,70.52,52.96,67.28,8.88,4.18,3.84,69.35,CS,Hybrid,Yes,Yes,Yes,Medium,Medium,No,Yes,0.627,Provide remedial support for internal exam preparation. | Track assignment completion weekly and offer deadline coaching. | Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-67.72,72.15,63.7,65.64,81.19,14.81,11.74,3.01,60.14,CS,Regular,Yes,No,No,Medium,Medium,No,No,0.8054,Schedule attendance mentoring and alert the advisor.
-92.52,73.44,99.84,62.75,61.15,15.8,6.09,3.15,69.84,SE,Regular,Yes,No,No,High,Medium,No,No,0.6982,Maintain the current support plan and consider advanced enrichment tasks.
-83.85,90.73,51.24,73.45,88.96,14.77,16.76,3.29,81.87,CS,Regular,Yes,No,No,High,High,No,No,0.6376,Recommend additional topic-wise quiz practice.
-51.73,88.91,84.07,62.4,73.32,12.41,10.5,2.7,68.96,SE,Hybrid,Yes,Yes,No,Low,Medium,No,Yes,0.5308,Schedule attendance mentoring and alert the advisor. | Review workload balance and suggest time-management support.
-83.96,62.57,58.79,86.77,58.39,18.67,5.65,2.91,54.77,BCA,Regular,No,No,Yes,Medium,Medium,No,No,0.6108,Recommend additional topic-wise quiz practice. | Increase LMS engagement through digital learning prompts. | Offer offline material access or campus connectivity support.
-76.7,60.86,100.0,79.47,75.61,16.16,14.72,3.94,64.92,BIT,Regular,Yes,Yes,No,High,High,No,No,0.7428,Review workload balance and suggest time-management support.
-72.43,44.02,63.58,55.95,84.97,18.26,13.18,2.21,68.38,BIT,Regular,Yes,No,No,Medium,Medium,No,Yes,0.5511,Track assignment completion weekly and offer deadline coaching.
-56.95,80.58,59.55,66.56,76.16,17.81,16.84,2.18,86.13,BIT,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.6019,Schedule attendance mentoring and alert the advisor. | Recommend additional topic-wise quiz practice.
-64.82,69.95,41.17,57.25,51.92,7.32,12.86,2.77,62.15,AI,Hybrid,No,No,No,Low,Low,Yes,Yes,0.711,Schedule attendance mentoring and alert the advisor. | Recommend additional topic-wise quiz practice. | Encourage a structured weekly self-study plan. | Offer offline material access or campus connectivity support.
-76.77,72.02,94.0,66.06,72.72,13.42,2.64,3.47,55.21,CS,Regular,Yes,No,Yes,Medium,Medium,No,No,0.6907,Increase LMS engagement through digital learning prompts.
-77.77,61.53,62.56,86.7,69.81,2.0,15.55,3.39,70.06,BIT,Hybrid,Yes,Yes,No,Medium,Medium,No,No,0.5913,Encourage a structured weekly self-study plan. | Review workload balance and suggest time-management support.
-88.24,69.81,81.65,68.98,73.4,12.93,12.19,2.59,66.64,BIT,Regular,Yes,No,No,Medium,Medium,No,No,0.8288,Maintain the current support plan and consider advanced enrichment tasks.
-91.25,63.03,47.82,43.57,66.29,15.27,18.88,3.46,72.2,BIT,Regular,No,No,No,Medium,Medium,No,Yes,0.5324,Provide remedial support for internal exam preparation. | Recommend additional topic-wise quiz practice. | Offer offline material access or campus connectivity support.
-67.15,55.88,45.4,37.13,93.19,10.08,14.02,3.03,70.09,SE,Regular,Yes,No,No,Medium,Medium,No,Yes,0.6336,Schedule attendance mentoring and alert the advisor. | Provide remedial support for internal exam preparation. | Track assignment completion weekly and offer deadline coaching. | Recommend additional topic-wise quiz practice.
-74.7,71.57,73.27,56.64,64.1,9.72,9.85,2.83,84.35,AI,Hybrid,Yes,Yes,No,Low,Low,Yes,Yes,0.5627,Review workload balance and suggest time-management support.
-100.0,73.23,70.31,50.21,77.66,17.82,12.5,2.83,74.16,BIT,Regular,Yes,Yes,Yes,Medium,Medium,No,No,0.6737,Provide remedial support for internal exam preparation. | Review workload balance and suggest time-management support.
-79.2,75.29,63.39,53.72,66.13,12.31,13.13,2.7,72.42,BIT,Regular,Yes,Yes,No,Medium,Medium,No,No,0.7617,Provide remedial support for internal exam preparation. | Review workload balance and suggest time-management support.
-75.77,98.82,52.38,48.78,84.99,12.8,14.13,2.8,70.72,CS,Regular,Yes,Yes,No,Medium,Medium,No,Yes,0.7432,Provide remedial support for internal exam preparation. | Recommend additional topic-wise quiz practice. | Review workload balance and suggest time-management support.
-59.19,68.27,83.46,79.78,75.05,14.72,13.0,4.0,70.29,SE,Regular,Yes,Yes,No,High,High,No,Yes,0.6012,Schedule attendance mentoring and alert the advisor. | Review workload balance and suggest time-management support.
-70.94,82.49,64.5,57.14,100.0,17.96,15.09,2.25,54.97,CS,Regular,Yes,No,No,Medium,Medium,No,No,0.5996,Maintain the current support plan and consider advanced enrichment tasks.
-73.6,85.1,78.95,57.27,74.44,19.07,6.63,2.9,58.52,SE,Regular,Yes,No,No,Medium,Medium,No,No,0.7338,Maintain the current support plan and consider advanced enrichment tasks.
-70.4,75.67,60.36,73.08,68.26,8.14,23.32,2.83,75.56,BIT,Hybrid,Yes,No,No,Medium,Medium,No,No,0.5882,Maintain the current support plan and consider advanced enrichment tasks.
-69.21,64.99,69.0,57.24,66.47,9.51,8.92,4.0,75.17,BIT,Regular,Yes,No,No,Medium,Medium,No,No,0.653,Schedule attendance mentoring and alert the advisor.
-81.98,71.61,71.9,92.1,35.98,15.36,4.72,2.77,81.25,BCA,Regular,Yes,No,No,Medium,Medium,No,No,0.5673,Increase LMS engagement through digital learning prompts.
-58.88,81.29,57.68,39.17,53.27,13.78,6.01,3.5,62.5,AI,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.6452,Schedule attendance mentoring and alert the advisor. | Provide remedial support for internal exam preparation. | Recommend additional topic-wise quiz practice.
-92.23,65.69,90.77,68.61,65.28,18.19,10.96,2.69,81.21,BIT,Hybrid,Yes,No,Yes,Medium,Medium,No,No,0.7597,Maintain the current support plan and consider advanced enrichment tasks.
-86.44,57.89,73.94,58.58,86.42,11.01,6.65,3.93,77.6,CS,Regular,Yes,No,No,High,Medium,No,No,0.5184,Track assignment completion weekly and offer deadline coaching.
-84.19,62.13,58.46,47.24,87.54,17.03,6.67,3.92,70.31,CS,Regular,Yes,No,Yes,High,High,No,Yes,0.5432,Provide remedial support for internal exam preparation. | Recommend additional topic-wise quiz practice.
-90.21,99.46,86.8,86.91,74.95,20.46,13.37,3.37,78.64,CS,Regular,Yes,No,Yes,High,High,No,No,0.7625,Maintain the current support plan and consider advanced enrichment tasks.
-89.07,62.73,51.07,37.86,83.57,12.93,1.44,3.75,78.04,BIT,Hybrid,Yes,No,Yes,Medium,Medium,No,Yes,0.5832,Provide remedial support for internal exam preparation. | Recommend additional topic-wise quiz practice. | Increase LMS engagement through digital learning prompts.
-91.15,97.42,84.1,64.38,61.98,15.32,15.3,2.22,69.06,CS,Hybrid,Yes,Yes,Yes,Medium,Medium,No,No,0.7247,Review workload balance and suggest time-management support.
-69.82,81.01,64.84,47.03,81.28,7.2,15.08,1.94,64.67,CS,Hybrid,Yes,Yes,Yes,Low,Medium,No,Yes,0.4865,Schedule attendance mentoring and alert the advisor. | Provide remedial support for internal exam preparation. | Encourage a structured weekly self-study plan. | Review workload balance and suggest time-management support.
-78.89,88.08,61.98,51.06,68.52,11.51,5.06,2.97,100.0,BIT,Regular,Yes,No,Yes,Medium,Medium,No,No,0.7659,Provide remedial support for internal exam preparation. | Increase LMS engagement through digital learning prompts.
-66.9,51.3,45.46,52.54,67.75,11.21,5.98,3.26,70.02,BCA,Regular,Yes,Yes,No,Low,Medium,No,Yes,0.7373,Schedule attendance mentoring and alert the advisor. | Provide remedial support for internal exam preparation. | Track assignment completion weekly and offer deadline coaching. | Recommend additional topic-wise quiz practice. | Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-72.16,63.99,81.58,62.78,82.06,10.59,8.4,1.65,100.0,SE,Regular,Yes,No,No,Low,Low,Yes,Yes,0.5163,Maintain the current support plan and consider advanced enrichment tasks.
-81.79,75.59,94.24,57.03,63.49,15.92,12.7,3.08,83.95,SE,Regular,Yes,Yes,No,Medium,Medium,No,No,0.6253,Review workload balance and suggest time-management support.
-61.62,92.33,79.51,91.25,49.57,9.95,7.85,4.0,67.55,BIT,Regular,Yes,No,Yes,High,Medium,No,Yes,0.5352,Schedule attendance mentoring and alert the advisor.
-83.45,59.86,59.07,70.66,65.29,10.76,3.63,2.84,80.15,AI,Regular,Yes,No,No,Medium,Medium,No,No,0.665,Track assignment completion weekly and offer deadline coaching. | Recommend additional topic-wise quiz practice. | Increase LMS engagement through digital learning prompts.
-86.65,61.71,55.91,65.46,95.19,13.5,12.72,2.98,76.09,SE,Regular,Yes,No,Yes,Medium,Medium,No,No,0.842,Recommend additional topic-wise quiz practice.
-57.9,72.99,76.85,37.89,64.04,18.83,8.54,2.15,59.92,BIT,Regular,Yes,No,Yes,Medium,Low,Yes,Yes,0.5415,Schedule attendance mentoring and alert the advisor. | Provide remedial support for internal exam preparation.
-84.56,75.21,73.83,25.53,81.26,6.09,1.65,4.0,66.17,CS,Regular,Yes,Yes,No,Medium,Medium,No,Yes,0.59,Provide remedial support for internal exam preparation. | Encourage a structured weekly self-study plan. | Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-55.27,68.54,60.76,57.34,47.41,11.32,8.92,3.19,55.03,AI,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.7082,Schedule attendance mentoring and alert the advisor.
-84.68,46.64,71.92,85.41,73.18,11.35,20.26,3.11,72.96,BIT,Hybrid,Yes,No,Yes,Medium,High,No,Yes,0.4903,Track assignment completion weekly and offer deadline coaching.
-77.12,61.1,68.77,80.12,83.32,12.18,18.92,4.0,64.72,BIT,Regular,Yes,No,No,High,High,No,No,0.7054,Maintain the current support plan and consider advanced enrichment tasks.
-77.77,85.78,75.05,54.09,74.76,12.2,10.87,2.7,71.68,AI,Hybrid,Yes,No,No,Medium,Medium,No,No,0.7185,Provide remedial support for internal exam preparation.
-90.44,65.34,27.71,74.24,92.34,15.59,4.74,3.35,93.88,BIT,Regular,Yes,Yes,Yes,Medium,Medium,No,No,0.6257,Recommend additional topic-wise quiz practice. | Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-93.98,74.16,98.35,78.75,60.53,9.51,13.43,2.92,64.82,SE,Regular,Yes,No,Yes,High,Medium,No,No,0.6386,Maintain the current support plan and consider advanced enrichment tasks.
-95.47,65.07,64.68,56.74,73.16,15.99,8.06,2.6,44.99,CS,Regular,Yes,Yes,No,Low,Medium,No,Yes,0.6925,Review workload balance and suggest time-management support.
-95.13,76.84,78.27,61.32,98.02,2.25,7.57,4.0,78.06,BIT,Hybrid,Yes,No,No,Medium,Medium,No,No,0.5378,Encourage a structured weekly self-study plan.
-55.4,76.04,77.64,70.35,97.45,12.66,7.88,3.05,71.15,AI,Hybrid,Yes,No,Yes,Medium,Medium,No,Yes,0.6821,Schedule attendance mentoring and alert the advisor.
-86.16,53.26,69.14,71.45,48.69,19.3,8.16,2.88,73.54,BCA,Regular,Yes,Yes,Yes,Medium,Medium,No,Yes,0.7262,Track assignment completion weekly and offer deadline coaching. | Review workload balance and suggest time-management support.
-85.37,65.86,50.65,78.3,83.67,12.3,14.07,2.72,75.87,BIT,Regular,No,No,No,Medium,Medium,No,No,0.5753,Recommend additional topic-wise quiz practice. | Offer offline material access or campus connectivity support.
-81.57,81.28,72.87,43.72,67.21,13.22,14.27,2.93,77.48,BIT,Regular,Yes,No,No,Medium,Medium,No,Yes,0.7307,Provide remedial support for internal exam preparation.
-65.64,75.28,82.93,80.95,59.35,9.09,8.95,3.1,71.03,BIT,Regular,Yes,Yes,No,Medium,Medium,No,No,0.7334,Schedule attendance mentoring and alert the advisor. | Review workload balance and suggest time-management support.
-65.11,64.8,83.75,59.44,68.55,15.9,2.43,2.19,75.64,CS,Regular,Yes,Yes,No,Low,Low,Yes,Yes,0.6392,Schedule attendance mentoring and alert the advisor. | Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-80.04,66.78,78.28,81.98,90.6,23.47,13.29,3.04,75.07,BIT,Regular,Yes,No,No,High,High,No,No,0.5357,Maintain the current support plan and consider advanced enrichment tasks.
-84.29,66.24,65.7,54.35,64.29,7.45,8.52,2.79,63.14,CS,Regular,Yes,No,Yes,Low,Medium,No,Yes,0.5088,Provide remedial support for internal exam preparation. | Encourage a structured weekly self-study plan.
-66.68,72.69,86.93,45.32,55.04,12.06,3.13,3.75,84.69,SE,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.5319,Schedule attendance mentoring and alert the advisor. | Provide remedial support for internal exam preparation. | Increase LMS engagement through digital learning prompts.
-69.99,69.55,74.3,90.03,57.64,14.94,9.37,4.0,81.62,BIT,Regular,Yes,No,No,High,High,No,No,0.6926,Schedule attendance mentoring and alert the advisor.
-81.34,71.72,48.79,68.85,61.48,4.4,15.05,3.32,71.37,BIT,Regular,Yes,Yes,Yes,Medium,Medium,No,No,0.6152,Recommend additional topic-wise quiz practice. | Encourage a structured weekly self-study plan. | Review workload balance and suggest time-management support.
-61.69,52.43,66.74,74.16,83.67,18.55,11.6,2.82,87.51,AI,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.6966,Schedule attendance mentoring and alert the advisor. | Track assignment completion weekly and offer deadline coaching.
-90.61,74.35,81.11,42.04,66.52,23.42,9.23,3.02,74.06,SE,Hybrid,Yes,No,Yes,High,Medium,No,Yes,0.6643,Provide remedial support for internal exam preparation.
-85.36,48.54,79.03,61.7,88.9,14.15,5.54,3.36,84.85,CS,Regular,Yes,No,No,High,Medium,No,Yes,0.6834,Track assignment completion weekly and offer deadline coaching. | Increase LMS engagement through digital learning prompts.
-54.41,76.85,63.4,69.3,67.9,19.15,9.97,3.47,62.9,BIT,Regular,Yes,No,Yes,High,Medium,No,Yes,0.5144,Schedule attendance mentoring and alert the advisor.
-84.93,69.04,47.59,74.87,74.88,16.08,6.39,2.62,64.13,BIT,Regular,Yes,No,No,Medium,Medium,No,No,0.7515,Recommend additional topic-wise quiz practice.
-85.49,54.16,60.16,77.42,83.85,6.12,6.34,2.89,78.73,BIT,Regular,Yes,Yes,No,Medium,Medium,No,Yes,0.618,Track assignment completion weekly and offer deadline coaching. | Encourage a structured weekly self-study plan. | Review workload balance and suggest time-management support.
-80.72,50.17,78.25,64.57,74.72,18.37,11.12,2.75,65.38,BIT,Regular,Yes,Yes,Yes,Medium,Medium,No,Yes,0.7185,Track assignment completion weekly and offer deadline coaching. | Review workload balance and suggest time-management support.
-79.01,94.59,71.54,76.66,68.18,9.18,4.49,3.31,82.42,CS,Regular,Yes,No,Yes,High,Medium,No,No,0.646,Increase LMS engagement through digital learning prompts.
-91.98,68.96,62.96,56.62,52.34,12.61,4.97,2.7,76.54,SE,Hybrid,Yes,Yes,No,Low,Medium,No,Yes,0.5629,Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-74.4,69.1,61.51,56.16,73.19,5.06,18.12,3.73,72.35,SE,Regular,Yes,Yes,Yes,Medium,Medium,No,No,0.4847,Encourage a structured weekly self-study plan. | Review workload balance and suggest time-management support.
-91.04,60.8,72.63,51.24,69.87,15.66,18.7,2.94,70.33,BIT,Regular,Yes,No,No,Medium,Medium,No,No,0.5765,Provide remedial support for internal exam preparation.
-69.38,63.21,79.94,73.67,56.4,6.53,14.99,2.74,82.49,BCA,Regular,Yes,No,Yes,Medium,Medium,No,No,0.6016,Schedule attendance mentoring and alert the advisor. | Encourage a structured weekly self-study plan.
-69.94,66.42,64.26,64.66,80.79,6.44,10.38,2.36,64.29,CS,Regular,Yes,No,No,Low,Low,Yes,Yes,0.633,Schedule attendance mentoring and alert the advisor. | Encourage a structured weekly self-study plan.
-63.45,68.78,79.09,71.81,65.06,17.45,10.74,1.84,86.57,BIT,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.5211,Schedule attendance mentoring and alert the advisor.
-71.85,68.43,72.49,59.2,54.26,12.05,17.88,2.93,47.36,BCA,Regular,Yes,Yes,Yes,Medium,Medium,No,No,0.6907,Review workload balance and suggest time-management support.
-85.51,72.38,77.92,50.58,57.24,12.81,4.93,3.12,65.63,BIT,Regular,Yes,No,Yes,Medium,Medium,No,No,0.8306,Provide remedial support for internal exam preparation. | Increase LMS engagement through digital learning prompts.
-74.72,58.33,55.91,72.87,58.89,18.23,8.54,2.69,66.76,CS,Regular,Yes,No,No,Medium,Medium,No,No,0.7093,Track assignment completion weekly and offer deadline coaching. | Recommend additional topic-wise quiz practice.
-72.45,59.61,66.8,87.97,88.53,12.54,10.34,3.3,72.39,SE,Regular,Yes,No,Yes,High,Medium,No,No,0.5446,Track assignment completion weekly and offer deadline coaching.
-88.77,53.5,54.16,70.33,85.21,15.97,7.02,3.2,75.99,BIT,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.6585,Track assignment completion weekly and offer deadline coaching. | Recommend additional topic-wise quiz practice.
-100.0,52.06,48.74,70.32,56.79,10.93,9.5,3.2,68.31,CS,Regular,Yes,No,No,Medium,Medium,No,Yes,0.7296,Track assignment completion weekly and offer deadline coaching. | Recommend additional topic-wise quiz practice.
-79.09,62.62,56.16,94.87,68.63,17.18,10.83,2.35,67.97,BCA,Regular,Yes,No,Yes,Medium,Medium,No,No,0.6988,Recommend additional topic-wise quiz practice.
-77.67,70.95,70.02,28.45,51.44,15.0,9.04,2.64,69.57,BIT,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.7379,Provide remedial support for internal exam preparation.
-73.0,69.64,56.01,69.79,81.55,14.12,12.08,1.88,54.03,CS,Regular,Yes,No,Yes,Low,Medium,No,Yes,0.6294,Recommend additional topic-wise quiz practice.
-77.1,92.92,72.77,76.09,85.02,15.83,9.76,3.38,54.83,AI,Regular,Yes,No,No,High,High,No,No,0.4946,Maintain the current support plan and consider advanced enrichment tasks.
-69.72,57.58,83.16,82.47,76.52,17.45,4.74,2.32,63.28,CS,Regular,Yes,No,No,Medium,Medium,No,No,0.5556,Schedule attendance mentoring and alert the advisor. | Track assignment completion weekly and offer deadline coaching. | Increase LMS engagement through digital learning prompts.
-98.11,88.82,86.47,48.76,81.02,16.13,1.94,2.52,71.79,BCA,Regular,Yes,No,No,Medium,Medium,No,Yes,0.7024,Provide remedial support for internal exam preparation. | Increase LMS engagement through digital learning prompts.
-92.28,68.92,67.07,76.31,70.13,15.36,10.04,3.7,70.13,BIT,Regular,Yes,No,No,High,High,No,No,0.7658,Maintain the current support plan and consider advanced enrichment tasks.
-70.31,81.17,50.98,55.43,81.6,8.9,9.28,1.49,80.28,AI,Regular,Yes,No,No,Low,Low,Yes,Yes,0.6982,Recommend additional topic-wise quiz practice.
-70.38,82.25,75.37,76.17,69.12,9.0,11.64,1.99,75.53,BIT,Regular,Yes,No,Yes,Medium,Medium,No,No,0.4797,Maintain the current support plan and consider advanced enrichment tasks.
-70.91,55.02,76.95,47.19,61.74,13.61,6.0,2.34,55.47,CS,Regular,Yes,No,No,Low,Low,Yes,Yes,0.625,Provide remedial support for internal exam preparation. | Track assignment completion weekly and offer deadline coaching.
-70.34,57.87,82.77,73.08,79.72,9.98,9.15,3.73,70.23,BIT,Hybrid,Yes,No,Yes,Medium,Medium,No,No,0.4594,Track assignment completion weekly and offer deadline coaching.
-91.68,70.76,64.91,87.51,80.66,10.11,13.34,3.07,95.25,AI,Regular,Yes,Yes,Yes,High,Medium,No,No,0.6647,Review workload balance and suggest time-management support.
-57.7,51.44,66.22,68.54,80.01,7.9,1.06,2.23,81.99,BIT,Regular,Yes,No,No,Low,Low,Yes,Yes,0.5865,Schedule attendance mentoring and alert the advisor. | Track assignment completion weekly and offer deadline coaching. | Encourage a structured weekly self-study plan. | Increase LMS engagement through digital learning prompts.
-76.39,59.37,91.23,84.5,83.71,12.14,1.62,3.89,63.52,BIT,Regular,Yes,No,No,High,Medium,No,No,0.5308,Track assignment completion weekly and offer deadline coaching. | Increase LMS engagement through digital learning prompts.
-93.8,74.22,66.3,61.16,72.71,9.64,12.58,2.76,71.67,CS,Regular,Yes,Yes,No,Medium,Medium,No,No,0.6807,Review workload balance and suggest time-management support.
-73.31,71.92,82.42,79.68,75.49,7.2,1.15,2.78,69.22,BCA,Regular,No,No,Yes,Low,Low,Yes,Yes,0.6094,Encourage a structured weekly self-study plan. | Increase LMS engagement through digital learning prompts. | Offer offline material access or campus connectivity support.
-74.11,64.43,64.68,63.26,73.54,12.12,6.32,3.4,63.7,BCA,Hybrid,No,Yes,Yes,Low,Medium,No,Yes,0.5437,Offer offline material access or campus connectivity support. | Review workload balance and suggest time-management support.
-100.0,82.13,48.59,70.66,68.98,6.49,1.0,3.9,73.81,BCA,Regular,No,No,No,Medium,Medium,No,No,0.415,Recommend additional topic-wise quiz practice. | Encourage a structured weekly self-study plan. | Increase LMS engagement through digital learning prompts. | Offer offline material access or campus connectivity support.
-78.61,74.02,68.0,77.23,48.71,12.5,3.48,3.91,79.67,SE,Regular,Yes,No,Yes,High,High,No,No,0.6218,Increase LMS engagement through digital learning prompts.
-86.96,75.54,60.21,59.19,85.61,8.26,13.11,3.34,87.58,BIT,Regular,Yes,Yes,No,Medium,Medium,No,No,0.7336,Review workload balance and suggest time-management support.
-64.36,64.56,79.93,67.43,85.35,13.33,5.97,3.25,73.77,BCA,Regular,Yes,No,No,Medium,Medium,No,Yes,0.76,Schedule attendance mentoring and alert the advisor. | Increase LMS engagement through digital learning prompts.
-56.14,64.46,74.51,97.57,63.92,11.28,10.85,3.49,90.61,BIT,Hybrid,Yes,No,No,Medium,Medium,No,Yes,0.5651,Schedule attendance mentoring and alert the advisor.
-64.18,77.41,92.43,48.38,62.46,13.08,8.56,3.03,93.13,CS,Hybrid,No,No,Yes,Medium,Medium,No,Yes,0.4967,Schedule attendance mentoring and alert the advisor. | Provide remedial support for internal exam preparation. | Offer offline material access or campus connectivity support.
-73.47,69.32,70.05,55.56,85.0,19.9,10.78,2.89,70.05,BCA,Hybrid,No,Yes,No,Medium,Medium,No,No,0.4845,Offer offline material access or campus connectivity support. | Review workload balance and suggest time-management support.
-83.8,59.64,98.59,41.83,50.25,17.96,11.9,2.4,80.05,BCA,Regular,Yes,Yes,No,Medium,Medium,No,Yes,0.5859,Provide remedial support for internal exam preparation. | Track assignment completion weekly and offer deadline coaching. | Review workload balance and suggest time-management support.
-72.57,68.22,49.89,79.53,70.87,14.7,9.79,3.14,97.43,SE,Regular,Yes,No,No,Medium,Medium,No,No,0.5845,Recommend additional topic-wise quiz practice.
-82.4,73.26,60.85,69.18,55.02,13.94,14.67,2.82,57.21,BCA,Regular,Yes,No,Yes,Medium,Medium,No,No,0.783,Maintain the current support plan and consider advanced enrichment tasks.
-72.12,53.26,94.36,89.28,89.06,9.92,9.2,3.32,61.0,BCA,Hybrid,Yes,Yes,No,Medium,Medium,No,Yes,0.6556,Track assignment completion weekly and offer deadline coaching. | Review workload balance and suggest time-management support.
-87.05,52.72,66.73,50.29,66.86,11.27,15.76,3.55,67.64,BCA,Regular,Yes,No,No,Medium,Medium,No,Yes,0.5819,Provide remedial support for internal exam preparation. | Track assignment completion weekly and offer deadline coaching.
-64.98,97.27,59.53,74.96,69.24,12.82,12.11,2.82,67.01,BIT,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.752,Schedule attendance mentoring and alert the advisor. | Recommend additional topic-wise quiz practice.
-93.19,52.05,35.02,88.13,75.13,15.55,12.05,1.93,45.22,BIT,Regular,Yes,No,No,Medium,Medium,No,Yes,0.6891,Track assignment completion weekly and offer deadline coaching. | Recommend additional topic-wise quiz practice.
-80.48,64.84,75.75,55.42,84.49,12.62,6.29,2.72,61.69,BIT,Regular,Yes,Yes,No,Low,Medium,No,Yes,0.6898,Review workload balance and suggest time-management support.
-61.85,90.53,46.31,79.37,86.6,11.49,14.73,2.9,85.63,BIT,Regular,No,No,Yes,Medium,Medium,No,Yes,0.5684,Schedule attendance mentoring and alert the advisor. | Recommend additional topic-wise quiz practice. | Offer offline material access or campus connectivity support.
-84.4,58.95,55.75,76.95,80.15,11.29,16.42,3.62,55.52,BIT,Regular,No,No,No,Medium,Medium,No,No,0.481,Track assignment completion weekly and offer deadline coaching. | Recommend additional topic-wise quiz practice. | Offer offline material access or campus connectivity support.
-94.31,76.43,75.41,58.7,64.92,10.13,6.95,3.26,77.61,AI,Regular,No,No,Yes,Medium,Medium,No,No,0.5904,Offer offline material access or campus connectivity support.
-76.02,65.98,75.44,59.1,63.12,7.5,9.67,3.27,75.4,BCA,Regular,Yes,No,Yes,Medium,Medium,No,No,0.6892,Encourage a structured weekly self-study plan.
-69.9,82.88,57.52,64.37,84.3,12.19,2.23,3.03,76.66,BIT,Hybrid,Yes,No,No,Low,Medium,No,Yes,0.6637,Schedule attendance mentoring and alert the advisor. | Recommend additional topic-wise quiz practice. | Increase LMS engagement through digital learning prompts.
-83.33,91.26,68.25,68.45,69.74,12.77,15.41,2.36,80.08,BIT,Regular,Yes,No,Yes,Medium,Medium,No,No,0.7833,Maintain the current support plan and consider advanced enrichment tasks.
-58.18,75.61,62.57,49.77,80.4,12.36,11.86,2.62,47.06,SE,Regular,Yes,Yes,No,Low,Medium,No,Yes,0.5501,Schedule attendance mentoring and alert the advisor. | Provide remedial support for internal exam preparation. | Review workload balance and suggest time-management support.
-85.74,72.29,79.96,61.48,81.95,12.98,4.57,2.81,68.89,SE,Regular,Yes,Yes,Yes,Medium,Medium,No,No,0.742,Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-88.32,64.93,86.31,93.67,50.9,16.44,12.63,3.01,72.96,BIT,Regular,Yes,No,No,High,High,No,No,0.5579,Maintain the current support plan and consider advanced enrichment tasks.
-75.29,83.1,81.97,79.05,60.06,7.19,2.33,3.77,72.24,CS,Hybrid,Yes,Yes,No,Medium,Medium,No,No,0.6026,Encourage a structured weekly self-study plan. | Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-86.19,62.2,63.27,63.23,63.0,11.13,11.07,1.7,66.09,BIT,Regular,Yes,No,Yes,Low,Low,Yes,Yes,0.5042,Maintain the current support plan and consider advanced enrichment tasks.
-82.32,68.36,70.89,81.32,61.6,9.92,4.29,2.01,69.82,BIT,Hybrid,Yes,No,Yes,Low,Medium,No,Yes,0.5217,Increase LMS engagement through digital learning prompts.
-85.03,69.36,69.69,90.33,75.93,13.81,8.43,3.77,76.77,BIT,Regular,Yes,Yes,No,High,High,No,No,0.7409,Review workload balance and suggest time-management support.
-43.95,58.29,69.72,75.46,50.0,9.59,7.78,3.25,54.94,SE,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.6785,Schedule attendance mentoring and alert the advisor. | Track assignment completion weekly and offer deadline coaching.
-71.83,74.92,56.52,40.56,90.72,10.81,10.72,3.84,69.64,SE,Regular,Yes,No,No,Medium,Medium,No,Yes,0.489,Provide remedial support for internal exam preparation. | Recommend additional topic-wise quiz practice.
-95.78,73.61,46.65,45.91,72.53,13.32,2.94,2.08,85.16,BIT,Regular,Yes,Yes,Yes,Low,Low,Yes,Yes,0.5411,Provide remedial support for internal exam preparation. | Recommend additional topic-wise quiz practice. | Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-96.61,71.73,48.01,80.04,54.53,12.3,6.63,2.71,77.48,BIT,Regular,Yes,No,Yes,Medium,Medium,No,No,0.7441,Recommend additional topic-wise quiz practice.
-56.46,50.46,77.4,62.67,69.21,9.17,9.73,2.84,89.95,AI,Regular,Yes,Yes,No,Medium,Low,Yes,Yes,0.5281,Schedule attendance mentoring and alert the advisor. | Track assignment completion weekly and offer deadline coaching. | Review workload balance and suggest time-management support.
-81.17,55.77,91.31,81.04,59.63,14.9,6.09,1.94,71.07,BIT,Regular,Yes,Yes,No,Low,Medium,No,Yes,0.5376,Track assignment completion weekly and offer deadline coaching. | Review workload balance and suggest time-management support.
-85.36,88.9,78.14,67.28,93.18,11.77,14.0,2.79,71.42,BIT,Regular,Yes,No,No,Medium,Medium,No,No,0.7217,Maintain the current support plan and consider advanced enrichment tasks.
-72.63,71.81,65.15,100.0,58.0,13.69,10.16,2.77,72.98,BIT,Hybrid,Yes,No,No,Medium,Medium,No,No,0.6625,Maintain the current support plan and consider advanced enrichment tasks.
-85.35,47.0,33.96,74.25,68.24,14.6,11.39,2.78,68.97,BIT,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.7057,Track assignment completion weekly and offer deadline coaching. | Recommend additional topic-wise quiz practice.
-76.23,70.01,56.64,78.01,80.65,12.76,7.46,2.26,72.95,CS,Regular,Yes,No,Yes,Medium,Medium,No,No,0.5878,Recommend additional topic-wise quiz practice.
-64.59,60.08,64.74,71.74,76.66,12.17,8.83,4.0,80.21,BIT,Regular,Yes,No,Yes,High,Medium,No,Yes,0.5046,Schedule attendance mentoring and alert the advisor.
-74.32,62.17,75.04,79.97,71.17,15.61,2.93,3.95,61.56,BIT,Regular,Yes,Yes,No,High,Medium,No,No,0.5061,Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-73.24,87.41,82.13,77.62,70.15,15.22,14.34,3.76,70.01,CS,Regular,Yes,No,Yes,High,High,No,No,0.847,Maintain the current support plan and consider advanced enrichment tasks.
-74.71,67.71,56.9,65.16,56.36,17.95,15.85,3.43,87.91,BIT,Regular,Yes,Yes,Yes,High,Medium,No,No,0.5917,Recommend additional topic-wise quiz practice. | Review workload balance and suggest time-management support.
-83.71,82.1,72.63,67.5,79.49,11.31,7.9,2.65,58.21,SE,Regular,No,No,Yes,Medium,Low,Yes,No,0.4603,Offer offline material access or campus connectivity support.
-67.31,65.2,42.49,50.38,58.02,11.28,3.23,3.38,66.83,AI,Regular,Yes,No,Yes,Medium,Medium,No,No,0.7498,Schedule attendance mentoring and alert the advisor. | Provide remedial support for internal exam preparation. | Recommend additional topic-wise quiz practice. | Increase LMS engagement through digital learning prompts.
-80.83,64.12,51.04,46.18,65.14,14.06,13.59,3.72,96.87,CS,Regular,Yes,No,No,Medium,High,No,Yes,0.5372,Provide remedial support for internal exam preparation. | Recommend additional topic-wise quiz practice.
-75.63,66.46,75.13,66.85,89.58,12.97,7.41,4.0,84.24,AI,Regular,Yes,No,Yes,High,High,No,No,0.6385,Maintain the current support plan and consider advanced enrichment tasks.
-74.11,66.94,94.07,55.6,77.74,10.06,12.18,2.42,71.8,CS,Regular,Yes,No,No,Medium,Medium,No,No,0.5295,Maintain the current support plan and consider advanced enrichment tasks.
-74.02,100.0,54.63,67.27,79.87,13.58,19.38,2.15,73.1,BCA,Regular,Yes,No,Yes,Medium,Medium,No,No,0.7151,Recommend additional topic-wise quiz practice.
-99.85,63.22,68.7,47.87,94.32,11.48,14.12,2.76,85.39,AI,Regular,Yes,No,No,Medium,Medium,No,Yes,0.712,Provide remedial support for internal exam preparation.
-61.92,60.8,87.75,91.65,45.24,12.3,9.16,2.59,79.2,SE,Regular,Yes,No,Yes,Medium,Medium,No,Yes,0.6677,Schedule attendance mentoring and alert the advisor.
-71.68,89.65,100.0,60.35,69.41,15.77,7.72,2.8,83.81,SE,Regular,No,No,No,Medium,Medium,No,No,0.4676,Offer offline material access or campus connectivity support.
-69.55,72.62,68.87,80.35,66.07,7.98,2.0,2.74,73.74,SE,Regular,Yes,No,No,Low,Medium,No,Yes,0.6743,Schedule attendance mentoring and alert the advisor. | Encourage a structured weekly self-study plan. | Increase LMS engagement through digital learning prompts.
-90.96,59.97,70.41,75.42,60.87,11.37,14.84,2.27,78.55,CS,Regular,Yes,No,Yes,Medium,Medium,No,No,0.77,Track assignment completion weekly and offer deadline coaching.
-84.59,53.41,96.91,52.53,70.31,15.28,3.65,2.99,60.17,BCA,Hybrid,Yes,No,No,Medium,Medium,No,Yes,0.6906,Provide remedial support for internal exam preparation. | Track assignment completion weekly and offer deadline coaching. | Increase LMS engagement through digital learning prompts.
-72.95,68.65,66.29,60.53,60.88,9.63,11.07,3.44,74.63,CS,Hybrid,Yes,No,Yes,Medium,Medium,No,No,0.7358,Maintain the current support plan and consider advanced enrichment tasks.
-100.0,68.54,56.88,71.59,73.64,21.9,5.77,2.49,76.82,BIT,Regular,Yes,Yes,Yes,Medium,Medium,No,No,0.6567,Recommend additional topic-wise quiz practice. | Increase LMS engagement through digital learning prompts. | Review workload balance and suggest time-management support.
-90.2,78.9,60.48,90.4,57.21,12.42,12.34,2.82,100.0,BIT,Regular,Yes,Yes,Yes,Medium,Medium,No,No,0.6383,Review workload balance and suggest time-management support.
-87.68,70.47,84.44,48.79,71.3,4.08,8.63,2.3,56.82,SE,Regular,No,Yes,Yes,Low,Low,Yes,Yes,0.795,Provide remedial support for internal exam preparation. | Encourage a structured weekly self-study plan. | Offer offline material access or campus connectivity support. | Review workload balance and suggest time-management support.
-75.86,68.47,71.27,49.16,69.5,18.51,15.63,4.0,75.76,BCA,Regular,Yes,Yes,No,High,High,No,Yes,0.61,Provide remedial support for internal exam preparation. | Review workload balance and suggest time-management support.
-74.42,68.8,52.55,81.96,60.49,10.63,7.75,2.59,97.81,BIT,Regular,Yes,No,No,Medium,Medium,No,No,0.7054,Recommend additional topic-wise quiz practice.
-70.95,71.36,79.79,39.68,74.06,6.17,10.03,2.96,85.56,AI,Regular,Yes,No,No,Medium,Medium,No,Yes,0.6072,Provide remedial support for internal exam preparation. | Encourage a structured weekly self-study plan.
-84.14,68.56,43.04,66.98,80.18,7.84,7.01,2.55,86.76,SE,Hybrid,No,Yes,No,Low,Low,Yes,Yes,0.7004,Recommend additional topic-wise quiz practice. | Encourage a structured weekly self-study plan. | Offer offline material access or campus connectivity support. | Review workload balance and suggest time-management support.
-78.87,95.82,83.82,79.86,79.16,12.72,7.64,3.13,72.9,BCA,Regular,Yes,No,Yes,High,Medium,No,No,0.6547,Maintain the current support plan and consider advanced enrichment tasks.
+attendance_rate,internal_avg_theory,external_avg_theory,internal_avg_practical,external_avg_practical,study_hours_per_week,previous_gpa,department,actual_band,predicted_band,predicted_risk,actual_risk,confidence,recommendations
+58.87,15.81,41.93,22.39,21.07,12.57,5.19,CSE,Medium,Medium,No,Yes,0.9688,Schedule attendance mentoring and alert the advisor. | Review overall academic progress and suggest study skills workshop.
+69.4,16.07,28.73,25.0,12.18,19.6,8.12,CSE,Medium,Medium,No,No,0.9756,Maintain the current support plan and consider advanced enrichment tasks.
+79.86,18.19,56.01,25.0,17.63,16.93,8.71,ME,High,High,No,No,0.7009,Maintain the current support plan and consider advanced enrichment tasks.
+57.24,14.82,29.64,18.32,18.64,14.45,8.97,CSE,Medium,Medium,No,Yes,0.9203,Schedule attendance mentoring and alert the advisor.
+100.0,25.03,42.5,13.36,15.94,23.55,5.93,ECE,Medium,Medium,No,No,0.8442,Review overall academic progress and suggest study skills workshop.
+68.84,22.95,44.67,16.89,17.04,10.33,7.41,ECE,Medium,Medium,No,No,0.9746,Maintain the current support plan and consider advanced enrichment tasks.
+78.07,22.79,48.34,17.76,16.55,18.99,7.43,EEE,Medium,Medium,No,No,0.694,Maintain the current support plan and consider advanced enrichment tasks.
+100.0,18.86,38.23,18.85,21.26,15.34,7.06,EEE,Medium,Medium,No,No,0.8238,Maintain the current support plan and consider advanced enrichment tasks.
+86.29,16.86,56.93,13.94,20.86,10.11,8.48,ME,Medium,Medium,No,No,0.5692,Maintain the current support plan and consider advanced enrichment tasks.
+82.74,29.02,38.42,18.17,19.86,16.16,7.97,ME,Medium,Medium,No,No,0.7393,Maintain the current support plan and consider advanced enrichment tasks.
+85.89,19.87,65.74,16.33,10.25,7.58,6.83,CSE,Medium,Medium,No,No,0.5677,Encourage a structured weekly self-study plan.
+63.25,23.33,68.2,16.47,15.27,4.36,7.54,CSE,Medium,Medium,No,No,0.7262,Encourage a structured weekly self-study plan.
+83.53,14.97,52.07,16.14,20.93,13.79,5.62,ME,Medium,Medium,No,No,0.8696,Review overall academic progress and suggest study skills workshop.
+90.59,21.44,16.32,23.61,14.29,19.99,8.73,CSE,Medium,Medium,No,Yes,0.8896,Offer targeted coaching for theory external exams.
+77.09,23.57,53.35,12.25,18.07,6.38,8.34,CE,Medium,Medium,No,No,0.7928,Encourage a structured weekly self-study plan.
+87.29,20.25,46.14,23.75,17.07,13.99,6.31,EEE,Medium,Medium,No,No,0.6105,Maintain the current support plan and consider advanced enrichment tasks.
+89.69,21.5,63.2,17.39,11.46,11.85,6.2,ME,Medium,High,No,No,0.5839,Maintain the current support plan and consider advanced enrichment tasks.
+100.0,23.0,48.85,16.8,25.0,19.89,4.9,CSE,High,High,No,No,0.5276,Review overall academic progress and suggest study skills workshop.
+59.7,21.41,40.01,17.14,14.45,14.15,5.93,CSE,Medium,Medium,No,Yes,0.9935,Schedule attendance mentoring and alert the advisor. | Review overall academic progress and suggest study skills workshop.
+72.7,19.0,27.83,5.22,12.34,4.52,8.7,ME,Medium,Medium,No,Yes,0.9619,Offer targeted coaching for theory external exams. | Recommend additional practice in lab sessions. | Encourage a structured weekly self-study plan.
+74.58,27.54,60.39,20.35,18.76,16.82,8.5,ECE,High,High,No,No,0.9073,Maintain the current support plan and consider advanced enrichment tasks.
+61.78,19.79,35.07,18.38,19.21,9.59,6.79,CE,Medium,Medium,No,No,0.9764,Encourage a structured weekly self-study plan.
+82.32,24.46,29.66,14.48,22.79,5.96,7.08,ECE,Medium,Medium,No,No,0.9473,Encourage a structured weekly self-study plan.
+51.96,21.54,54.09,17.24,14.26,22.38,8.4,ECE,Medium,Medium,No,Yes,0.9262,Schedule attendance mentoring and alert the advisor.
+81.63,16.3,41.63,17.99,17.02,11.94,6.35,ME,Medium,Medium,No,No,0.9849,Maintain the current support plan and consider advanced enrichment tasks.
+86.73,9.91,45.79,15.36,18.4,7.57,7.53,CE,Medium,Medium,No,No,0.9608,Provide remedial support for theory internal exam preparation. | Encourage a structured weekly self-study plan.
+100.0,22.42,62.6,18.86,21.18,17.88,8.53,EEE,High,High,No,No,0.9336,Maintain the current support plan and consider advanced enrichment tasks.
+32.08,18.26,39.84,20.29,15.3,15.82,7.75,CSE,Medium,Medium,No,Yes,0.972,Schedule attendance mentoring and alert the advisor.
+52.53,19.6,50.07,16.19,14.51,12.27,8.93,ECE,Medium,Medium,No,Yes,0.9692,Schedule attendance mentoring and alert the advisor.
+50.75,30.0,39.18,18.18,18.46,11.34,5.73,EEE,Medium,Medium,No,Yes,0.9495,Schedule attendance mentoring and alert the advisor. | Review overall academic progress and suggest study skills workshop.
+86.26,20.75,44.1,10.47,17.64,14.44,7.96,ME,Medium,Medium,No,No,0.8932,Maintain the current support plan and consider advanced enrichment tasks.
+81.81,14.52,70.0,18.88,17.71,13.76,6.28,CSE,High,High,No,No,0.5279,Maintain the current support plan and consider advanced enrichment tasks.
+52.84,15.03,62.57,17.7,12.7,17.76,7.76,EEE,Medium,Medium,No,Yes,0.9307,Schedule attendance mentoring and alert the advisor.
+86.05,20.81,35.46,11.49,11.52,22.95,5.39,EEE,Medium,Medium,No,No,0.9347,Review overall academic progress and suggest study skills workshop.
+72.48,20.94,70.0,10.03,16.17,9.12,7.5,CSE,Medium,Medium,No,No,0.7454,Encourage a structured weekly self-study plan.
+71.77,9.8,33.77,13.87,17.78,15.43,8.21,ECE,Medium,Medium,No,No,0.9938,Provide remedial support for theory internal exam preparation.
+81.69,28.26,23.33,7.85,20.53,20.79,7.2,EEE,Medium,Medium,No,Yes,0.8729,Offer targeted coaching for theory external exams. | Recommend additional practice in lab sessions.
+46.29,25.9,29.88,18.6,19.77,13.91,7.96,CSE,Medium,Medium,No,Yes,0.9689,Schedule attendance mentoring and alert the advisor.
+82.2,25.29,21.62,21.42,18.98,17.06,8.17,EEE,Medium,Medium,No,Yes,0.9285,Offer targeted coaching for theory external exams.
+98.85,20.85,31.99,14.6,14.74,9.32,7.78,CSE,Medium,Medium,No,No,0.9551,Encourage a structured weekly self-study plan.
+61.4,20.58,70.0,13.41,20.12,4.49,6.48,ECE,Medium,Medium,No,No,0.8143,Encourage a structured weekly self-study plan.
+89.71,10.26,48.08,17.53,13.65,18.29,7.33,CSE,Medium,Medium,No,No,0.8904,Provide remedial support for theory internal exam preparation.
+75.61,23.2,50.66,16.52,16.35,21.5,7.51,CSE,Medium,Medium,No,No,0.7036,Maintain the current support plan and consider advanced enrichment tasks.
+93.57,18.2,41.47,18.09,19.2,14.11,9.46,ME,Medium,Medium,No,No,0.7695,Maintain the current support plan and consider advanced enrichment tasks.
+75.78,20.07,42.14,16.17,16.33,18.48,8.82,CSE,Medium,Medium,No,No,0.9361,Maintain the current support plan and consider advanced enrichment tasks.
+74.32,22.82,38.5,23.95,17.14,23.39,8.08,CSE,Medium,Medium,No,No,0.8783,Maintain the current support plan and consider advanced enrichment tasks.
+100.0,18.69,26.23,17.71,16.46,11.42,6.87,CE,Medium,Medium,No,Yes,0.9616,Offer targeted coaching for theory external exams.
+100.0,20.61,42.05,17.15,12.51,16.91,5.79,CSE,Medium,Medium,No,No,0.9121,Review overall academic progress and suggest study skills workshop.
+99.08,28.57,49.48,22.1,20.16,16.8,7.36,CSE,High,High,No,No,0.903,Maintain the current support plan and consider advanced enrichment tasks.
+63.87,25.37,63.68,16.74,15.28,17.29,6.03,EEE,Medium,Medium,No,No,0.6721,Maintain the current support plan and consider advanced enrichment tasks.
+83.87,14.89,50.7,17.81,24.05,14.8,7.85,ECE,Medium,Medium,No,No,0.637,Maintain the current support plan and consider advanced enrichment tasks.
+95.21,20.85,62.19,15.18,22.15,15.19,7.54,ECE,High,High,No,No,0.853,Maintain the current support plan and consider advanced enrichment tasks.
+49.98,20.49,7.5,25.0,16.99,15.5,7.17,CSE,Medium,Medium,No,Yes,0.7912,Schedule attendance mentoring and alert the advisor. | Offer targeted coaching for theory external exams.
+52.17,19.73,31.43,18.32,22.18,10.66,8.47,CSE,Medium,Medium,No,Yes,0.9824,Schedule attendance mentoring and alert the advisor.
+85.31,18.36,20.31,15.41,16.77,1.51,8.28,ECE,Medium,Medium,No,Yes,0.9738,Offer targeted coaching for theory external exams. | Encourage a structured weekly self-study plan.
+56.63,19.5,38.99,21.53,17.24,15.54,6.88,CSE,Medium,Medium,No,Yes,0.9884,Schedule attendance mentoring and alert the advisor.
+91.36,30.0,43.62,17.13,14.62,11.87,6.47,EEE,Medium,Medium,No,No,0.6932,Maintain the current support plan and consider advanced enrichment tasks.
+85.69,18.54,63.22,17.19,20.31,9.56,5.87,ME,Medium,High,No,No,0.6266,Encourage a structured weekly self-study plan. | Review overall academic progress and suggest study skills workshop.
+98.17,23.31,38.45,16.02,22.35,10.48,7.28,CSE,Medium,Medium,No,No,0.8448,Maintain the current support plan and consider advanced enrichment tasks.
+87.4,21.63,53.5,12.82,17.35,21.11,7.25,ECE,Medium,Medium,No,No,0.5373,Maintain the current support plan and consider advanced enrichment tasks.
+63.67,20.86,70.0,18.51,14.12,9.08,5.78,CSE,Medium,Medium,No,No,0.733,Encourage a structured weekly self-study plan. | Review overall academic progress and suggest study skills workshop.
+88.64,16.32,70.0,17.34,10.71,22.81,6.12,EEE,Medium,High,No,No,0.5405,Maintain the current support plan and consider advanced enrichment tasks.
+85.79,23.01,44.01,20.84,15.49,19.62,7.04,CE,Medium,Medium,No,No,0.7007,Maintain the current support plan and consider advanced enrichment tasks.
+100.0,19.72,28.26,25.0,16.15,13.47,6.28,ECE,Medium,Medium,No,No,0.907,Maintain the current support plan and consider advanced enrichment tasks.
+85.78,29.06,48.7,20.32,23.79,14.71,6.41,EEE,High,High,No,No,0.7796,Maintain the current support plan and consider advanced enrichment tasks.
+71.22,13.16,55.57,14.59,18.0,15.5,5.8,CSE,Medium,Medium,No,No,0.9642,Review overall academic progress and suggest study skills workshop.
+57.26,24.91,58.9,18.62,19.52,14.64,5.79,ME,Medium,Medium,No,Yes,0.8311,Schedule attendance mentoring and alert the advisor. | Review overall academic progress and suggest study skills workshop.
+100.0,23.48,69.66,22.17,20.13,25.06,9.54,CSE,High,High,No,No,0.9448,Maintain the current support plan and consider advanced enrichment tasks.
+65.62,12.29,49.51,24.49,15.9,12.42,6.66,ECE,Medium,Medium,No,No,0.9545,Maintain the current support plan and consider advanced enrichment tasks.
+70.06,10.55,29.07,17.53,16.89,3.09,8.06,ME,Medium,Medium,No,No,0.988,Provide remedial support for theory internal exam preparation. | Encourage a structured weekly self-study plan.
+82.65,15.5,36.21,23.59,20.88,24.52,8.49,ME,Medium,Medium,No,No,0.844,Maintain the current support plan and consider advanced enrichment tasks.
+78.13,14.19,34.0,18.72,11.0,22.76,7.29,ME,Medium,Medium,No,No,0.9772,Maintain the current support plan and consider advanced enrichment tasks.
+76.78,24.43,41.03,7.58,18.09,26.17,7.56,CE,Medium,Medium,No,No,0.8641,Recommend additional practice in lab sessions.
+93.99,17.61,20.95,24.56,17.37,17.75,7.31,ECE,Medium,Medium,No,Yes,0.9067,Offer targeted coaching for theory external exams.
+79.16,24.52,43.11,18.42,19.05,11.24,6.98,EEE,Medium,Medium,No,No,0.9043,Maintain the current support plan and consider advanced enrichment tasks.
+80.93,19.48,51.32,11.85,21.31,9.27,7.31,CSE,Medium,Medium,No,No,0.8844,Encourage a structured weekly self-study plan.
+70.32,15.97,51.47,19.85,21.16,14.88,6.76,CSE,Medium,Medium,No,No,0.8558,Maintain the current support plan and consider advanced enrichment tasks.
+70.01,25.9,59.91,15.69,23.56,24.57,7.95,ME,High,High,No,No,0.6645,Maintain the current support plan and consider advanced enrichment tasks.
+63.28,20.1,40.47,17.87,20.75,10.09,8.23,ECE,Medium,Medium,No,No,0.986,Maintain the current support plan and consider advanced enrichment tasks.
+53.38,16.24,40.28,14.34,22.77,14.69,7.66,ME,Medium,Medium,No,Yes,0.9775,Schedule attendance mentoring and alert the advisor.
+83.25,16.17,47.46,17.54,21.19,29.79,7.29,EEE,Medium,Medium,No,No,0.7617,Maintain the current support plan and consider advanced enrichment tasks.
+50.92,12.46,34.21,14.5,10.64,3.9,6.81,ECE,Low,Medium,No,Yes,0.7079,Schedule attendance mentoring and alert the advisor. | Encourage a structured weekly self-study plan.
+88.58,15.41,35.28,17.85,23.08,13.66,7.52,CE,Medium,Medium,No,No,0.9207,Maintain the current support plan and consider advanced enrichment tasks.
+100.0,15.48,42.13,12.86,18.28,18.46,6.81,EEE,Medium,Medium,No,No,0.869,Maintain the current support plan and consider advanced enrichment tasks.
+69.04,19.14,44.45,25.0,15.29,22.08,6.37,ME,Medium,Medium,No,No,0.9154,Maintain the current support plan and consider advanced enrichment tasks.
+67.94,23.55,58.02,16.42,19.12,7.43,8.59,CE,Medium,Medium,No,No,0.7364,Encourage a structured weekly self-study plan.
+83.6,17.76,21.52,19.83,13.86,7.27,6.65,ECE,Medium,Medium,No,Yes,0.9527,Offer targeted coaching for theory external exams. | Encourage a structured weekly self-study plan.
+100.0,26.14,45.07,21.74,13.82,14.83,7.79,CSE,High,High,No,No,0.5498,Maintain the current support plan and consider advanced enrichment tasks.
+61.47,29.18,66.59,13.25,21.32,18.47,9.17,CSE,High,High,No,No,0.6021,Maintain the current support plan and consider advanced enrichment tasks.
+56.11,21.91,64.33,15.87,19.84,13.19,6.59,ME,Medium,Medium,No,Yes,0.8739,Schedule attendance mentoring and alert the advisor.
+82.97,20.4,39.93,9.73,18.18,20.66,8.76,ECE,Medium,Medium,No,No,0.8235,Recommend additional practice in lab sessions.
+86.04,19.4,64.36,20.1,23.7,10.08,6.79,EEE,High,High,No,No,0.8919,Maintain the current support plan and consider advanced enrichment tasks.
+84.23,21.84,30.94,13.4,19.86,8.61,9.57,ECE,Medium,Medium,No,No,0.9267,Encourage a structured weekly self-study plan.
+58.12,17.31,38.52,16.45,21.37,14.66,8.06,CE,Medium,Medium,No,Yes,0.973,Schedule attendance mentoring and alert the advisor.
+74.97,22.21,41.63,19.97,16.93,17.31,5.3,EEE,Medium,Medium,No,No,0.9366,Review overall academic progress and suggest study skills workshop.
+89.81,21.76,47.28,23.93,24.22,8.76,9.38,EEE,High,High,No,No,0.6451,Encourage a structured weekly self-study plan.
+86.25,15.07,70.0,16.62,14.18,18.6,8.9,ECE,High,High,No,No,0.5928,Maintain the current support plan and consider advanced enrichment tasks.
+89.17,24.79,33.71,17.16,14.65,15.35,6.21,CSE,Medium,Medium,No,No,0.965,Maintain the current support plan and consider advanced enrichment tasks.
+67.52,23.35,59.42,16.94,21.64,14.02,7.68,CSE,Medium,Medium,No,No,0.5093,Maintain the current support plan and consider advanced enrichment tasks.
+55.27,14.68,60.74,18.51,18.07,22.93,9.06,ECE,Medium,Medium,No,Yes,0.9168,Schedule attendance mentoring and alert the advisor.
+81.72,21.97,38.7,17.88,14.61,24.93,6.08,CSE,Medium,Medium,No,No,0.9397,Maintain the current support plan and consider advanced enrichment tasks.
+71.47,24.5,60.12,23.96,12.14,11.35,7.4,ECE,High,High,No,No,0.5528,Maintain the current support plan and consider advanced enrichment tasks.
+98.49,21.91,42.94,6.6,18.4,20.13,7.96,ECE,Medium,Medium,No,No,0.7115,Recommend additional practice in lab sessions.
+79.15,17.68,27.68,17.28,16.34,23.65,6.03,EEE,Medium,Medium,No,Yes,0.9732,Offer targeted coaching for theory external exams.
+63.83,26.18,65.41,21.75,11.13,13.28,7.67,CSE,High,High,No,No,0.5432,Maintain the current support plan and consider advanced enrichment tasks.
+63.77,13.03,59.55,12.64,13.67,14.96,5.27,CSE,Medium,Medium,No,No,0.9683,Review overall academic progress and suggest study skills workshop.
+55.17,27.19,56.13,25.0,25.0,14.45,9.89,ECE,High,Medium,No,Yes,0.6304,Schedule attendance mentoring and alert the advisor.
+73.59,18.41,29.95,18.4,23.87,7.74,6.71,CSE,Medium,Medium,No,No,0.9711,Encourage a structured weekly self-study plan.
+62.53,22.61,45.02,16.13,19.73,23.16,8.38,ECE,Medium,Medium,No,No,0.8911,Maintain the current support plan and consider advanced enrichment tasks.
+54.84,22.93,36.89,22.73,22.22,15.87,4.47,ME,Medium,Medium,No,Yes,0.9632,Schedule attendance mentoring and alert the advisor. | Review overall academic progress and suggest study skills workshop.
+71.66,23.18,47.71,16.45,19.12,11.17,7.59,ME,Medium,Medium,No,No,0.8063,Maintain the current support plan and consider advanced enrichment tasks.
+100.0,25.2,48.15,24.2,19.83,13.64,7.37,ECE,High,High,No,No,0.7397,Maintain the current support plan and consider advanced enrichment tasks.
+54.58,18.36,45.4,23.06,17.45,25.66,6.29,ME,Medium,Medium,No,Yes,0.956,Schedule attendance mentoring and alert the advisor.
+86.37,25.74,44.8,20.58,14.38,21.25,9.33,ECE,High,High,No,No,0.5621,Maintain the current support plan and consider advanced enrichment tasks.
+62.02,15.43,27.43,19.3,14.44,12.25,8.52,ECE,Medium,Medium,No,Yes,0.9685,Offer targeted coaching for theory external exams.
+74.11,17.18,40.84,16.21,11.88,15.72,8.21,ECE,Medium,Medium,No,No,0.9707,Maintain the current support plan and consider advanced enrichment tasks.
+82.37,15.12,46.8,12.26,10.87,14.82,5.18,EEE,Medium,Medium,No,No,0.9504,Review overall academic progress and suggest study skills workshop.
+61.27,13.42,41.45,11.3,16.09,5.65,8.8,ME,Medium,Medium,No,No,0.9876,Encourage a structured weekly self-study plan.
+62.6,13.28,50.87,7.51,15.56,13.81,5.95,CSE,Medium,Medium,No,No,0.9684,Recommend additional practice in lab sessions. | Review overall academic progress and suggest study skills workshop.
+76.39,28.11,67.28,12.98,25.0,15.43,5.58,CSE,High,Medium,No,No,0.5267,Review overall academic progress and suggest study skills workshop.
+95.8,20.98,69.27,10.97,7.73,9.87,6.07,ECE,Medium,Medium,No,No,0.5762,Encourage a structured weekly self-study plan.
+55.17,24.68,31.86,19.05,15.95,10.74,6.59,ME,Medium,Medium,No,Yes,0.9804,Schedule attendance mentoring and alert the advisor.
+68.96,19.98,55.14,14.53,14.09,7.19,6.54,CSE,Medium,Medium,No,No,0.9672,Encourage a structured weekly self-study plan.
+70.26,28.54,61.73,25.0,14.4,21.92,5.85,EEE,High,High,No,No,0.6557,Review overall academic progress and suggest study skills workshop.
+37.26,10.89,55.6,21.45,22.53,17.68,6.85,CE,Medium,Medium,No,Yes,0.9426,Schedule attendance mentoring and alert the advisor. | Provide remedial support for theory internal exam preparation.
+80.1,26.44,51.23,13.23,24.14,21.9,8.7,ECE,High,High,No,No,0.6622,Maintain the current support plan and consider advanced enrichment tasks.
+57.45,25.65,70.0,23.19,21.38,12.76,8.33,ECE,High,High,No,Yes,0.5908,Schedule attendance mentoring and alert the advisor.
+95.51,12.04,42.9,12.5,12.32,7.43,7.21,EEE,Medium,Medium,No,No,0.9859,Encourage a structured weekly self-study plan.
+84.02,23.1,45.22,18.52,18.37,9.67,6.85,CSE,Medium,Medium,No,No,0.8003,Encourage a structured weekly self-study plan.
+53.93,27.15,0.21,18.78,21.32,15.91,7.49,CSE,Medium,Medium,No,Yes,0.8278,Schedule attendance mentoring and alert the advisor. | Offer targeted coaching for theory external exams.
+88.91,19.48,48.68,19.65,14.86,20.11,5.51,CSE,Medium,Medium,No,No,0.6386,Review overall academic progress and suggest study skills workshop.
+83.19,20.86,33.77,17.87,15.62,8.81,6.41,CSE,Medium,Medium,No,No,0.9694,Encourage a structured weekly self-study plan.
+58.84,23.04,17.29,15.12,17.76,6.69,8.07,CSE,Medium,Medium,No,Yes,0.9239,Schedule attendance mentoring and alert the advisor. | Offer targeted coaching for theory external exams. | Encourage a structured weekly self-study plan.
+55.96,16.68,9.67,17.17,7.48,11.66,6.03,CSE,Low,Medium,No,Yes,0.7544,Schedule attendance mentoring and alert the advisor. | Offer targeted coaching for theory external exams.
+67.67,25.66,36.3,25.0,17.21,22.0,10.0,CSE,High,Medium,No,No,0.7409,Maintain the current support plan and consider advanced enrichment tasks.
+72.28,17.43,17.43,16.86,25.0,11.43,8.96,ECE,Medium,Medium,No,Yes,0.9509,Offer targeted coaching for theory external exams.
+72.46,12.87,41.6,20.24,16.86,12.32,7.22,CSE,Medium,Medium,No,No,0.9782,Maintain the current support plan and consider advanced enrichment tasks.
+80.77,22.28,38.1,17.68,23.03,14.6,9.26,ECE,Medium,Medium,No,No,0.8046,Maintain the current support plan and consider advanced enrichment tasks.
+96.53,23.96,38.2,17.48,18.75,17.13,7.13,EEE,Medium,Medium,No,No,0.8827,Maintain the current support plan and consider advanced enrichment tasks.
+78.83,25.05,33.19,17.06,25.0,21.52,6.52,ECE,Medium,Medium,No,No,0.8829,Maintain the current support plan and consider advanced enrichment tasks.
+81.03,18.0,35.99,25.0,14.51,11.18,8.12,EEE,Medium,Medium,No,No,0.9553,Maintain the current support plan and consider advanced enrichment tasks.
+53.92,28.55,30.51,20.52,20.13,11.6,7.6,CSE,Medium,Medium,No,Yes,0.9732,Schedule attendance mentoring and alert the advisor.
+100.0,20.85,59.47,18.19,14.94,9.7,5.8,ECE,High,Medium,No,No,0.5013,Encourage a structured weekly self-study plan. | Review overall academic progress and suggest study skills workshop.
+64.91,11.09,44.62,16.02,24.87,20.31,6.62,CSE,Medium,Medium,No,No,0.9593,Provide remedial support for theory internal exam preparation.
+74.08,12.67,29.89,13.41,18.47,18.61,7.21,CSE,Medium,Medium,No,No,0.9895,Maintain the current support plan and consider advanced enrichment tasks.
+79.86,19.64,22.95,14.15,13.42,12.47,9.33,ME,Medium,Medium,No,Yes,0.9725,Offer targeted coaching for theory external exams.
+75.67,15.92,42.94,19.68,21.29,23.13,5.58,CSE,Medium,Medium,No,No,0.9233,Review overall academic progress and suggest study skills workshop.
+88.41,21.36,41.54,17.71,24.22,22.74,7.05,CSE,Medium,Medium,No,No,0.6968,Maintain the current support plan and consider advanced enrichment tasks.
+87.89,17.61,48.35,21.29,19.38,12.64,7.3,CSE,Medium,Medium,No,No,0.6549,Maintain the current support plan and consider advanced enrichment tasks.
+66.43,16.42,28.76,16.23,12.91,17.2,8.11,ECE,Medium,Medium,No,No,0.9922,Maintain the current support plan and consider advanced enrichment tasks.
+79.79,16.76,52.78,9.74,12.31,16.02,8.27,ECE,Medium,Medium,No,No,0.8344,Recommend additional practice in lab sessions.
+76.42,12.22,28.42,19.7,7.85,7.93,8.66,EEE,Medium,Medium,No,No,0.9696,Encourage a structured weekly self-study plan.
+54.26,17.09,45.17,17.06,18.63,22.69,6.04,CSE,Medium,Medium,No,Yes,0.9891,Schedule attendance mentoring and alert the advisor.
+85.64,12.07,16.64,17.08,11.37,11.72,6.14,EEE,Medium,Medium,No,Yes,0.949,Offer targeted coaching for theory external exams.
+78.12,19.76,59.42,7.39,16.43,16.42,5.87,CSE,Medium,Medium,No,No,0.9064,Recommend additional practice in lab sessions. | Review overall academic progress and suggest study skills workshop.
+100.0,20.51,32.36,17.36,13.16,3.16,6.77,ECE,Medium,Medium,No,No,0.9542,Encourage a structured weekly self-study plan.
+64.82,28.29,53.74,16.69,20.72,14.62,6.97,CSE,Medium,Medium,No,No,0.5464,Maintain the current support plan and consider advanced enrichment tasks.
+62.09,18.79,27.64,21.36,15.84,12.53,8.05,CSE,Medium,Medium,No,Yes,0.988,Offer targeted coaching for theory external exams.
+72.3,21.42,57.73,18.65,21.48,17.75,7.57,ME,High,High,No,No,0.6377,Maintain the current support plan and consider advanced enrichment tasks.
+63.98,18.8,70.0,23.71,17.65,11.04,8.01,ECE,High,High,No,No,0.5151,Maintain the current support plan and consider advanced enrichment tasks.
+68.06,30.0,40.46,17.47,13.8,13.98,5.76,ECE,Medium,Medium,No,No,0.9071,Review overall academic progress and suggest study skills workshop.
+65.96,17.89,44.08,16.0,23.36,11.03,6.19,CSE,Medium,Medium,No,No,0.9634,Maintain the current support plan and consider advanced enrichment tasks.
+79.55,18.26,47.44,25.0,17.06,10.69,8.75,CSE,Medium,Medium,No,No,0.6003,Maintain the current support plan and consider advanced enrichment tasks.
+67.65,17.78,68.56,22.45,20.65,15.67,6.42,ME,High,High,No,No,0.5789,Maintain the current support plan and consider advanced enrichment tasks.
+54.48,22.88,25.17,17.5,15.99,14.71,7.28,ECE,Medium,Medium,No,Yes,0.9174,Schedule attendance mentoring and alert the advisor. | Offer targeted coaching for theory external exams.
+84.6,28.21,63.78,19.82,15.11,17.08,7.97,EEE,High,High,No,No,0.8775,Maintain the current support plan and consider advanced enrichment tasks.
+88.34,28.03,65.73,15.26,12.68,14.97,8.35,ECE,High,High,No,No,0.8414,Maintain the current support plan and consider advanced enrichment tasks.
+54.75,25.27,51.4,17.36,13.07,12.69,8.57,ECE,Medium,Medium,No,Yes,0.8988,Schedule attendance mentoring and alert the advisor.
+100.0,17.46,25.76,15.78,17.8,22.68,8.4,CSE,Medium,Medium,No,Yes,0.8936,Offer targeted coaching for theory external exams.
+81.32,12.66,39.38,20.88,17.59,13.66,7.65,CE,Medium,Medium,No,No,0.959,Maintain the current support plan and consider advanced enrichment tasks.
+47.16,15.78,42.92,15.48,20.11,13.91,8.49,ME,Medium,Medium,No,Yes,0.977,Schedule attendance mentoring and alert the advisor.
+84.46,29.59,40.45,25.0,10.53,16.43,8.55,ME,High,Medium,No,No,0.5211,Maintain the current support plan and consider advanced enrichment tasks.
+100.0,20.15,36.26,11.73,13.75,16.88,7.73,ME,Medium,Medium,No,No,0.9297,Maintain the current support plan and consider advanced enrichment tasks.
+100.0,23.9,29.34,11.59,25.0,13.97,6.04,EEE,Medium,Medium,No,No,0.856,Maintain the current support plan and consider advanced enrichment tasks.
+68.54,16.91,46.82,14.72,16.64,15.1,6.66,ME,Medium,Medium,No,No,0.9666,Maintain the current support plan and consider advanced enrichment tasks.
+61.03,24.11,57.82,24.83,25.0,17.11,9.01,ECE,High,Medium,No,No,0.4999,Maintain the current support plan and consider advanced enrichment tasks.
+69.36,22.12,69.33,23.58,17.18,11.24,6.5,EEE,High,High,No,No,0.6625,Maintain the current support plan and consider advanced enrichment tasks.
+84.22,14.47,41.49,22.84,16.39,17.52,9.8,CSE,Medium,Medium,No,No,0.8547,Maintain the current support plan and consider advanced enrichment tasks.
+78.85,22.82,40.13,22.99,14.39,14.92,6.18,CSE,Medium,Medium,No,No,0.917,Maintain the current support plan and consider advanced enrichment tasks.
+75.2,7.3,70.0,17.14,14.54,16.68,8.29,ME,Medium,Medium,No,No,0.6997,Provide remedial support for theory internal exam preparation.
+78.87,24.11,9.87,21.11,16.82,15.07,8.25,ECE,Medium,Medium,No,Yes,0.9062,Offer targeted coaching for theory external exams.
+59.57,28.85,60.77,17.99,11.48,19.14,8.95,CE,High,Medium,No,Yes,0.609,Schedule attendance mentoring and alert the advisor.
+61.46,19.61,29.45,19.64,20.12,15.46,7.63,CSE,Medium,Medium,No,No,0.9774,Maintain the current support plan and consider advanced enrichment tasks.
+80.63,18.61,49.01,17.51,23.33,16.26,9.17,CSE,High,High,No,No,0.6245,Maintain the current support plan and consider advanced enrichment tasks.
+58.84,23.52,57.97,17.61,18.32,19.96,6.5,CSE,Medium,Medium,No,Yes,0.8188,Schedule attendance mentoring and alert the advisor.
+64.32,19.7,38.38,22.2,19.32,11.45,9.19,ECE,Medium,Medium,No,No,0.9385,Maintain the current support plan and consider advanced enrichment tasks.
+68.05,27.25,37.13,24.28,14.08,13.03,10.0,CSE,Medium,Medium,No,No,0.8042,Maintain the current support plan and consider advanced enrichment tasks.
+71.74,22.4,70.0,15.26,25.0,4.55,7.27,ME,High,High,No,No,0.5204,Encourage a structured weekly self-study plan.
+82.84,15.03,46.37,20.17,20.1,12.5,6.7,ECE,Medium,Medium,No,No,0.8103,Maintain the current support plan and consider advanced enrichment tasks.
+65.26,28.35,68.89,21.94,19.32,14.68,6.4,CSE,High,High,No,No,0.6973,Maintain the current support plan and consider advanced enrichment tasks.
+80.28,20.83,68.29,9.93,20.32,28.13,5.23,CE,High,Medium,No,No,0.5935,Recommend additional practice in lab sessions. | Review overall academic progress and suggest study skills workshop.
+94.65,27.08,0.0,18.52,14.83,9.72,8.42,CSE,Medium,Medium,No,Yes,0.8728,Offer targeted coaching for theory external exams. | Encourage a structured weekly self-study plan.
+91.85,11.86,36.95,19.79,18.65,23.97,5.83,ME,Medium,Medium,No,No,0.9059,Provide remedial support for theory internal exam preparation. | Review overall academic progress and suggest study skills workshop.
+49.46,23.73,29.97,14.91,20.92,9.85,8.5,ECE,Medium,Medium,No,Yes,0.971,Schedule attendance mentoring and alert the advisor. | Encourage a structured weekly self-study plan.
+62.74,22.8,29.23,17.29,16.48,15.57,10.0,CSE,Medium,Medium,No,No,0.931,Maintain the current support plan and consider advanced enrichment tasks.
+91.46,15.59,70.0,21.26,15.8,16.47,9.58,ECE,High,High,No,No,0.7482,Maintain the current support plan and consider advanced enrichment tasks.
+88.09,21.62,58.6,23.19,18.25,14.33,9.23,CSE,High,High,No,No,0.9413,Maintain the current support plan and consider advanced enrichment tasks.
+47.85,23.57,29.22,23.05,13.01,14.09,8.35,CSE,Medium,Medium,No,Yes,0.9405,Schedule attendance mentoring and alert the advisor.
+82.29,21.46,44.39,9.73,12.09,9.85,6.57,EEE,Medium,Medium,No,No,0.9572,Recommend additional practice in lab sessions. | Encourage a structured weekly self-study plan.
+93.04,15.67,46.55,16.33,21.99,20.99,7.98,EEE,Medium,Medium,No,No,0.6637,Maintain the current support plan and consider advanced enrichment tasks.
+78.08,19.16,57.82,18.86,15.15,8.91,6.15,CSE,Medium,Medium,No,No,0.7531,Encourage a structured weekly self-study plan.
+83.33,18.56,51.22,18.38,13.27,14.09,6.07,EEE,Medium,Medium,No,No,0.7988,Maintain the current support plan and consider advanced enrichment tasks.
+70.43,12.58,52.93,14.76,20.1,18.87,8.73,CSE,Medium,Medium,No,No,0.901,Maintain the current support plan and consider advanced enrichment tasks.
+78.58,15.03,33.03,17.27,20.09,18.25,6.26,CE,Medium,Medium,No,No,0.9874,Maintain the current support plan and consider advanced enrichment tasks.
+35.62,18.11,57.9,12.12,18.04,13.65,8.73,CSE,Medium,Medium,No,Yes,0.9474,Schedule attendance mentoring and alert the advisor.
+86.66,19.9,24.41,17.74,10.97,13.83,7.14,CSE,Medium,Medium,No,Yes,0.9738,Offer targeted coaching for theory external exams.
+100.0,18.8,56.12,12.21,20.3,15.83,6.91,CE,High,High,No,No,0.5542,Maintain the current support plan and consider advanced enrichment tasks.
+66.94,20.91,51.99,20.26,18.0,6.15,7.39,ME,Medium,Medium,No,No,0.8875,Encourage a structured weekly self-study plan.
+66.72,29.2,34.39,13.59,12.14,23.58,7.63,ECE,Medium,Medium,No,No,0.9211,Maintain the current support plan and consider advanced enrichment tasks.
+93.74,18.71,23.09,18.41,18.34,18.96,8.61,CSE,Medium,Medium,No,Yes,0.9025,Offer targeted coaching for theory external exams.
+65.49,20.34,50.24,15.91,18.96,13.43,8.1,ECE,Medium,Medium,No,No,0.9288,Maintain the current support plan and consider advanced enrichment tasks.
+95.53,30.0,44.74,13.24,17.7,15.61,7.77,CSE,High,Medium,No,No,0.685,Maintain the current support plan and consider advanced enrichment tasks.
+88.65,20.11,64.79,25.0,18.81,14.41,7.44,CSE,High,High,No,No,0.9454,Maintain the current support plan and consider advanced enrichment tasks.
+55.3,19.73,59.55,18.58,15.97,11.04,7.8,CSE,Medium,Medium,No,Yes,0.9552,Schedule attendance mentoring and alert the advisor.
+86.77,18.28,54.62,10.13,19.8,12.43,7.3,CSE,Medium,Medium,No,No,0.7385,Maintain the current support plan and consider advanced enrichment tasks.
+80.11,16.51,56.61,19.88,17.02,11.06,6.86,ME,Medium,Medium,No,No,0.6386,Maintain the current support plan and consider advanced enrichment tasks.
+65.33,15.47,45.32,24.64,11.87,15.42,6.89,ECE,Medium,Medium,No,No,0.9616,Maintain the current support plan and consider advanced enrichment tasks.
+62.81,23.04,53.42,17.53,23.04,18.44,8.95,ECE,High,Medium,No,No,0.6169,Maintain the current support plan and consider advanced enrichment tasks.
+57.73,19.07,40.66,18.69,18.58,7.99,8.88,CE,Medium,Medium,No,Yes,0.984,Schedule attendance mentoring and alert the advisor. | Encourage a structured weekly self-study plan.
+70.43,17.98,43.0,6.68,18.23,3.78,5.54,CE,Medium,Medium,No,No,0.9897,Recommend additional practice in lab sessions. | Encourage a structured weekly self-study plan. | Review overall academic progress and suggest study skills workshop.
+80.98,18.44,47.76,14.61,13.88,6.14,9.15,ECE,Medium,Medium,No,No,0.8361,Encourage a structured weekly self-study plan.
+63.96,9.21,40.61,14.65,15.62,15.43,8.17,ECE,Medium,Medium,No,No,0.9865,Provide remedial support for theory internal exam preparation.
+64.78,14.45,26.37,16.82,13.97,17.73,6.56,ECE,Medium,Medium,No,Yes,0.9882,Offer targeted coaching for theory external exams.
+71.08,22.79,62.2,18.63,15.37,9.74,7.52,CE,Medium,High,No,No,0.5517,Encourage a structured weekly self-study plan.
+87.81,24.83,55.1,12.62,23.01,10.71,6.87,ECE,High,Medium,No,No,0.5286,Maintain the current support plan and consider advanced enrichment tasks.
+46.53,19.59,42.11,20.69,18.81,14.46,9.75,CSE,Medium,Medium,No,Yes,0.956,Schedule attendance mentoring and alert the advisor.
+66.93,26.48,62.0,14.7,10.02,16.28,6.31,ME,Medium,Medium,No,No,0.7344,Maintain the current support plan and consider advanced enrichment tasks.
+92.67,28.66,46.73,14.03,14.87,14.85,6.52,ECE,Medium,Medium,No,No,0.6226,Maintain the current support plan and consider advanced enrichment tasks.
+80.09,22.03,43.47,20.57,20.27,12.22,5.55,ECE,Medium,Medium,No,No,0.8596,Review overall academic progress and suggest study skills workshop.
+64.95,26.65,42.45,15.71,11.73,14.52,7.58,EEE,Medium,Medium,No,No,0.9615,Maintain the current support plan and consider advanced enrichment tasks.
+70.77,21.94,34.67,16.96,17.97,16.45,8.49,CSE,Medium,Medium,No,No,0.9752,Maintain the current support plan and consider advanced enrichment tasks.
+74.48,6.94,70.0,17.76,24.92,22.03,6.37,EEE,Medium,Medium,No,No,0.6669,Provide remedial support for theory internal exam preparation.
+75.2,6.88,67.37,13.71,16.17,9.14,7.42,ME,Medium,Medium,No,No,0.863,Provide remedial support for theory internal exam preparation. | Encourage a structured weekly self-study plan.
+82.9,21.93,63.51,11.2,21.26,17.68,6.57,CSE,High,High,No,No,0.5438,Maintain the current support plan and consider advanced enrichment tasks.
+94.38,22.77,59.91,20.37,17.33,10.05,5.88,CSE,High,High,No,No,0.7817,Review overall academic progress and suggest study skills workshop.
+69.87,18.9,28.74,24.52,21.0,11.57,9.99,ME,Medium,Medium,No,No,0.8835,Maintain the current support plan and consider advanced enrichment tasks.
+66.87,27.16,9.81,20.22,14.0,20.29,8.21,ME,Medium,Medium,No,Yes,0.9307,Offer targeted coaching for theory external exams.
+50.1,14.62,50.78,17.1,20.22,11.14,6.07,ECE,Medium,Medium,No,Yes,0.9708,Schedule attendance mentoring and alert the advisor.
+66.48,24.51,40.51,17.39,12.07,15.81,6.75,CE,Medium,Medium,No,No,0.9758,Maintain the current support plan and consider advanced enrichment tasks.
+83.67,24.63,25.32,15.39,11.56,22.46,7.61,EEE,Medium,Medium,No,Yes,0.9537,Offer targeted coaching for theory external exams.
+84.16,14.69,54.53,16.93,17.05,10.76,6.03,CSE,Medium,Medium,No,No,0.7936,Maintain the current support plan and consider advanced enrichment tasks.
+89.56,14.56,58.81,13.35,14.3,11.26,10.0,CSE,Medium,Medium,No,No,0.6512,Maintain the current support plan and consider advanced enrichment tasks.
+78.62,17.28,17.28,18.44,15.99,15.94,6.17,ME,Medium,Medium,No,Yes,0.9748,Offer targeted coaching for theory external exams.
+93.89,21.53,66.72,24.04,18.99,4.96,6.72,ME,High,High,No,No,0.705,Encourage a structured weekly self-study plan.
+79.02,15.66,38.95,13.48,20.14,18.38,9.71,CSE,Medium,Medium,No,No,0.9076,Maintain the current support plan and consider advanced enrichment tasks.
+93.14,17.76,62.2,25.0,22.11,17.5,8.41,CSE,High,High,No,No,0.921,Maintain the current support plan and consider advanced enrichment tasks.
+74.01,10.96,44.67,21.18,19.66,17.28,7.04,CSE,Medium,Medium,No,No,0.9874,Provide remedial support for theory internal exam preparation.
+98.63,26.06,45.17,12.33,20.79,21.2,7.78,ECE,High,Medium,No,No,0.5859,Maintain the current support plan and consider advanced enrichment tasks.
+65.45,22.17,41.76,24.11,22.41,10.87,7.51,CSE,Medium,Medium,No,No,0.9305,Maintain the current support plan and consider advanced enrichment tasks.
+89.92,22.34,39.51,22.91,20.71,26.8,6.46,CE,Medium,Medium,No,No,0.643,Maintain the current support plan and consider advanced enrichment tasks.
+60.63,24.24,48.08,21.4,15.32,11.61,7.44,ECE,Medium,Medium,No,No,0.9032,Maintain the current support plan and consider advanced enrichment tasks.
+60.83,16.09,70.0,21.16,18.6,24.75,10.0,CE,High,High,No,No,0.5331,Maintain the current support plan and consider advanced enrichment tasks.
+71.36,29.54,50.11,19.24,10.72,17.89,7.34,ECE,Medium,Medium,No,No,0.6087,Maintain the current support plan and consider advanced enrichment tasks.
+47.21,23.85,21.83,23.13,19.71,9.49,6.68,CSE,Medium,Medium,No,Yes,0.9742,Schedule attendance mentoring and alert the advisor. | Offer targeted coaching for theory external exams. | Encourage a structured weekly self-study plan.
+89.74,18.45,24.54,19.39,18.99,18.52,6.26,ME,Medium,Medium,No,Yes,0.9686,Offer targeted coaching for theory external exams.
+71.52,21.13,38.85,19.05,11.68,25.52,8.31,EEE,Medium,Medium,No,No,0.9089,Maintain the current support plan and consider advanced enrichment tasks.
+54.63,19.15,47.95,15.11,15.86,20.74,6.2,ECE,Medium,Medium,No,Yes,0.979,Schedule attendance mentoring and alert the advisor.
+77.66,26.97,43.39,22.76,20.52,16.8,7.23,ME,High,Medium,No,No,0.7217,Maintain the current support plan and consider advanced enrichment tasks.
+97.19,11.37,56.17,11.74,21.05,12.74,7.22,ECE,Medium,Medium,No,No,0.6702,Provide remedial support for theory internal exam preparation.
+69.4,26.86,47.12,17.25,17.41,11.08,8.81,CSE,Medium,Medium,No,No,0.6716,Maintain the current support plan and consider advanced enrichment tasks.
+72.32,25.06,70.0,19.42,14.68,11.33,7.54,CSE,High,High,No,No,0.7604,Maintain the current support plan and consider advanced enrichment tasks.
+78.59,13.48,51.52,18.99,16.14,23.6,7.94,ME,Medium,Medium,No,No,0.8325,Maintain the current support plan and consider advanced enrichment tasks.
+72.68,25.43,40.86,12.63,22.16,16.48,5.56,ME,Medium,Medium,No,No,0.9658,Review overall academic progress and suggest study skills workshop.
+63.06,11.91,33.82,11.84,15.57,13.18,8.6,ECE,Medium,Medium,No,No,0.9592,Provide remedial support for theory internal exam preparation.
+72.07,11.44,38.29,9.38,17.28,22.73,7.57,CSE,Medium,Medium,No,No,0.9843,Provide remedial support for theory internal exam preparation. | Recommend additional practice in lab sessions.
+96.44,21.97,0.0,24.47,13.02,21.9,6.45,ECE,Medium,Medium,No,Yes,0.8519,Offer targeted coaching for theory external exams.
+80.88,16.61,22.95,15.98,24.48,16.41,8.11,ECE,Medium,Medium,No,Yes,0.9563,Offer targeted coaching for theory external exams.
+74.33,27.13,37.89,15.74,22.61,9.31,7.8,CSE,Medium,Medium,No,No,0.8966,Encourage a structured weekly self-study plan.
+96.05,21.58,65.27,14.12,19.34,17.27,7.91,ECE,High,High,No,No,0.8893,Maintain the current support plan and consider advanced enrichment tasks.
+86.46,21.0,55.01,18.66,17.88,13.92,7.04,EEE,Medium,High,No,No,0.7205,Maintain the current support plan and consider advanced enrichment tasks.
+76.89,16.78,69.73,21.77,20.61,12.79,8.7,CSE,High,High,No,No,0.8134,Maintain the current support plan and consider advanced enrichment tasks.
+90.32,20.13,34.0,12.29,14.8,18.81,8.84,ME,Medium,Medium,No,No,0.951,Maintain the current support plan and consider advanced enrichment tasks.
+83.44,30.0,44.11,13.19,16.76,13.08,8.81,CSE,Medium,Medium,No,No,0.6439,Maintain the current support plan and consider advanced enrichment tasks.
+74.06,18.62,53.09,14.73,17.18,20.04,7.81,CSE,Medium,Medium,No,No,0.7267,Maintain the current support plan and consider advanced enrichment tasks.
+100.0,17.74,15.31,18.82,22.24,5.82,6.76,CSE,Medium,Medium,No,Yes,0.9175,Offer targeted coaching for theory external exams. | Encourage a structured weekly self-study plan.
+83.57,9.21,47.51,23.35,24.86,17.43,8.82,ECE,Medium,Medium,No,No,0.6923,Provide remedial support for theory internal exam preparation.
+81.29,16.42,24.42,20.79,17.86,13.19,7.05,ECE,Medium,Medium,No,Yes,0.9679,Offer targeted coaching for theory external exams.
+85.35,14.61,48.06,14.91,16.9,14.95,4.79,CSE,Medium,Medium,No,No,0.903,Review overall academic progress and suggest study skills workshop.
+91.21,26.95,44.05,23.12,25.0,13.6,5.73,ECE,High,High,No,No,0.5474,Review overall academic progress and suggest study skills workshop.
+71.58,23.12,35.35,16.6,20.32,15.46,8.05,ECE,Medium,Medium,No,No,0.9643,Maintain the current support plan and consider advanced enrichment tasks.
+89.05,29.97,34.84,17.03,25.0,3.66,5.33,CSE,Medium,Medium,No,No,0.7412,Encourage a structured weekly self-study plan. | Review overall academic progress and suggest study skills workshop.
+82.28,24.52,53.57,21.42,17.98,22.46,6.82,EEE,High,High,No,No,0.7381,Maintain the current support plan and consider advanced enrichment tasks.
+96.71,19.79,36.1,20.0,19.15,11.82,6.28,ECE,Medium,Medium,No,No,0.9273,Maintain the current support plan and consider advanced enrichment tasks.
+72.44,17.87,45.63,22.6,21.43,14.45,8.29,ECE,Medium,Medium,No,No,0.743,Maintain the current support plan and consider advanced enrichment tasks.
+91.19,22.95,48.3,25.0,17.53,13.13,7.96,CSE,High,High,No,No,0.7268,Maintain the current support plan and consider advanced enrichment tasks.
+85.77,28.12,51.21,18.49,23.11,12.13,6.27,CSE,High,High,No,No,0.7946,Maintain the current support plan and consider advanced enrichment tasks.
+89.09,24.94,36.67,19.54,19.59,25.53,8.07,CSE,High,Medium,No,No,0.8102,Maintain the current support plan and consider advanced enrichment tasks.
+77.42,20.37,48.46,17.96,19.51,14.31,8.55,CSE,Medium,Medium,No,No,0.5374,Maintain the current support plan and consider advanced enrichment tasks.
+53.49,22.96,15.69,18.0,16.31,14.28,6.99,CSE,Medium,Medium,No,Yes,0.8408,Schedule attendance mentoring and alert the advisor. | Offer targeted coaching for theory external exams.
+76.63,13.36,38.21,24.66,12.94,8.44,7.42,CSE,Medium,Medium,No,No,0.9798,Encourage a structured weekly self-study plan.
+71.08,27.08,49.35,18.79,11.0,17.28,7.92,ECE,Medium,Medium,No,No,0.6771,Maintain the current support plan and consider advanced enrichment tasks.
+77.05,18.71,40.59,20.84,18.48,27.15,7.12,CSE,Medium,Medium,No,No,0.9236,Maintain the current support plan and consider advanced enrichment tasks.
+70.07,16.46,61.34,20.12,21.53,19.58,6.67,CSE,Medium,High,No,No,0.5782,Maintain the current support plan and consider advanced enrichment tasks.
+75.62,26.2,56.39,18.76,14.7,15.68,6.94,ECE,Medium,Medium,No,No,0.6112,Maintain the current support plan and consider advanced enrichment tasks.
+46.56,27.38,57.6,12.38,9.82,15.65,7.29,EEE,Medium,Medium,No,Yes,0.8777,Schedule attendance mentoring and alert the advisor.
+89.7,17.67,30.64,22.64,13.74,18.38,7.43,CE,Medium,Medium,No,No,0.9445,Maintain the current support plan and consider advanced enrichment tasks.
+75.78,17.45,48.66,13.05,9.58,16.31,7.54,CSE,Medium,Medium,No,No,0.9571,Maintain the current support plan and consider advanced enrichment tasks.
+76.18,27.51,55.01,21.01,11.4,9.46,7.11,CSE,Medium,Medium,No,No,0.5795,Encourage a structured weekly self-study plan.
+84.5,13.27,37.84,20.83,11.03,12.37,7.85,CSE,Medium,Medium,No,No,0.9762,Maintain the current support plan and consider advanced enrichment tasks.
+94.6,19.78,22.53,13.89,23.33,14.57,9.09,ME,Medium,Medium,No,Yes,0.8939,Offer targeted coaching for theory external exams.
+80.22,19.14,36.76,8.66,19.05,14.89,7.66,CE,Medium,Medium,No,No,0.9695,Recommend additional practice in lab sessions.
+66.35,29.91,23.18,12.55,16.69,15.8,9.42,EEE,Medium,Medium,No,Yes,0.8983,Offer targeted coaching for theory external exams.
+59.15,25.93,36.04,18.31,22.69,11.57,9.87,CSE,Medium,Medium,No,Yes,0.845,Schedule attendance mentoring and alert the advisor.
+80.71,16.58,52.39,14.96,14.48,12.86,7.79,CSE,Medium,Medium,No,No,0.8431,Maintain the current support plan and consider advanced enrichment tasks.
+93.43,13.95,26.04,19.85,24.31,12.56,8.91,EEE,Medium,Medium,No,Yes,0.8886,Offer targeted coaching for theory external exams.
+84.44,20.31,25.66,25.0,17.47,15.36,4.92,CE,Medium,Medium,No,Yes,0.9455,Offer targeted coaching for theory external exams. | Review overall academic progress and suggest study skills workshop.
+64.92,20.36,67.43,17.52,12.18,13.9,6.25,ME,Medium,Medium,No,No,0.7502,Maintain the current support plan and consider advanced enrichment tasks.
+70.45,17.61,50.65,13.85,24.77,12.8,7.98,CSE,Medium,Medium,No,No,0.8835,Maintain the current support plan and consider advanced enrichment tasks.
+68.95,18.77,49.73,15.96,14.74,10.94,6.72,ECE,Medium,Medium,No,No,0.9803,Maintain the current support plan and consider advanced enrichment tasks.
+78.83,25.39,58.64,19.48,24.78,13.56,9.07,CSE,High,High,No,No,0.8191,Maintain the current support plan and consider advanced enrichment tasks.
+70.8,18.24,49.61,17.8,19.18,15.16,6.33,CSE,Medium,Medium,No,No,0.9083,Maintain the current support plan and consider advanced enrichment tasks.
+67.58,25.94,45.27,17.93,18.73,10.03,5.11,CSE,Medium,Medium,No,No,0.9241,Review overall academic progress and suggest study skills workshop.
+100.0,13.73,24.26,18.99,17.27,8.01,7.62,ME,Medium,Medium,No,Yes,0.9598,Offer targeted coaching for theory external exams. | Encourage a structured weekly self-study plan.
+65.26,28.6,58.56,21.35,19.84,12.36,7.8,CSE,High,High,No,No,0.5445,Maintain the current support plan and consider advanced enrichment tasks.
+67.16,18.9,58.14,25.0,13.08,24.53,6.83,EEE,Medium,Medium,No,No,0.6452,Maintain the current support plan and consider advanced enrichment tasks.
+85.02,4.34,60.47,21.37,12.17,11.43,8.98,CSE,Medium,Medium,No,No,0.7607,Provide remedial support for theory internal exam preparation.
+58.89,28.02,26.47,16.77,18.57,14.24,8.71,CE,Medium,Medium,No,Yes,0.9271,Schedule attendance mentoring and alert the advisor. | Offer targeted coaching for theory external exams.
+64.86,12.92,44.55,13.33,25.0,12.09,9.85,CSE,Medium,Medium,No,No,0.9146,Maintain the current support plan and consider advanced enrichment tasks.
+48.98,16.77,58.89,20.61,22.3,23.13,7.95,ME,Medium,Medium,No,Yes,0.86,Schedule attendance mentoring and alert the advisor.
+66.97,8.21,45.66,16.2,13.78,16.95,6.86,EEE,Medium,Medium,No,No,0.9938,Provide remedial support for theory internal exam preparation.
+69.98,8.95,49.88,20.57,13.62,11.5,6.37,ECE,Medium,Medium,No,No,0.9758,Provide remedial support for theory internal exam preparation.
+81.19,26.87,32.98,17.87,17.03,13.18,6.96,CSE,Medium,Medium,No,No,0.9329,Maintain the current support plan and consider advanced enrichment tasks.
+86.85,19.48,45.22,16.58,17.44,16.5,6.42,CE,Medium,Medium,No,No,0.8492,Maintain the current support plan and consider advanced enrichment tasks.
+93.56,26.12,42.86,19.13,18.25,8.5,7.17,CSE,High,Medium,No,No,0.6635,Encourage a structured weekly self-study plan.
+88.84,20.46,70.0,16.1,23.01,12.18,6.91,CSE,High,High,No,No,0.8703,Maintain the current support plan and consider advanced enrichment tasks.
+74.08,23.7,28.08,15.36,20.55,12.73,7.24,ME,Medium,Medium,No,No,0.9767,Maintain the current support plan and consider advanced enrichment tasks.
+98.42,16.4,40.24,18.93,19.52,16.64,8.08,CSE,Medium,Medium,No,No,0.8481,Maintain the current support plan and consider advanced enrichment tasks.
+63.21,23.67,50.34,22.05,18.29,17.36,8.99,CE,High,Medium,No,No,0.5868,Maintain the current support plan and consider advanced enrichment tasks.
+83.47,30.0,48.78,24.28,16.81,21.64,8.03,CE,High,High,No,No,0.8524,Maintain the current support plan and consider advanced enrichment tasks.
+99.64,21.85,32.54,7.91,10.22,15.29,5.57,CE,Medium,Medium,No,No,0.9163,Recommend additional practice in lab sessions. | Review overall academic progress and suggest study skills workshop.
+100.0,17.29,70.0,20.22,17.96,23.23,7.52,CSE,High,High,No,No,0.9095,Maintain the current support plan and consider advanced enrichment tasks.
+56.81,18.73,25.02,20.92,21.42,16.79,6.86,ECE,Medium,Medium,No,Yes,0.9486,Schedule attendance mentoring and alert the advisor. | Offer targeted coaching for theory external exams.
+93.44,20.16,62.04,13.29,16.15,12.02,6.91,ECE,High,High,No,No,0.5414,Maintain the current support plan and consider advanced enrichment tasks.
+60.82,14.08,42.23,19.09,20.59,13.67,8.73,ECE,Medium,Medium,No,No,0.9479,Maintain the current support plan and consider advanced enrichment tasks.
+59.52,21.47,51.58,16.81,15.55,14.49,7.25,CSE,Medium,Medium,No,Yes,0.9693,Schedule attendance mentoring and alert the advisor.
+55.36,21.35,63.37,15.31,20.04,21.36,5.53,CSE,Medium,Medium,No,Yes,0.8657,Schedule attendance mentoring and alert the advisor. | Review overall academic progress and suggest study skills workshop.
+66.87,26.03,39.69,23.63,20.22,12.4,7.91,CE,Medium,Medium,No,No,0.8519,Maintain the current support plan and consider advanced enrichment tasks.
+71.79,19.31,61.08,17.97,19.48,9.44,7.31,CSE,Medium,Medium,No,No,0.5803,Encourage a structured weekly self-study plan.
+70.58,19.61,59.27,12.6,22.7,11.16,7.07,CSE,Medium,Medium,No,No,0.8364,Maintain the current support plan and consider advanced enrichment tasks.
+94.3,19.02,67.4,16.51,13.17,19.62,8.9,CSE,High,High,No,No,0.8404,Maintain the current support plan and consider advanced enrichment tasks.
+76.13,22.02,43.45,20.1,15.17,13.88,6.41,CSE,Medium,Medium,No,No,0.9679,Maintain the current support plan and consider advanced enrichment tasks.
+75.69,16.33,18.9,22.41,22.04,19.27,6.0,ME,Medium,Medium,No,Yes,0.9735,Offer targeted coaching for theory external exams.
+84.85,15.06,22.46,16.39,23.14,22.79,6.74,ME,Medium,Medium,No,Yes,0.9342,Offer targeted coaching for theory external exams.
+58.62,24.52,62.75,18.17,19.06,12.35,6.82,ECE,Medium,Medium,No,Yes,0.6972,Schedule attendance mentoring and alert the advisor.
+49.1,12.89,43.38,25.0,12.46,17.58,8.72,CSE,Medium,Medium,No,Yes,0.9615,Schedule attendance mentoring and alert the advisor.
+83.19,25.55,60.88,20.09,15.7,20.49,6.59,ECE,High,High,No,No,0.7794,Maintain the current support plan and consider advanced enrichment tasks.
+76.87,28.91,54.72,23.12,13.24,4.11,7.21,CSE,Medium,Medium,No,No,0.5723,Encourage a structured weekly self-study plan.
+47.88,22.18,59.98,17.94,25.0,19.79,6.83,ECE,Medium,Medium,No,Yes,0.8213,Schedule attendance mentoring and alert the advisor.
+68.23,20.16,58.52,19.81,23.19,12.07,6.97,CSE,Medium,High,No,No,0.5389,Maintain the current support plan and consider advanced enrichment tasks.
+67.62,10.96,70.0,15.95,18.95,11.61,7.53,ECE,Medium,Medium,No,No,0.7821,Provide remedial support for theory internal exam preparation.
+80.9,25.4,40.12,22.81,21.0,5.57,8.75,CSE,Medium,Medium,No,No,0.7069,Encourage a structured weekly self-study plan.
+83.33,16.77,70.0,19.01,13.96,17.01,5.91,CSE,Medium,High,No,No,0.6529,Review overall academic progress and suggest study skills workshop.
+58.02,10.77,36.15,22.41,23.77,13.56,8.89,ECE,Medium,Medium,No,Yes,0.9213,Schedule attendance mentoring and alert the advisor. | Provide remedial support for theory internal exam preparation.
+78.44,20.5,42.97,16.87,16.31,16.29,8.55,EEE,Medium,Medium,No,No,0.8923,Maintain the current support plan and consider advanced enrichment tasks.
+61.69,14.19,70.0,19.93,20.15,6.15,8.21,EEE,Medium,Medium,No,No,0.744,Encourage a structured weekly self-study plan.
+81.53,24.45,12.54,24.05,14.16,14.68,7.18,EEE,Medium,Medium,No,Yes,0.9314,Offer targeted coaching for theory external exams.
+100.0,16.52,34.21,18.4,19.08,19.38,8.4,ME,Medium,Medium,No,No,0.8299,Maintain the current support plan and consider advanced enrichment tasks.
+85.56,15.65,28.41,16.85,14.55,11.25,9.52,ME,Medium,Medium,No,No,0.9371,Maintain the current support plan and consider advanced enrichment tasks.
+67.72,22.14,55.44,18.03,20.16,18.11,6.83,CSE,Medium,Medium,No,No,0.6429,Maintain the current support plan and consider advanced enrichment tasks.
+97.65,12.07,60.94,18.48,18.42,16.93,6.48,CSE,Medium,Medium,No,No,0.6089,Maintain the current support plan and consider advanced enrichment tasks.
+80.7,16.67,46.11,22.03,17.14,9.99,6.13,CSE,Medium,Medium,No,No,0.8601,Encourage a structured weekly self-study plan.
+100.0,14.61,70.0,21.07,21.06,8.59,6.6,EEE,High,High,No,No,0.6856,Encourage a structured weekly self-study plan.
+87.76,20.98,53.32,17.01,21.04,24.18,6.16,ME,High,High,No,No,0.6034,Maintain the current support plan and consider advanced enrichment tasks.
+70.26,20.17,45.4,20.56,19.72,16.85,7.62,CSE,Medium,Medium,No,No,0.8553,Maintain the current support plan and consider advanced enrichment tasks.
+77.27,21.99,46.07,20.3,22.53,12.25,8.91,CE,Medium,Medium,No,No,0.5476,Maintain the current support plan and consider advanced enrichment tasks.
+72.33,21.01,49.23,16.2,20.78,24.15,5.92,CSE,Medium,Medium,No,No,0.8334,Review overall academic progress and suggest study skills workshop.
+67.1,17.3,39.73,13.91,16.61,20.47,9.16,CSE,Medium,Medium,No,No,0.9805,Maintain the current support plan and consider advanced enrichment tasks.
+98.23,20.14,21.75,20.94,11.19,16.55,6.19,CSE,Medium,Medium,No,Yes,0.942,Offer targeted coaching for theory external exams.
+61.37,19.58,54.17,17.28,22.3,22.9,7.93,CSE,Medium,Medium,No,No,0.6803,Maintain the current support plan and consider advanced enrichment tasks.
+65.65,13.16,38.65,20.55,12.73,15.43,6.16,CSE,Medium,Medium,No,No,0.9947,Maintain the current support plan and consider advanced enrichment tasks.
+91.44,14.99,33.14,13.86,17.06,17.45,7.52,CSE,Medium,Medium,No,No,0.9719,Maintain the current support plan and consider advanced enrichment tasks.
+80.22,20.16,41.17,12.46,16.27,12.69,9.11,CSE,Medium,Medium,No,No,0.9513,Maintain the current support plan and consider advanced enrichment tasks.
+62.66,24.34,37.14,17.3,14.82,4.29,6.55,EEE,Medium,Medium,No,No,0.9844,Encourage a structured weekly self-study plan.
+71.3,23.98,70.0,18.3,14.08,9.03,5.11,CSE,Medium,High,No,No,0.5513,Encourage a structured weekly self-study plan. | Review overall academic progress and suggest study skills workshop.
+100.0,20.01,59.59,18.32,12.38,11.93,8.38,CE,High,High,No,No,0.6952,Maintain the current support plan and consider advanced enrichment tasks.
+91.22,24.36,53.5,17.71,20.69,16.35,6.09,EEE,High,High,No,No,0.639,Maintain the current support plan and consider advanced enrichment tasks.
+69.82,19.98,48.01,13.89,13.38,7.8,6.59,CSE,Medium,Medium,No,No,0.9796,Encourage a structured weekly self-study plan.
+63.86,23.59,49.14,20.4,23.83,12.68,6.75,EEE,Medium,Medium,No,No,0.8234,Maintain the current support plan and consider advanced enrichment tasks.
+68.26,22.9,35.66,16.6,18.36,12.29,9.41,EEE,Medium,Medium,No,No,0.9661,Maintain the current support plan and consider advanced enrichment tasks.
+72.06,8.92,30.55,23.52,25.0,25.72,4.78,CSE,Medium,Medium,No,No,0.9489,Provide remedial support for theory internal exam preparation. | Review overall academic progress and suggest study skills workshop.
+95.67,22.14,33.48,15.32,23.54,9.65,6.85,EEE,Medium,Medium,No,No,0.871,Encourage a structured weekly self-study plan.
+99.66,13.79,34.21,21.23,16.73,10.55,8.96,ME,Medium,Medium,No,No,0.9327,Maintain the current support plan and consider advanced enrichment tasks.
+76.98,18.1,50.17,12.53,17.52,10.45,8.53,CSE,Medium,Medium,No,No,0.8781,Maintain the current support plan and consider advanced enrichment tasks.
+57.23,19.21,55.27,22.57,17.17,25.9,7.47,CSE,Medium,Medium,No,Yes,0.813,Schedule attendance mentoring and alert the advisor.
+96.15,17.95,66.67,16.66,17.05,19.28,5.75,ECE,High,High,No,No,0.5921,Review overall academic progress and suggest study skills workshop.
+54.6,15.46,37.56,16.53,23.49,13.49,6.96,ECE,Medium,Medium,No,Yes,0.9509,Schedule attendance mentoring and alert the advisor.
+69.73,16.95,44.69,20.6,19.75,11.05,7.52,ME,Medium,Medium,No,No,0.9692,Maintain the current support plan and consider advanced enrichment tasks.
+80.36,25.98,20.56,22.25,22.5,18.04,7.9,ECE,Medium,Medium,No,Yes,0.818,Offer targeted coaching for theory external exams.
+53.67,20.53,37.07,15.82,5.9,8.64,5.93,CSE,Medium,Medium,No,Yes,0.9434,Schedule attendance mentoring and alert the advisor. | Encourage a structured weekly self-study plan. | Review overall academic progress and suggest study skills workshop.
+100.0,14.31,55.05,17.87,16.11,15.04,8.6,ECE,High,Medium,No,No,0.6343,Maintain the current support plan and consider advanced enrichment tasks.
+68.17,19.08,41.96,20.67,20.53,15.5,7.97,CSE,Medium,Medium,No,No,0.9367,Maintain the current support plan and consider advanced enrichment tasks.
+91.79,22.24,70.0,15.72,18.17,8.57,7.16,EEE,High,High,No,No,0.7535,Encourage a structured weekly self-study plan.
+63.59,21.69,56.36,14.73,15.03,12.04,5.56,ECE,Medium,Medium,No,No,0.9459,Review overall academic progress and suggest study skills workshop.
+64.84,20.9,62.38,23.85,12.75,24.46,8.49,CSE,High,High,No,No,0.6565,Maintain the current support plan and consider advanced enrichment tasks.
+56.12,24.24,31.32,16.03,19.37,22.0,5.65,CSE,Medium,Medium,No,Yes,0.9772,Schedule attendance mentoring and alert the advisor. | Review overall academic progress and suggest study skills workshop.
+74.23,19.73,43.65,15.06,17.49,11.47,8.8,CSE,Medium,Medium,No,No,0.9568,Maintain the current support plan and consider advanced enrichment tasks.
+70.3,23.7,70.0,13.46,8.87,16.43,9.19,CSE,High,Medium,No,No,0.5796,Maintain the current support plan and consider advanced enrichment tasks.
+84.47,23.45,40.23,19.22,15.26,14.84,6.34,CE,Medium,Medium,No,No,0.8448,Maintain the current support plan and consider advanced enrichment tasks.
+70.81,18.42,16.92,17.3,21.66,20.32,6.72,ECE,Medium,Medium,No,Yes,0.946,Offer targeted coaching for theory external exams.
+61.86,10.55,54.95,14.49,12.61,13.7,6.3,ME,Medium,Medium,No,No,0.9646,Provide remedial support for theory internal exam preparation.

@@ -24,12 +24,18 @@ const StudentHomePage = () => {
     const [studyHours, setStudyHours] = useState('');
     const [hasLoggedToday, setHasLoggedToday] = useState(false);
     const [aiInsight, setAiInsight] = useState(null);
-    const classID = currentUser?.sclassName?._id
+    const classID = currentUser?.sclassName?.id || currentUser?.sclassName?._id;
 
-    const radarData = aiInsight?.examResults?.map(exam => ({
+    const theoryRadarData = aiInsight?.examResults?.filter(exam => exam.subjects?.subject_type === 'Theory' || !exam.subjects?.subject_type).map(exam => ({
         subject: exam.subjects?.sub_name?.split(' ')[0] || "Unknown",
         marks: exam.marks_obtained || 0,
         fullMark: 100
+    })) || [];
+
+    const practicalRadarData = aiInsight?.examResults?.filter(exam => exam.subjects?.subject_type === 'Practical').map(exam => ({
+        subject: exam.subjects?.sub_name?.split(' ')[0] || "Unknown",
+        marks: exam.marks_obtained || 0,
+        fullMark: 50
     })) || [];
 
     useEffect(() => {
@@ -91,8 +97,8 @@ const StudentHomePage = () => {
     ];
 
     const stats = [
-        { title: 'Current Semester', value: `Sem ${currentUser?.sclassName?.semester || 1}`, icon: <SubjectIcon />, color: '#845EC2' },
-        { title: 'Total Subjects', value: subjectsList?.filter(s => s.semester === (currentUser?.sclassName?.semester || 1)).length || 0, icon: <AssignmentIcon />, color: '#FF8066' },
+        { title: 'Current Semester', value: currentUser?.sclassName?.semester || 1, icon: <SubjectIcon />, color: '#845EC2' },
+        { title: 'Total Subjects', value: subjectsList?.length || 0, icon: <AssignmentIcon />, color: '#FF8066' },
     ];
 
     return (
@@ -154,11 +160,16 @@ const StudentHomePage = () => {
                             </SectionPaper>
                         </Grid>
                     </Grid>
+                    <Box sx={{ mt: 2 }}>
+                        <SectionPaper>
+                            <SeeNotice />
+                        </SectionPaper>
+                    </Box>
                 </Grid>
                 <Grid item xs={12} md={4}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, height: '100%' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                         {/* Part 1: AI Recommendations */}
-                        <ChartPaper sx={{ p: 3, flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <ChartPaper sx={{ p: 3, display: 'flex', flexDirection: 'column' }}>
                             <Typography variant="overline" sx={{ fontWeight: 800, mb: 1, display: 'block', textAlign: 'center', color: 'var(--secondary)', letterSpacing: 1, fontFamily: 'var(--font-heading)' }}>
                                 AI Performance Summary
                             </Typography>
@@ -166,25 +177,38 @@ const StudentHomePage = () => {
                                 {aiInsight ? (
                                     <>
                                         <Box sx={{ 
-                                            width: '80px', 
-                                            height: '80px', 
+                                            width: '100px', 
+                                            height: '100px', 
                                             borderRadius: '50%', 
                                             display: 'flex', 
                                             alignItems: 'center', 
                                             justifyContent: 'center',
-                                            bgcolor: aiInsight.ai_insight.predicted_performance === 'High' ? 'rgba(34, 197, 94, 0.1)' : aiInsight.ai_insight.predicted_performance === 'Medium' ? 'rgba(234, 179, 8, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                                            color: aiInsight.ai_insight.predicted_performance === 'High' ? '#22c55e' : aiInsight.ai_insight.predicted_performance === 'Medium' ? '#eab308' : '#ef4444',
-                                            border: `2px solid ${aiInsight.ai_insight.predicted_performance === 'High' ? '#22c55e' : aiInsight.ai_insight.predicted_performance === 'Medium' ? '#eab308' : '#ef4444'}`
+                                            bgcolor: aiInsight.ai_insight.performance_band === 'High' ? 'rgba(34, 197, 94, 0.1)' : aiInsight.ai_insight.performance_band === 'Medium' ? 'rgba(234, 179, 8, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                                            color: aiInsight.ai_insight.performance_band === 'High' ? '#22c55e' : aiInsight.ai_insight.performance_band === 'Medium' ? '#eab308' : '#ef4444',
+                                            border: `2px solid ${aiInsight.ai_insight.performance_band === 'High' ? '#22c55e' : aiInsight.ai_insight.performance_band === 'Medium' ? '#eab308' : '#ef4444'}`
                                         }}>
                                             <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                                                {aiInsight.ai_insight.predicted_performance}
+                                                {aiInsight.ai_insight.performance_band}
                                             </Typography>
                                         </Box>
-                                        <Typography variant="body2" sx={{ textAlign: 'center', color: 'var(--text-main)', fontWeight: 500, fontSize: '0.85rem' }}>
+                                        <Typography variant="body2" sx={{ textAlign: 'center', color: 'var(--text-main)', fontWeight: 500, fontSize: '0.85rem', mt: 1, maxWidth: '100%', wordBreak: 'break-word' }}>
                                             {aiInsight.ai_insight.recommendations[0] || "Keep up the good work!"}
                                         </Typography>
+
+                                        {/* Summary Metrics Row */}
+                                        <Box sx={{ display: 'flex', gap: 2, mt: 1.5, width: '100%', justifyContent: 'space-around', borderTop: '1px solid rgba(255,255,255,0.05)', pt: 1.5 }}>
+                                            <Box sx={{ textAlign: 'center' }}>
+                                                <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 600 }}>ATTENDANCE</Typography>
+                                                <Typography variant="body2" sx={{ fontWeight: 700, color: 'var(--primary)' }}>{Math.round(aiInsight.features?.attendance_rate || 0)}%</Typography>
+                                            </Box>
+                                            <Box sx={{ textAlign: 'center' }}>
+                                                <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 600 }}>THEORY AVG</Typography>
+                                                <Typography variant="body2" sx={{ fontWeight: 700, color: '#10b981' }}>{Math.round((aiInsight.features?.external_avg_theory / 70) * 100 || 0)}%</Typography>
+                                            </Box>
+                                        </Box>
+
                                         {aiInsight.subjectAlerts && aiInsight.subjectAlerts.length > 0 && (
-                                            <Typography variant="caption" sx={{ color: '#ef4444', fontWeight: 600, textAlign: 'center' }}>
+                                            <Typography variant="caption" sx={{ color: '#ef4444', fontWeight: 600, textAlign: 'center', mt: 1 }}>
                                                 ⚠️ Attention needed in some subjects!
                                             </Typography>
                                         )}
@@ -195,14 +219,14 @@ const StudentHomePage = () => {
                             </Box>
                         </ChartPaper>
 
-                        {/* Part 2: Subject Performance Graph */}
+                        {/* Part 2: Theory Subject Performance */}
                         <ChartPaper sx={{ p: 3, flexGrow: 1 }}>
                             <Typography variant="overline" sx={{ fontWeight: 800, mb: 1, display: 'block', textAlign: 'center', color: 'var(--secondary)', letterSpacing: 1, fontFamily: 'var(--font-heading)' }}>
-                                Subject Performance
+                                Theory Performance
                             </Typography>
-                            {aiInsight && aiInsight.examResults && aiInsight.examResults.length > 0 ? (
+                            {theoryRadarData.length > 0 ? (
                                 <ResponsiveContainer width="100%" height={200}>
-                                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+                                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={theoryRadarData}>
                                         <PolarGrid stroke="rgba(255,255,255,0.1)" />
                                         <PolarAngleAxis dataKey="subject" stroke="var(--text-muted)" tick={{ fontSize: 10 }} />
                                         <PolarRadiusAxis angle={30} domain={[0, 100]} stroke="var(--text-muted)" tick={{ fontSize: 10 }} />
@@ -211,20 +235,35 @@ const StudentHomePage = () => {
                                 </ResponsiveContainer>
                             ) : (
                                 <Box sx={{ textAlign: 'center', color: 'var(--text-muted)', py: 4 }}>
-                                    <Typography variant="body2" sx={{ fontWeight: 700 }}>No Performance Data</Typography>
+                                    <Typography variant="body2" sx={{ fontWeight: 700 }}>No Theory Data</Typography>
+                                </Box>
+                            )}
+                        </ChartPaper>
+
+                        {/* Part 3: Practical Subject Performance */}
+                        <ChartPaper sx={{ p: 3, flexGrow: 1, mt: 2 }}>
+                            <Typography variant="overline" sx={{ fontWeight: 800, mb: 1, display: 'block', textAlign: 'center', color: 'var(--secondary)', letterSpacing: 1, fontFamily: 'var(--font-heading)' }}>
+                                Practical Performance
+                            </Typography>
+                            {practicalRadarData.length > 0 ? (
+                                <ResponsiveContainer width="100%" height={200}>
+                                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={practicalRadarData}>
+                                        <PolarGrid stroke="rgba(255,255,255,0.1)" />
+                                        <PolarAngleAxis dataKey="subject" stroke="var(--text-muted)" tick={{ fontSize: 10 }} />
+                                        <PolarRadiusAxis angle={30} domain={[0, 50]} stroke="var(--text-muted)" tick={{ fontSize: 10 }} />
+                                        <Radar name="Marks" dataKey="marks" stroke="var(--primary)" fill="var(--primary)" fillOpacity={0.3} />
+                                    </RadarChart>
+                                </ResponsiveContainer>
+                            ) : (
+                                <Box sx={{ textAlign: 'center', color: 'var(--text-muted)', py: 4 }}>
+                                    <Typography variant="body2" sx={{ fontWeight: 700 }}>No Practical Data</Typography>
                                 </Box>
                             )}
                         </ChartPaper>
                     </Box>
                 </Grid>
             </Grid>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <SectionPaper>
-                        <SeeNotice />
-                    </SectionPaper>
-                </Grid>
-            </Grid>
+
         </Container>
     );
 };

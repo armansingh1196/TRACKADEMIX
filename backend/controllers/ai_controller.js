@@ -12,7 +12,7 @@ const getAIRecommendations = async (req, res) => {
             .select(`
                 *,
                 sclasses ( sclass_name ),
-                exam_results ( internal_marks, external_marks, marks_obtained, subjects(sub_name) ),
+                exam_results ( internal_marks, external_marks, marks_obtained, subjects(sub_name, subject_type) ),
                 attendance_records ( status ),
                 study_logs ( hours_logged ),
                 semester_results ( cgpa )
@@ -33,14 +33,30 @@ const getAIRecommendations = async (req, res) => {
         }
 
         // Exam Marks
-        let internalAvg = 60;
-        let totalAvg = 70;
-        if (student.exam_results && student.exam_results.length > 0) {
-            const internals = student.exam_results.filter(e => e.internal_marks !== null).map(e => (e.internal_marks / 30) * 100);
-            if (internals.length > 0) internalAvg = internals.reduce((a, b) => a + b, 0) / internals.length;
+        let internalAvgTheory = 20;
+        let externalAvgTheory = 45;
+        let internalAvgPractical = 18;
+        let externalAvgPractical = 18;
 
-            const totals = student.exam_results.map(e => e.marks_obtained);
-            totalAvg = totals.reduce((a, b) => a + b, 0) / totals.length;
+        if (student.exam_results && student.exam_results.length > 0) {
+            const theoryExams = student.exam_results.filter(e => e.subjects?.subject_type === 'Theory' || !e.subjects?.subject_type);
+            const practicalExams = student.exam_results.filter(e => e.subjects?.subject_type === 'Practical');
+
+            if (theoryExams.length > 0) {
+                const internals = theoryExams.filter(e => e.internal_marks !== null).map(e => e.internal_marks);
+                if (internals.length > 0) internalAvgTheory = internals.reduce((a, b) => a + b, 0) / internals.length;
+
+                const externals = theoryExams.filter(e => e.external_marks !== null).map(e => e.external_marks);
+                if (externals.length > 0) externalAvgTheory = externals.reduce((a, b) => a + b, 0) / externals.length;
+            }
+
+            if (practicalExams.length > 0) {
+                const internals = practicalExams.filter(e => e.internal_marks !== null).map(e => e.internal_marks);
+                if (internals.length > 0) internalAvgPractical = internals.reduce((a, b) => a + b, 0) / internals.length;
+
+                const externals = practicalExams.filter(e => e.external_marks !== null).map(e => e.external_marks);
+                if (externals.length > 0) externalAvgPractical = externals.reduce((a, b) => a + b, 0) / externals.length;
+            }
         }
 
         // Subject Specific Alerts
@@ -48,24 +64,24 @@ const getAIRecommendations = async (req, res) => {
         if (student.exam_results && student.exam_results.length > 0) {
             student.exam_results.forEach(exam => {
                 const subName = exam.subjects?.sub_name || "Unknown Subject";
-                const marks = exam.marks_obtained;
+                const isPractical = exam.subjects?.subject_type === 'Practical';
                 const internal = exam.internal_marks;
                 const external = exam.external_marks;
                 
-                if (internal !== null && internal < 15) {
-                    subjectAlerts.push(`Low internal score in ${subName}. Focus on assignments and class tests.`);
+                const minInternal = isPractical ? 10 : 12; // 40%
+                const minExternal = isPractical ? 10 : 28; // 40%
+                
+                if (internal !== null && internal < minInternal) {
+                    subjectAlerts.push(`Low internal score in ${subName}. Focus on continuous assessment.`);
                 }
-                if (external !== null && external < 35) {
+                if (external !== null && external < minExternal) {
                     subjectAlerts.push(`Weak performance in ${subName} external exams. Needs targeted study.`);
-                }
-                if (marks !== null && marks < 50) {
-                    subjectAlerts.push(`Critical: High risk of failure in ${subName}. Immediate focus required.`);
                 }
             });
         }
 
         // Study Hours (Average per day logged * 7 for weekly)
-        let studyHoursPerWeek = 10;
+        let studyHoursPerWeek = 15;
         if (student.study_logs && student.study_logs.length > 0) {
             const totalHours = student.study_logs.reduce((acc, log) => acc + parseFloat(log.hours_logged), 0);
             const avgDaily = totalHours / student.study_logs.length;
@@ -73,33 +89,34 @@ const getAIRecommendations = async (req, res) => {
         }
 
         // CGPA
-        let previousGpa = 7.0;
+        let previousGpa = 7.5;
         if (student.semester_results && student.semester_results.length > 0) {
-            // Get the latest CGPA
             const latest = student.semester_results.sort((a, b) => b.semester - a.semester)[0];
             if (latest.cgpa) previousGpa = latest.cgpa;
         }
 
-        // Department
+        // Department (Extract from class name if available, e.g. "CSE-2022" -> "CSE")
         let department = "CSE";
+        if (student.sclasses?.sclass_name) {
+            const match = student.sclasses.sclass_name.match(/^([A-Z]+)/);
+            if (match) department = match[1];
+        }
 
         const inputPayload = {
             attendance_rate: attendanceRate,
-            assignment_average: totalAvg, 
-            quiz_average: internalAvg,
-            internal_exam_score: internalAvg,
-            lab_performance: totalAvg, // Synthesized
+            internal_avg_theory: internalAvgTheory,
+            external_avg_theory: externalAvgTheory,
+            internal_avg_practical: internalAvgPractical,
+            external_avg_practical: externalAvgPractical,
             study_hours_per_week: studyHoursPerWeek,
-            lms_logins_per_week: 5, // Synthesized
             previous_gpa: previousGpa,
-            project_score: totalAvg, // Synthesized
             department: department
         };
 
         // 3. Spawn Python script
-        // Note: Assumes Python virtual env is set up in Major Project AI directory
-        const pythonScriptPath = path.resolve(__dirname, '../../../Major Project AI/scripts/predict_student.py');
-        const pythonExe = path.resolve(__dirname, '../../../Major Project AI/.venv/Scripts/python.exe');
+        // Note: Assumes Python virtual env is set up in ai-trackademics directory
+        const pythonScriptPath = path.resolve(__dirname, '../../ai-trackademics/scripts/predict_student.py');
+        const pythonExe = path.resolve(__dirname, '../../ai-trackademics/.venv/Scripts/python.exe');
         
         const pythonProcess = spawn(pythonExe, [pythonScriptPath]);
 
@@ -129,13 +146,25 @@ const getAIRecommendations = async (req, res) => {
                     return res.status(500).send({ message: parsedResult.error });
                 }
                 
+                // Read metrics.json
+                const metricsPath = path.resolve(__dirname, '../../ai-trackademics/artifacts/metrics.json');
+                let modelMetrics = { accuracy: 0.8833, model_type: "Random Forest" }; // Fallback
+                try {
+                    if (require('fs').existsSync(metricsPath)) {
+                        modelMetrics = JSON.parse(require('fs').readFileSync(metricsPath, 'utf8'));
+                    }
+                } catch (e) {
+                    console.error("Error reading metrics:", e);
+                }
+                
                 // Return payload
                 res.send({
                     studentId: studentId,
                     features: inputPayload,
                     ai_insight: parsedResult,
                     subjectAlerts: subjectAlerts,
-                    examResults: student.exam_results
+                    examResults: student.exam_results,
+                    modelMetrics: modelMetrics
                 });
 
             } catch (err) {
