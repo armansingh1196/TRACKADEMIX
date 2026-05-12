@@ -10,7 +10,8 @@ const subjectCreate = async (req, res) => {
             sessions: subject.sessions,
             sclass_id: sclassName,
             admin_id: adminID,
-            semester: parseInt(semester) || 1
+            semester: parseInt(semester) || 1,
+            subject_type: subject.subjectType || 'Theory'
         }));
 
         const { data, error } = await supabase

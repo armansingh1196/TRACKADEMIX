@@ -62,7 +62,7 @@ const teacherLogIn = async (req, res) => {
                 *,
                 admins ( id, school_name ),
                 sclasses ( id, sclass_name, semester, batch ),
-                subjects!teachers_teach_subject_id_fkey ( id, sub_name, sessions )
+                subjects!teachers_teach_subject_id_fkey ( id, sub_name, sessions, subject_type )
             `)
             .eq('email', email)
             .single();
@@ -81,7 +81,8 @@ const teacherLogIn = async (req, res) => {
                 teachSubject: teacher.subjects ? {
                     _id: teacher.subjects.id,
                     subName: teacher.subjects.sub_name,
-                    sessions: teacher.subjects.sessions
+                    sessions: teacher.subjects.sessions,
+                    subjectType: teacher.subjects.subject_type
                 } : null,
                 school: teacher.admins ? {
                     _id: teacher.admins.id,
@@ -111,7 +112,7 @@ const getTeachers = async (req, res) => {
             .from('teachers')
             .select(`
                 *,
-                subjects!teachers_teach_subject_id_fkey ( id, sub_name ),
+                subjects!teachers_teach_subject_id_fkey ( id, sub_name, subject_type ),
                 sclasses ( id, sclass_name, semester, batch )
             `)
             .eq('admin_id', req.params.id);
@@ -123,7 +124,8 @@ const getTeachers = async (req, res) => {
             _id: teacher.id,
             teachSubject: teacher.subjects ? {
                 _id: teacher.subjects.id,
-                subName: teacher.subjects.sub_name
+                subName: teacher.subjects.sub_name,
+                subjectType: teacher.subjects.subject_type
             } : null,
             teachSclass: teacher.sclasses ? {
                 _id: teacher.sclasses.id,
@@ -145,7 +147,7 @@ const getTeacherDetail = async (req, res) => {
             .from('teachers')
             .select(`
                 *,
-                subjects!teachers_teach_subject_id_fkey ( id, sub_name, sessions ),
+                subjects!teachers_teach_subject_id_fkey ( id, sub_name, sessions, subject_type ),
                 admins ( id, school_name ),
                 sclasses ( id, sclass_name, semester, batch )
             `)
@@ -163,7 +165,8 @@ const getTeacherDetail = async (req, res) => {
             teachSubject: teacher.subjects ? {
                 _id: teacher.subjects.id,
                 subName: teacher.subjects.sub_name,
-                sessions: teacher.subjects.sessions
+                sessions: teacher.subjects.sessions,
+                subjectType: teacher.subjects.subject_type
             } : null,
             school: teacher.admins ? {
                 _id: teacher.admins.id,
@@ -361,9 +364,28 @@ const bulkMarkMarks = async (req, res) => {
             return res.status(400).json({ message: "Invalid marks data" });
         }
 
+        // Fetch subject type to validate limits
+        const subjectId = marksData[0].subject_id;
+        const { data: subject, error: subError } = await supabase
+            .from('subjects')
+            .select('subject_type')
+            .eq('id', subjectId)
+            .single();
+
+        if (subError) throw subError;
+
+        const isPractical = subject && subject.subject_type === 'Practical';
+        const maxInternal = isPractical ? 25 : 30;
+        const maxExternal = isPractical ? 25 : 70;
+
         const enrichedMarksData = marksData.map(item => {
             const internal = parseFloat(item.internal_marks) || 0;
             const external = parseFloat(item.external_marks) || 0;
+            
+            if (internal > maxInternal || external > maxExternal) {
+                return res.status(400).json({ message: `Marks exceed limits for ${isPractical ? 'Practical' : 'Theory'} subject` });
+            }
+
             // If marks_obtained is not provided, calculate it as sum of internal and external
             const total = item.marks_obtained !== undefined ? item.marks_obtained : (internal + external);
             return {

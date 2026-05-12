@@ -13,7 +13,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 
 const SubjectForm = () => {
-    const [subjects, setSubjects] = useState([{ subName: "", subCode: "", sessions: "" }]);
+    const [subjects, setSubjects] = useState([{ subName: "", subCode: "", sessions: "", subjectType: "Theory" }]);
     const [targetSemester, setTargetSemester] = useState(1);
 
     const dispatch = useDispatch()
@@ -37,7 +37,7 @@ const SubjectForm = () => {
     };
 
     const handleAddSubject = () => {
-        setSubjects([...subjects, { subName: "", subCode: "", sessions: "" }]);
+        setSubjects([...subjects, { subName: "", subCode: "", sessions: "", subjectType: "Theory" }]);
     };
 
     const handleRemoveSubject = (index) => () => {
@@ -59,6 +59,7 @@ const SubjectForm = () => {
                 subName: subject.subName,
                 subCode: subject.subCode,
                 sessions: subject.sessions,
+                subjectType: subject.subjectType,
             })),
             adminID,
             semester: targetSemester
@@ -122,7 +123,7 @@ const SubjectForm = () => {
                         {subjects.map((subject, index) => (
                             <SubjectCard key={index}>
                                 <Grid container spacing={3} alignItems="center">
-                                    <Grid item xs={12} sm={4}>
+                                    <Grid item xs={12} sm={3}>
                                         <AppTextField
                                             fullWidth
                                             label="Subject Name"
@@ -132,7 +133,7 @@ const SubjectForm = () => {
                                             required
                                         />
                                     </Grid>
-                                    <Grid item xs={12} sm={3}>
+                                    <Grid item xs={12} sm={2}>
                                         <AppTextField
                                             fullWidth
                                             label="Code"
@@ -142,7 +143,7 @@ const SubjectForm = () => {
                                             required
                                         />
                                     </Grid>
-                                    <Grid item xs={12} sm={3}>
+                                    <Grid item xs={12} sm={2}>
                                         <AppTextField
                                             fullWidth
                                             label="Sessions"
@@ -152,6 +153,19 @@ const SubjectForm = () => {
                                             onChange={handleSubjectChange(index, 'sessions')}
                                             required
                                         />
+                                    </Grid>
+                                    <Grid item xs={12} sm={3}>
+                                        <AppTextField
+                                            select
+                                            fullWidth
+                                            label="Type"
+                                            value={subject.subjectType}
+                                            onChange={handleSubjectChange(index, 'subjectType')}
+                                            required
+                                        >
+                                            <MenuItem value="Theory">Theory</MenuItem>
+                                            <MenuItem value="Practical">Practical</MenuItem>
+                                        </AppTextField>
                                     </Grid>
                                     <Grid item xs={12} sm={2} sx={{ display: 'flex', justifyContent: 'center' }}>
                                         {index > 0 ? (

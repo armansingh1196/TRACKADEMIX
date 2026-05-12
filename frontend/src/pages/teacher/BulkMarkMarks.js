@@ -25,6 +25,10 @@ const BulkMarkMarks = () => {
     const classID = currentUser.teachSclass?._id;
     const subjectID = currentUser.teachSubject?._id;
     const subName = currentUser.teachSubject?.subName;
+    const subjectType = currentUser.teachSubject?.subjectType || 'Theory';
+    const isPractical = subjectType === 'Practical';
+    const maxInternal = isPractical ? 25 : 30;
+    const maxExternal = isPractical ? 25 : 70;
 
     useEffect(() => {
         dispatch(getClassStudents(classID));
@@ -95,8 +99,8 @@ const BulkMarkMarks = () => {
                                     <TableRow>
                                         <TableCell sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Roll No</TableCell>
                                         <TableCell sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Student Name</TableCell>
-                                        <TableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Internal (30)</TableCell>
-                                        <TableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>External (70)</TableCell>
+                                        <TableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Internal ({maxInternal})</TableCell>
+                                        <TableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>External ({maxExternal})</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -110,9 +114,9 @@ const BulkMarkMarks = () => {
                                                     variant="outlined"
                                                     size="small"
                                                     value={row.internalMarks}
-                                                    onChange={(e) => handleMarkChange(row.student_id, 'internalMarks', e.target.value, 30)}
+                                                    onChange={(e) => handleMarkChange(row.student_id, 'internalMarks', e.target.value, maxInternal)}
                                                     InputProps={{
-                                                        inputProps: { min: 0, max: 30 },
+                                                        inputProps: { min: 0, max: maxInternal },
                                                         sx: { 
                                                             color: 'white', 
                                                             fontWeight: 800,
@@ -130,9 +134,9 @@ const BulkMarkMarks = () => {
                                                     variant="outlined"
                                                     size="small"
                                                     value={row.externalMarks}
-                                                    onChange={(e) => handleMarkChange(row.student_id, 'externalMarks', e.target.value, 70)}
+                                                    onChange={(e) => handleMarkChange(row.student_id, 'externalMarks', e.target.value, maxExternal)}
                                                     InputProps={{
-                                                        inputProps: { min: 0, max: 70 },
+                                                        inputProps: { min: 0, max: maxExternal },
                                                         sx: { 
                                                             color: 'white', 
                                                             fontWeight: 800,
