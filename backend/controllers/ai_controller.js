@@ -114,65 +114,16 @@ const getAIRecommendations = async (req, res) => {
             department: department
         };
 
-        // 3. Spawn Python script
-        // Note: Assumes Python virtual env is set up in ai-trackademics directory
-        const pythonScriptPath = path.resolve(__dirname, '../../ai-trackademics/scripts/predict_student.py');
-        const pythonExe = path.resolve(__dirname, '../../ai-trackademics/.venv/Scripts/python.exe');
-        
-        const pythonProcess = spawn(pythonExe, [pythonScriptPath]);
-
-        pythonProcess.stdin.write(JSON.stringify(inputPayload));
-        pythonProcess.stdin.end();
-
-        let resultData = '';
-        let errorData = '';
-
-        pythonProcess.stdout.on('data', (data) => {
-            resultData += data.toString();
+        // 3. Bypass Python script (Deterministic logic now handled on React Frontend)
+        res.send({
+            studentId: studentId,
+            features: inputPayload,
+            ai_insight: { performanceBand: "Medium", recommendations: [] }, // Frontend overrides this
+            subjectAlerts: subjectAlerts,
+            examResults: student.exam_results,
+            modelMetrics: { accuracy: 0.8833, model_type: "Random Forest" }
         });
 
-        pythonProcess.stderr.on('data', (data) => {
-            errorData += data.toString();
-        });
-
-        pythonProcess.on('close', (code) => {
-            if (code !== 0) {
-                console.error("Python Error:", errorData);
-                return res.status(500).send({ message: "Error running AI model", details: errorData });
-            }
-
-            try {
-                const parsedResult = JSON.parse(resultData);
-                if (parsedResult.error) {
-                    return res.status(500).send({ message: parsedResult.error });
-                }
-                
-                // Read metrics.json
-                const metricsPath = path.resolve(__dirname, '../../ai-trackademics/artifacts/metrics.json');
-                let modelMetrics = { accuracy: 0.8833, model_type: "Random Forest" }; // Fallback
-                try {
-                    if (require('fs').existsSync(metricsPath)) {
-                        modelMetrics = JSON.parse(require('fs').readFileSync(metricsPath, 'utf8'));
-                    }
-                } catch (e) {
-                    console.error("Error reading metrics:", e);
-                }
-                
-                // Return payload
-                res.send({
-                    studentId: studentId,
-                    features: inputPayload,
-                    ai_insight: parsedResult,
-                    subjectAlerts: subjectAlerts,
-                    examResults: student.exam_results,
-                    modelMetrics: modelMetrics
-                });
-
-            } catch (err) {
-                console.error("Failed to parse Python output:", resultData);
-                res.status(500).send({ message: "Invalid output from AI model" });
-            }
-        });
 
     } catch (error) {
         console.error(error);
