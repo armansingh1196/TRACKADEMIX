@@ -63,6 +63,13 @@ const StudentHomePage = () => {
 
 
             const fetchAI = async () => {
+                if (currentUser._id.startsWith("mock_")) {
+                    setAiInsight({
+                        features: { attendance_rate: calculateOverallAttendancePercentage(currentUser.attendance || []) },
+                        examResults: currentUser.examResult || []
+                    });
+                    return;
+                }
                 try {
                     const response = await api.get(`/Student/AIRecommendations/${currentUser._id}`);
                     setAiInsight(response.data);

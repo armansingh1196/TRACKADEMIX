@@ -11,6 +11,21 @@ const AttendanceHeatmap = ({ studentID }) => {
     useEffect(() => {
         const fetchHeatmap = async () => {
             setLoading(true);
+            if (studentID.startsWith("mock_")) {
+                const today = new Date();
+                const d1 = new Date(today); d1.setDate(today.getDate() - 1);
+                const d2 = new Date(today); d2.setDate(today.getDate() - 2);
+                const d3 = new Date(today); d3.setDate(today.getDate() - 3);
+                
+                setData([
+                    { date: d1.toISOString().split('T')[0], count: 3, total: 3 },
+                    { date: d2.toISOString().split('T')[0], count: 2, total: 3 },
+                    { date: d3.toISOString().split('T')[0], count: 0, total: 2 },
+                    { date: today.toISOString().split('T')[0], count: 1, total: 1 },
+                ]);
+                setLoading(false);
+                return;
+            }
             try {
                 const response = await api.get(`/Student/Heatmap/${studentID}`);
                 setData(response.data);
