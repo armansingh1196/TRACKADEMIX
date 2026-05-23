@@ -64,7 +64,7 @@ const ChooseUser = ({ visitor }) => {
       <Orb style={{ top: '20%', left: '40%', background: 'radial-gradient(circle, rgba(45,212,191,0.15) 0%, transparent 65%)', width: 350, height: 350 }} />
 
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
-        <Box sx={{ position: 'absolute', top: -72, left: 0 }}>
+        <Box sx={{ position: { xs: 'relative', md: 'absolute' }, top: { md: -72 }, left: { md: 0 }, mb: { xs: 2, md: 0 } }}>
           <Tooltip title="Back to Homepage">
             <BackBtn onClick={() => navigate('/')}>
               <ArrowBackIosNew sx={{ fontSize: 16 }} />
@@ -86,12 +86,12 @@ const ChooseUser = ({ visitor }) => {
             <Grid item xs={12} sm={6} md={4} key={role.name}>
               <RoleCard elevation={0} onClick={() => navigateHandler(role.name)} accent={role.color} style={{ animationDelay: `${i * 0.08}s` }}>
                 <RoleIconBox rolecolor={role.color}>
-                  {React.cloneElement(role.icon, { sx: { fontSize: 40 } })}
+                  {React.cloneElement(role.icon, { sx: { fontSize: { xs: 28, md: 40 } } })}
                 </RoleIconBox>
-                <Typography sx={{ fontFamily: 'var(--font-sf)', fontWeight: 700, fontSize: '1.25rem', letterSpacing: '-0.025em', color: '#fff', mb: 1.5, mt: 0.5 }}>
+                <Typography sx={{ fontFamily: 'var(--font-sf)', fontWeight: 700, fontSize: { xs: '1.05rem', md: '1.25rem' }, letterSpacing: '-0.025em', color: '#fff', mb: { xs: 0.75, md: 1.5 }, mt: 0.5 }}>
                   {role.label}
                 </Typography>
-                <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: '0.9375rem', color: 'rgba(235,235,245,0.45)', lineHeight: 1.5 }}>
+                <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: { xs: '0.8125rem', md: '0.9375rem' }, color: 'rgba(235,235,245,0.45)', lineHeight: 1.5 }}>
                   {role.desc}
                 </Typography>
                 <EnterButton rolecolor={role.color}>Enter Portal</EnterButton>
@@ -127,6 +127,11 @@ const StyledMain = styled.div`
   align-items: center;
   justify-content: center;
   padding: 80px 0;
+
+  @media (max-width: 600px) {
+    padding: 40px 0 60px;
+    align-items: flex-start;
+  }
 `;
 
 const Orb = styled.div`
@@ -140,6 +145,10 @@ const PageHeader = styled(Box)`
   text-align: center;
   margin-bottom: 56px;
   animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+
+  @media (max-width: 600px) {
+    margin-bottom: 28px;
+  }
 `;
 
 const BackBtn = styled(IconButton)`
@@ -169,6 +178,11 @@ const RoleCard = styled(Paper)`
     color: white !important;
     animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
 
+    @media (max-width: 600px) {
+      padding: 24px 20px !important;
+      border-radius: 18px !important;
+    }
+
     &:hover {
       transform: translateY(-14px) scale(1.02) !important;
       border-color: ${props => props.accent ? `${props.accent}60` : 'rgba(110,63,243,0.5)'} !important;
@@ -191,6 +205,13 @@ const RoleIconBox = styled(Box)`
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   animation: ${floatCard} 7s ease-in-out infinite;
 
+  @media (max-width: 600px) {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    margin-bottom: 16px;
+  }
+
   ${RoleCard}:hover & {
     transform: scale(1.12);
     background: ${props => props.rolecolor ? `${props.rolecolor}28` : 'rgba(110,63,243,0.24)'};
@@ -211,4 +232,10 @@ const EnterButton = styled(Box)`
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+
+  @media (max-width: 600px) {
+    margin-top: 18px;
+    padding: 9px 20px;
+    font-size: 0.8125rem;
+  }
 `;

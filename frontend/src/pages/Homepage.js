@@ -158,6 +158,10 @@ const StyledMain = styled.div`
   align-items: center;
   padding: 80px 0;
 
+  @media (max-width: 600px) {
+    padding: 48px 0 40px;
+  }
+
   @media (min-width: 900px) {
     height: 100vh;
     padding: 0;
@@ -192,6 +196,13 @@ const PillBadge = styled.div`
   letter-spacing: 0.05em;
   text-transform: uppercase;
   margin-bottom: 28px;
+
+  @media (max-width: 600px) {
+    font-size: 0.625rem;
+    padding: 5px 12px;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
 `;
 
 const HeroTitle = styled(Typography)`
@@ -216,6 +227,11 @@ const HeroSubtitle = styled(Typography)`
   line-height: 1.55 !important;
   max-width: 520px;
   margin-bottom: 40px !important;
+
+  @media (max-width: 600px) {
+    font-size: 0.9375rem !important;
+    margin-bottom: 28px !important;
+  }
 `;
 
 const CTARow = styled(Box)`
@@ -223,6 +239,11 @@ const CTARow = styled(Box)`
   gap: 14px;
   margin-bottom: 36px;
   flex-wrap: wrap;
+
+  @media (max-width: 600px) {
+    gap: 10px;
+    margin-bottom: 24px;
+  }
 `;
 
 const FooterNote = styled(Typography)`

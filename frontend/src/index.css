@@ -492,3 +492,37 @@ h5 { font-family: var(--font-heading); font-weight: 700; font-size: clamp(0.95re
 .fade-in {
   animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* ── Global Mobile Responsiveness ── */
+@media (max-width: 600px) {
+  .MuiPaper-root {
+    border-radius: 14px !important;
+  }
+
+  .MuiContainer-root {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .MuiButton-root {
+    font-size: 0.875rem !important;
+    padding: 8px 16px !important;
+  }
+
+  .MuiButton-sizeLarge {
+    padding: 10px 20px !important;
+  }
+
+  h1 {
+    font-size: clamp(1.6rem, 8vw, 2.4rem) !important;
+  }
+
+  h2 {
+    font-size: clamp(1.3rem, 6vw, 2rem) !important;
+  }
+
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+}
