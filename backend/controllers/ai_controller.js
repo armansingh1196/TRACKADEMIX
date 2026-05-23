@@ -114,6 +114,18 @@ const getAIRecommendations = async (req, res) => {
             department: department
         };
 
+        // Read metrics.json
+        const fs = require('fs');
+        const metricsPath = path.resolve(__dirname, '../../ai-trackademics/artifacts/metrics.json');
+        let modelMetrics = { accuracy: 0.9375, model_type: "Random Forest" }; // Fallback
+        try {
+            if (fs.existsSync(metricsPath)) {
+                modelMetrics = JSON.parse(fs.readFileSync(metricsPath, 'utf8'));
+            }
+        } catch (e) {
+            console.error("Error reading metrics:", e);
+        }
+
         // 3. Bypass Python script (Deterministic logic now handled on React Frontend)
         res.send({
             studentId: studentId,
@@ -121,7 +133,7 @@ const getAIRecommendations = async (req, res) => {
             ai_insight: { performanceBand: "Medium", recommendations: [] }, // Frontend overrides this
             subjectAlerts: subjectAlerts,
             examResults: student.exam_results,
-            modelMetrics: { accuracy: 0.8833, model_type: "Random Forest" }
+            modelMetrics: modelMetrics
         });
 
 

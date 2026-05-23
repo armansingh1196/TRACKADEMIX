@@ -66,7 +66,11 @@ const StudentHomePage = () => {
                 if (currentUser._id.startsWith("mock_")) {
                     setAiInsight({
                         features: { attendance_rate: calculateOverallAttendancePercentage(currentUser.attendance || []) },
-                        examResults: currentUser.examResult || []
+                        examResults: currentUser.examResult || [],
+                        subjectAlerts: [
+                            "Low internal score in Operating Systems. Focus on continuous assessment.",
+                            "Weak performance in Database Systems external exams. Needs targeted study."
+                        ]
                     });
                     return;
                 }
@@ -220,9 +224,16 @@ const StudentHomePage = () => {
                                         </Box>
 
                                         {aiInsight.subjectAlerts && aiInsight.subjectAlerts.length > 0 && (
-                                            <Typography variant="caption" sx={{ color: '#ef4444', fontWeight: 600, textAlign: 'center', mt: 1 }}>
-                                                ⚠️ Attention needed in some subjects!
-                                            </Typography>
+                                            <Box sx={{ mt: 2, p: 1.5, background: 'rgba(239, 68, 68, 0.1)', borderRadius: '12px', border: '1px solid rgba(239, 68, 68, 0.2)', width: '100%' }}>
+                                                <Typography variant="caption" sx={{ color: '#ef4444', fontWeight: 800, display: 'block', mb: 1, textTransform: 'uppercase', letterSpacing: 0.5 }}>
+                                                    ⚠️ Recommendations For You:
+                                                </Typography>
+                                                <ul style={{ margin: 0, paddingLeft: '20px', color: '#fca5a5', fontSize: '0.8rem', textAlign: 'left' }}>
+                                                    {aiInsight.subjectAlerts.map((alert, idx) => (
+                                                        <li key={idx} style={{ marginBottom: '4px' }}>{alert}</li>
+                                                    ))}
+                                                </ul>
+                                            </Box>
                                         )}
                                     </>
                                 ) : (
