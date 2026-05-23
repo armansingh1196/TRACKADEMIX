@@ -59,8 +59,9 @@ const ChooseUser = ({ visitor }) => {
 
   return (
     <StyledMain>
-      <Orb style={{ top: '-10%', right: '-5%', background: 'radial-gradient(circle, rgba(110,63,243,0.15) 0%, transparent 65%)', width: 600, height: 600 }} />
-      <Orb style={{ bottom: '-15%', left: '-5%', background: 'radial-gradient(circle, rgba(10,132,255,0.08) 0%, transparent 65%)', width: 500, height: 500 }} />
+      <Orb style={{ top: '-15%', right: '-8%', background: 'radial-gradient(circle, rgba(110,63,243,0.45) 0%, rgba(110,63,243,0.1) 50%, transparent 70%)', width: 650, height: 650 }} />
+      <Orb style={{ bottom: '-20%', left: '-8%', background: 'radial-gradient(circle, rgba(10,132,255,0.35) 0%, rgba(10,132,255,0.08) 55%, transparent 70%)', width: 550, height: 550 }} />
+      <Orb style={{ top: '20%', left: '40%', background: 'radial-gradient(circle, rgba(45,212,191,0.15) 0%, transparent 65%)', width: 350, height: 350 }} />
 
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
         <Box sx={{ position: 'absolute', top: -72, left: 0 }}>
@@ -118,7 +119,7 @@ const floatCard = keyframes`
 
 const StyledMain = styled.div`
   min-height: 100vh;
-  background: #000000;
+  background: transparent;
   color: white;
   position: relative;
   overflow: hidden;
@@ -157,11 +158,12 @@ const RoleCard = styled(Paper)`
   && {
     padding: 40px 28px;
     text-align: center;
-    background: rgba(28, 28, 30, 0.72) !important;
-    backdrop-filter: blur(40px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+    background: rgba(255, 255, 255, 0.055) !important;
+    backdrop-filter: blur(40px) saturate(200%) brightness(1.06) !important;
+    -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06) !important;
     border-radius: 24px !important;
-    border: 1px solid rgba(84, 84, 88, 0.45) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12) !important;
     cursor: pointer;
     transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
     color: white !important;
@@ -169,9 +171,9 @@ const RoleCard = styled(Paper)`
 
     &:hover {
       transform: translateY(-14px) scale(1.02) !important;
-      border-color: ${props => props.accent || '#6E3FF3'} !important;
-      box-shadow: 0 28px 60px rgba(0,0,0,0.55), 0 0 0 1px ${props => props.accent ? `${props.accent}50` : 'rgba(110,63,243,0.4)'} !important;
-      background: rgba(28, 28, 30, 0.9) !important;
+      border-color: ${props => props.accent ? `${props.accent}60` : 'rgba(110,63,243,0.5)'} !important;
+      box-shadow: 0 28px 60px rgba(0,0,0,0.6), 0 0 0 1px ${props => props.accent ? `${props.accent}40` : 'rgba(110,63,243,0.35)'}, inset 0 1px 0 rgba(255,255,255,0.18) !important;
+      background: rgba(255, 255, 255, 0.085) !important;
     }
   }
 `;
@@ -205,7 +207,8 @@ const EnterButton = styled(Box)`
   display: inline-block;
   transition: all 0.25s ease;
   letter-spacing: -0.01em;
-  color: ${props => props.rolecolor || '#6E3FF3'};
-  background: ${props => props.rolecolor ? `${props.rolecolor}10` : 'rgba(110,63,243,0.1)'};
-  border: 1px solid ${props => props.rolecolor ? `${props.rolecolor}30` : 'rgba(110,63,243,0.25)'};
+  color: ${props => props.rolecolor || '#8B5CF6'};
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
 `;

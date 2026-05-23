@@ -282,13 +282,13 @@ export default StudentHomePage;
 
 
 const SectionPaper = styled(Box)`
-  background: rgba(28, 28, 30, 0.65);
+  background: rgba(255, 255, 255, 0.055);
   border-radius: 20px;
-  border: 1px solid rgba(84, 84, 88, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 18px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
-  backdrop-filter: blur(40px) saturate(160%);
-  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.1);
+  backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
 
   @media (max-width: 600px) {
     border-radius: 14px;
@@ -297,16 +297,16 @@ const SectionPaper = styled(Box)`
 `;
 
 const ChartPaper = styled(Box)`
-  background: rgba(28, 28, 30, 0.65);
+  background: rgba(255, 255, 255, 0.055);
   border-radius: 20px;
-  border: 1px solid rgba(84, 84, 88, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 20px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  backdrop-filter: blur(40px) saturate(160%);
-  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
   transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   @media (max-width: 600px) {
@@ -316,7 +316,8 @@ const ChartPaper = styled(Box)`
 
   &:hover {
     transform: translateY(-4px);
-    border-color: rgba(110, 63, 243, 0.4);
-    box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+    border-color: rgba(110, 63, 243, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.14);
   }
 `;

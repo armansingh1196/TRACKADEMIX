@@ -12,9 +12,9 @@ const Homepage = () => {
 
     return (
         <StyledMain>
-            <Orb style={{ top: '-10%', right: '-5%', width: 600, height: 600, background: 'radial-gradient(circle, rgba(110,63,243,0.18) 0%, transparent 70%)' }} />
-            <Orb style={{ bottom: '-15%', left: '-8%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(10,132,255,0.1) 0%, transparent 70%)' }} />
-            <Orb style={{ top: '40%', left: '30%', width: 300, height: 300, background: 'radial-gradient(circle, rgba(110,63,243,0.06) 0%, transparent 70%)' }} />
+            <Orb style={{ top: '-15%', right: '-8%', width: 700, height: 700, background: 'radial-gradient(circle, rgba(110,63,243,0.45) 0%, rgba(110,63,243,0.1) 50%, transparent 70%)' }} />
+            <Orb style={{ bottom: '-20%', left: '-10%', width: 600, height: 600, background: 'radial-gradient(circle, rgba(10,132,255,0.35) 0%, rgba(10,132,255,0.08) 55%, transparent 70%)' }} />
+            <Orb style={{ top: '35%', left: '25%', width: 400, height: 400, background: 'radial-gradient(circle, rgba(45,212,191,0.18) 0%, rgba(45,212,191,0.04) 55%, transparent 70%)' }} />
 
             <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, height: '100%', display: 'flex', alignItems: 'center' }}>
                 <Grid container spacing={{ xs: 4, md: 8 }} alignItems="center">
@@ -150,7 +150,7 @@ const floatB = keyframes`
 /* ── Styled Components ── */
 const StyledMain = styled.div`
   min-height: 100vh;
-  background: #000000;
+  background: transparent;
   color: #FFFFFF;
   position: relative;
   overflow: hidden;
@@ -247,24 +247,26 @@ const CardsStack = styled(Box)`
 `;
 
 const FeatureCard = styled(Box)`
-  background: rgba(28, 28, 30, 0.7);
-  backdrop-filter: blur(40px) saturate(160%);
-  -webkit-backdrop-filter: blur(40px) saturate(160%);
-  border: 1px solid rgba(84, 84, 88, 0.45);
+  background: rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(32px) saturate(200%) brightness(1.06);
+  -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(1.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 24px;
   display: flex;
   align-items: center;
   gap: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12);
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   &.card-1 { animation: ${floatA} 7s ease-in-out infinite; }
   &.card-2 { animation: ${floatB} 8s ease-in-out infinite; animation-delay: 1s; }
 
   &:hover {
-    border-color: rgba(110, 63, 243, 0.5);
-    background: rgba(28, 28, 30, 0.85);
+    border-color: rgba(110, 63, 243, 0.4);
+    background: rgba(255, 255, 255, 0.08);
     transform: scale(1.02);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.16);
   }
 `;
 
@@ -285,15 +287,17 @@ const StatsRow = styled(Box)`
 
 const StatPill = styled(Box)`
   flex: 1;
-  background: rgba(28, 28, 30, 0.65);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(84, 84, 88, 0.4);
+  background: rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 18px 12px;
   text-align: center;
   display: flex;
   flex-direction: column;
   gap: 4px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
   transition: all 0.3s ease;
 
   .val {
@@ -311,11 +315,12 @@ const StatPill = styled(Box)`
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.07em;
-    color: rgba(110, 63, 243, 0.85);
+    color: rgba(139, 92, 246, 0.9);
   }
 
   &:hover {
-    border-color: rgba(110, 63, 243, 0.4);
-    background: rgba(110, 63, 243, 0.06);
+    border-color: rgba(110, 63, 243, 0.35);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.14);
   }
 `;
