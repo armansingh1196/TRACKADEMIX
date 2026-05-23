@@ -31,8 +31,43 @@ const mockUsers = {
         role: "Student",
         schoolName: "BIT Mesra",
         school: { _id: "school_123", schoolName: "BIT Mesra" },
-        sclassName: { _id: "class_123", sclassName: "CSE-A" },
-        attendance: []
+        sclassName: { _id: "class_123", sclassName: "CSE-A", semester: 6 },
+        attendance: [
+            { date: "2024-03-01", status: "Present", subName: "Data Structures", subId: "sub1" },
+            { date: "2024-03-02", status: "Present", subName: "Algorithms", subId: "sub2" },
+            { date: "2024-03-03", status: "Absent", subName: "Database Systems", subId: "sub3" },
+            { date: "2024-03-04", status: "Present", subName: "Operating Systems", subId: "sub4" }
+        ],
+        examResult: [
+            {
+                subject_id: "sub1",
+                internal_marks: 25,
+                external_marks: 55,
+                marks_obtained: 80,
+                subjects: { sub_name: "Data Structures", semester: 6, subject_type: "Theory" }
+            },
+            {
+                subject_id: "sub2",
+                internal_marks: 22,
+                external_marks: 48,
+                marks_obtained: 70,
+                subjects: { sub_name: "Algorithms", semester: 6, subject_type: "Theory" }
+            },
+            {
+                subject_id: "sub3",
+                internal_marks: 18,
+                external_marks: 35,
+                marks_obtained: 53,
+                subjects: { sub_name: "Database Systems", semester: 6, subject_type: "Theory" }
+            },
+            {
+                subject_id: "sub4",
+                internal_marks: 10,
+                external_marks: 20,
+                marks_obtained: 30, // Failing grade to trigger "Needs Effort" or "At Risk"
+                subjects: { sub_name: "Operating Systems", semester: 6, subject_type: "Theory" }
+            }
+        ]
     },
     "Teacher": {
         _id: "mock_teacher_123",
