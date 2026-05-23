@@ -63,38 +63,35 @@ const ChooseUser = ({ visitor }) => {
       <Orb style={{ bottom: '-20%', left: '-8%', background: 'radial-gradient(circle, rgba(68,138,255,0.3) 0%, rgba(68,138,255,0.08) 55%, transparent 70%)', width: 550, height: 550 }} />
       <Orb style={{ top: '20%', left: '40%', background: 'radial-gradient(circle, rgba(45,212,191,0.12) 0%, transparent 65%)', width: 350, height: 350 }} />
 
-      <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
-        <Box sx={{ position: { xs: 'relative', md: 'absolute' }, top: { md: -72 }, left: { md: 0 }, mb: { xs: 2, md: 0 } }}>
-          <Tooltip title="Back to Homepage">
-            <BackBtn onClick={() => navigate('/')}>
-              <ArrowBackIosNew sx={{ fontSize: 16 }} />
-            </BackBtn>
-          </Tooltip>
-        </Box>
+      <Container maxWidth="md" sx={{ position: 'relative', zIndex: 2 }}>
+        {/* Back Button — top-left fixed */}
+        <BackBtn onClick={() => navigate('/')}>
+          <ArrowBackIosNew sx={{ fontSize: 14 }} />
+        </BackBtn>
 
         <PageHeader>
-          <Typography sx={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 'clamp(2rem, 5vw, 3rem)', letterSpacing: '-0.045em', color: '#F5F5FF', mb: 1.5 }}>
+          <Typography sx={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 'clamp(2.2rem, 5.5vw, 3.2rem)', letterSpacing: '-0.045em', color: '#F5F5FF', mb: 1 }}>
             Select Your <span style={{ color: '#7C4DFF' }}>Portal</span>
           </Typography>
-          <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '1.0625rem', color: 'rgba(226,232,255,0.5)', fontWeight: 400, letterSpacing: '-0.011em' }}>
-            Choose your institutional role to continue to your secure dashboard.
+          <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '0.9375rem', color: 'rgba(226,232,255,0.45)', fontWeight: 400, letterSpacing: '-0.011em' }}>
+            Choose your institutional role to continue.
           </Typography>
         </PageHeader>
 
-        <Grid container spacing={3} justifyContent="center">
+        <Grid container spacing={2.5} justifyContent="center">
           {roles.map((role, i) => (
             <Grid item xs={12} sm={6} md={4} key={role.name}>
               <RoleCard elevation={0} onClick={() => navigateHandler(role.name)} accent={role.color} style={{ animationDelay: `${i * 0.08}s` }}>
                 <RoleIconBox rolecolor={role.color}>
-                  {React.cloneElement(role.icon, { sx: { fontSize: { xs: 28, md: 40 } } })}
+                  {React.cloneElement(role.icon, { sx: { fontSize: { xs: 26, md: 32 } } })}
                 </RoleIconBox>
-                <Typography sx={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: { xs: '1.05rem', md: '1.25rem' }, letterSpacing: '-0.025em', color: '#F5F5FF', mb: { xs: 0.75, md: 1.5 }, mt: 0.5 }}>
+                <Typography sx={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: { xs: '1rem', md: '1.125rem' }, letterSpacing: '-0.025em', color: '#F5F5FF', mb: 0.75, mt: 0.25 }}>
                   {role.label}
                 </Typography>
-                <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: { xs: '0.8125rem', md: '0.875rem' }, color: 'rgba(226,232,255,0.5)', lineHeight: 1.55, letterSpacing: '-0.011em' }}>
+                <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '0.8125rem', color: 'rgba(226,232,255,0.45)', lineHeight: 1.5, letterSpacing: '-0.011em', px: 0.5 }}>
                   {role.desc}
                 </Typography>
-                <EnterButton rolecolor={role.color}>Enter Portal</EnterButton>
+                <EnterButton rolecolor={role.color}>Enter Portal →</EnterButton>
               </RoleCard>
             </Grid>
           ))}
@@ -114,7 +111,7 @@ export default ChooseUser;
 
 const floatCard = keyframes`
   0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-8px); }
+  50%       { transform: translateY(-6px); }
 `;
 
 const StyledMain = styled.div`
@@ -126,10 +123,10 @@ const StyledMain = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 80px 0;
+  padding: 60px 0;
 
   @media (max-width: 600px) {
-    padding: 40px 0 60px;
+    padding: 32px 0 48px;
     align-items: flex-start;
   }
 `;
@@ -143,99 +140,114 @@ const Orb = styled.div`
 
 const PageHeader = styled(Box)`
   text-align: center;
-  margin-bottom: 56px;
+  margin-bottom: 40px;
   animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
 
   @media (max-width: 600px) {
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 `;
 
 const BackBtn = styled(IconButton)`
   && {
-    color: rgba(226,232,255,0.7);
+    position: absolute;
+    top: -48px;
+    left: 0;
+    color: rgba(226,232,255,0.6);
     background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(124,77,255,0.12);
-    width: 40px;
-    height: 40px;
+    border: 1px solid rgba(124,77,255,0.1);
+    width: 36px;
+    height: 36px;
     transition: all 0.25s ease;
-    &:hover { background: rgba(124,77,255,0.12); border-color: rgba(124,77,255,0.3); color: white; }
+    &:hover { background: rgba(124,77,255,0.1); border-color: rgba(124,77,255,0.25); color: white; }
+
+    @media (max-width: 600px) {
+      position: relative;
+      top: 0;
+      margin-bottom: 16px;
+    }
   }
 `;
 
 const RoleCard = styled(Paper)`
   && {
-    padding: 40px 28px;
+    padding: 32px 24px;
     text-align: center;
-    background: rgba(255, 255, 255, 0.055) !important;
+    background: rgba(255, 255, 255, 0.045) !important;
     backdrop-filter: blur(40px) saturate(200%) brightness(1.06) !important;
     -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06) !important;
-    border-radius: 24px !important;
-    border: 1px solid rgba(124, 77, 255, 0.1) !important;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(124,77,255,0.06), inset 0 1px 0 rgba(255,255,255,0.1) !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(124, 77, 255, 0.08) !important;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,77,255,0.05), inset 0 1px 0 rgba(255,255,255,0.08) !important;
     cursor: pointer;
-    transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
     color: white !important;
     animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
 
     @media (max-width: 600px) {
       padding: 24px 20px !important;
-      border-radius: 18px !important;
+      border-radius: 16px !important;
     }
 
     &:hover {
-      transform: translateY(-14px) scale(1.02) !important;
-      border-color: ${props => props.accent ? `${props.accent}60` : 'rgba(110,63,243,0.5)'} !important;
-      box-shadow: 0 28px 60px rgba(0,0,0,0.55), 0 0 0 1px ${props => props.accent ? `${props.accent}40` : 'rgba(124,77,255,0.35)'}, inset 0 1px 0 rgba(255,255,255,0.14) !important;
-      background: rgba(255, 255, 255, 0.085) !important;
+      transform: translateY(-10px) scale(1.02) !important;
+      border-color: ${props => props.accent ? `${props.accent}50` : 'rgba(124,77,255,0.4)'} !important;
+      box-shadow: 0 24px 56px rgba(0,0,0,0.5), 0 0 0 1px ${props => props.accent ? `${props.accent}35` : 'rgba(124,77,255,0.3)'}, inset 0 1px 0 rgba(255,255,255,0.12) !important;
+      background: rgba(255, 255, 255, 0.07) !important;
     }
   }
 `;
 
 const RoleIconBox = styled(Box)`
-  width: 80px;
-  height: 80px;
-  border-radius: 22px;
+  width: 64px;
+  height: 64px;
+  border-radius: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 24px;
-  background: ${props => props.rolecolor ? `${props.rolecolor}14` : 'rgba(124,77,255,0.1)'};
+  margin: 0 auto 16px;
+  background: ${props => props.rolecolor ? `${props.rolecolor}12` : 'rgba(124,77,255,0.08)'};
   color: ${props => props.rolecolor || '#7C4DFF'};
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   animation: ${floatCard} 7s ease-in-out infinite;
 
   @media (max-width: 600px) {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
-    margin-bottom: 16px;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    margin-bottom: 12px;
   }
 
   ${RoleCard}:hover & {
-    transform: scale(1.12);
-    background: ${props => props.rolecolor ? `${props.rolecolor}20` : 'rgba(124,77,255,0.18)'};
+    transform: scale(1.1);
+    background: ${props => props.rolecolor ? `${props.rolecolor}1C` : 'rgba(124,77,255,0.15)'};
   }
 `;
 
 const EnterButton = styled(Box)`
-  margin-top: 28px;
-  padding: 11px 24px;
-  border-radius: 12px;
+  margin-top: 20px;
+  padding: 10px 0;
+  width: 100%;
+  border-radius: 10px;
   font-family: var(--font-body);
   font-weight: 600;
-  font-size: 0.875rem;
-  display: inline-block;
+  font-size: 0.8125rem;
+  text-align: center;
   transition: all 0.25s ease;
   letter-spacing: -0.01em;
   color: ${props => props.rolecolor || '#9B6FF8'};
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(124, 77, 255, 0.1);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(124, 77, 255, 0.08);
+
+  ${RoleCard}:hover & {
+    background: ${props => props.rolecolor ? `${props.rolecolor}18` : 'rgba(124,77,255,0.12)'};
+    border-color: ${props => props.rolecolor ? `${props.rolecolor}30` : 'rgba(124,77,255,0.2)'};
+    color: ${props => props.rolecolor || '#B794F6'};
+  }
 
   @media (max-width: 600px) {
-    margin-top: 18px;
-    padding: 9px 20px;
-    font-size: 0.8125rem;
+    margin-top: 14px;
+    padding: 8px 0;
+    font-size: 0.75rem;
   }
 `;
