@@ -1,11 +1,10 @@
-"""Generate a realistic mock dataset for student performance prediction."""
+"""Generate a realistic mock dataset for student performance prediction using active classes."""
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 import numpy as np
 import pandas as pd
+from dataclasses import dataclass
 
 from .config import (
     DATASET_PATH,
@@ -14,80 +13,130 @@ from .config import (
     LOW_PERFORMANCE_THRESHOLD,
     PERFORMANCE_LABELS,
     RANDOM_STATE,
+    SUBJECT_FEATURES,
+    BASE_SUBJECTS,
 )
-
+from . import db_loader
 
 @dataclass(frozen=True)
 class DatasetProfile:
     size: int = DATASET_SIZE
     random_state: int = RANDOM_STATE
 
-
 def _bounded(values: np.ndarray, low: float, high: float) -> np.ndarray:
     return np.clip(values, low, high)
 
-
 def generate_mock_dataset(profile: DatasetProfile | None = None) -> pd.DataFrame:
-    """Create a structured dataset with patterns a Random Forest can learn."""
+    """Create a structured dataset with patterns matching actual database schema."""
     profile = profile or DatasetProfile()
     rng = np.random.default_rng(profile.random_state)
-
-    departments = np.array(["CSE", "ECE", "EEE", "ME", "CE"])
     
-    department = rng.choice(departments, size=profile.size, p=[0.4, 0.2, 0.15, 0.15, 0.1])
+    # 1. Fetch class definitions
+    classes = db_loader.get_classes()
+    if not classes:
+        print("Warning: No classes fetched from DB. Using fallback.")
+        classes = [{"id": f"dummy_{i}", "sclass_name": f"CSE-202{i}"} for i in range(2, 6)]
+        
+    subjects = db_loader.get_subjects()
     
+    # Map class to its base subjects
+    class_subject_map = {}
+    for c in classes:
+        c_id = c['id']
+        class_subjects = [s for s in subjects if s.get('sclass_id') == c_id]
+        base_names = [db_loader.get_base_subject_name(s['sub_name']) for s in class_subjects]
+        class_subject_map[c_id] = [b for b in base_names if b is not None]
+        
+    # Generate students assigned to classes
+    student_classes = rng.choice(classes, size=profile.size)
+    student_class_ids = [c['id'] for c in student_classes]
+    
+    # Base general features
     attendance_rate = _bounded(rng.normal(75, 15, profile.size), 0, 100)
-    internal_avg_theory = _bounded(rng.normal(20, 5, profile.size), 0, 30)
-    external_avg_theory = _bounded(rng.normal(45, 15, profile.size), 0, 70)
-    internal_avg_practical = _bounded(rng.normal(18, 4, profile.size), 0, 25)
-    external_avg_practical = _bounded(rng.normal(18, 4, profile.size), 0, 25)
-    study_hours_per_week = _bounded(rng.normal(15, 5, profile.size), 0, 30)
     previous_gpa = _bounded(rng.normal(7.5, 1.2, profile.size), 0, 10)
-
-    # Calculate score based on formula
-    performance_score = (
-        attendance_rate * 0.2
-        + (internal_avg_theory / 30 * 100) * 0.15
-        + (external_avg_theory / 70 * 100) * 0.25
-        + (internal_avg_practical / 25 * 100) * 0.1
-        + (external_avg_practical / 25 * 100) * 0.1
-        + (previous_gpa / 10 * 100) * 0.15
-        + (study_hours_per_week / 30 * 100) * 0.05
-        + rng.normal(0, 0.5, profile.size) # Add less noise for higher accuracy
-    )
-
+    
+    # Department derived from class name (e.g. CSE-2022 -> CSE)
+    departments = []
+    for c in student_classes:
+        name = c.get('sclass_name', 'CSE')
+        import re
+        match = re.match(r'^([A-Z]+)', name)
+        departments.append(match.group(1) if match else "CSE")
+        
+    data_dict = {
+        "student_id": [f"STU-{i:04d}" for i in range(1, profile.size + 1)],
+        "department": departments,
+        "attendance_rate": np.round(attendance_rate, 2),
+        "previous_gpa": np.round(previous_gpa, 2)
+    }
+    
+    # Initialize all subject features to -1.0
+    for feat in SUBJECT_FEATURES:
+        data_dict[feat] = np.full(profile.size, -1.0)
+        
+    # Variables to track performance per student
+    total_score_sum = np.zeros(profile.size)
+    total_score_count = np.zeros(profile.size)
+    failing_any_subject = np.zeros(profile.size, dtype=bool)
+        
+    # Generate marks and attendance for enrolled subjects
+    for i in range(profile.size):
+        c_id = student_class_ids[i]
+        # Instead of sparse mapping, the user requested to 'complete' the dataset with dense values for all subjects
+        enrolled_subjects = BASE_SUBJECTS
+        student_score_sum = 0
+        student_score_count = 0
+        failing = False
+        
+        for sub in enrolled_subjects:
+            safe_name = sub.lower().replace(" ", "_")
+            
+            # Generate realistic values
+            # Using same distribution for theory/practical generically since we're just modeling.
+            # Usually internal=30, external=70. Let's make internal 0-30, external 0-70.
+            internal = float(_bounded(rng.normal(20, 5), 0, 30))
+            external = float(_bounded(rng.normal(45, 15), 0, 70))
+            subj_att = float(_bounded(rng.normal(attendance_rate[i], 10), 0, 100))
+            
+            data_dict[f"{safe_name}_internal"][i] = round(internal, 2)
+            data_dict[f"{safe_name}_external"][i] = round(external, 2)
+            data_dict[f"{safe_name}_attendance"][i] = round(subj_att, 2)
+            
+            subj_total = internal + external
+            if subj_total < 40:
+                failing = True
+                
+            student_score_sum += subj_total
+            student_score_count += 100 # Each subject is out of 100
+            
+        total_score_sum[i] = student_score_sum
+        total_score_count[i] = max(1, student_score_count)
+        failing_any_subject[i] = failing
+        
+    # Calculate overall performance score percentage
+    base_performance_score = (total_score_sum / total_score_count) * 100
+    # Add GPA influence and noise
+    performance_score = (base_performance_score * 0.8) + (previous_gpa / 10 * 100) * 0.2 + rng.normal(0, 0.5, profile.size)
+    performance_score = _bounded(performance_score, 0, 100)
+    
+    data_dict["performance_score"] = np.round(performance_score, 2)
+    
     performance_band = pd.cut(
         performance_score,
         bins=[-np.inf, LOW_PERFORMANCE_THRESHOLD, HIGH_PERFORMANCE_THRESHOLD, np.inf],
         labels=PERFORMANCE_LABELS,
     ).astype(str)
-
+    data_dict["performance_band"] = performance_band
+    
+    # at_risk if overall attendance < 60% OR failing any active subject OR performance band is Low
     at_risk = np.where(
-        (attendance_rate < 60)
-        | (external_avg_theory < 28) # Less than 40% of 70
-        | (performance_band == "Low"),
+        (attendance_rate < 60) | failing_any_subject | (performance_band == "Low"),
         "Yes",
-        "No",
+        "No"
     )
-
-    data = pd.DataFrame(
-        {
-            "student_id": [f"STU-{index:04d}" for index in range(1, profile.size + 1)],
-            "department": department,
-            "attendance_rate": np.round(attendance_rate, 2),
-            "internal_avg_theory": np.round(internal_avg_theory, 2),
-            "external_avg_theory": np.round(external_avg_theory, 2),
-            "internal_avg_practical": np.round(internal_avg_practical, 2),
-            "external_avg_practical": np.round(external_avg_practical, 2),
-            "study_hours_per_week": np.round(study_hours_per_week, 2),
-            "previous_gpa": np.round(previous_gpa, 2),
-            "performance_score": np.round(performance_score, 2),
-            "performance_band": performance_band,
-            "at_risk": at_risk,
-        }
-    )
-    return data
-
+    data_dict["at_risk"] = at_risk
+    
+    return pd.DataFrame(data_dict)
 
 def save_mock_dataset(profile: DatasetProfile | None = None) -> pd.DataFrame:
     """Generate and persist the dataset for training and demos."""
@@ -95,7 +144,6 @@ def save_mock_dataset(profile: DatasetProfile | None = None) -> pd.DataFrame:
     DATASET_PATH.parent.mkdir(parents=True, exist_ok=True)
     dataset.to_csv(DATASET_PATH, index=False)
     return dataset
-
 
 if __name__ == "__main__":
     frame = save_mock_dataset()

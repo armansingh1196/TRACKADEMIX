@@ -24,15 +24,32 @@ DATASET_SIZE = 2000
 TARGET_COLUMN = "performance_band"
 RISK_COLUMN = "at_risk"
 
+BASE_SUBJECTS = [
+    "Algorithms",
+    "Data Structures",
+    "Database Systems",
+    "Operating Systems",
+    "Software Engineering",
+    "DSA LAB",
+    "DBMS LAB",
+    "Computer Networks LAB",
+    "Computer Graphics LAB",
+    "Data Science LAB"
+]
+
+SUBJECT_FEATURES = []
+for sub in BASE_SUBJECTS:
+    safe_name = sub.lower().replace(" ", "_")
+    SUBJECT_FEATURES.extend([
+        f"{safe_name}_internal",
+        f"{safe_name}_external",
+        f"{safe_name}_attendance"
+    ])
+
 NUMERIC_FEATURES = [
     "attendance_rate",
-    "internal_avg_theory",
-    "external_avg_theory",
-    "internal_avg_practical",
-    "external_avg_practical",
-    "study_hours_per_week",
     "previous_gpa",
-]
+] + SUBJECT_FEATURES
 
 CATEGORICAL_FEATURES = [
     "department",

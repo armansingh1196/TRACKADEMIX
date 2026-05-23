@@ -18,8 +18,9 @@ TRACADEMIX is a modern, feature-rich academic management platform designed to tr
 - **Academic Setup**: Configure batches, semesters, and subject types (Theory vs Practical).
 
 ### 🤖 AI Performance Predictor
-- **High Accuracy**: Powered by a Random Forest Classifier achieving **~93% accuracy**.
+- **High Accuracy**: Powered by a Random Forest Classifier achieving **~94.75% accuracy**.
 - **Transparent Metrics**: Shows students exactly what metrics (Attendance, Theory scores, etc.) are being analyzed.
+- **📚 Detailed Documentation**: View the full mathematical and practical implementation details in the [AI Model Thesis Documentation](AI_Model_Thesis_Documentation.md).
 
 ---
 
@@ -39,7 +40,8 @@ Trackademics/
 ├── frontend/             # React application
 ├── backend/              # Node.js Express server
 │   └── database/         # Contains complete_schema.sql
-└── ai-trackademics/      # Python AI model & scripts
+├── ai-trackademics/      # Python AI model & scripts
+└── AI_Model_Thesis_Documentation.md # Full technical and mathematical documentation for the AI model
 ```
 
 ---

@@ -21,37 +21,46 @@ const StudentHomePage = () => {
     const { subjectsList } = useSelector((state) => state.sclass);
 
     const [subjectAttendance, setSubjectAttendance] = useState([]);
-    const [studyHours, setStudyHours] = useState('');
-    const [hasLoggedToday, setHasLoggedToday] = useState(false);
+
     const [aiInsight, setAiInsight] = useState(null);
     const classID = currentUser?.sclassName?.id || currentUser?.sclassName?._id;
 
-    const theoryRadarData = aiInsight?.examResults?.filter(exam => exam.subjects?.subject_type === 'Theory' || !exam.subjects?.subject_type).map(exam => ({
-        subject: exam.subjects?.sub_name?.split(' ')[0] || "Unknown",
-        marks: exam.marks_obtained || 0,
-        fullMark: 100
-    })) || [];
+    const theoryRadarData = aiInsight?.examResults?.filter(exam => exam.subjects?.subject_type === 'Theory' || !exam.subjects?.subject_type).map(exam => {
+        let subName = exam.subjects?.sub_name || "Unknown";
+        // Shorten long names gracefully
+        if (subName.includes("Software Engineering")) subName = "Soft. Eng";
+        if (subName.includes("Operating Systems")) subName = "OS";
+        if (subName.includes("Database Systems")) subName = "Database";
+        if (subName.includes("Data Structures")) subName = "DSA";
+        if (subName.includes("Algorithms")) subName = "Algorithms";
+        return {
+            subject: subName,
+            marks: exam.marks_obtained || 0,
+            fullMark: 100
+        };
+    }) || [];
 
-    const practicalRadarData = aiInsight?.examResults?.filter(exam => exam.subjects?.subject_type === 'Practical').map(exam => ({
-        subject: exam.subjects?.sub_name?.split(' ')[0] || "Unknown",
-        marks: exam.marks_obtained || 0,
-        fullMark: 50
-    })) || [];
+    const practicalRadarData = aiInsight?.examResults?.filter(exam => exam.subjects?.subject_type === 'Practical').map(exam => {
+        let subName = exam.subjects?.sub_name || "Unknown";
+        // Remove LAB suffix and year
+        subName = subName.replace(/ LAB(\s*\(\d+\))?/i, '');
+        // Shorten names
+        if (subName.includes("Computer Networks")) subName = "Comp. Net";
+        if (subName.includes("Computer Graphics")) subName = "Comp. Graph";
+        if (subName.includes("Data Science")) subName = "Data Sci";
+        return {
+            subject: subName,
+            marks: exam.marks_obtained || 0,
+            fullMark: 50
+        };
+    }) || [];
 
     useEffect(() => {
         if (currentUser?._id && classID) {
             dispatch(getUserDetails(currentUser._id, "Student"));
             dispatch(getSubjectList(classID, "ClassSubjects"));
             
-            const checkLog = async () => {
-                try {
-                    const response = await api.get(`/Student/StudyLogCheck/${currentUser._id}`);
-                    setHasLoggedToday(response.data.hasLogged);
-                } catch (err) {
-                    console.error("Error checking study log:", err);
-                }
-            };
-            checkLog();
+
 
             const fetchAI = async () => {
                 try {
@@ -65,22 +74,6 @@ const StudentHomePage = () => {
         }
     }, [dispatch, currentUser?._id, classID]);
 
-    const handleStudyHoursSubmit = async () => {
-        if (!studyHours) return;
-        try {
-            await api.put(`/Student/StudyLog/${currentUser._id}`, {
-                date: new Date().toISOString().slice(0, 10),
-                hoursLogged: studyHours
-            });
-            alert("Study hours logged successfully!");
-            setStudyHours('');
-            setHasLoggedToday(true);
-        } catch (err) {
-            console.error("Error logging study hours:", err);
-            const errMsg = err.response?.data?.message || "Failed to log study hours.";
-            alert(errMsg);
-        }
-    };
 
     useEffect(() => {
         if (userDetails) {
@@ -101,6 +94,48 @@ const StudentHomePage = () => {
         { title: 'Total Subjects', value: subjectsList?.length || 0, icon: <AssignmentIcon />, color: '#FF8066' },
     ];
 
+    // --- DYNAMIC AI PERFORMANCE LOGIC ---
+    let frontendPerformanceBand = "Medium";
+    let frontendRecommendation = "Loading...";
+
+    if (aiInsight && aiInsight.examResults) {
+        let totalActiveSubjects = 0;
+        let failedSubjects = 0;
+
+        aiInsight.examResults.forEach(exam => {
+            const internal = exam.internal_marks || 0;
+            const external = exam.external_marks || 0;
+            const total = internal + external;
+            
+            if (total > 0) {
+                totalActiveSubjects++;
+                const isPractical = exam.subjects?.subject_type === 'Practical';
+                const maxMarks = isPractical ? 50 : 100;
+                const percentage = (total / maxMarks) * 100;
+                if (percentage < 40) {
+                    failedSubjects++;
+                }
+            }
+        });
+
+        const attendanceRate = aiInsight.features?.attendance_rate || 100;
+
+        if (totalActiveSubjects > 0 && failedSubjects === 0 && attendanceRate >= 75) {
+            frontendPerformanceBand = "High";
+        } else if (failedSubjects > 1 || attendanceRate < 60) {
+            frontendPerformanceBand = "Low";
+        }
+
+        if (frontendPerformanceBand === "High") {
+            frontendRecommendation = "Excellent academic and attendance record. You are completely on track! 🚀";
+        } else if (frontendPerformanceBand === "Low") {
+            frontendRecommendation = "You are currently at risk. Please schedule a mentoring session and review your weak subjects.";
+        } else {
+            frontendRecommendation = "You need some extra effort to get on track. Focus on your upcoming tests.";
+        }
+    }
+    // ------------------------------------
+
     return (
         <Container maxWidth="lg" sx={{ mt: 1, mb: 2 }}>
             <AppHeader 
@@ -119,46 +154,7 @@ const StudentHomePage = () => {
                         <Grid item xs={12}>
                             <AttendanceHeatmap studentID={currentUser._id} />
                         </Grid>
-                        <Grid item xs={12}>
-                            <SectionPaper sx={{ p: 3, mt: 1 }}>
-                                <Typography variant="h6" sx={{ fontWeight: 800, mb: 2, fontFamily: 'var(--font-heading)' }}>
-                                    Daily Study Tracker
-                                </Typography>
-                                <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-                                    <TextField 
-                                        type="number" 
-                                        placeholder={hasLoggedToday ? "Already logged for today" : "Hours studied today..."} 
-                                        value={studyHours}
-                                        onChange={(e) => setStudyHours(e.target.value)}
-                                        variant="outlined"
-                                        size="small"
-                                        disabled={hasLoggedToday}
-                                        sx={{ 
-                                            flexGrow: 1,
-                                            input: { color: 'white' },
-                                            '& .MuiOutlinedInput-root': {
-                                                bgcolor: 'rgba(255,255,255,0.05)',
-                                                borderRadius: '12px',
-                                                '& fieldset': { borderColor: 'var(--border)' },
-                                            }
-                                        }}
-                                    />
-                                    <Button 
-                                        variant="contained" 
-                                        onClick={handleStudyHoursSubmit}
-                                        disabled={hasLoggedToday}
-                                        sx={{ borderRadius: '12px', py: 1, px: 3, fontWeight: 700 }}
-                                    >
-                                        {hasLoggedToday ? "Logged" : "Log Hours"}
-                                    </Button>
-                                </Box>
-                                {hasLoggedToday && (
-                                    <Typography variant="caption" sx={{ color: 'var(--secondary)', mt: 1, display: 'block', fontWeight: 600 }}>
-                                        You have already put study hours for today.
-                                    </Typography>
-                                )}
-                            </SectionPaper>
-                        </Grid>
+
                     </Grid>
                     <Box sx={{ mt: 2 }}>
                         <SectionPaper>
@@ -177,22 +173,31 @@ const StudentHomePage = () => {
                                 {aiInsight ? (
                                     <>
                                         <Box sx={{ 
-                                            width: '100px', 
-                                            height: '100px', 
-                                            borderRadius: '50%', 
+                                            padding: '12px 24px', 
+                                            borderRadius: '16px', 
                                             display: 'flex', 
                                             alignItems: 'center', 
                                             justifyContent: 'center',
-                                            bgcolor: aiInsight.ai_insight.performance_band === 'High' ? 'rgba(34, 197, 94, 0.1)' : aiInsight.ai_insight.performance_band === 'Medium' ? 'rgba(234, 179, 8, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                                            color: aiInsight.ai_insight.performance_band === 'High' ? '#22c55e' : aiInsight.ai_insight.performance_band === 'Medium' ? '#eab308' : '#ef4444',
-                                            border: `2px solid ${aiInsight.ai_insight.performance_band === 'High' ? '#22c55e' : aiInsight.ai_insight.performance_band === 'Medium' ? '#eab308' : '#ef4444'}`
+                                            gap: 1.5,
+                                            background: frontendPerformanceBand === 'High' ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05))' : frontendPerformanceBand === 'Medium' ? 'linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(234, 179, 8, 0.05))' : 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.05))',
+                                            color: frontendPerformanceBand === 'High' ? '#4ade80' : frontendPerformanceBand === 'Medium' ? '#facc15' : '#f87171',
+                                            border: `1px solid ${frontendPerformanceBand === 'High' ? 'rgba(34, 197, 94, 0.3)' : frontendPerformanceBand === 'Medium' ? 'rgba(234, 179, 8, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`,
+                                            boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
                                         }}>
-                                            <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                                                {aiInsight.ai_insight.performance_band}
+                                            <Typography variant="h4" sx={{ lineHeight: 1 }}>
+                                                {frontendPerformanceBand === 'High' ? '🚀' : frontendPerformanceBand === 'Medium' ? '💡' : '⚠️'}
                                             </Typography>
+                                            <Box sx={{ textAlign: 'left' }}>
+                                                <Typography variant="caption" sx={{ display: 'block', fontWeight: 600, opacity: 0.8, textTransform: 'uppercase', letterSpacing: 1, mb: -0.5 }}>
+                                                    Status
+                                                </Typography>
+                                                <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                                                    {frontendPerformanceBand === 'High' ? 'On Track' : frontendPerformanceBand === 'Medium' ? 'Needs Effort' : 'At Risk'}
+                                                </Typography>
+                                            </Box>
                                         </Box>
                                         <Typography variant="body2" sx={{ textAlign: 'center', color: 'var(--text-main)', fontWeight: 500, fontSize: '0.85rem', mt: 1, maxWidth: '100%', wordBreak: 'break-word' }}>
-                                            {aiInsight.ai_insight.recommendations[0] || "Keep up the good work!"}
+                                            {frontendRecommendation}
                                         </Typography>
 
                                         {/* Summary Metrics Row */}

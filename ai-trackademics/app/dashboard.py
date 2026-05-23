@@ -26,6 +26,7 @@ from src.student_performance_ai.config import (
     TARGET_DISTRIBUTION_PLOT,
 )
 from src.student_performance_ai.inference import predict_student
+from src.student_performance_ai import db_loader
 
 
 st.set_page_config(page_title="Student Performance AI", layout="wide")
@@ -578,209 +579,114 @@ def _render_dashboard(
             unsafe_allow_html=True,
         )
 
+        st.subheader("Load Student from Database")
+        students = db_loader.fetch_table("students")
+        student_options = {"": "Custom / Manual Entry"}
+        for s in students:
+            student_options[s["id"]] = f"{s.get('name', s.get('first_name', ''))} ({s.get('email', '')})"
+        
+        selected_student_id = st.selectbox("Select Student", list(student_options.keys()), format_func=lambda x: student_options[x])
+
+        from src.student_performance_ai.config import BASE_SUBJECTS, SUBJECT_FEATURES
+        active_subjects = BASE_SUBJECTS
+        
+        # Initialize default values
+        current_vals = {f: -1.0 for f in SUBJECT_FEATURES}
+        current_vals["attendance_rate"] = float(defaults.get("attendance_rate", 75.0))
+        current_vals["previous_gpa"] = float(defaults.get("previous_gpa", 7.5))
+        current_vals["department"] = defaults.get("department", "CSE")
+
+        if selected_student_id:
+            # Fetch data
+            exam_results = db_loader.fetch_table("exam_results")
+            attendance_records = db_loader.fetch_table("attendance_records")
+            all_subjects = db_loader.get_subjects()
+            
+            student = [s for s in students if s["id"] == selected_student_id][0]
+            sclass_id = student.get("sclass_id")
+            
+            # Identify active subjects
+            class_subjects = [s for s in all_subjects if s.get('sclass_id') == sclass_id]
+            subject_id_to_base = {}
+            active_subjects = []
+            for s in class_subjects:
+                base = db_loader.get_base_subject_name(s['sub_name'])
+                if base:
+                    active_subjects.append(base)
+                    subject_id_to_base[s['id']] = base
+
+            # Calculate attendance rate
+            student_attendance = [a for a in attendance_records if a.get('student_id') == selected_student_id]
+            if student_attendance:
+                present = len([a for a in student_attendance if a.get('status') == 'Present'])
+                late = len([a for a in student_attendance if a.get('status') == 'Late'])
+                current_vals["attendance_rate"] = ((present + 0.5 * late) / len(student_attendance)) * 100
+
+            # Assign subject marks and subject attendance
+            student_exams = [e for e in exam_results if e.get('student_id') == selected_student_id]
+            
+            for base in active_subjects:
+                safe_name = base.lower().replace(" ", "_")
+                # Default for active subject is 0 instead of -1
+                current_vals[f"{safe_name}_internal"] = 0.0
+                current_vals[f"{safe_name}_external"] = 0.0
+                current_vals[f"{safe_name}_attendance"] = current_vals["attendance_rate"] # default to overall
+                
+            for e in student_exams:
+                s_id = e.get('subject_id')
+                if s_id in subject_id_to_base:
+                    base = subject_id_to_base[s_id]
+                    safe_name = base.lower().replace(" ", "_")
+                    current_vals[f"{safe_name}_internal"] = float(e.get('internal_marks') or 0.0)
+                    current_vals[f"{safe_name}_external"] = float(e.get('external_marks') or 0.0)
+
+        else:
+            # If no student selected, all base subjects are active, initialized to defaults
+            for base in active_subjects:
+                safe_name = base.lower().replace(" ", "_")
+                current_vals[f"{safe_name}_internal"] = 20.0
+                current_vals[f"{safe_name}_external"] = 45.0
+                current_vals[f"{safe_name}_attendance"] = current_vals["attendance_rate"]
+
         with st.form("student_prediction_form"):
             if stack:
-                department = st.selectbox(
-                    "Department",
-                    sorted(dataset["department"].unique()),
-                    index=sorted(dataset["department"].unique()).index(defaults["department"]),
-                )
-                study_mode = st.selectbox(
-                    "Study Mode",
-                    sorted(dataset["study_mode"].unique()),
-                    index=sorted(dataset["study_mode"].unique()).index(defaults["study_mode"]),
-                )
-                internet_access = st.selectbox(
-                    "Internet Access",
-                    ["Yes", "No"],
-                    index=["Yes", "No"].index(defaults["internet_access"]),
-                )
-                part_time_job = st.selectbox(
-                    "Part-Time Job",
-                    ["Yes", "No"],
-                    index=["Yes", "No"].index(defaults["part_time_job"]),
-                )
-                extracurricular_activity = st.selectbox(
-                    "Extracurricular Activity",
-                    ["Yes", "No"],
-                    index=["Yes", "No"].index(defaults["extracurricular_activity"]),
-                )
-                previous_gpa = st.slider(
-                    "Previous GPA",
-                    min_value=1.0,
-                    max_value=4.0,
-                    value=float(defaults["previous_gpa"]),
-                    step=0.01,
-                )
-                study_hours_per_week = st.slider(
-                    "Study Hours Per Week",
-                    min_value=0.0,
-                    max_value=40.0,
-                    value=float(defaults["study_hours_per_week"]),
-                    step=0.5,
-                )
-                attendance_rate = st.slider(
-                    "Attendance Rate",
-                    min_value=0.0,
-                    max_value=100.0,
-                    value=float(defaults["attendance_rate"]),
-                    step=0.5,
-                )
-                assignment_average = st.slider(
-                    "Assignment Average",
-                    min_value=0.0,
-                    max_value=100.0,
-                    value=float(defaults["assignment_average"]),
-                    step=0.5,
-                )
-                quiz_average = st.slider(
-                    "Quiz Average",
-                    min_value=0.0,
-                    max_value=100.0,
-                    value=float(defaults["quiz_average"]),
-                    step=0.5,
-                )
-                internal_exam_score = st.slider(
-                    "Internal Exam Score",
-                    min_value=0.0,
-                    max_value=100.0,
-                    value=float(defaults["internal_exam_score"]),
-                    step=0.5,
-                )
-                lab_performance = st.slider(
-                    "Lab Performance",
-                    min_value=0.0,
-                    max_value=100.0,
-                    value=float(defaults["lab_performance"]),
-                    step=0.5,
-                )
-                project_score = st.slider(
-                    "Project Score",
-                    min_value=0.0,
-                    max_value=100.0,
-                    value=float(defaults["project_score"]),
-                    step=0.5,
-                )
-                lms_logins_per_week = st.slider(
-                    "LMS Logins Per Week",
-                    min_value=0.0,
-                    max_value=30.0,
-                    value=float(defaults["lms_logins_per_week"]),
-                    step=1.0,
-                )
+                department = st.selectbox("Department", ["CSE", "ECE", "EEE", "ME", "CE"], index=["CSE", "ECE", "EEE", "ME", "CE"].index(current_vals["department"]))
+                previous_gpa = st.slider("Previous GPA", min_value=0.0, max_value=10.0, value=current_vals["previous_gpa"], step=0.01)
+                attendance_rate = st.slider("Overall Attendance Rate", min_value=0.0, max_value=100.0, value=current_vals["attendance_rate"], step=0.5)
+                
+                for base in active_subjects:
+                    st.markdown(f"**{base}**")
+                    safe_name = base.lower().replace(" ", "_")
+                    current_vals[f"{safe_name}_internal"] = st.slider(f"{base} Internal", 0.0, 30.0, current_vals[f"{safe_name}_internal"], 0.5, key=f"s_{safe_name}_int")
+                    current_vals[f"{safe_name}_external"] = st.slider(f"{base} External", 0.0, 70.0, current_vals[f"{safe_name}_external"], 0.5, key=f"s_{safe_name}_ext")
+                    current_vals[f"{safe_name}_attendance"] = st.slider(f"{base} Attendance", 0.0, 100.0, current_vals[f"{safe_name}_attendance"], 0.5, key=f"s_{safe_name}_att")
             else:
                 form_left, form_right = st.columns(2)
                 with form_left:
-                    department = st.selectbox(
-                        "Department",
-                        sorted(dataset["department"].unique()),
-                        index=sorted(dataset["department"].unique()).index(defaults["department"]),
-                    )
-                    study_mode = st.selectbox(
-                        "Study Mode",
-                        sorted(dataset["study_mode"].unique()),
-                        index=sorted(dataset["study_mode"].unique()).index(defaults["study_mode"]),
-                    )
-                    internet_access = st.selectbox(
-                        "Internet Access",
-                        ["Yes", "No"],
-                        index=["Yes", "No"].index(defaults["internet_access"]),
-                    )
-                    part_time_job = st.selectbox(
-                        "Part-Time Job",
-                        ["Yes", "No"],
-                        index=["Yes", "No"].index(defaults["part_time_job"]),
-                    )
-                    extracurricular_activity = st.selectbox(
-                        "Extracurricular Activity",
-                        ["Yes", "No"],
-                        index=["Yes", "No"].index(defaults["extracurricular_activity"]),
-                    )
-                    previous_gpa = st.slider(
-                        "Previous GPA",
-                        min_value=1.0,
-                        max_value=4.0,
-                        value=float(defaults["previous_gpa"]),
-                        step=0.01,
-                    )
-                    study_hours_per_week = st.slider(
-                        "Study Hours Per Week",
-                        min_value=0.0,
-                        max_value=40.0,
-                        value=float(defaults["study_hours_per_week"]),
-                        step=0.5,
-                    )
+                    department = st.selectbox("Department", ["CSE", "ECE", "EEE", "ME", "CE"], index=["CSE", "ECE", "EEE", "ME", "CE"].index(current_vals["department"]))
+                    previous_gpa = st.slider("Previous GPA", min_value=0.0, max_value=10.0, value=current_vals["previous_gpa"], step=0.01)
                 with form_right:
-                    attendance_rate = st.slider(
-                        "Attendance Rate",
-                        min_value=0.0,
-                        max_value=100.0,
-                        value=float(defaults["attendance_rate"]),
-                        step=0.5,
-                    )
-                    assignment_average = st.slider(
-                        "Assignment Average",
-                        min_value=0.0,
-                        max_value=100.0,
-                        value=float(defaults["assignment_average"]),
-                        step=0.5,
-                    )
-                    quiz_average = st.slider(
-                        "Quiz Average",
-                        min_value=0.0,
-                        max_value=100.0,
-                        value=float(defaults["quiz_average"]),
-                        step=0.5,
-                    )
-                    internal_exam_score = st.slider(
-                        "Internal Exam Score",
-                        min_value=0.0,
-                        max_value=100.0,
-                        value=float(defaults["internal_exam_score"]),
-                        step=0.5,
-                    )
-                    lab_performance = st.slider(
-                        "Lab Performance",
-                        min_value=0.0,
-                        max_value=100.0,
-                        value=float(defaults["lab_performance"]),
-                        step=0.5,
-                    )
-                    project_score = st.slider(
-                        "Project Score",
-                        min_value=0.0,
-                        max_value=100.0,
-                        value=float(defaults["project_score"]),
-                        step=0.5,
-                    )
-                    lms_logins_per_week = st.slider(
-                        "LMS Logins Per Week",
-                        min_value=0.0,
-                        max_value=30.0,
-                        value=float(defaults["lms_logins_per_week"]),
-                        step=1.0,
-                    )
+                    attendance_rate = st.slider("Overall Attendance Rate", min_value=0.0, max_value=100.0, value=current_vals["attendance_rate"], step=0.5)
+                    
+                st.markdown("### Subject Details")
+                sub_cols = st.columns(3)
+                col_idx = 0
+                for base in active_subjects:
+                    with sub_cols[col_idx % 3]:
+                        st.markdown(f"**{base}**")
+                        safe_name = base.lower().replace(" ", "_")
+                        current_vals[f"{safe_name}_internal"] = st.slider(f"{base} Internal", 0.0, 30.0, current_vals[f"{safe_name}_internal"], 0.5, key=f"{safe_name}_int")
+                        current_vals[f"{safe_name}_external"] = st.slider(f"{base} External", 0.0, 70.0, current_vals[f"{safe_name}_external"], 0.5, key=f"{safe_name}_ext")
+                        current_vals[f"{safe_name}_attendance"] = st.slider(f"{base} Attendance", 0.0, 100.0, current_vals[f"{safe_name}_attendance"], 0.5, key=f"{safe_name}_att")
+                    col_idx += 1
 
             submitted = st.form_submit_button("Predict Student Performance", use_container_width=True)
 
         if submitted:
-            student_data = {
-                "department": department,
-                "study_mode": study_mode,
-                "internet_access": internet_access,
-                "part_time_job": part_time_job,
-                "extracurricular_activity": extracurricular_activity,
-                "attendance_rate": attendance_rate,
-                "assignment_average": assignment_average,
-                "quiz_average": quiz_average,
-                "internal_exam_score": internal_exam_score,
-                "lab_performance": lab_performance,
-                "study_hours_per_week": study_hours_per_week,
-                "lms_logins_per_week": lms_logins_per_week,
-                "previous_gpa": previous_gpa,
-                "project_score": project_score,
-            }
-            result = predict_student(student_data)
+            current_vals["department"] = department
+            current_vals["previous_gpa"] = previous_gpa
+            current_vals["attendance_rate"] = attendance_rate
+            result = predict_student(current_vals)
 
             if stack:
                 st.markdown(
@@ -841,9 +747,6 @@ def _render_dashboard(
         view_columns = [
             "department",
             "attendance_rate",
-            "assignment_average",
-            "quiz_average",
-            "internal_exam_score",
             "previous_gpa",
             "actual_band",
             "predicted_band",

@@ -7,75 +7,100 @@
   },
   "feature_columns": [
     "attendance_rate",
-    "internal_avg_theory",
-    "external_avg_theory",
-    "internal_avg_practical",
-    "external_avg_practical",
-    "study_hours_per_week",
     "previous_gpa",
+    "algorithms_internal",
+    "algorithms_external",
+    "algorithms_attendance",
+    "data_structures_internal",
+    "data_structures_external",
+    "data_structures_attendance",
+    "database_systems_internal",
+    "database_systems_external",
+    "database_systems_attendance",
+    "operating_systems_internal",
+    "operating_systems_external",
+    "operating_systems_attendance",
+    "software_engineering_internal",
+    "software_engineering_external",
+    "software_engineering_attendance",
+    "dsa_lab_internal",
+    "dsa_lab_external",
+    "dsa_lab_attendance",
+    "dbms_lab_internal",
+    "dbms_lab_external",
+    "dbms_lab_attendance",
+    "computer_networks_lab_internal",
+    "computer_networks_lab_external",
+    "computer_networks_lab_attendance",
+    "computer_graphics_lab_internal",
+    "computer_graphics_lab_external",
+    "computer_graphics_lab_attendance",
+    "data_science_lab_internal",
+    "data_science_lab_external",
+    "data_science_lab_attendance",
     "department"
   ],
   "top_features": [
     {
-      "feature": "numeric__external_avg_theory",
-      "importance": 0.35066905264753717
+      "feature": "numeric__algorithms_external",
+      "importance": 0.11952482017913597
     },
     {
-      "feature": "numeric__attendance_rate",
-      "importance": 0.25071493280406126
+      "feature": "numeric__database_systems_external",
+      "importance": 0.07644096980744006
     },
     {
-      "feature": "numeric__internal_avg_theory",
-      "importance": 0.11555739984733068
+      "feature": "numeric__operating_systems_attendance",
+      "importance": 0.07573117595890858
+    },
+    {
+      "feature": "numeric__algorithms_attendance",
+      "importance": 0.07566431822253239
+    },
+    {
+      "feature": "numeric__database_systems_attendance",
+      "importance": 0.0717734759493967
+    },
+    {
+      "feature": "numeric__data_structures_external",
+      "importance": 0.07141361998834117
+    },
+    {
+      "feature": "numeric__data_structures_internal",
+      "importance": 0.06943761629188987
+    },
+    {
+      "feature": "numeric__operating_systems_external",
+      "importance": 0.06142652953860507
+    },
+    {
+      "feature": "numeric__operating_systems_internal",
+      "importance": 0.05930443179634682
     },
     {
       "feature": "numeric__previous_gpa",
-      "importance": 0.07033547849474467
-    },
-    {
-      "feature": "numeric__internal_avg_practical",
-      "importance": 0.06585060113950608
-    },
-    {
-      "feature": "numeric__external_avg_practical",
-      "importance": 0.05836987535715102
-    },
-    {
-      "feature": "numeric__study_hours_per_week",
-      "importance": 0.05427941562385049
-    },
-    {
-      "feature": "categorical__department_ECE",
-      "importance": 0.01350406604145839
-    },
-    {
-      "feature": "categorical__department_CSE",
-      "importance": 0.011397725004125255
-    },
-    {
-      "feature": "categorical__department_CE",
-      "importance": 0.0034223237338369115
+      "importance": 0.05361621446333649
     }
   ],
   "model_choice": "Random Forest Classifier",
   "key_metrics": {
-    "accuracy": 0.9275,
-    "weighted_f1": 0.9236,
+    "accuracy": 0.9375,
+    "weighted_f1": 0.9367,
     "confusion_matrix": [
       [
-        0,
         2,
+        0,
         0
       ],
       [
         0,
-        309,
-        9
+        32,
+        1
       ],
       [
         0,
-        18,
-        62
+        2,
+        11
       ]
     ],
     "class_labels": [
@@ -83,7 +108,7 @@
       "Medium",
       "High"
     ],
-    "train_rows": 1600,
-    "test_rows": 400
+    "train_rows": 192,
+    "test_rows": 48
   }
 }

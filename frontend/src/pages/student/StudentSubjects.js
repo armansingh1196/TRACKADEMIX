@@ -88,18 +88,31 @@ const StudentSubjects = () => {
                             <TableHead>
                                 <StyledTableRow>
                                     <StyledTableCell>Subject Name</StyledTableCell>
-                                    <StyledTableCell align="center">Obtained Marks</StyledTableCell>
+                                    <StyledTableCell align="center">Internal (30)</StyledTableCell>
+                                    <StyledTableCell align="center">External (70)</StyledTableCell>
+                                    <StyledTableCell align="center">Total Marks</StyledTableCell>
                                     <StyledTableCell align="right">Status</StyledTableCell>
                                 </StyledTableRow>
                             </TableHead>
                             <TableBody>
                                 {theoryMarks.map((result, index) => {
+                                    const internal = result.internal_marks || 0;
+                                    const external = result.external_marks || 0;
                                     const marks = result.marks_obtained || 0;
-                                    const isPassing = marks >= 40;
+                                    const isIntPass = internal >= 12;
+                                    const isExtPass = external >= 28;
+                                    const isPassing = marks >= 40 && isIntPass && isExtPass;
+                                    
                                     return (
                                         <StyledTableRow key={index}>
                                             <StyledTableCell sx={{ color: 'white', fontWeight: 600 }}>
                                                 {result.subjects.sub_name}
+                                            </StyledTableCell>
+                                            <StyledTableCell align="center" sx={{ color: isIntPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
+                                                {internal} {isIntPass ? '' : '(Fail)'}
+                                            </StyledTableCell>
+                                            <StyledTableCell align="center" sx={{ color: isExtPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
+                                                {external} {isExtPass ? '' : '(Fail)'}
                                             </StyledTableCell>
                                             <StyledTableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800, fontSize: '1.1rem' }}>
                                                 {marks}
@@ -125,18 +138,30 @@ const StudentSubjects = () => {
                                     <TableHead>
                                         <StyledTableRow>
                                             <StyledTableCell>Subject Name</StyledTableCell>
-                                            <StyledTableCell align="center">Obtained Marks</StyledTableCell>
+                                            <StyledTableCell align="center">Internal (20)</StyledTableCell>
+                                            <StyledTableCell align="center">External (30)</StyledTableCell>
+                                            <StyledTableCell align="center">Total Marks</StyledTableCell>
                                             <StyledTableCell align="right">Status</StyledTableCell>
                                         </StyledTableRow>
                                     </TableHead>
                                     <TableBody>
                                         {practicalMarks.map((result, index) => {
+                                            const internal = result.internal_marks || 0;
+                                            const external = result.external_marks || 0;
                                             const marks = result.marks_obtained || 0;
-                                            const isPassing = marks >= 20; // 40% of 50 is 20
+                                            const isIntPass = internal >= 8;
+                                            const isExtPass = external >= 12;
+                                            const isPassing = marks >= 20 && isIntPass && isExtPass;
                                             return (
                                                 <StyledTableRow key={index}>
                                                     <StyledTableCell sx={{ color: 'white', fontWeight: 600 }}>
                                                         {result.subjects.sub_name}
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="center" sx={{ color: isIntPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
+                                                        {internal} {isIntPass ? '' : '(Fail)'}
+                                                    </StyledTableCell>
+                                                    <StyledTableCell align="center" sx={{ color: isExtPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
+                                                        {external} {isExtPass ? '' : '(Fail)'}
                                                     </StyledTableCell>
                                                     <StyledTableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800, fontSize: '1.1rem' }}>
                                                         {marks}

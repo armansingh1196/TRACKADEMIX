@@ -103,6 +103,7 @@ const getAIRecommendations = async (req, res) => {
         }
 
         const inputPayload = {
+            student_id: studentId,
             attendance_rate: attendanceRate,
             internal_avg_theory: internalAvgTheory,
             external_avg_theory: externalAvgTheory,
