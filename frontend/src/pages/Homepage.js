@@ -12,113 +12,146 @@ const Homepage = () => {
 
     return (
         <StyledMain>
-            <BackgroundDecor />
+            <Orb style={{ top: '-10%', right: '-5%', width: 600, height: 600, background: 'radial-gradient(circle, rgba(110,63,243,0.18) 0%, transparent 70%)' }} />
+            <Orb style={{ bottom: '-15%', left: '-8%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(10,132,255,0.1) 0%, transparent 70%)' }} />
+            <Orb style={{ top: '40%', left: '30%', width: 300, height: 300, background: 'radial-gradient(circle, rgba(110,63,243,0.06) 0%, transparent 70%)' }} />
+
             <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, height: '100%', display: 'flex', alignItems: 'center' }}>
-                <Grid container spacing={6} alignItems="center">
+                <Grid container spacing={{ xs: 4, md: 8 }} alignItems="center">
+
+                    {/* Left — Hero */}
                     <Grid item xs={12} md={7}>
                         <ContentBox>
-                            <Badge>
-                                <RocketLaunchOutlinedIcon sx={{ fontSize: 16 }} />
+                            <PillBadge>
+                                <RocketLaunchOutlinedIcon sx={{ fontSize: 13 }} />
                                 Next-Gen Academic Management
-                            </Badge>
-                            <MainTitle variant="h1">
-                                TRACAD<span>EMIX</span>
+                            </PillBadge>
+
+                            <HeroTitle>
+                                TRACAD<AccentSpan>EMIX</AccentSpan>
                                 <br />
-                                Institutional Clarity.
-                            </MainTitle>
-                            <Description variant="body1">
-                                The TRACADEMIX Institutional Management system 
-                                provides a unified, secure ecosystem for record management, 
-                                attendance tracking, and performance analytics.
-                            </Description>
-                            
-                            <ActionButtons>
-                                <AppButton 
-                                    variant="contained" 
+                                Institutional<br />Clarity.
+                            </HeroTitle>
+
+                            <HeroSubtitle>
+                                A unified, secure ecosystem for record management,
+                                attendance tracking, and AI-powered performance analytics.
+                            </HeroSubtitle>
+
+                            <CTARow>
+                                <AppButton
+                                    variant="contained"
                                     size="large"
                                     onClick={() => navigate('/choose')}
-                                    sx={{ 
-                                        px: 5, py: 2, fontSize: '1.2rem', 
-                                        background: 'var(--gradient-vibrant) !important',
-                                        boxShadow: '0 10px 30px rgba(132, 94, 194, 0.4) !important'
+                                    sx={{
+                                        px: 4, py: 1.75,
+                                        fontSize: '1rem !important',
+                                        borderRadius: '14px !important',
+                                        background: '#6E3FF3 !important',
+                                        boxShadow: '0 8px 32px rgba(110,63,243,0.45) !important',
+                                        fontWeight: 600,
                                     }}
                                 >
                                     Get Started
                                 </AppButton>
-                                <AppButton 
-                                    variant="outlined" 
+                                <AppButton
+                                    variant="outlined"
                                     size="large"
                                     onClick={() => navigate('/chooseasguest')}
-                                    sx={{ 
-                                        px: 5, py: 2, fontSize: '1.2rem', 
-                                        color: 'white', 
-                                        borderColor: 'var(--primary)',
-                                        borderWidth: '2px !important',
-                                        '&:hover': { background: 'rgba(132, 94, 194, 0.1) !important' }
+                                    sx={{
+                                        px: 4, py: 1.75,
+                                        fontSize: '1rem !important',
+                                        borderRadius: '14px !important',
+                                        color: 'rgba(235,235,245,0.8) !important',
+                                        borderColor: 'rgba(84,84,88,0.7) !important',
+                                        background: 'rgba(120,120,128,0.1) !important',
+                                        '&:hover': {
+                                            borderColor: 'rgba(110,63,243,0.5) !important',
+                                            background: 'rgba(110,63,243,0.08) !important',
+                                        }
                                     }}
                                 >
                                     Guest Demo
                                 </AppButton>
-                            </ActionButtons>
+                            </CTARow>
 
-                            <SignUpText>
-                                Administrator or HOD? <span onClick={() => navigate('/Adminregister')}>Establish your portal</span>
-                            </SignUpText>
+                            <FooterNote>
+                                Administrator or HOD?{' '}
+                                <span onClick={() => navigate('/Adminregister')}>Establish your portal</span>
+                            </FooterNote>
                         </ContentBox>
                     </Grid>
 
+                    {/* Right — Glass Cards */}
                     <Grid item xs={12} md={5} sx={{ display: { xs: 'none', md: 'block' } }}>
-                        <VisualStack>
-                            <GlassCard className="top-card">
-                                <IconWrapper color="var(--primary)">
-                                    <SchoolOutlinedIcon />
-                                </IconWrapper>
+                        <CardsStack>
+                            <FeatureCard className="card-1">
+                                <CardIcon style={{ background: 'rgba(110,63,243,0.14)', color: '#9B6FF8' }}>
+                                    <SchoolOutlinedIcon sx={{ fontSize: 28 }} />
+                                </CardIcon>
                                 <Box>
-                                    <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.5, fontFamily: 'Outfit' }}>Centralized Control</Typography>
-                                    <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>Manage every department from one unified dashboard.</Typography>
+                                    <Typography sx={{ fontFamily: 'var(--font-sf)', fontWeight: 600, fontSize: '1rem', color: '#fff', letterSpacing: '-0.02em', mb: '3px' }}>
+                                        Centralized Control
+                                    </Typography>
+                                    <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: '0.875rem', color: 'rgba(235,235,245,0.45)', lineHeight: 1.4 }}>
+                                        Manage every department from one unified dashboard.
+                                    </Typography>
                                 </Box>
-                            </GlassCard>
-                            <GlassCard className="middle-card">
-                                <IconWrapper color="var(--secondary)">
-                                    <SecurityOutlinedIcon />
-                                </IconWrapper>
+                            </FeatureCard>
+
+                            <FeatureCard className="card-2">
+                                <CardIcon style={{ background: 'rgba(10,132,255,0.14)', color: '#0A84FF' }}>
+                                    <SecurityOutlinedIcon sx={{ fontSize: 28 }} />
+                                </CardIcon>
                                 <Box>
-                                    <Typography variant="h6" sx={{ fontWeight: 800, mb: 0.5, fontFamily: 'Outfit' }}>Secure Infrastructure</Typography>
-                                    <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>Bank-grade encryption for all institutional data.</Typography>
+                                    <Typography sx={{ fontFamily: 'var(--font-sf)', fontWeight: 600, fontSize: '1rem', color: '#fff', letterSpacing: '-0.02em', mb: '3px' }}>
+                                        Secure Infrastructure
+                                    </Typography>
+                                    <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: '0.875rem', color: 'rgba(235,235,245,0.45)', lineHeight: 1.4 }}>
+                                        Bank-grade encryption for all institutional data.
+                                    </Typography>
                                 </Box>
-                            </GlassCard>
-                            <FloatingStats>
-                                <StatBox>
-                                    <Typography className="val">24/7</Typography>
-                                    <Typography className="lab">Uptime</Typography>
-                                </StatBox>
-                                <StatBox>
-                                    <Typography className="val">100%</Typography>
-                                    <Typography className="lab">Secure</Typography>
-                                </StatBox>
-                            </FloatingStats>
-                        </VisualStack>
+                            </FeatureCard>
+
+                            <StatsRow>
+                                <StatPill>
+                                    <span className="val">24/7</span>
+                                    <span className="lab">Uptime</span>
+                                </StatPill>
+                                <StatPill>
+                                    <span className="val">100%</span>
+                                    <span className="lab">Secure</span>
+                                </StatPill>
+                                <StatPill>
+                                    <span className="val">AI</span>
+                                    <span className="lab">Powered</span>
+                                </StatPill>
+                            </StatsRow>
+                        </CardsStack>
                     </Grid>
                 </Grid>
             </Container>
-            
-            <GlowBall style={{ top: '5%', right: '5%', background: 'rgba(132, 94, 194, 0.2)' }} />
-            <GlowBall style={{ bottom: '10%', left: '5%', background: 'rgba(255, 128, 102, 0.1)' }} />
         </StyledMain>
     );
 };
 
 export default Homepage;
 
-const float = keyframes`
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-15px); }
+/* ── Animations ── */
+const floatA = keyframes`
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+`;
+const floatB = keyframes`
+  0%, 100% { transform: translateX(-30px) translateY(0px); }
+  50%       { transform: translateX(-30px) translateY(-8px); }
 `;
 
+/* ── Styled Components ── */
 const StyledMain = styled.div`
   min-height: 100vh;
-  background-color: var(--bg-main);
-  color: var(--text-main);
+  background: #000000;
+  color: #FFFFFF;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -131,160 +164,158 @@ const StyledMain = styled.div`
   }
 `;
 
-const BackgroundDecor = styled.div`
+const Orb = styled.div`
   position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 70% 30%, rgba(132, 94, 194, 0.1) 0%, transparent 40%),
-              radial-gradient(circle at 20% 80%, rgba(255, 128, 102, 0.05) 0%, transparent 40%);
-  z-index: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
 `;
 
 const ContentBox = styled(Box)`
   position: relative;
   z-index: 2;
-  animation: fadeIn 0.8s ease-out;
+  animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
 `;
 
-const Badge = styled.div`
+const PillBadge = styled.div`
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  background: rgba(132, 94, 194, 0.15);
-  border: 1px solid rgba(132, 94, 194, 0.3);
-  padding: 10px 20px;
+  gap: 8px;
+  background: rgba(110, 63, 243, 0.1);
+  border: 1px solid rgba(110, 63, 243, 0.28);
+  padding: 7px 16px;
   border-radius: 100px;
-  color: var(--primary);
-  font-size: 0.85rem;
-  font-weight: 800;
+  color: rgba(155, 111, 248, 0.95);
+  font-family: var(--font-sf);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 `;
 
-const MainTitle = styled(Typography)`
-  font-size: clamp(3rem, 7vw, 5rem) !important;
-  line-height: 1 !important;
-  margin-bottom: 28px !important;
-  font-weight: 800 !important;
-  font-family: var(--font-heading) !important;
-  
-  span {
-    color: var(--primary);
-  }
+const HeroTitle = styled(Typography)`
+  font-family: var(--font-sf) !important;
+  font-size: clamp(2.8rem, 7vw, 4.5rem) !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1.0 !important;
+  color: #FFFFFF !important;
+  margin-bottom: 24px !important;
 `;
 
-const Description = styled(Typography)`
-  font-size: 1.25rem !important;
-  color: var(--text-muted) !important;
-  max-width: 580px;
-  margin-bottom: 56px !important;
-  line-height: 1.6 !important;
+const AccentSpan = styled.span`
+  color: #6E3FF3;
 `;
 
-const ActionButtons = styled(Box)`
+const HeroSubtitle = styled(Typography)`
+  font-family: var(--font-sf) !important;
+  font-size: 1.0625rem !important;
+  font-weight: 400 !important;
+  color: rgba(235, 235, 245, 0.5) !important;
+  line-height: 1.55 !important;
+  max-width: 520px;
+  margin-bottom: 40px !important;
+`;
+
+const CTARow = styled(Box)`
   display: flex;
-  gap: 24px;
-  margin-bottom: 48px;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-    gap: 16px;
-    
-    button {
-        width: 100%;
-        font-size: 1rem !important;
-    }
-  }
+  gap: 14px;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
 `;
 
-const SignUpText = styled(Typography)`
-  color: var(--text-muted) !important;
-  font-size: 1.1rem !important;
+const FooterNote = styled(Typography)`
+  font-family: var(--font-sf) !important;
+  font-size: 0.9375rem !important;
+  color: rgba(235, 235, 245, 0.35) !important;
 
   span {
-    color: var(--secondary);
-    font-weight: 800;
-    margin-left: 10px;
+    color: rgba(110, 63, 243, 0.9);
+    font-weight: 500;
+    margin-left: 6px;
     cursor: pointer;
-    transition: var(--transition);
-    
-    &:hover {
-      text-decoration: underline;
-      filter: brightness(1.2);
-    }
+    transition: color 0.2s ease;
+    &:hover { color: rgba(155, 111, 248, 1); }
   }
 `;
 
-const VisualStack = styled(Box)`
+const CardsStack = styled(Box)`
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  align-items: flex-end;
+  gap: 16px;
 `;
 
-const GlassCard = styled(Box)`
-  background: rgba(176, 168, 185, 0.05);
-  backdrop-filter: blur(24px);
-  padding: 32px;
-  border-radius: 32px;
-  border: 1px solid rgba(176, 168, 185, 0.1);
+const FeatureCard = styled(Box)`
+  background: rgba(28, 28, 30, 0.7);
+  backdrop-filter: blur(40px) saturate(160%);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  border: 1px solid rgba(84, 84, 88, 0.45);
+  border-radius: 20px;
+  padding: 24px;
   display: flex;
   align-items: center;
-  gap: 24px;
-  width: 100%;
-  max-width: 440px;
-  animation: ${float} 6s ease-in-out infinite;
+  gap: 18px;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  &.top-card { animation-delay: 0s; }
-  &.middle-card { animation-delay: 1.5s; transform: translateX(-40px); }
+  &.card-1 { animation: ${floatA} 7s ease-in-out infinite; }
+  &.card-2 { animation: ${floatB} 8s ease-in-out infinite; animation-delay: 1s; }
 
   &:hover {
-    background: rgba(176, 168, 185, 0.1);
-    border-color: var(--primary);
+    border-color: rgba(110, 63, 243, 0.5);
+    background: rgba(28, 28, 30, 0.85);
     transform: scale(1.02);
   }
 `;
 
-const IconWrapper = styled(Box)`
-  width: 64px;
-  height: 64px;
-  background: ${props => props.color}20;
-  color: ${props => props.color};
-  border-radius: 20px;
+const CardIcon = styled(Box)`
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid ${props => props.color}30;
-  svg { font-size: 32px; }
+  flex-shrink: 0;
 `;
 
-const FloatingStats = styled(Box)`
+const StatsRow = styled(Box)`
   display: flex;
-  gap: 24px;
-  width: 100%;
-  max-width: 440px;
-  animation: ${float} 6s ease-in-out infinite;
-  animation-delay: 3s;
+  gap: 12px;
 `;
 
-const StatBox = styled(Box)`
+const StatPill = styled(Box)`
   flex: 1;
-  background: rgba(132, 94, 194, 0.05);
-  padding: 24px;
-  border-radius: 28px;
-  border: 1px solid rgba(132, 94, 194, 0.1);
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(84, 84, 88, 0.4);
+  border-radius: 16px;
+  padding: 18px 12px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: all 0.3s ease;
 
-  .val { font-size: 1.8rem; font-weight: 800; color: white; font-family: var(--font-heading); }
-  .lab { font-size: 0.8rem; text-transform: uppercase; color: var(--secondary); font-weight: 800; margin-top: 4px; font-family: var(--font-heading); }
-`;
+  .val {
+    font-family: var(--font-sf);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
 
-const GlowBall = styled.div`
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  filter: blur(160px);
-  border-radius: 50%;
-  z-index: 1;
-  pointer-events: none;
+  .lab {
+    font-family: var(--font-sf);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: rgba(110, 63, 243, 0.85);
+  }
+
+  &:hover {
+    border-color: rgba(110, 63, 243, 0.4);
+    background: rgba(110, 63, 243, 0.06);
+  }
 `;

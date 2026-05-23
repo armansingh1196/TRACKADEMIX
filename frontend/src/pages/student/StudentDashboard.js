@@ -35,7 +35,7 @@ const StudentDashboard = () => {
     const toggleDrawer = () => setOpen(!open);
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'var(--bg-main)' }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#000000' }}>
             <CssBaseline />
             <AppBar open={open} position='fixed' elevation={0}>
                 <Toolbar sx={{ pr: '24px', display: 'flex', alignItems: 'center' }}>
@@ -104,32 +104,32 @@ const StudentDashboard = () => {
 export default StudentDashboard;
 
 const BrandLogo = styled(Typography)`
-  font-weight: 900 !important;
+  font-weight: 700 !important;
   color: white !important;
-  font-family: 'Outfit', sans-serif !important;
-  letter-spacing: 1px !important;
-  font-size: 1.25rem !important;
+  font-family: var(--font-sf, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif) !important;
+  letter-spacing: -0.02em !important;
+  font-size: 1.125rem !important;
 
   @media (max-width: 600px) {
     font-size: 1rem !important;
   }
-  
+
   span {
-    color: var(--primary);
+    color: #6E3FF3;
   }
 `;
 
 const ContentWrapper = styled(Box)`
-  padding: 28px;
-  animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  padding: 24px 28px;
+  animation: fadeUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   overflow-x: hidden;
   min-width: 0;
 
   @media (max-width: 768px) {
-    padding: 16px 12px;
+    padding: 16px 14px;
   }
 
   @media (max-width: 600px) {
-    padding: 12px 8px;
+    padding: 12px 10px;
   }
 `;

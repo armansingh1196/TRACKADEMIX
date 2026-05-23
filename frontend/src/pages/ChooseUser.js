@@ -1,16 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Grid,
-  Paper,
-  Box,
-  Container,
-  CircularProgress,
-  Backdrop,
-  Typography,
-  IconButton,
-  Tooltip
-} from '@mui/material';
+import { Grid, Paper, Box, Container, CircularProgress, Backdrop, Typography, IconButton, Tooltip } from '@mui/material';
 import { AccountCircle, School, Group, ArrowBackIosNew } from '@mui/icons-material';
 import styled, { keyframes } from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
@@ -22,9 +12,7 @@ const ChooseUser = ({ visitor }) => {
   const navigate = useNavigate();
   const password = "zxc";
   const guestEnabled = import.meta.env.VITE_ENABLE_GUEST_DEMO === "true";
-
   const { status, currentUser, currentRole } = useSelector(state => state.user);
-
   const [loader, setLoader] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [message, setMessage] = useState("");
@@ -32,44 +20,22 @@ const ChooseUser = ({ visitor }) => {
   const navigateHandler = (user) => {
     if (user === "Admin") {
       if (visitor === "guest") {
-        if (!guestEnabled) {
-          navigate('/Adminlogin');
-          return;
-        }
-        const email = "yogendra@12";
-        const fields = { email, password };
+        if (!guestEnabled) { navigate('/Adminlogin'); return; }
         setLoader(true);
-        dispatch(loginUser(fields, user));
-      } else {
-        navigate('/Adminlogin');
-      }
+        dispatch(loginUser({ email: "yogendra@12", password }, user));
+      } else { navigate('/Adminlogin'); }
     } else if (user === "Student") {
       if (visitor === "guest") {
-        if (!guestEnabled) {
-          navigate('/Studentlogin');
-          return;
-        }
-        const rollNum = "1";
-        const studentName = "Dipesh Awasthi";
-        const fields = { rollNum, studentName, password };
+        if (!guestEnabled) { navigate('/Studentlogin'); return; }
         setLoader(true);
-        dispatch(loginUser(fields, user));
-      } else {
-        navigate('/Studentlogin');
-      }
+        dispatch(loginUser({ rollNum: "1", studentName: "Dipesh Awasthi", password }, user));
+      } else { navigate('/Studentlogin'); }
     } else if (user === "Teacher") {
       if (visitor === "guest") {
-        if (!guestEnabled) {
-          navigate('/Teacherlogin');
-          return;
-        }
-        const email = "tony@12";
-        const fields = { email, password };
+        if (!guestEnabled) { navigate('/Teacherlogin'); return; }
         setLoader(true);
-        dispatch(loginUser(fields, user));
-      } else {
-        navigate('/Teacherlogin');
-      }
+        dispatch(loginUser({ email: "tony@12", password }, user));
+      } else { navigate('/Teacherlogin'); }
     }
   };
 
@@ -86,53 +52,57 @@ const ChooseUser = ({ visitor }) => {
   }, [status, currentRole, navigate, currentUser]);
 
   const roles = [
-    { name: 'Admin', label: 'Head of Department', icon: <AccountCircle />, desc: 'Manage institutional data, students, and faculty assignments.' },
-    { name: 'Student', label: 'Student', icon: <School />, desc: 'Access your courses, attendance, and exam performance records.' },
-    { name: 'Teacher', label: 'Professor', icon: <Group />, desc: 'Manage class sessions, track assignments, and evaluate student progress.' },
+    { name: 'Admin', label: 'Head of Department', icon: <AccountCircle />, desc: 'Manage institutional data, students, and faculty assignments.', color: '#6E3FF3' },
+    { name: 'Student', label: 'Student', icon: <School />, desc: 'Access your courses, attendance, and exam performance records.', color: '#0A84FF' },
+    { name: 'Teacher', label: 'Professor', icon: <Group />, desc: 'Manage class sessions, track assignments, and evaluate students.', color: '#30D158' },
   ];
 
   return (
     <StyledMain>
-      <BackgroundDecor />
+      <Orb style={{ top: '-10%', right: '-5%', background: 'radial-gradient(circle, rgba(110,63,243,0.15) 0%, transparent 65%)', width: 600, height: 600 }} />
+      <Orb style={{ bottom: '-15%', left: '-5%', background: 'radial-gradient(circle, rgba(10,132,255,0.08) 0%, transparent 65%)', width: 500, height: 500 }} />
+
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
-        <Box sx={{ position: 'absolute', top: -80, left: 0 }}>
-            <Tooltip title="Back to Homepage">
-                <IconButton onClick={() => navigate('/')} sx={{ color: 'white', bgcolor: 'rgba(132, 94, 194, 0.15)', '&:hover': { bgcolor: 'rgba(132, 94, 194, 0.3)' } }}>
-                    <ArrowBackIosNew sx={{ fontSize: 20 }} />
-                </IconButton>
-            </Tooltip>
+        <Box sx={{ position: 'absolute', top: -72, left: 0 }}>
+          <Tooltip title="Back to Homepage">
+            <BackBtn onClick={() => navigate('/')}>
+              <ArrowBackIosNew sx={{ fontSize: 16 }} />
+            </BackBtn>
+          </Tooltip>
         </Box>
-        
-        <Box sx={{ mb: 10, textAlign: 'center' }}>
-            <Typography variant="h3" sx={{ fontWeight: 900, fontFamily: 'Outfit', mb: 2, letterSpacing: '-1.5px' }}>
-                Select Your <span>Portal</span>
-            </Typography>
-            <Typography variant="h6" sx={{ color: 'var(--text-muted)', fontWeight: 400 }}>
-                Choose your institutional role to continue to your secure dashboard.
-            </Typography>
-        </Box>
-        <Grid container spacing={4} justifyContent="center">
-          {roles.map((role) => (
+
+        <PageHeader>
+          <Typography sx={{ fontFamily: 'var(--font-sf)', fontWeight: 700, fontSize: 'clamp(2rem, 5vw, 3rem)', letterSpacing: '-0.04em', color: '#fff', mb: 1.5 }}>
+            Select Your <span style={{ color: '#6E3FF3' }}>Portal</span>
+          </Typography>
+          <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: '1.0625rem', color: 'rgba(235,235,245,0.45)', fontWeight: 400 }}>
+            Choose your institutional role to continue to your secure dashboard.
+          </Typography>
+        </PageHeader>
+
+        <Grid container spacing={3} justifyContent="center">
+          {roles.map((role, i) => (
             <Grid item xs={12} sm={6} md={4} key={role.name}>
-              <StyledPaper elevation={0} onClick={() => navigateHandler(role.name)}>
-                <IconBox className="icon-box">
-                  {role.icon}
-                </IconBox>
-                <Typography variant="h5" sx={{ fontWeight: 800, mb: 2, fontFamily: 'Outfit' }}>
+              <RoleCard elevation={0} onClick={() => navigateHandler(role.name)} accent={role.color} style={{ animationDelay: `${i * 0.08}s` }}>
+                <RoleIconBox rolecolor={role.color}>
+                  {React.cloneElement(role.icon, { sx: { fontSize: 40 } })}
+                </RoleIconBox>
+                <Typography sx={{ fontFamily: 'var(--font-sf)', fontWeight: 700, fontSize: '1.25rem', letterSpacing: '-0.025em', color: '#fff', mb: 1.5, mt: 0.5 }}>
                   {role.label}
                 </Typography>
-                <Typography variant="body2" sx={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>
+                <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: '0.9375rem', color: 'rgba(235,235,245,0.45)', lineHeight: 1.5 }}>
                   {role.desc}
                 </Typography>
-                <PortalButton className="portal-btn">Enter Portal</PortalButton>
-              </StyledPaper>
+                <EnterButton rolecolor={role.color}>Enter Portal</EnterButton>
+              </RoleCard>
             </Grid>
           ))}
         </Grid>
       </Container>
-      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={loader}>
-        <CircularProgress color="inherit" sx={{ color: 'var(--primary)' }} />
-        <Typography variant="h6" sx={{ ml: 2, fontFamily: 'Outfit', fontWeight: 600 }}>Authenticating Access...</Typography>
+
+      <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, backdropFilter: 'blur(8px)' }} open={loader}>
+        <CircularProgress sx={{ color: '#6E3FF3' }} />
+        <Typography sx={{ ml: 2, fontFamily: 'var(--font-sf)', fontWeight: 500 }}>Authenticating Access...</Typography>
       </Backdrop>
       <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
     </StyledMain>
@@ -141,97 +111,101 @@ const ChooseUser = ({ visitor }) => {
 
 export default ChooseUser;
 
-const float = keyframes`
+const floatCard = keyframes`
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
+  50%       { transform: translateY(-8px); }
 `;
 
 const StyledMain = styled.div`
-  height: 100vh;
-  background-color: var(--bg-main);
+  min-height: 100vh;
+  background: #000000;
   color: white;
   position: relative;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 80px 0;
 `;
 
-const BackgroundDecor = styled.div`
+const Orb = styled.div`
   position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 15% 15%, rgba(132, 94, 194, 0.1) 0%, transparent 40%),
-              radial-gradient(circle at 85% 85%, rgba(255, 128, 102, 0.05) 0%, transparent 40%);
-  z-index: 1;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
 `;
 
-const StyledPaper = styled(Paper)`
-  padding: 56px 32px;
+const PageHeader = styled(Box)`
   text-align: center;
-  background: rgba(176, 168, 185, 0.05) !important;
-  backdrop-filter: blur(24px);
-  border-radius: 40px !important;
-  border: 1px solid var(--border) !important;
-  cursor: pointer;
-  transition: var(--transition) !important;
-  color: white !important;
-  animation: float 6s ease-in-out infinite;
+  margin-bottom: 56px;
+  animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+`;
 
-  &:hover {
-    background: rgba(132, 94, 194, 0.05) !important;
-    transform: translateY(-16px);
-    border-color: var(--primary) !important;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3) !important;
-
-    .icon-box {
-      background: var(--gradient-primary);
-      color: white;
-      transform: scale(1.1);
-      box-shadow: 0 10px 25px rgba(132, 94, 194, 0.4);
-    }
-
-    .portal-btn {
-      background: var(--gradient-primary);
-      color: white;
-      border-color: transparent;
-    }
-  }
-
-  span {
-    background: var(--gradient-vibrant);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+const BackBtn = styled(IconButton)`
+  && {
+    color: rgba(235,235,245,0.7);
+    background: rgba(28,28,30,0.7);
+    border: 1px solid rgba(84,84,88,0.5);
+    width: 40px;
+    height: 40px;
+    transition: all 0.25s ease;
+    &:hover { background: rgba(110,63,243,0.15); border-color: rgba(110,63,243,0.4); color: white; }
   }
 `;
 
-const IconBox = styled(Box)`
-  width: 88px;
-  height: 88px;
-  background-color: rgba(132, 94, 194, 0.1);
-  color: var(--primary);
-  border-radius: 28px;
+const RoleCard = styled(Paper)`
+  && {
+    padding: 40px 28px;
+    text-align: center;
+    background: rgba(28, 28, 30, 0.72) !important;
+    backdrop-filter: blur(40px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+    border-radius: 24px !important;
+    border: 1px solid rgba(84, 84, 88, 0.45) !important;
+    cursor: pointer;
+    transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    color: white !important;
+    animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+
+    &:hover {
+      transform: translateY(-14px) scale(1.02) !important;
+      border-color: ${props => props.accent || '#6E3FF3'} !important;
+      box-shadow: 0 28px 60px rgba(0,0,0,0.55), 0 0 0 1px ${props => props.accent ? `${props.accent}50` : 'rgba(110,63,243,0.4)'} !important;
+      background: rgba(28, 28, 30, 0.9) !important;
+    }
+  }
+`;
+
+const RoleIconBox = styled(Box)`
+  width: 80px;
+  height: 80px;
+  border-radius: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 36px;
-  transition: var(--transition);
-  border: 1px solid rgba(132, 94, 194, 0.2);
+  margin: 0 auto 24px;
+  background: ${props => props.rolecolor ? `${props.rolecolor}18` : 'rgba(110,63,243,0.14)'};
+  color: ${props => props.rolecolor || '#6E3FF3'};
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: ${floatCard} 7s ease-in-out infinite;
 
-  svg {
-    font-size: 44px;
+  ${RoleCard}:hover & {
+    transform: scale(1.12);
+    background: ${props => props.rolecolor ? `${props.rolecolor}28` : 'rgba(110,63,243,0.24)'};
   }
 `;
 
-const PortalButton = styled(Box)`
-  margin-top: 40px;
-  padding: 14px 28px;
-  border-radius: 16px;
-  font-weight: 800;
-  color: var(--primary);
-  background-color: rgba(132, 94, 194, 0.1);
-  transition: var(--transition);
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 2.5px;
-  border: 1px solid rgba(132, 94, 194, 0.2);
+const EnterButton = styled(Box)`
+  margin-top: 28px;
+  padding: 11px 24px;
+  border-radius: 12px;
+  font-family: var(--font-sf);
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: inline-block;
+  transition: all 0.25s ease;
+  letter-spacing: -0.01em;
+  color: ${props => props.rolecolor || '#6E3FF3'};
+  background: ${props => props.rolecolor ? `${props.rolecolor}10` : 'rgba(110,63,243,0.1)'};
+  border: 1px solid ${props => props.rolecolor ? `${props.rolecolor}30` : 'rgba(110,63,243,0.25)'};
 `;

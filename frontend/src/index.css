@@ -1,42 +1,363 @@
-/* TRACADEMIX Unified Design System - High Readability Institutional Edition */
+/* ============================================================
+   TRACADEMIX — Apple iOS Design System
+   Inspired by iOS 17 / macOS Sonoma Human Interface Guidelines
+   ============================================================ */
+
 :root {
-  /* Color Palette - The Verified Classy Palette */
-  --primary: #845EC2;        /* Royal Purple */
-  --primary-light: #B0A8B9;  /* Silver Lavender (Muted Accent) */
-  --secondary: #FF8066;      /* Vibrant Salmon (CTA Accent) */
-  --accent: #C34A36;         /* Terracotta (Critical Accent) */
-  --muted: #B0A8B9;          /* Silver Lavender */
-  
-  /* System Tokens - Optimized for Institutional Depth */
-  --bg-main: #1A181F;        /* Deep Obsidian Foundation */
-  --bg-surface: #4B4453;     /* Deep Obsidian Surface (Cards/Sidebars) */
-  --bg-card: rgba(75, 68, 83, 0.6);
-  
-  --text-main: #FFFFFF;      /* Pure white for primary headings */
-  --text-secondary: rgba(255, 255, 255, 0.85); /* Slightly transparent for body readability */
-  --text-muted: #B0A8B9;     /* Silver Lavender for labels */
-  
-  --success: #00C9A7;
-  --error: #C34A36;          /* Using Terracotta for error states */
-  --warning: #FFBC11;
-  
-  /* Gradations */
-  --gradient-primary: linear-gradient(135deg, #845EC2 0%, #B0A8B9 100%);
-  --gradient-vibrant: linear-gradient(135deg, #845EC2 0%, #FF8066 100%);
-  --gradient-surface: linear-gradient(180deg, #4B4453 0%, #1A181F 100%);
-  
-  /* Borders & Shadows */
-  --border: rgba(176, 168, 185, 0.15);
-  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.4);
-  --shadow-xl: 0 25px 60px rgba(0, 0, 0, 0.6);
-  
-  /* Typography Standards */
-  --font-heading: 'Plus Jakarta Sans', 'Outfit', sans-serif;
-  --font-body: 'Inter', sans-serif;
-  
-  /* Modern Fast Transition */
-  --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  /* ── iOS Semantic Color System ── */
+  --accent:          #6E3FF3;                      /* Electric Indigo — single primary accent */
+  --accent-hover:    #5A2FD6;                      /* Deeper on hover */
+  --accent-glow:     rgba(110, 63, 243, 0.35);     /* Glow shadow for accent elements */
+  --accent-tint:     rgba(110, 63, 243, 0.12);     /* Ultra-light tint for backgrounds */
+  --accent-tint-md:  rgba(110, 63, 243, 0.2);      /* Medium tint */
+
+  /* iOS System Blues (secondary actions) */
+  --blue:            #0A84FF;
+  --blue-tint:       rgba(10, 132, 255, 0.12);
+
+  /* iOS Semantic Greens / Yellows / Reds */
+  --success:         #30D158;
+  --success-tint:    rgba(48, 209, 88, 0.14);
+  --warning:         #FFD60A;
+  --warning-tint:    rgba(255, 214, 10, 0.14);
+  --danger:          #FF453A;
+  --danger-tint:     rgba(255, 69, 58, 0.14);
+
+  /* ── iOS Background Layers ── */
+  --bg-base:         #000000;                      /* True black — OLED optimized */
+  --bg-layer1:       #1C1C1E;                      /* iOS systemBackground (dark) */
+  --bg-layer2:       #2C2C2E;                      /* iOS secondarySystemBackground */
+  --bg-layer3:       #3A3A3C;                      /* iOS tertiarySystemBackground */
+  --bg-glass:        rgba(28, 28, 30, 0.72);       /* Frosted glass surface */
+  --bg-glass-heavy:  rgba(18, 18, 20, 0.85);       /* Heavier glass (sidebar/AppBar) */
+
+  /* Backward compat aliases */
+  --bg-main:         #000000;
+  --bg-surface:      #2C2C2E;
+  --bg-card:         rgba(28, 28, 30, 0.72);
+  --primary:         #6E3FF3;
+  --primary-light:   rgba(110, 63, 243, 0.5);
+  --secondary:       #0A84FF;
+  --muted:           rgba(235, 235, 245, 0.3);
+  --error:           #FF453A;
+
+  /* ── iOS Typography Color Labels ── */
+  --text-1:          #FFFFFF;                              /* Primary labels */
+  --text-2:          rgba(235, 235, 245, 0.6);             /* Secondary labels */
+  --text-3:          rgba(235, 235, 245, 0.3);             /* Tertiary labels */
+  --text-4:          rgba(235, 235, 245, 0.18);            /* Quaternary labels */
+  --text-main:       #FFFFFF;
+  --text-secondary:  rgba(235, 235, 245, 0.75);
+  --text-muted:      rgba(235, 235, 245, 0.45);
+
+  /* ── iOS Separator / Fill ── */
+  --separator:       rgba(84, 84, 88, 0.65);
+  --separator-light: rgba(84, 84, 88, 0.36);
+  --fill-1:          rgba(120, 120, 128, 0.36);
+  --fill-2:          rgba(120, 120, 128, 0.22);
+  --fill-3:          rgba(120, 120, 128, 0.14);
+
+  /* Backward compat */
+  --border:          rgba(84, 84, 88, 0.55);
+
+  /* ── Depth & Shadow ── */
+  --shadow-sm:  0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-md:  0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-lg:  0 16px 40px rgba(0, 0, 0, 0.6);
+  --shadow-xl:  0 24px 64px rgba(0, 0, 0, 0.7);
+
+  /* ── Apple Typography Stack ── */
+  --font-sf:      -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+  --font-heading: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', 'Outfit', sans-serif;
+  --font-body:    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', sans-serif;
+
+  /* ── Apple HIG Type Scale ── */
+  --text-display:    clamp(2.4rem, 6vw, 3.5rem);    /* Hero headings */
+  --text-title1:     clamp(1.75rem, 4vw, 2.25rem);  /* Page titles */
+  --text-title2:     clamp(1.35rem, 3vw, 1.625rem); /* Section titles */
+  --text-title3:     clamp(1.1rem, 2.5vw, 1.25rem); /* Sub-section titles */
+  --text-headline:   1.0625rem;                      /* 17px — iOS Headline */
+  --text-body:       1.0625rem;                      /* 17px — iOS Body */
+  --text-callout:    1rem;                           /* 16px */
+  --text-subhead:    0.9375rem;                      /* 15px */
+  --text-footnote:   0.8125rem;                      /* 13px */
+  --text-caption1:   0.75rem;                        /* 12px */
+  --text-caption2:   0.6875rem;                      /* 11px */
+
+  /* ── Geometry ── */
+  --radius-sm:   10px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --radius-pill: 100px;
+
+  /* ── Transitions ── */
+  --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);   /* Apple spring */
+  --ease-smooth:   cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Apple smooth */
+  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);         /* Fast out */
+  --transition:    all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-spring: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-fast: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* Gradients (backward compat) */
+  --gradient-primary: linear-gradient(135deg, #6E3FF3 0%, #9B6FF8 100%);
+  --gradient-vibrant: linear-gradient(135deg, #6E3FF3 0%, #0A84FF 100%);
+  --gradient-surface: linear-gradient(180deg, #2C2C2E 0%, #000000 100%);
+}
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  overflow-x: hidden;
+  max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-base);
+  color: var(--text-2);
+  font-family: var(--font-sf);
+  font-size: var(--text-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* ── Apple HIG Typography Scale ── */
+h1 {
+  font-family: var(--font-sf);
+  font-weight: 700;
+  font-size: var(--text-display);
+  color: var(--text-1);
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+h2 {
+  font-family: var(--font-sf);
+  font-weight: 700;
+  font-size: var(--text-title1);
+  color: var(--text-1);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+h3 {
+  font-family: var(--font-sf);
+  font-weight: 600;
+  font-size: var(--text-title2);
+  color: var(--text-1);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+h4 {
+  font-family: var(--font-sf);
+  font-weight: 600;
+  font-size: var(--text-title3);
+  color: var(--text-1);
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+h5 {
+  font-family: var(--font-sf);
+  font-weight: 600;
+  font-size: var(--text-headline);
+  color: var(--text-1);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+}
+h6 {
+  font-family: var(--font-sf);
+  font-weight: 600;
+  font-size: var(--text-callout);
+  color: var(--text-1);
+  line-height: 1.4;
+}
+
+p {
+  font-size: var(--text-body);
+  line-height: 1.55;
+  color: var(--text-2);
+}
+
+/* ── Gradient Text Utility ── */
+.title-gradient {
+  background: var(--gradient-vibrant);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Material UI Global Overrides — iOS Style ── */
+.MuiTypography-root {
+  font-family: var(--font-sf) !important;
+  color: var(--text-2) !important;
+}
+.MuiTypography-h1 { color: var(--text-1) !important; font-size: var(--text-display) !important; font-weight: 700 !important; letter-spacing: -0.04em !important; }
+.MuiTypography-h2 { color: var(--text-1) !important; font-size: var(--text-title1) !important; font-weight: 700 !important; letter-spacing: -0.03em !important; }
+.MuiTypography-h3 { color: var(--text-1) !important; font-size: var(--text-title2) !important; font-weight: 600 !important; letter-spacing: -0.025em !important; }
+.MuiTypography-h4 { color: var(--text-1) !important; font-size: var(--text-title3) !important; font-weight: 600 !important; letter-spacing: -0.015em !important; }
+.MuiTypography-h5 { color: var(--text-1) !important; font-size: var(--text-headline) !important; font-weight: 600 !important; }
+.MuiTypography-h6 { color: var(--text-1) !important; font-size: var(--text-callout) !important; font-weight: 600 !important; }
+.MuiTypography-body1 { font-size: var(--text-body) !important; }
+.MuiTypography-body2 { font-size: var(--text-subhead) !important; }
+.MuiTypography-subtitle1 { font-size: var(--text-callout) !important; font-weight: 600 !important; }
+.MuiTypography-subtitle2 { font-size: var(--text-subhead) !important; font-weight: 600 !important; }
+.MuiTypography-caption { font-size: var(--text-caption1) !important; }
+.MuiTypography-overline { font-size: var(--text-caption2) !important; letter-spacing: 0.08em !important; }
+
+.MuiBreadcrumbs-root { color: var(--text-3) !important; }
+.MuiLink-root { color: inherit !important; }
+
+/* iOS-style Paper / Card */
+.MuiPaper-root {
+  background: var(--bg-glass) !important;
+  backdrop-filter: blur(40px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+  color: var(--text-2) !important;
+  border: 1px solid var(--separator) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* iOS-style Buttons */
+.MuiButton-root {
+  border-radius: var(--radius-md) !important;
+  font-family: var(--font-sf) !important;
+  font-weight: 600 !important;
+  font-size: var(--text-callout) !important;
+  text-transform: none !important;
+  letter-spacing: -0.01em !important;
+  transition: var(--transition) !important;
+}
+.MuiButton-containedPrimary {
+  background: var(--accent) !important;
+  color: white !important;
+  box-shadow: 0 4px 16px var(--accent-glow) !important;
+}
+.MuiButton-containedPrimary:hover {
+  background: var(--accent-hover) !important;
+  box-shadow: 0 8px 28px var(--accent-glow) !important;
+  transform: translateY(-1px);
+}
+.MuiButton-containedPrimary:active {
+  transform: scale(0.97) !important;
+  box-shadow: 0 2px 8px var(--accent-glow) !important;
+}
+
+/* iOS-style Form Inputs */
+.MuiInputLabel-root {
+  color: var(--text-3) !important;
+  font-family: var(--font-sf) !important;
+  font-size: var(--text-subhead) !important;
+  font-weight: 500 !important;
+}
+.MuiOutlinedInput-root {
+  color: var(--text-1) !important;
+  background: var(--fill-3) !important;
+  border-radius: var(--radius-md) !important;
+  font-size: var(--text-body) !important;
+  font-family: var(--font-sf) !important;
+  transition: var(--transition) !important;
+}
+.MuiOutlinedInput-notchedOutline {
+  border-color: var(--separator) !important;
+  transition: var(--transition) !important;
+}
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent) !important;
+}
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent) !important;
+  border-width: 2px !important;
+}
+
+/* iOS list items */
+.MuiListItemText-primary {
+  font-family: var(--font-sf) !important;
+  font-size: var(--text-callout) !important;
+  font-weight: 500 !important;
+  color: var(--text-1) !important;
+}
+.MuiListItemText-secondary {
+  font-family: var(--font-sf) !important;
+  font-size: var(--text-footnote) !important;
+  color: var(--text-3) !important;
+}
+.MuiListItemIcon-root {
+  color: var(--accent) !important;
+}
+
+/* ── iOS-style Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(120, 120, 128, 0.3); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(120, 120, 128, 0.5); }
+
+/* ── Sidebar Transitions ── */
+.sidebar-content-exit {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.15s var(--ease-smooth), transform 0.15s var(--ease-smooth);
+  pointer-events: none;
+}
+.sidebar-content-enter {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.25s 0.08s var(--ease-out), transform 0.25s 0.08s var(--ease-out);
+}
+
+/* ── Keyframes ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+
+/* ── Utility Classes ── */
+.fade-in  { animation: fadeUp 0.6s var(--ease-out) forwards; }
+.scale-in { animation: scaleIn 0.4s var(--ease-spring) forwards; }
+
+/* Glass card utility */
+.glass-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid var(--separator);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+/* Section label utility (iOS grouped list style) */
+.section-label {
+  font-size: var(--text-caption2);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+  padding: 0 8px;
+  margin-bottom: 6px;
 }
 
 * {

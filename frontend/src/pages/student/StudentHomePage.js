@@ -282,38 +282,41 @@ export default StudentHomePage;
 
 
 const SectionPaper = styled(Box)`
-  background: rgba(176, 168, 185, 0.03);
-  border-radius: 24px;
-  border: 1px solid var(--border);
-  padding: 16px;
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(10px);
+  background: rgba(28, 28, 30, 0.65);
+  border-radius: 20px;
+  border: 1px solid rgba(84, 84, 88, 0.45);
+  padding: 18px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+  backdrop-filter: blur(40px) saturate(160%);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
 
   @media (max-width: 600px) {
-    border-radius: 16px;
+    border-radius: 14px;
     padding: 12px;
   }
 `;
 
 const ChartPaper = styled(Box)`
-  background: rgba(176, 168, 185, 0.03);
-  border-radius: 24px;
-  border: 1px solid var(--border);
-  padding: 24px;
-  box-shadow: var(--shadow-md);
+  background: rgba(28, 28, 30, 0.65);
+  border-radius: 20px;
+  border: 1px solid rgba(84, 84, 88, 0.45);
+  padding: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.4);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  backdrop-filter: blur(10px);
-  transition: var(--transition);
+  backdrop-filter: blur(40px) saturate(160%);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   @media (max-width: 600px) {
-    padding: 16px;
-    border-radius: 16px;
+    padding: 14px;
+    border-radius: 14px;
   }
 
   &:hover {
-    transform: translateY(-3px);
-    border-color: var(--primary);
+    transform: translateY(-4px);
+    border-color: rgba(110, 63, 243, 0.4);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.5);
   }
 `;

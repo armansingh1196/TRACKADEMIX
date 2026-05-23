@@ -111,33 +111,35 @@ const StudentProfile = () => {
 export default StudentProfile;
 
 const ProfilePaper = styled(Paper)`
-  padding: 48px;
-  border-radius: 32px !important;
-  border: 1px solid var(--border) !important;
-  background: rgba(176, 168, 185, 0.03) !important;
-  backdrop-filter: blur(20px);
-  box-shadow: var(--shadow-xl) !important;
-  animation: fadeIn 0.8s ease-out;
+  padding: 40px 44px;
+  border-radius: 24px !important;
+  border: 1px solid rgba(84,84,88,0.45) !important;
+  background: rgba(28, 28, 30, 0.72) !important;
+  backdrop-filter: blur(40px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+  animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
 
   @media (max-width: 600px) {
     padding: 24px 16px;
-    border-radius: 20px !important;
+    border-radius: 18px !important;
   }
 `;
 
 const StyledAvatar = styled(Avatar)`
-  box-shadow: 0 12px 32px rgba(255, 128, 102, 0.3);
-  border: 4px solid var(--bg-surface);
+  box-shadow: 0 8px 28px rgba(110,63,243,0.35);
+  border: 3px solid rgba(110,63,243,0.4);
+  background: linear-gradient(135deg, #6E3FF3 0%, #0A84FF 100%) !important;
 `;
 
 const SectionTitle = styled(Typography)`
-  font-family: 'Outfit', sans-serif !important;
-  font-weight: 800 !important;
-  color: var(--secondary) !important;
-  margin-bottom: 28px !important;
+  font-family: var(--font-sf) !important;
+  font-weight: 600 !important;
+  color: rgba(110,63,243,0.9) !important;
+  margin-bottom: 20px !important;
+  font-size: 0.6875rem !important;  /* 11px — iOS caption2 */
   text-transform: uppercase;
-  letter-spacing: 1.5px;
-  font-size: 0.9rem !important;
+  letter-spacing: 0.08em;
 `;
 
 const InfoGrid = styled(Grid)`
@@ -145,28 +147,29 @@ const InfoGrid = styled(Grid)`
 `;
 
 const InfoLabel = styled(Typography)`
-  font-size: 0.7rem !important;
+  font-family: var(--font-sf) !important;
+  font-size: 0.6875rem !important;   /* 11px caption2 */
   text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--text-muted) !important;
-  font-weight: 800 !important;
-  margin-bottom: 8px !important;
+  letter-spacing: 0.07em;
+  color: rgba(235,235,245,0.35) !important;
+  font-weight: 600 !important;
+  margin-bottom: 5px !important;
 `;
 
 const InfoValue = styled(Box)`
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-weight: 600;
-  color: white;
-  font-size: 1rem;
-  font-family: 'Outfit', sans-serif;
+  gap: 10px;
+  font-family: var(--font-sf);
+  font-weight: 500;
+  font-size: 0.9375rem;   /* 15px — iOS subhead */
+  color: rgba(235,235,245,0.85);
   word-break: break-word;
   overflow-wrap: anywhere;
-  
+
   svg {
-    color: var(--secondary);
-    font-size: 22px;
+    color: rgba(110,63,243,0.8);
+    font-size: 20px;
     flex-shrink: 0;
   }
 `;
