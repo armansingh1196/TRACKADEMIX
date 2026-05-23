@@ -19,6 +19,26 @@ const StudentAIInsights = () => {
         const fetchInsights = async () => {
             try {
                 setLoading(true);
+                if (currentUser._id.startsWith("mock_")) {
+                    import('../../components/attendanceCalculator').then(({ calculateOverallAttendancePercentage }) => {
+                        setInsights({
+                            features: { 
+                                attendance_rate: calculateOverallAttendancePercentage(currentUser.attendance || []),
+                                internal_avg_theory: 22,
+                                external_avg_theory: 45,
+                                previous_gpa: 8.2
+                            },
+                            examResults: currentUser.examResult || [],
+                            subjectAlerts: [
+                                "Low internal score in Operating Systems. Focus on continuous assessment.",
+                                "Weak performance in Database Systems external exams. Needs targeted study."
+                            ],
+                            modelMetrics: { accuracy: 0.9375, model_type: "Random Forest" }
+                        });
+                        setLoading(false);
+                    });
+                    return;
+                }
                 const response = await api.get(`/Student/AIRecommendations/${currentUser._id}`);
                 setInsights(response.data);
                 setError(null);
@@ -26,7 +46,9 @@ const StudentAIInsights = () => {
                 console.error("Error fetching AI insights:", err);
                 setError("Failed to load AI insights. Please ensure the AI backend is running.");
             } finally {
-                setLoading(false);
+                if (!currentUser._id.startsWith("mock_")) {
+                    setLoading(false);
+                }
             }
         };
 
@@ -52,6 +74,45 @@ const StudentAIInsights = () => {
             default: return null;
         }
     };
+
+    // Calculate deterministic logic
+    let calculatedBand = "Medium";
+    let recommendations = [];
+    
+    if (insights && insights.features) {
+        let failedSubjects = 0;
+        let totalActiveSubjects = 0;
+        
+        if (insights.examResults) {
+            insights.examResults.forEach(exam => {
+                const total = (exam.internal_marks || 0) + (exam.external_marks || 0);
+                if (total > 0) {
+                    totalActiveSubjects++;
+                    const maxMarks = exam.subjects?.subject_type === 'Practical' ? 50 : 100;
+                    if ((total / maxMarks) * 100 < 40) failedSubjects++;
+                }
+            });
+        }
+        
+        const attendanceRate = insights.features.attendance_rate || 100;
+        
+        if (totalActiveSubjects > 0 && failedSubjects === 0 && attendanceRate >= 75) {
+            calculatedBand = "High";
+            recommendations.push("Excellent academic and attendance record. You are completely on track! 🚀");
+            recommendations.push("Consider mentoring peers who might be struggling in your strong subjects.");
+            recommendations.push("Keep maintaining your regular attendance.");
+        } else if (failedSubjects > 1 || attendanceRate < 60) {
+            calculatedBand = "Low";
+            recommendations.push("You are currently at risk. Please schedule a mentoring session immediately.");
+            if (attendanceRate < 60) recommendations.push(`Your attendance is critically low (${Math.round(attendanceRate)}%). This strongly correlates with exam failure.`);
+            recommendations.push("Review your weak subjects and complete all pending assignments.");
+        } else {
+            calculatedBand = "Medium";
+            recommendations.push("You need some extra effort to get on track. Focus on your upcoming tests.");
+            if (failedSubjects === 1) recommendations.push("You have one weak subject dragging down your average. Dedicate more study hours to it.");
+            if (attendanceRate < 75) recommendations.push("Try to improve your attendance to reach the 75% threshold.");
+        }
+    }
 
     return (
         <Container maxWidth="lg" sx={{ mt: 1, mb: 2 }}>
@@ -79,9 +140,9 @@ const StudentAIInsights = () => {
                                 Predicted Performance
                             </Typography>
                             <Box sx={{ my: 2, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
-                                {getBandIcon(insights.ai_insight.performance_band)}
-                                <Typography variant="h3" sx={{ fontWeight: 900, color: getBandColor(insights.ai_insight.performance_band) }}>
-                                    {insights.ai_insight.performance_band}
+                                {getBandIcon(calculatedBand)}
+                                <Typography variant="h3" sx={{ fontWeight: 900, color: getBandColor(calculatedBand) }}>
+                                    {calculatedBand}
                                 </Typography>
                             </Box>
                             <Typography variant="body2" sx={{ color: 'var(--text-secondary)' }}>
@@ -100,7 +161,7 @@ const StudentAIInsights = () => {
                             </Box>
                             
                             <Box component="ul" sx={{ pl: 2 }}>
-                                {insights.ai_insight.recommendations.map((rec, index) => (
+                                {recommendations.map((rec, index) => (
                                     <Box component="li" key={index} sx={{ mb: 2, color: 'var(--text-main)' }}>
                                         <Typography variant="body1" sx={{ fontWeight: 500 }}>
                                             {rec}
