@@ -212,7 +212,7 @@ const StudentHomePage = () => {
                                         </Typography>
 
                                         {/* Summary Metrics Row */}
-                                        <Box sx={{ display: 'flex', gap: 2, mt: 1.5, width: '100%', justifyContent: 'space-around', borderTop: '1px solid rgba(255,255,255,0.05)', pt: 1.5 }}>
+                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mt: 1.5, width: '100%', justifyContent: 'space-around', borderTop: '1px solid rgba(255,255,255,0.05)', pt: 1.5 }}>
                                             <Box sx={{ textAlign: 'center' }}>
                                                 <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 600 }}>ATTENDANCE</Typography>
                                                 <Typography variant="body2" sx={{ fontWeight: 700, color: 'var(--primary)' }}>{Math.round(aiInsight.features?.attendance_rate || 0)}%</Typography>
@@ -222,19 +222,6 @@ const StudentHomePage = () => {
                                                 <Typography variant="body2" sx={{ fontWeight: 700, color: '#10b981' }}>{Math.round((aiInsight.features?.external_avg_theory / 70) * 100 || 0)}%</Typography>
                                             </Box>
                                         </Box>
-
-                                        {aiInsight.subjectAlerts && aiInsight.subjectAlerts.length > 0 && (
-                                            <Box sx={{ mt: 2, p: 1.5, background: 'rgba(239, 68, 68, 0.1)', borderRadius: '12px', border: '1px solid rgba(239, 68, 68, 0.2)', width: '100%' }}>
-                                                <Typography variant="caption" sx={{ color: '#ef4444', fontWeight: 800, display: 'block', mb: 1, textTransform: 'uppercase', letterSpacing: 0.5 }}>
-                                                    ⚠️ Recommendations For You:
-                                                </Typography>
-                                                <ul style={{ margin: 0, paddingLeft: '20px', color: '#fca5a5', fontSize: '0.8rem', textAlign: 'left' }}>
-                                                    {aiInsight.subjectAlerts.map((alert, idx) => (
-                                                        <li key={idx} style={{ marginBottom: '4px' }}>{alert}</li>
-                                                    ))}
-                                                </ul>
-                                            </Box>
-                                        )}
                                     </>
                                 ) : (
                                     <Typography variant="body2" sx={{ fontWeight: 700, color: 'var(--text-muted)' }}>Loading...</Typography>

@@ -4,7 +4,7 @@ import { getSubjectList } from '../../redux/sclassRelated/sclassHandle';
 import { 
     BottomNavigation, BottomNavigationAction, Container, 
     Box, Typography, CircularProgress, Grid, Paper, Stack,
-    Table, TableHead, TableBody
+    Table, TableHead, TableBody, TableContainer
 } from '@mui/material';
 import { getUserDetails } from '../../redux/userRelated/userHandle';
 import CustomBarChart from '../../components/CustomBarChart'
@@ -84,49 +84,51 @@ const StudentSubjects = () => {
                         <Typography variant="subtitle1" sx={{ color: 'var(--primary)', mt: 2, mb: 1, fontWeight: 700 }}>
                             THEORY SUBJECTS
                         </Typography>
-                        <Table sx={{ mt: 1 }}>
-                            <TableHead>
-                                <StyledTableRow>
-                                    <StyledTableCell>Subject Name</StyledTableCell>
-                                    <StyledTableCell align="center">Internal (30)</StyledTableCell>
-                                    <StyledTableCell align="center">External (70)</StyledTableCell>
-                                    <StyledTableCell align="center">Total Marks</StyledTableCell>
-                                    <StyledTableCell align="right">Status</StyledTableCell>
-                                </StyledTableRow>
-                            </TableHead>
-                            <TableBody>
-                                {theoryMarks.map((result, index) => {
-                                    const internal = result.internal_marks || 0;
-                                    const external = result.external_marks || 0;
-                                    const marks = result.marks_obtained || 0;
-                                    const isIntPass = internal >= 12;
-                                    const isExtPass = external >= 28;
-                                    const isPassing = marks >= 40 && isIntPass && isExtPass;
-                                    
-                                    return (
-                                        <StyledTableRow key={index}>
-                                            <StyledTableCell sx={{ color: 'white', fontWeight: 600 }}>
-                                                {result.subjects.sub_name}
-                                            </StyledTableCell>
-                                            <StyledTableCell align="center" sx={{ color: isIntPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
-                                                {internal} {isIntPass ? '' : '(Fail)'}
-                                            </StyledTableCell>
-                                            <StyledTableCell align="center" sx={{ color: isExtPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
-                                                {external} {isExtPass ? '' : '(Fail)'}
-                                            </StyledTableCell>
-                                            <StyledTableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800, fontSize: '1.1rem' }}>
-                                                {marks}
-                                            </StyledTableCell>
-                                            <StyledTableCell align="right">
-                                                <StatusBadge className={isPassing ? 'pass' : 'fail'}>
-                                                    {isPassing ? 'Qualified' : 'Requires Improvement'}
-                                                </StatusBadge>
-                                            </StyledTableCell>
-                                        </StyledTableRow>
-                                    );
-                                })}
-                            </TableBody>
-                        </Table>
+                        <TableContainer sx={{ overflowX: 'auto', background: 'transparent', boxShadow: 'none' }}>
+                            <Table sx={{ mt: 1, minWidth: 500 }}>
+                                <TableHead>
+                                    <StyledTableRow>
+                                        <StyledTableCell>Subject Name</StyledTableCell>
+                                        <StyledTableCell align="center">Internal (30)</StyledTableCell>
+                                        <StyledTableCell align="center">External (70)</StyledTableCell>
+                                        <StyledTableCell align="center">Total Marks</StyledTableCell>
+                                        <StyledTableCell align="right">Status</StyledTableCell>
+                                    </StyledTableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {theoryMarks.map((result, index) => {
+                                        const internal = result.internal_marks || 0;
+                                        const external = result.external_marks || 0;
+                                        const marks = result.marks_obtained || 0;
+                                        const isIntPass = internal >= 12;
+                                        const isExtPass = external >= 28;
+                                        const isPassing = marks >= 40 && isIntPass && isExtPass;
+                                        
+                                        return (
+                                            <StyledTableRow key={index}>
+                                                <StyledTableCell sx={{ color: 'white', fontWeight: 600 }}>
+                                                    {result.subjects.sub_name}
+                                                </StyledTableCell>
+                                                <StyledTableCell align="center" sx={{ color: isIntPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
+                                                    {internal} {isIntPass ? '' : '(Fail)'}
+                                                </StyledTableCell>
+                                                <StyledTableCell align="center" sx={{ color: isExtPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
+                                                    {external} {isExtPass ? '' : '(Fail)'}
+                                                </StyledTableCell>
+                                                <StyledTableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800, fontSize: '1.1rem' }}>
+                                                    {marks}
+                                                </StyledTableCell>
+                                                <StyledTableCell align="right">
+                                                    <StatusBadge className={isPassing ? 'pass' : 'fail'}>
+                                                        {isPassing ? 'Qualified' : 'Requires Improvement'}
+                                                    </StatusBadge>
+                                                </StyledTableCell>
+                                            </StyledTableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
 
                         {/* Practical Table */}
                         {practicalMarks.length > 0 && (
@@ -134,48 +136,50 @@ const StudentSubjects = () => {
                                 <Typography variant="subtitle1" sx={{ color: 'var(--secondary)', mt: 4, mb: 1, fontWeight: 700 }}>
                                     PRACTICAL / LAB SUBJECTS
                                 </Typography>
-                                <Table sx={{ mt: 1 }}>
-                                    <TableHead>
-                                        <StyledTableRow>
-                                            <StyledTableCell>Subject Name</StyledTableCell>
-                                            <StyledTableCell align="center">Internal (20)</StyledTableCell>
-                                            <StyledTableCell align="center">External (30)</StyledTableCell>
-                                            <StyledTableCell align="center">Total Marks</StyledTableCell>
-                                            <StyledTableCell align="right">Status</StyledTableCell>
-                                        </StyledTableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {practicalMarks.map((result, index) => {
-                                            const internal = result.internal_marks || 0;
-                                            const external = result.external_marks || 0;
-                                            const marks = result.marks_obtained || 0;
-                                            const isIntPass = internal >= 8;
-                                            const isExtPass = external >= 12;
-                                            const isPassing = marks >= 20 && isIntPass && isExtPass;
-                                            return (
-                                                <StyledTableRow key={index}>
-                                                    <StyledTableCell sx={{ color: 'white', fontWeight: 600 }}>
-                                                        {result.subjects.sub_name}
-                                                    </StyledTableCell>
-                                                    <StyledTableCell align="center" sx={{ color: isIntPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
-                                                        {internal} {isIntPass ? '' : '(Fail)'}
-                                                    </StyledTableCell>
-                                                    <StyledTableCell align="center" sx={{ color: isExtPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
-                                                        {external} {isExtPass ? '' : '(Fail)'}
-                                                    </StyledTableCell>
-                                                    <StyledTableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800, fontSize: '1.1rem' }}>
-                                                        {marks}
-                                                    </StyledTableCell>
-                                                    <StyledTableCell align="right">
-                                                        <StatusBadge className={isPassing ? 'pass' : 'fail'}>
-                                                            {isPassing ? 'Qualified' : 'Requires Improvement'}
-                                                        </StatusBadge>
-                                                    </StyledTableCell>
-                                                </StyledTableRow>
-                                            );
-                                        })}
-                                    </TableBody>
-                                </Table>
+                                <TableContainer sx={{ overflowX: 'auto', background: 'transparent', boxShadow: 'none' }}>
+                                    <Table sx={{ mt: 1, minWidth: 500 }}>
+                                        <TableHead>
+                                            <StyledTableRow>
+                                                <StyledTableCell>Subject Name</StyledTableCell>
+                                                <StyledTableCell align="center">Internal (20)</StyledTableCell>
+                                                <StyledTableCell align="center">External (30)</StyledTableCell>
+                                                <StyledTableCell align="center">Total Marks</StyledTableCell>
+                                                <StyledTableCell align="right">Status</StyledTableCell>
+                                            </StyledTableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {practicalMarks.map((result, index) => {
+                                                const internal = result.internal_marks || 0;
+                                                const external = result.external_marks || 0;
+                                                const marks = result.marks_obtained || 0;
+                                                const isIntPass = internal >= 8;
+                                                const isExtPass = external >= 12;
+                                                const isPassing = marks >= 20 && isIntPass && isExtPass;
+                                                return (
+                                                    <StyledTableRow key={index}>
+                                                        <StyledTableCell sx={{ color: 'white', fontWeight: 600 }}>
+                                                            {result.subjects.sub_name}
+                                                        </StyledTableCell>
+                                                        <StyledTableCell align="center" sx={{ color: isIntPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
+                                                            {internal} {isIntPass ? '' : '(Fail)'}
+                                                        </StyledTableCell>
+                                                        <StyledTableCell align="center" sx={{ color: isExtPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
+                                                            {external} {isExtPass ? '' : '(Fail)'}
+                                                        </StyledTableCell>
+                                                        <StyledTableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800, fontSize: '1.1rem' }}>
+                                                            {marks}
+                                                        </StyledTableCell>
+                                                        <StyledTableCell align="right">
+                                                            <StatusBadge className={isPassing ? 'pass' : 'fail'}>
+                                                                {isPassing ? 'Qualified' : 'Requires Improvement'}
+                                                            </StatusBadge>
+                                                        </StyledTableCell>
+                                                    </StyledTableRow>
+                                                );
+                                            })}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
                             </>
                         )}
                     </GlassCard>
