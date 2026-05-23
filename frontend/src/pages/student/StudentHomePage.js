@@ -101,7 +101,7 @@ const StudentHomePage = () => {
     ];
 
     const stats = [
-        { title: 'Current Semester', value: currentUser?.sclassName?.semester || 1, icon: <SubjectIcon />, color: '#845EC2' },
+        { title: 'Current Semester', value: currentUser?.sclassName?.semester || 1, icon: <SubjectIcon />, color: '#7C4DFF' },
         { title: 'Total Subjects', value: subjectsList?.length || 0, icon: <AssignmentIcon />, color: '#FF8066' },
     ];
 
@@ -284,9 +284,9 @@ export default StudentHomePage;
 const SectionPaper = styled(Box)`
   background: rgba(255, 255, 255, 0.055);
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(124, 77, 255, 0.1);
   padding: 18px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,77,255,0.06), inset 0 1px 0 rgba(255,255,255,0.1);
   backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
   -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
 
@@ -299,15 +299,15 @@ const SectionPaper = styled(Box)`
 const ChartPaper = styled(Box)`
   background: rgba(255, 255, 255, 0.055);
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(124, 77, 255, 0.1);
   padding: 20px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,77,255,0.06), inset 0 1px 0 rgba(255,255,255,0.1);
   display: flex;
   flex-direction: column;
   justify-content: center;
   backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
   -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
-  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   @media (max-width: 600px) {
     padding: 14px;
@@ -316,8 +316,8 @@ const ChartPaper = styled(Box)`
 
   &:hover {
     transform: translateY(-4px);
-    border-color: rgba(110, 63, 243, 0.35);
+    border-color: rgba(124, 77, 255, 0.25);
     background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 16px 48px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.14);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(124,77,255,0.12), inset 0 1px 0 rgba(255,255,255,0.14);
   }
 `;

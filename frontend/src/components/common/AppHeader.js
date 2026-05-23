@@ -30,12 +30,12 @@ const AppHeader = ({ title, subtitle, showBack = true, rightSide }) => {
               onClick={() => navigate(`/${pathnames[0]}/dashboard`)}
               sx={{
                 cursor: 'pointer',
-                fontFamily: 'var(--font-sf)',
+                fontFamily: 'var(--font-body)',
                 fontSize: '0.75rem',
                 fontWeight: 500,
-                color: 'rgba(235,235,245,0.35) !important',
+                color: 'rgba(226,232,255,0.35) !important',
                 letterSpacing: '0.01em',
-                '&:hover': { color: 'rgba(235,235,245,0.6) !important' },
+                '&:hover': { color: 'rgba(226,232,255,0.6) !important' },
                 transition: 'color 0.2s ease',
               }}
             >
@@ -47,10 +47,10 @@ const AppHeader = ({ title, subtitle, showBack = true, rightSide }) => {
                 <Typography
                   key={value}
                   sx={{
-                    fontFamily: 'var(--font-sf)',
+                    fontFamily: 'var(--font-body)',
                     fontSize: '0.75rem',
                     fontWeight: 500,
-                    color: 'rgba(110, 63, 243, 0.9) !important',
+                    color: 'rgba(124, 77, 255, 0.9) !important',
                     letterSpacing: '0.01em',
                   }}
                 >
@@ -61,10 +61,10 @@ const AppHeader = ({ title, subtitle, showBack = true, rightSide }) => {
                   underline="none"
                   key={value}
                   sx={{
-                    fontFamily: 'var(--font-sf)',
+                    fontFamily: 'var(--font-body)',
                     fontSize: '0.75rem',
                     fontWeight: 500,
-                    color: 'rgba(235,235,245,0.35) !important',
+                    color: 'rgba(226,232,255,0.35) !important',
                   }}
                 >
                   {value.replace(/-/g, ' ')}
@@ -102,35 +102,36 @@ const BackBtn = styled(IconButton)`
   && {
     width: 28px;
     height: 28px;
-    background: rgba(120, 120, 128, 0.18);
-    border: 1px solid rgba(84, 84, 88, 0.4);
-    color: rgba(235, 235, 245, 0.7);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(124, 77, 255, 0.1);
+    color: rgba(226, 232, 255, 0.7);
     border-radius: 50%;
     transition: all 0.2s ease;
 
     &:hover {
-      background: rgba(120, 120, 128, 0.3);
-      color: white;
+      background: rgba(124, 77, 255, 0.12);
+      color: #F5F5FF;
     }
   }
 `;
 
 const LargeTitle = styled(Typography)`
-  font-family: var(--font-sf) !important;
-  font-weight: 700 !important;
+  font-family: var(--font-display) !important;
+  font-weight: 800 !important;
   font-size: clamp(1.75rem, 4vw, 2.5rem) !important;
-  letter-spacing: -0.03em !important;
-  color: #FFFFFF !important;
+  letter-spacing: -0.035em !important;
+  color: #F5F5FF !important;
   line-height: 1.1 !important;
   margin-bottom: 6px !important;
 `;
 
 const Subtitle = styled(Typography)`
-  font-family: var(--font-sf) !important;
-  font-size: 0.9375rem !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.875rem !important;
   font-weight: 400 !important;
-  color: rgba(235, 235, 245, 0.5) !important;
-  line-height: 1.45 !important;
+  color: rgba(226, 232, 255, 0.5) !important;
+  line-height: 1.5 !important;
+  letter-spacing: -0.011em !important;
   max-width: 600px;
   word-break: break-word;
 `;

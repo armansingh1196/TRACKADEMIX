@@ -10,8 +10,8 @@ const StyledCard = styled(Paper)(({ color }) => ({
     alignItems: 'center',
     gap: '18px',
     borderRadius: '20px',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
-    boxShadow: '0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1)',
+    border: '1px solid rgba(124, 77, 255, 0.1)',
+    boxShadow: '0 8px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(124,77,255,0.06), inset 0 1px 0 rgba(255,255,255,0.1)',
     background: 'rgba(255, 255, 255, 0.055)',
     backdropFilter: 'blur(40px) saturate(200%) brightness(1.06)',
     WebkitBackdropFilter: 'blur(40px) saturate(200%) brightness(1.06)',
@@ -19,8 +19,8 @@ const StyledCard = styled(Paper)(({ color }) => ({
     cursor: 'default',
     '&:hover': {
         transform: 'translateY(-6px) scale(1.01)',
-        boxShadow: `0 20px 48px rgba(0,0,0,0.6), 0 0 0 1px ${color || 'rgba(110,63,243,0.35)'}, inset 0 1px 0 rgba(255,255,255,0.14)`,
-        borderColor: color ? `${color}50` : 'rgba(110, 63, 243, 0.4)',
+        boxShadow: `0 20px 48px rgba(0,0,0,0.55), 0 0 0 1px ${color || 'rgba(124,77,255,0.3)'}, inset 0 1px 0 rgba(255,255,255,0.14)`,
+        borderColor: color ? `${color}40` : 'rgba(124, 77, 255, 0.3)',
         background: 'rgba(255, 255, 255, 0.08)',
     },
 }));
@@ -33,7 +33,7 @@ const IconCircle = styled(Box)(({ color }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: color ? `${color}18` : 'rgba(110, 63, 243, 0.14)',
+    backgroundColor: color ? `${color}14` : 'rgba(124, 77, 255, 0.1)',
     color: color || 'var(--accent)',
     flexShrink: 0,
     '& svg': {
@@ -51,12 +51,12 @@ const DashboardCard = ({ title, value, icon, color, duration = 2.5 }) => {
                 {/* iOS Caption style label */}
                 <Typography
                     sx={{
-                        fontFamily: 'var(--font-sf)',
-                        fontWeight: 600,
-                        fontSize: '0.6875rem',  /* 11px caption2 */
+                        fontFamily: 'var(--font-heading)',
+                        fontWeight: 700,
+                        fontSize: '0.6875rem',
                         textTransform: 'uppercase',
-                        letterSpacing: '0.07em',
-                        color: 'rgba(235, 235, 245, 0.45)',
+                        letterSpacing: '0.1em',
+                        color: 'rgba(226, 232, 255, 0.5)',
                         mb: '4px',
                         lineHeight: 1,
                         display: 'block',
@@ -67,12 +67,13 @@ const DashboardCard = ({ title, value, icon, color, duration = 2.5 }) => {
                 {/* iOS Large Number */}
                 <Typography
                     sx={{
-                        fontFamily: 'var(--font-sf)',
-                        fontWeight: 700,
+                        fontFamily: 'var(--font-display)',
+                        fontWeight: 800,
                         fontSize: 'clamp(1.75rem, 4vw, 2.25rem)',
-                        letterSpacing: '-0.03em',
-                        color: '#FFFFFF',
+                        letterSpacing: '-0.035em',
+                        color: '#F5F5FF',
                         lineHeight: 1,
+                        fontFeatureSettings: "'tnum'",
                     }}
                 >
                     <CountUp start={0} end={value || 0} duration={duration} />

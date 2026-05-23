@@ -31,11 +31,11 @@ const StudentProfile = () => {
                         textAlign: 'center'
                     }}>
                         <StyledAvatar sx={{ width: 120, height: 120, mb: 3, background: 'var(--gradient-vibrant)' }}>
-                            <Typography variant="h3" sx={{ fontWeight: 900, color: 'white', fontFamily: 'Outfit' }}>
+                            <Typography variant="h3" sx={{ fontWeight: 800, color: 'white', fontFamily: 'var(--font-display)' }}>
                                 {String(currentUser.name).charAt(0)}
                             </Typography>
                         </StyledAvatar>
-                        <Typography variant="h5" sx={{ fontWeight: 900, mb: 0.5, fontFamily: 'Outfit', color: 'white' }}>{currentUser?.name}</Typography>
+                        <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, fontFamily: 'var(--font-display)', color: '#F5F5FF' }}>{currentUser?.name}</Typography>
                         <Typography variant="body2" sx={{ color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1.5 }}>
                             Student Scholar
                         </Typography>
@@ -44,7 +44,7 @@ const StudentProfile = () => {
                             <AppButton variant="contained" fullWidth sx={{ 
                                 mb: 2, 
                                 background: 'var(--gradient-primary) !important',
-                                boxShadow: '0 8px 20px rgba(132, 94, 194, 0.2)'
+                                boxShadow: '0 8px 20px rgba(124, 77, 255, 0.2)'
                             }}>
                                 Report Issue
                             </AppButton>
@@ -113,11 +113,11 @@ export default StudentProfile;
 const ProfilePaper = styled(Paper)`
   padding: 40px 44px;
   border-radius: 24px !important;
-  border: 1px solid rgba(84,84,88,0.45) !important;
-  background: rgba(28, 28, 30, 0.72) !important;
-  backdrop-filter: blur(40px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(40px) saturate(180%) !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+  border: 1px solid rgba(124,77,255,0.1) !important;
+  background: rgba(255, 255, 255, 0.055) !important;
+  backdrop-filter: blur(40px) saturate(200%) brightness(1.06) !important;
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(124,77,255,0.06), inset 0 1px 0 rgba(255,255,255,0.1) !important;
   animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
 
   @media (max-width: 600px) {
@@ -127,19 +127,19 @@ const ProfilePaper = styled(Paper)`
 `;
 
 const StyledAvatar = styled(Avatar)`
-  box-shadow: 0 8px 28px rgba(110,63,243,0.35);
-  border: 3px solid rgba(110,63,243,0.4);
-  background: linear-gradient(135deg, #6E3FF3 0%, #0A84FF 100%) !important;
+  box-shadow: 0 8px 28px rgba(124,77,255,0.3);
+  border: 3px solid rgba(124,77,255,0.35);
+  background: linear-gradient(135deg, #7C4DFF 0%, #448AFF 100%) !important;
 `;
 
 const SectionTitle = styled(Typography)`
-  font-family: var(--font-sf) !important;
-  font-weight: 600 !important;
-  color: rgba(110,63,243,0.9) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  color: rgba(124,77,255,0.9) !important;
   margin-bottom: 20px !important;
-  font-size: 0.6875rem !important;  /* 11px — iOS caption2 */
+  font-size: 0.6875rem !important;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
 `;
 
 const InfoGrid = styled(Grid)`
@@ -147,12 +147,12 @@ const InfoGrid = styled(Grid)`
 `;
 
 const InfoLabel = styled(Typography)`
-  font-family: var(--font-sf) !important;
-  font-size: 0.6875rem !important;   /* 11px caption2 */
+  font-family: var(--font-heading) !important;
+  font-size: 0.6875rem !important;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
-  color: rgba(235,235,245,0.35) !important;
-  font-weight: 600 !important;
+  letter-spacing: 0.1em;
+  color: rgba(226,232,255,0.4) !important;
+  font-weight: 700 !important;
   margin-bottom: 5px !important;
 `;
 
@@ -160,15 +160,16 @@ const InfoValue = styled(Box)`
   display: flex;
   align-items: center;
   gap: 10px;
-  font-family: var(--font-sf);
+  font-family: var(--font-body);
   font-weight: 500;
-  font-size: 0.9375rem;   /* 15px — iOS subhead */
-  color: rgba(235,235,245,0.85);
+  font-size: 0.875rem;
+  color: rgba(226,232,255,0.85);
+  letter-spacing: -0.011em;
   word-break: break-word;
   overflow-wrap: anywhere;
 
   svg {
-    color: rgba(110,63,243,0.8);
+    color: rgba(124,77,255,0.75);
     font-size: 20px;
     flex-shrink: 0;
   }

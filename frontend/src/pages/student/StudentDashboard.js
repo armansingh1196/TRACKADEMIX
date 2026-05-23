@@ -35,7 +35,7 @@ const StudentDashboard = () => {
     const toggleDrawer = () => setOpen(!open);
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#000000' }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'var(--bg-base)' }}>
             <CssBaseline />
             <AppBar open={open} position='fixed' elevation={0}>
                 <Toolbar sx={{ pr: '24px', display: 'flex', alignItems: 'center' }}>
@@ -57,12 +57,12 @@ const StudentDashboard = () => {
                         noWrap
                         sx={{ 
                             flexGrow: 1, 
-                            fontWeight: 800, 
-                            fontFamily: 'Outfit', 
-                            color: 'white',
-                            opacity: 0.8,
-                            fontSize: { xs: '0.8rem', sm: '1rem' },
-                            letterSpacing: '1px',
+                            fontWeight: 700, 
+                            fontFamily: 'var(--font-heading)', 
+                            color: 'rgba(226,232,255,0.6)',
+                            opacity: 1,
+                            fontSize: { xs: '0.75rem', sm: '0.8125rem' },
+                            letterSpacing: '0.1em',
                             display: { xs: 'none', sm: 'block' }
                         }}
                     >
@@ -104,10 +104,10 @@ const StudentDashboard = () => {
 export default StudentDashboard;
 
 const BrandLogo = styled(Typography)`
-  font-weight: 700 !important;
-  color: white !important;
-  font-family: var(--font-sf, -apple-system, BlinkMacSystemFont, 'Inter', sans-serif) !important;
-  letter-spacing: -0.02em !important;
+  font-weight: 800 !important;
+  color: #F5F5FF !important;
+  font-family: var(--font-display) !important;
+  letter-spacing: -0.025em !important;
   font-size: 1.125rem !important;
 
   @media (max-width: 600px) {
@@ -115,7 +115,7 @@ const BrandLogo = styled(Typography)`
   }
 
   span {
-    color: #6E3FF3;
+    color: #7C4DFF;
   }
 `;
 

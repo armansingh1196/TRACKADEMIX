@@ -52,16 +52,16 @@ const ChooseUser = ({ visitor }) => {
   }, [status, currentRole, navigate, currentUser]);
 
   const roles = [
-    { name: 'Admin', label: 'Head of Department', icon: <AccountCircle />, desc: 'Manage institutional data, students, and faculty assignments.', color: '#6E3FF3' },
-    { name: 'Student', label: 'Student', icon: <School />, desc: 'Access your courses, attendance, and exam performance records.', color: '#0A84FF' },
-    { name: 'Teacher', label: 'Professor', icon: <Group />, desc: 'Manage class sessions, track assignments, and evaluate students.', color: '#30D158' },
+    { name: 'Admin', label: 'Head of Department', icon: <AccountCircle />, desc: 'Manage institutional data, students, and faculty assignments.', color: '#7C4DFF' },
+    { name: 'Student', label: 'Student', icon: <School />, desc: 'Access your courses, attendance, and exam performance records.', color: '#448AFF' },
+    { name: 'Teacher', label: 'Professor', icon: <Group />, desc: 'Manage class sessions, track assignments, and evaluate students.', color: '#34D399' },
   ];
 
   return (
     <StyledMain>
-      <Orb style={{ top: '-15%', right: '-8%', background: 'radial-gradient(circle, rgba(110,63,243,0.45) 0%, rgba(110,63,243,0.1) 50%, transparent 70%)', width: 650, height: 650 }} />
-      <Orb style={{ bottom: '-20%', left: '-8%', background: 'radial-gradient(circle, rgba(10,132,255,0.35) 0%, rgba(10,132,255,0.08) 55%, transparent 70%)', width: 550, height: 550 }} />
-      <Orb style={{ top: '20%', left: '40%', background: 'radial-gradient(circle, rgba(45,212,191,0.15) 0%, transparent 65%)', width: 350, height: 350 }} />
+      <Orb style={{ top: '-15%', right: '-8%', background: 'radial-gradient(circle, rgba(124,77,255,0.4) 0%, rgba(124,77,255,0.1) 50%, transparent 70%)', width: 650, height: 650 }} />
+      <Orb style={{ bottom: '-20%', left: '-8%', background: 'radial-gradient(circle, rgba(68,138,255,0.3) 0%, rgba(68,138,255,0.08) 55%, transparent 70%)', width: 550, height: 550 }} />
+      <Orb style={{ top: '20%', left: '40%', background: 'radial-gradient(circle, rgba(45,212,191,0.12) 0%, transparent 65%)', width: 350, height: 350 }} />
 
       <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2 }}>
         <Box sx={{ position: { xs: 'relative', md: 'absolute' }, top: { md: -72 }, left: { md: 0 }, mb: { xs: 2, md: 0 } }}>
@@ -73,10 +73,10 @@ const ChooseUser = ({ visitor }) => {
         </Box>
 
         <PageHeader>
-          <Typography sx={{ fontFamily: 'var(--font-sf)', fontWeight: 700, fontSize: 'clamp(2rem, 5vw, 3rem)', letterSpacing: '-0.04em', color: '#fff', mb: 1.5 }}>
-            Select Your <span style={{ color: '#6E3FF3' }}>Portal</span>
+          <Typography sx={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 'clamp(2rem, 5vw, 3rem)', letterSpacing: '-0.045em', color: '#F5F5FF', mb: 1.5 }}>
+            Select Your <span style={{ color: '#7C4DFF' }}>Portal</span>
           </Typography>
-          <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: '1.0625rem', color: 'rgba(235,235,245,0.45)', fontWeight: 400 }}>
+          <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '1.0625rem', color: 'rgba(226,232,255,0.5)', fontWeight: 400, letterSpacing: '-0.011em' }}>
             Choose your institutional role to continue to your secure dashboard.
           </Typography>
         </PageHeader>
@@ -88,10 +88,10 @@ const ChooseUser = ({ visitor }) => {
                 <RoleIconBox rolecolor={role.color}>
                   {React.cloneElement(role.icon, { sx: { fontSize: { xs: 28, md: 40 } } })}
                 </RoleIconBox>
-                <Typography sx={{ fontFamily: 'var(--font-sf)', fontWeight: 700, fontSize: { xs: '1.05rem', md: '1.25rem' }, letterSpacing: '-0.025em', color: '#fff', mb: { xs: 0.75, md: 1.5 }, mt: 0.5 }}>
+                <Typography sx={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: { xs: '1.05rem', md: '1.25rem' }, letterSpacing: '-0.025em', color: '#F5F5FF', mb: { xs: 0.75, md: 1.5 }, mt: 0.5 }}>
                   {role.label}
                 </Typography>
-                <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: { xs: '0.8125rem', md: '0.9375rem' }, color: 'rgba(235,235,245,0.45)', lineHeight: 1.5 }}>
+                <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: { xs: '0.8125rem', md: '0.875rem' }, color: 'rgba(226,232,255,0.5)', lineHeight: 1.55, letterSpacing: '-0.011em' }}>
                   {role.desc}
                 </Typography>
                 <EnterButton rolecolor={role.color}>Enter Portal</EnterButton>
@@ -102,8 +102,8 @@ const ChooseUser = ({ visitor }) => {
       </Container>
 
       <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1, backdropFilter: 'blur(8px)' }} open={loader}>
-        <CircularProgress sx={{ color: '#6E3FF3' }} />
-        <Typography sx={{ ml: 2, fontFamily: 'var(--font-sf)', fontWeight: 500 }}>Authenticating Access...</Typography>
+        <CircularProgress sx={{ color: '#7C4DFF' }} />
+        <Typography sx={{ ml: 2, fontFamily: 'var(--font-body)', fontWeight: 500, letterSpacing: '-0.011em' }}>Authenticating Access...</Typography>
       </Backdrop>
       <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
     </StyledMain>
@@ -153,13 +153,13 @@ const PageHeader = styled(Box)`
 
 const BackBtn = styled(IconButton)`
   && {
-    color: rgba(235,235,245,0.7);
-    background: rgba(28,28,30,0.7);
-    border: 1px solid rgba(84,84,88,0.5);
+    color: rgba(226,232,255,0.7);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(124,77,255,0.12);
     width: 40px;
     height: 40px;
     transition: all 0.25s ease;
-    &:hover { background: rgba(110,63,243,0.15); border-color: rgba(110,63,243,0.4); color: white; }
+    &:hover { background: rgba(124,77,255,0.12); border-color: rgba(124,77,255,0.3); color: white; }
   }
 `;
 
@@ -171,8 +171,8 @@ const RoleCard = styled(Paper)`
     backdrop-filter: blur(40px) saturate(200%) brightness(1.06) !important;
     -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06) !important;
     border-radius: 24px !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.12) !important;
+    border: 1px solid rgba(124, 77, 255, 0.1) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 0 0 1px rgba(124,77,255,0.06), inset 0 1px 0 rgba(255,255,255,0.1) !important;
     cursor: pointer;
     transition: all 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
     color: white !important;
@@ -186,7 +186,7 @@ const RoleCard = styled(Paper)`
     &:hover {
       transform: translateY(-14px) scale(1.02) !important;
       border-color: ${props => props.accent ? `${props.accent}60` : 'rgba(110,63,243,0.5)'} !important;
-      box-shadow: 0 28px 60px rgba(0,0,0,0.6), 0 0 0 1px ${props => props.accent ? `${props.accent}40` : 'rgba(110,63,243,0.35)'}, inset 0 1px 0 rgba(255,255,255,0.18) !important;
+      box-shadow: 0 28px 60px rgba(0,0,0,0.55), 0 0 0 1px ${props => props.accent ? `${props.accent}40` : 'rgba(124,77,255,0.35)'}, inset 0 1px 0 rgba(255,255,255,0.14) !important;
       background: rgba(255, 255, 255, 0.085) !important;
     }
   }
@@ -200,8 +200,8 @@ const RoleIconBox = styled(Box)`
   align-items: center;
   justify-content: center;
   margin: 0 auto 24px;
-  background: ${props => props.rolecolor ? `${props.rolecolor}18` : 'rgba(110,63,243,0.14)'};
-  color: ${props => props.rolecolor || '#6E3FF3'};
+  background: ${props => props.rolecolor ? `${props.rolecolor}14` : 'rgba(124,77,255,0.1)'};
+  color: ${props => props.rolecolor || '#7C4DFF'};
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   animation: ${floatCard} 7s ease-in-out infinite;
 
@@ -214,7 +214,7 @@ const RoleIconBox = styled(Box)`
 
   ${RoleCard}:hover & {
     transform: scale(1.12);
-    background: ${props => props.rolecolor ? `${props.rolecolor}28` : 'rgba(110,63,243,0.24)'};
+    background: ${props => props.rolecolor ? `${props.rolecolor}20` : 'rgba(124,77,255,0.18)'};
   }
 `;
 
@@ -222,15 +222,15 @@ const EnterButton = styled(Box)`
   margin-top: 28px;
   padding: 11px 24px;
   border-radius: 12px;
-  font-family: var(--font-sf);
+  font-family: var(--font-body);
   font-weight: 600;
   font-size: 0.875rem;
   display: inline-block;
   transition: all 0.25s ease;
   letter-spacing: -0.01em;
-  color: ${props => props.rolecolor || '#8B5CF6'};
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: ${props => props.rolecolor || '#9B6FF8'};
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(124, 77, 255, 0.1);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
 
   @media (max-width: 600px) {

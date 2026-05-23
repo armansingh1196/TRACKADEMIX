@@ -11,8 +11,8 @@ import AppButton from '../components/common/AppButton';
 import AppTextField from '../components/common/AppTextField';
 
 const theme = createTheme({
-  palette: { primary: { main: '#6E3FF3' }, secondary: { main: '#0A84FF' } },
-  typography: { fontFamily: "-apple-system, BlinkMacSystemFont, 'Inter', sans-serif" },
+  palette: { primary: { main: '#7C4DFF' }, secondary: { main: '#448AFF' } },
+  typography: { fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif" },
 });
 
 const LoginPage = ({ role }) => {
@@ -87,23 +87,23 @@ const LoginPage = ({ role }) => {
         <Grid container sx={{ height: '100vh', overflow: 'hidden' }}>
 
           {/* ── Left: Form Panel ── */}
-          <Grid item xs={12} md={5} component={Box} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: '#000', position: 'relative', zIndex: 2 }}>
-            <FormOrb style={{ top: '-20%', left: '-20%', background: 'radial-gradient(circle, rgba(110,63,243,0.12) 0%, transparent 70%)', width: 400, height: 400 }} />
+          <Grid item xs={12} md={5} component={Box} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: '#060818', position: 'relative', zIndex: 2 }}>
+            <FormOrb style={{ top: '-20%', left: '-20%', background: 'radial-gradient(circle, rgba(124,77,255,0.12) 0%, transparent 70%)', width: 400, height: 400 }} />
             <FormWrapper>
               {/* Brand */}
               <BrandBox onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-                <SchoolOutlined sx={{ fontSize: 30, color: '#6E3FF3' }} />
-                <Typography sx={{ fontFamily: 'var(--font-sf)', fontWeight: 700, fontSize: '1.125rem', color: 'white', letterSpacing: '-0.02em' }}>
-                  TRACAD<span style={{ color: '#6E3FF3' }}>EMIX</span>
+                <SchoolOutlined sx={{ fontSize: 30, color: '#7C4DFF' }} />
+                <Typography sx={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '1.125rem', color: '#F5F5FF', letterSpacing: '-0.025em' }}>
+                  TRACAD<span style={{ color: '#7C4DFF' }}>EMIX</span>
                 </Typography>
               </BrandBox>
 
               {/* Heading */}
               <Box sx={{ mb: 4 }}>
-                <Typography sx={{ fontFamily: 'var(--font-sf)', fontWeight: 700, fontSize: 'clamp(1.75rem, 4vw, 2.25rem)', letterSpacing: '-0.03em', color: 'white', mb: 0.75 }}>
+                <Typography sx={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 'clamp(1.75rem, 4vw, 2.25rem)', letterSpacing: '-0.035em', color: '#F5F5FF', mb: 0.75 }}>
                   Welcome Back
                 </Typography>
-                <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: '0.9375rem', color: 'rgba(235,235,245,0.45)', fontWeight: 400 }}>
+                <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '0.9375rem', color: 'rgba(226,232,255,0.5)', fontWeight: 400, letterSpacing: '-0.011em' }}>
                   Login to your {role} portal to continue monitoring records.
                 </Typography>
               </Box>
@@ -147,32 +147,32 @@ const LoginPage = ({ role }) => {
                 />
 
                 {role === "Student" && (
-                  <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: '0.8125rem', color: 'rgba(110,63,243,0.85)', mt: 1, fontWeight: 500, lineHeight: 1.4 }}>
+                  <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '0.8125rem', color: 'rgba(124,77,255,0.85)', mt: 1, fontWeight: 500, lineHeight: 1.5, letterSpacing: '-0.011em' }}>
                     First time? Password: CapitalizedFirstName@BirthYearLast3Roll
                   </Typography>
                 )}
 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', my: 3 }}>
                   <FormControlLabel
-                    control={<Checkbox value="remember" size="small" sx={{ color: 'rgba(235,235,245,0.25)', '&.Mui-checked': { color: '#6E3FF3' }, p: '6px' }} />}
-                    label={<Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: '0.875rem', color: 'rgba(235,235,245,0.45)' }}>Keep me logged in</Typography>}
+                    control={<Checkbox value="remember" size="small" sx={{ color: 'rgba(226,232,255,0.25)', '&.Mui-checked': { color: '#7C4DFF' }, p: '6px' }} />}
+                    label={<Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '0.875rem', color: 'rgba(226,232,255,0.5)', letterSpacing: '-0.011em' }}>Keep me logged in</Typography>}
                   />
-                  <Link to="/" style={{ fontFamily: 'var(--font-sf)', color: '#6E3FF3', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>
+                  <Link to="/" style={{ fontFamily: 'var(--font-body)', color: '#7C4DFF', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>
                     Recovery
                   </Link>
                 </Box>
 
                 <AppButton type="submit" fullWidth variant="contained" disabled={loader}
-                  sx={{ py: 1.8, fontWeight: 600, fontSize: '1rem !important', borderRadius: '14px !important', background: '#6E3FF3 !important', boxShadow: '0 8px 28px rgba(110,63,243,0.4) !important' }}
+                  sx={{ py: 1.8, fontWeight: 600, fontSize: '0.9375rem !important', borderRadius: '14px !important', background: '#7C4DFF !important', boxShadow: '0 8px 28px rgba(124,77,255,0.35) !important', letterSpacing: '-0.01em' }}
                 >
                   {loader ? <CircularProgress size={22} color="inherit" /> : `Enter ${role} Portal`}
                 </AppButton>
 
                 {role === "Admin" && (
                   <Box sx={{ mt: 3.5, textAlign: 'center' }}>
-                    <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: '0.875rem', color: 'rgba(235,235,245,0.4)' }}>
+                    <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '0.875rem', color: 'rgba(226,232,255,0.45)', letterSpacing: '-0.011em' }}>
                       New institution?{' '}
-                      <Link to="/Adminregister" style={{ color: '#6E3FF3', fontWeight: 500, textDecoration: 'none' }}>Register here</Link>
+                      <Link to="/Adminregister" style={{ color: '#7C4DFF', fontWeight: 500, textDecoration: 'none' }}>Register here</Link>
                     </Typography>
                   </Box>
                 )}
@@ -181,14 +181,14 @@ const LoginPage = ({ role }) => {
           </Grid>
 
           {/* ── Right: Visual Panel ── */}
-          <Grid item xs={false} md={7} sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', background: '#050508' }}>
-            <RightOrb style={{ top: '-15%', right: '-10%', width: 600, height: 600, background: 'radial-gradient(circle, rgba(110,63,243,0.2) 0%, transparent 65%)' }} />
-            <RightOrb style={{ bottom: '-20%', left: '-5%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(10,132,255,0.1) 0%, transparent 65%)' }} />
+          <Grid item xs={false} md={7} sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden', background: '#040610' }}>
+            <RightOrb style={{ top: '-15%', right: '-10%', width: 600, height: 600, background: 'radial-gradient(circle, rgba(124,77,255,0.18) 0%, transparent 65%)' }} />
+            <RightOrb style={{ bottom: '-20%', left: '-5%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(68,138,255,0.1) 0%, transparent 65%)' }} />
             <VisualBox>
-              <Typography sx={{ fontFamily: 'var(--font-sf)', fontWeight: 700, fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', letterSpacing: '-0.04em', color: 'white', mb: 2, lineHeight: 1.05 }}>
-                Secure{' '}<span style={{ color: '#6E3FF3' }}>Access.</span>
+              <Typography sx={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 'clamp(2.5rem, 5vw, 3.5rem)', letterSpacing: '-0.045em', color: '#F5F5FF', mb: 2, lineHeight: 1.05 }}>
+                Secure{' '}<span style={{ color: '#7C4DFF' }}>Access.</span>
               </Typography>
-              <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: '1.0625rem', color: 'rgba(235,235,245,0.4)', fontWeight: 400, lineHeight: 1.6, maxWidth: 420 }}>
+              <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '1.0625rem', color: 'rgba(226,232,255,0.45)', fontWeight: 400, lineHeight: 1.65, maxWidth: 420, letterSpacing: '-0.011em' }}>
                 Access your records, attendance, and performance analytics with institutional-grade security.
               </Typography>
               <VisualStats>
@@ -222,7 +222,7 @@ const slideUp = keyframes`
 const PageRoot = styled.div`
   height: 100vh;
   overflow: hidden;
-  background: #000;
+  background: #060818;
 `;
 
 const FormOrb = styled.div`
@@ -250,18 +250,19 @@ const BrandBox = styled(Box)`
 
 const IOSField = styled(AppTextField)`
   & .MuiOutlinedInput-root {
-    background: rgba(120,120,128,0.1) !important;
-    color: white !important;
+    background: rgba(124,77,255,0.04) !important;
+    color: var(--text-1) !important;
     border-radius: 12px !important;
-    font-family: var(--font-sf) !important;
+    font-family: var(--font-body) !important;
     font-size: 0.9375rem !important;
-    & fieldset { border-color: rgba(84,84,88,0.55) !important; }
-    &:hover fieldset { border-color: rgba(110,63,243,0.5) !important; }
-    &.Mui-focused fieldset { border-color: #6E3FF3 !important; border-width: 2px !important; }
+    letter-spacing: -0.011em !important;
+    & fieldset { border-color: rgba(124,77,255,0.12) !important; }
+    &:hover fieldset { border-color: rgba(124,77,255,0.35) !important; }
+    &.Mui-focused fieldset { border-color: #7C4DFF !important; border-width: 2px !important; box-shadow: 0 0 0 3px rgba(124,77,255,0.08); }
   }
   & .MuiInputLabel-root {
-    color: rgba(235,235,245,0.35) !important;
-    font-family: var(--font-sf) !important;
+    color: rgba(226,232,255,0.4) !important;
+    font-family: var(--font-body) !important;
     font-size: 0.9375rem !important;
   }
 `;
@@ -290,28 +291,34 @@ const VisualStats = styled(Box)`
 const StatItem = styled(Box)`
   flex: 1;
   min-width: 100px;
-  background: rgba(28,28,30,0.65);
-  border: 1px solid rgba(84,84,88,0.4);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(124,77,255,0.1);
   backdrop-filter: blur(20px);
   border-radius: 16px;
   padding: 20px 16px;
   display: flex;
   flex-direction: column;
   gap: 5px;
+  transition: all 0.25s ease;
 
   .v {
-    font-family: var(--font-sf);
+    font-family: var(--font-display);
     font-size: 1.35rem;
-    font-weight: 700;
-    color: white;
+    font-weight: 800;
+    color: #F5F5FF;
     letter-spacing: -0.03em;
   }
   .l {
-    font-family: var(--font-sf);
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: rgba(235,235,245,0.4);
+    font-family: var(--font-heading);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: rgba(226,232,255,0.4);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.1em;
+  }
+
+  &:hover {
+    border-color: rgba(124,77,255,0.2);
+    background: rgba(255,255,255,0.06);
   }
 `;

@@ -45,11 +45,11 @@ const StudentSideBar = ({ open }) => {
                                     primary={item.text}
                                     primaryTypographyProps={{
                                         sx: {
-                                            fontFamily: 'var(--font-sf)',
+                                            fontFamily: 'var(--font-body)',
                                             fontWeight: isActive ? 600 : 500,
                                             fontSize: '0.9375rem',
                                             letterSpacing: '-0.01em',
-                                            color: isActive ? '#FFFFFF' : 'rgba(235,235,245,0.6)',
+                                            color: isActive ? '#F5F5FF' : 'rgba(226,232,255,0.6)',
                                         }
                                     }}
                                 />
@@ -78,11 +78,11 @@ const StudentSideBar = ({ open }) => {
                             primary="Profile"
                             primaryTypographyProps={{
                                 sx: {
-                                    fontFamily: 'var(--font-sf)',
+                                    fontFamily: 'var(--font-body)',
                                     fontWeight: location.pathname.startsWith('/Student/profile') ? 600 : 500,
                                     fontSize: '0.9375rem',
                                     letterSpacing: '-0.01em',
-                                    color: location.pathname.startsWith('/Student/profile') ? '#FFFFFF' : 'rgba(235,235,245,0.6)',
+                                    color: location.pathname.startsWith('/Student/profile') ? '#F5F5FF' : 'rgba(226,232,255,0.6)',
                                 }
                             }}
                         />
@@ -102,11 +102,11 @@ const StudentSideBar = ({ open }) => {
                             primary="Logout"
                             primaryTypographyProps={{
                                 sx: {
-                                    fontFamily: 'var(--font-sf)',
+                                    fontFamily: 'var(--font-body)',
                                     fontWeight: 500,
                                     fontSize: '0.9375rem',
                                     letterSpacing: '-0.01em',
-                                    color: 'rgba(235,235,245,0.45)',
+                                    color: 'rgba(226,232,255,0.5)',
                                 }
                             }}
                         />
@@ -121,11 +121,11 @@ export default StudentSideBar;
 
 const SectionLabel = styled(MuiTypography)`
   padding: 0 8px 8px;
-  font-family: var(--font-sf) !important;
-  font-size: 0.6875rem !important;  /* 11px — iOS caption2 */
-  font-weight: 600 !important;
-  color: rgba(235,235,245,0.3) !important;
-  letter-spacing: 0.07em !important;
+  font-family: var(--font-heading) !important;
+  font-size: 0.6875rem !important;  /* 11px */
+  font-weight: 700 !important;
+  color: rgba(226,232,255,0.3) !important;
+  letter-spacing: 0.1em !important;
   text-transform: uppercase;
   white-space: nowrap;
 `;
@@ -133,7 +133,7 @@ const SectionLabel = styled(MuiTypography)`
 const StyledNav = styled.div`
   display: flex;
   flex-direction: column;
-  color: rgba(235,235,245,0.75);
+  color: rgba(226,232,255,0.75);
   height: 100%;
 `;
 
@@ -145,13 +145,13 @@ const NavItem = styled(ListItemButton)`
     padding: 10px 12px !important;
     min-height: 44px;
     background: ${props => props.isactive === 'true'
-        ? 'rgba(110, 63, 243, 0.16) !important'
+        ? 'rgba(124, 77, 255, 0.14) !important'
         : 'transparent !important'};
 
     &:hover {
       background: ${props => props.isactive === 'true'
-        ? 'rgba(110,63,243,0.2) !important'
-        : 'rgba(120,120,128,0.1) !important'};
+        ? 'rgba(124,77,255,0.18) !important'
+        : 'rgba(255,255,255,0.04) !important'};
     }
   }
 `;
@@ -176,8 +176,8 @@ const NavIcon = styled(ListItemIcon)`
   && {
     min-width: 0 !important;
     color: ${props => {
-        if (props.logout === 'true') return 'rgba(235,235,245,0.3)';
-        return props.isactive === 'true' ? '#9B6FF8' : 'rgba(235,235,245,0.35)';
+        if (props.logout === 'true') return 'rgba(226,232,255,0.3)';
+        return props.isactive === 'true' ? '#9B6FF8' : 'rgba(226,232,255,0.35)';
     }} !important;
     transition: color 0.2s ease !important;
 
@@ -186,7 +186,7 @@ const NavIcon = styled(ListItemIcon)`
     }
 
     &.logout-icon {
-      color: rgba(235,235,245,0.3);
+      color: rgba(226,232,255,0.3);
     }
   }
 `;

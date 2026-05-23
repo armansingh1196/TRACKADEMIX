@@ -12,9 +12,9 @@ const Homepage = () => {
 
     return (
         <StyledMain>
-            <Orb style={{ top: '-15%', right: '-8%', width: 700, height: 700, background: 'radial-gradient(circle, rgba(110,63,243,0.45) 0%, rgba(110,63,243,0.1) 50%, transparent 70%)' }} />
-            <Orb style={{ bottom: '-20%', left: '-10%', width: 600, height: 600, background: 'radial-gradient(circle, rgba(10,132,255,0.35) 0%, rgba(10,132,255,0.08) 55%, transparent 70%)' }} />
-            <Orb style={{ top: '35%', left: '25%', width: 400, height: 400, background: 'radial-gradient(circle, rgba(45,212,191,0.18) 0%, rgba(45,212,191,0.04) 55%, transparent 70%)' }} />
+            <Orb style={{ top: '-15%', right: '-8%', width: 700, height: 700, background: 'radial-gradient(circle, rgba(124,77,255,0.4) 0%, rgba(124,77,255,0.1) 50%, transparent 70%)' }} />
+            <Orb style={{ bottom: '-20%', left: '-10%', width: 600, height: 600, background: 'radial-gradient(circle, rgba(68,138,255,0.3) 0%, rgba(68,138,255,0.08) 55%, transparent 70%)' }} />
+            <Orb style={{ top: '35%', left: '25%', width: 400, height: 400, background: 'radial-gradient(circle, rgba(45,212,191,0.15) 0%, rgba(45,212,191,0.04) 55%, transparent 70%)' }} />
 
             <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, height: '100%', display: 'flex', alignItems: 'center' }}>
                 <Grid container spacing={{ xs: 4, md: 8 }} alignItems="center">
@@ -47,8 +47,8 @@ const Homepage = () => {
                                         px: 4, py: 1.75,
                                         fontSize: '1rem !important',
                                         borderRadius: '14px !important',
-                                        background: '#6E3FF3 !important',
-                                        boxShadow: '0 8px 32px rgba(110,63,243,0.45) !important',
+                                        background: '#7C4DFF !important',
+                                        boxShadow: '0 8px 32px rgba(124,77,255,0.4) !important',
                                         fontWeight: 600,
                                     }}
                                 >
@@ -63,11 +63,11 @@ const Homepage = () => {
                                         fontSize: '1rem !important',
                                         borderRadius: '14px !important',
                                         color: 'rgba(235,235,245,0.8) !important',
-                                        borderColor: 'rgba(84,84,88,0.7) !important',
+                                        borderColor: 'rgba(124,77,255,0.15) !important',
                                         background: 'rgba(120,120,128,0.1) !important',
                                         '&:hover': {
-                                            borderColor: 'rgba(110,63,243,0.5) !important',
-                                            background: 'rgba(110,63,243,0.08) !important',
+                                            borderColor: 'rgba(124,77,255,0.35) !important',
+                                            background: 'rgba(124,77,255,0.08) !important',
                                         }
                                     }}
                                 >
@@ -86,28 +86,28 @@ const Homepage = () => {
                     <Grid item xs={12} md={5} sx={{ display: { xs: 'none', md: 'block' } }}>
                         <CardsStack>
                             <FeatureCard className="card-1">
-                                <CardIcon style={{ background: 'rgba(110,63,243,0.14)', color: '#9B6FF8' }}>
+                                <CardIcon style={{ background: 'rgba(124,77,255,0.12)', color: '#9B6FF8' }}>
                                     <SchoolOutlinedIcon sx={{ fontSize: 28 }} />
                                 </CardIcon>
                                 <Box>
-                                    <Typography sx={{ fontFamily: 'var(--font-sf)', fontWeight: 600, fontSize: '1rem', color: '#fff', letterSpacing: '-0.02em', mb: '3px' }}>
+                                    <Typography sx={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1rem', color: '#F5F5FF', letterSpacing: '-0.02em', mb: '3px' }}>
                                         Centralized Control
                                     </Typography>
-                                    <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: '0.875rem', color: 'rgba(235,235,245,0.45)', lineHeight: 1.4 }}>
+                                    <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '0.875rem', color: 'rgba(226,232,255,0.5)', lineHeight: 1.5, letterSpacing: '-0.011em' }}>
                                         Manage every department from one unified dashboard.
                                     </Typography>
                                 </Box>
                             </FeatureCard>
 
                             <FeatureCard className="card-2">
-                                <CardIcon style={{ background: 'rgba(10,132,255,0.14)', color: '#0A84FF' }}>
+                                <CardIcon style={{ background: 'rgba(68,138,255,0.12)', color: '#448AFF' }}>
                                     <SecurityOutlinedIcon sx={{ fontSize: 28 }} />
                                 </CardIcon>
                                 <Box>
-                                    <Typography sx={{ fontFamily: 'var(--font-sf)', fontWeight: 600, fontSize: '1rem', color: '#fff', letterSpacing: '-0.02em', mb: '3px' }}>
+                                    <Typography sx={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '1rem', color: '#F5F5FF', letterSpacing: '-0.02em', mb: '3px' }}>
                                         Secure Infrastructure
                                     </Typography>
-                                    <Typography sx={{ fontFamily: 'var(--font-sf)', fontSize: '0.875rem', color: 'rgba(235,235,245,0.45)', lineHeight: 1.4 }}>
+                                    <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '0.875rem', color: 'rgba(226,232,255,0.5)', lineHeight: 1.5, letterSpacing: '-0.011em' }}>
                                         Bank-grade encryption for all institutional data.
                                     </Typography>
                                 </Box>
@@ -185,14 +185,14 @@ const PillBadge = styled.div`
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: rgba(110, 63, 243, 0.1);
-  border: 1px solid rgba(110, 63, 243, 0.28);
+  background: rgba(124, 77, 255, 0.08);
+  border: 1px solid rgba(124, 77, 255, 0.2);
   padding: 7px 16px;
   border-radius: 100px;
   color: rgba(155, 111, 248, 0.95);
-  font-family: var(--font-sf);
+  font-family: var(--font-heading);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   margin-bottom: 28px;
@@ -206,25 +206,26 @@ const PillBadge = styled.div`
 `;
 
 const HeroTitle = styled(Typography)`
-  font-family: var(--font-sf) !important;
+  font-family: var(--font-display) !important;
   font-size: clamp(2.8rem, 7vw, 4.5rem) !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.04em !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.045em !important;
   line-height: 1.0 !important;
-  color: #FFFFFF !important;
+  color: #F5F5FF !important;
   margin-bottom: 24px !important;
 `;
 
 const AccentSpan = styled.span`
-  color: #6E3FF3;
+  color: #7C4DFF;
 `;
 
 const HeroSubtitle = styled(Typography)`
-  font-family: var(--font-sf) !important;
+  font-family: var(--font-body) !important;
   font-size: 1.0625rem !important;
   font-weight: 400 !important;
-  color: rgba(235, 235, 245, 0.5) !important;
-  line-height: 1.55 !important;
+  color: rgba(226, 232, 255, 0.55) !important;
+  line-height: 1.65 !important;
+  letter-spacing: -0.011em !important;
   max-width: 520px;
   margin-bottom: 40px !important;
 
@@ -247,12 +248,13 @@ const CTARow = styled(Box)`
 `;
 
 const FooterNote = styled(Typography)`
-  font-family: var(--font-sf) !important;
-  font-size: 0.9375rem !important;
-  color: rgba(235, 235, 245, 0.35) !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.875rem !important;
+  color: rgba(226, 232, 255, 0.35) !important;
+  letter-spacing: -0.011em !important;
 
   span {
-    color: rgba(110, 63, 243, 0.9);
+    color: rgba(124, 77, 255, 0.9);
     font-weight: 500;
     margin-left: 6px;
     cursor: pointer;
@@ -271,23 +273,23 @@ const FeatureCard = styled(Box)`
   background: rgba(255, 255, 255, 0.055);
   backdrop-filter: blur(32px) saturate(200%) brightness(1.06);
   -webkit-backdrop-filter: blur(32px) saturate(200%) brightness(1.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(124, 77, 255, 0.12);
   border-radius: 20px;
   padding: 24px;
   display: flex;
   align-items: center;
   gap: 18px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.12);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,77,255,0.06), inset 0 1px 0 rgba(255,255,255,0.1);
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   &.card-1 { animation: ${floatA} 7s ease-in-out infinite; }
   &.card-2 { animation: ${floatB} 8s ease-in-out infinite; animation-delay: 1s; }
 
   &:hover {
-    border-color: rgba(110, 63, 243, 0.4);
+    border-color: rgba(124, 77, 255, 0.3);
     background: rgba(255, 255, 255, 0.08);
     transform: scale(1.02);
-    box-shadow: 0 16px 48px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.16);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(124,77,255,0.12), inset 0 1px 0 rgba(255,255,255,0.14);
   }
 `;
 
@@ -311,37 +313,37 @@ const StatPill = styled(Box)`
   background: rgba(255, 255, 255, 0.055);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(124, 77, 255, 0.1);
   border-radius: 16px;
   padding: 18px 12px;
   text-align: center;
   display: flex;
   flex-direction: column;
   gap: 4px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.35), 0 0 0 1px rgba(124,77,255,0.05), inset 0 1px 0 rgba(255,255,255,0.1);
   transition: all 0.3s ease;
 
   .val {
-    font-family: var(--font-sf);
+    font-family: var(--font-display);
     font-size: 1.5rem;
-    font-weight: 700;
-    color: #FFFFFF;
+    font-weight: 800;
+    color: #F5F5FF;
     letter-spacing: -0.03em;
     line-height: 1;
   }
 
   .lab {
-    font-family: var(--font-sf);
+    font-family: var(--font-heading);
     font-size: 0.6875rem;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.07em;
-    color: rgba(139, 92, 246, 0.9);
+    letter-spacing: 0.1em;
+    color: rgba(155, 111, 248, 0.85);
   }
 
   &:hover {
-    border-color: rgba(110, 63, 243, 0.35);
+    border-color: rgba(124, 77, 255, 0.25);
     background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.14);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45), 0 0 0 1px rgba(124,77,255,0.1), inset 0 1px 0 rgba(255,255,255,0.14);
   }
 `;
