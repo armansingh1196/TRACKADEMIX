@@ -99,7 +99,7 @@ const AppHeader = ({ title, subtitle, showBack = true, rightSide }) => {
 export default AppHeader;
 
 const HeaderWrapper = styled(Box)`
-  margin-bottom: 32px;
+  margin-bottom: 24px;
   animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 `;
 
@@ -107,6 +107,8 @@ const TopRow = styled(Box)`
   display: flex;
   align-items: center;
   margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
 `;
 
 const Title = styled(Typography)`
@@ -117,6 +119,8 @@ const Title = styled(Typography)`
   -webkit-text-fill-color: transparent;
   margin-bottom: 8px !important;
   letter-spacing: -1px !important;
+  font-size: clamp(1.6rem, 5vw, 3rem) !important;
+  line-height: 1.1 !important;
 `;
 
 const Subtitle = styled(Typography)`
@@ -124,4 +128,6 @@ const Subtitle = styled(Typography)`
   font-weight: 500 !important;
   max-width: 600px;
   line-height: 1.6 !important;
+  font-size: clamp(0.8rem, 2.5vw, 1rem) !important;
+  word-break: break-word;
 `;

@@ -118,6 +118,11 @@ const ProfilePaper = styled(Paper)`
   backdrop-filter: blur(20px);
   box-shadow: var(--shadow-xl) !important;
   animation: fadeIn 0.8s ease-out;
+
+  @media (max-width: 600px) {
+    padding: 24px 16px;
+    border-radius: 20px !important;
+  }
 `;
 
 const StyledAvatar = styled(Avatar)`
@@ -154,11 +159,14 @@ const InfoValue = styled(Box)`
   gap: 12px;
   font-weight: 600;
   color: white;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-family: 'Outfit', sans-serif;
+  word-break: break-word;
+  overflow-wrap: anywhere;
   
   svg {
     color: var(--secondary);
     font-size: 22px;
+    flex-shrink: 0;
   }
 `;

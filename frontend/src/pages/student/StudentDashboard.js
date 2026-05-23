@@ -120,10 +120,16 @@ const BrandLogo = styled(Typography)`
 `;
 
 const ContentWrapper = styled(Box)`
-  padding: 32px;
+  padding: 28px;
   animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  overflow-x: hidden;
+  min-width: 0;
+
+  @media (max-width: 768px) {
+    padding: 16px 12px;
+  }
 
   @media (max-width: 600px) {
-    padding: 16px;
+    padding: 12px 8px;
   }
 `;

@@ -283,27 +283,37 @@ export default StudentHomePage;
 
 const SectionPaper = styled(Box)`
   background: rgba(176, 168, 185, 0.03);
-  border-radius: 32px;
+  border-radius: 24px;
   border: 1px solid var(--border);
   padding: 16px;
   box-shadow: var(--shadow-md);
   backdrop-filter: blur(10px);
+
+  @media (max-width: 600px) {
+    border-radius: 16px;
+    padding: 12px;
+  }
 `;
 
 const ChartPaper = styled(Box)`
   background: rgba(176, 168, 185, 0.03);
-  border-radius: 32px;
+  border-radius: 24px;
   border: 1px solid var(--border);
-  padding: 28px;
+  padding: 24px;
   box-shadow: var(--shadow-md);
-  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   backdrop-filter: blur(10px);
   transition: var(--transition);
+
+  @media (max-width: 600px) {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
   &:hover {
-    transform: translateY(-5px);
+    transform: translateY(-3px);
     border-color: var(--primary);
   }
 `;

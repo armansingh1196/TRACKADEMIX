@@ -235,7 +235,7 @@ const StudentAIInsights = () => {
 
                     {/* AI Model Performance Row */}
                     <Grid item xs={12}>
-                        <SectionPaper sx={{ p: 4, background: 'linear-gradient(135deg, rgba(132, 85, 194, 0.1) 0%, rgba(255, 128, 102, 0.1) 100%) !important' }}>
+                        <SectionPaper sx={{ p: { xs: 2, sm: 4 }, background: 'linear-gradient(135deg, rgba(132, 85, 194, 0.1) 0%, rgba(255, 128, 102, 0.1) 100%) !important' }}>
                             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
                                 <Box>
                                     <Typography variant="subtitle2" sx={{ fontWeight: 800, color: 'var(--secondary)', mb: 0.5 }}>
@@ -245,16 +245,16 @@ const StudentAIInsights = () => {
                                         This model is trained on historical data to predict student success.
                                     </Typography>
                                 </Box>
-                                <Box sx={{ display: 'flex', gap: 4 }}>
-                                    <Box sx={{ textAlign: 'center' }}>
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mt: { xs: 2, sm: 0 } }}>
+                                    <Box sx={{ textAlign: 'center', minWidth: 80 }}>
                                         <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 700 }}>ACCURACY</Typography>
-                                        <Typography variant="h4" sx={{ fontWeight: 900, color: 'var(--primary)' }}>
+                                        <Typography variant="h4" sx={{ fontWeight: 900, color: 'var(--primary)', fontSize: { xs: '1.8rem', sm: '2.125rem' } }}>
                                             {insights.modelMetrics ? Math.round(insights.modelMetrics.accuracy * 100) : 88}%
                                         </Typography>
                                     </Box>
-                                    <Box sx={{ textAlign: 'center' }}>
+                                    <Box sx={{ textAlign: 'center', minWidth: 80 }}>
                                         <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 700 }}>MODEL TYPE</Typography>
-                                        <Typography variant="h5" sx={{ fontWeight: 800, color: 'var(--text-main)', mt: 0.5 }}>
+                                        <Typography variant="h5" sx={{ fontWeight: 800, color: 'var(--text-main)', mt: 0.5, fontSize: { xs: '1.1rem', sm: '1.5rem' } }}>
                                             {insights.modelMetrics?.model_type || "Random Forest"}
                                         </Typography>
                                     </Box>
@@ -276,6 +276,10 @@ const SectionPaper = styled(Paper)`
   border: 1px solid var(--border) !important;
   box-shadow: var(--shadow-md) !important;
   backdrop-filter: blur(10px);
+
+  @media (max-width: 600px) {
+    border-radius: 16px !important;
+  }
 `;
 
 const MetricBox = styled(Box)`

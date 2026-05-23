@@ -71,7 +71,7 @@ const AttendanceHeatmap = ({ studentID }) => {
 
     return (
         <HeatmapContainer>
-            <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
+            <Box sx={{ mb: 3, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, flexWrap: 'wrap', gap: 2 }}>
                 <Box>
                     <Typography variant="h6" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white', mb: 0.5 }}>
                         Attendance Consistency
@@ -131,11 +131,17 @@ const AttendanceHeatmap = ({ studentID }) => {
 export default AttendanceHeatmap;
 
 const HeatmapContainer = styled(Box)`
-    padding: 32px;
+    padding: 28px;
     background: rgba(255, 255, 255, 0.02);
-    border-radius: 32px;
+    border-radius: 24px;
     border: 1px solid var(--border);
     backdrop-filter: blur(10px);
+    overflow: hidden;
+
+    @media (max-width: 600px) {
+        padding: 16px;
+        border-radius: 16px;
+    }
 `;
 
 const GridWrapper = styled.div`
