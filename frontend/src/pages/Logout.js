@@ -3,104 +3,71 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { authLogout } from '../redux/userRelated/userSlice';
 import styled, { keyframes } from 'styled-components';
-import { Box, Typography, Avatar, Dialog, DialogContent, Stack } from '@mui/material';
-import AppButton from '../components/common/AppButton';
+import { Dialog, DialogContent } from '@mui/material';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const Logout = () => {
     const currentUser = useSelector(state => state.user.currentUser);
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const navigate    = useNavigate();
+    const dispatch    = useDispatch();
 
-    const handleLogout = () => {
-        dispatch(authLogout());
-        navigate('/');
-    };
+    const photoKey = `profilePhoto_${currentUser?._id}`;
+    const photo    = currentUser?._id ? localStorage.getItem(photoKey) : null;
+    const initial  = String(currentUser?.name || '?').charAt(0).toUpperCase();
 
-    const handleCancel = () => {
-        navigate(-1);
-    };
+    const handleLogout = () => { dispatch(authLogout()); navigate('/'); };
+    const handleCancel = () => navigate(-1);
 
     return (
-        <Dialog 
-            open={true} 
+        <Dialog
+            open={true}
             onClose={handleCancel}
-            PaperProps={{
-                sx: {
-                    background: 'transparent',
-                    boxShadow: 'none',
-                    maxWidth: '440px',
-                    width: '100%',
-                    overflow: 'visible',
-                    margin: '16px'
-                }
-            }}
-            BackdropProps={{
-                sx: {
-                    backgroundColor: 'rgba(10, 9, 12, 0.95)',
-                    backdropFilter: 'blur(20px)'
-                }
-            }}
+            PaperProps={{ sx: { background: 'transparent', boxShadow: 'none', maxWidth: 400, width: '100%', overflow: 'visible', m: 2 } }}
+            BackdropProps={{ sx: { backgroundColor: 'rgba(6,8,24,0.82)', backdropFilter: 'blur(16px)' } }}
         >
             <DialogContent sx={{ p: 0, overflow: 'visible' }}>
-                <LogoutCard>
-                    <AvatarGlow>
-                        <StyledAvatar sx={{ background: 'var(--gradient-vibrant)' }}>
-                            {String(currentUser?.name).charAt(0)}
-                        </StyledAvatar>
-                    </AvatarGlow>
-                    
-                    <Box sx={{ mb: 5, textAlign: 'center', zIndex: 1 }}>
-                        <Typography variant="h4" sx={{ 
-                            fontWeight: 900, 
-                            fontFamily: 'Outfit', 
-                            color: 'white',
-                            mb: 1.5,
-                            letterSpacing: '-0.5px'
-                        }}>
-                            Sign Out?
-                        </Typography>
-                        <Typography variant="body1" sx={{ 
-                            color: 'rgba(255,255,255,0.6)', 
-                            maxWidth: '280px',
-                            mx: 'auto',
-                            lineHeight: 1.6,
-                            fontWeight: 500
-                        }}>
-                            Hey <span style={{ color: 'var(--primary-light)' }}>{currentUser?.name}</span>, are you sure you want to end your session?
-                        </Typography>
-                    </Box>
+                <Card>
+                    {/* Top accent band */}
+                    <TopBand />
 
-                    <ActionStack>
-                        <AppButton 
-                            variant="contained" 
-                            fullWidth 
-                            onClick={handleLogout}
-                            sx={{ 
-                                py: 2, 
-                                background: 'var(--gradient-vibrant) !important',
-                                fontWeight: 800,
-                                fontSize: '1rem',
-                                borderRadius: '18px',
-                                boxShadow: '0 12px 30px rgba(255, 128, 102, 0.3)'
-                            }}
-                        >
-                            Sign Out Securely
-                        </AppButton>
-                        <AppButton 
-                            variant="text" 
-                            fullWidth 
-                            onClick={handleCancel}
-                            sx={{ 
-                                py: 1.5,
-                                color: 'rgba(255,255,255,0.4)', 
-                                fontWeight: 700,
-                                '&:hover': { color: 'white' }
-                            }}
-                        >
-                            Cancel
-                        </AppButton>
-                    </ActionStack>
-                </LogoutCard>
+                    <CardBody>
+                        {/* Avatar */}
+                        <AvatarWrap>
+                            {photo
+                                ? <AvatarPhoto src={photo} alt={currentUser?.name} />
+                                : <AvatarInitial>{initial}</AvatarInitial>
+                            }
+                            <AvatarGlow />
+                        </AvatarWrap>
+
+                        {/* Text */}
+                        <TextBlock>
+                            <Heading>Sign out?</Heading>
+                            <Sub>
+                                Hey <Name>{currentUser?.name}</Name>, are you sure you want to end your session?
+                            </Sub>
+                        </TextBlock>
+
+                        {/* Session info chip */}
+                        <SessionChip>
+                            <Dot />
+                            Active session
+                        </SessionChip>
+
+                        {/* Actions */}
+                        <Actions>
+                            <SignOutBtn onClick={handleLogout}>
+                                <LogoutRoundedIcon sx={{ fontSize: 16 }} />
+                                Sign Out Securely
+                            </SignOutBtn>
+                            <CancelBtn onClick={handleCancel}>
+                                <ArrowBackIosNewIcon sx={{ fontSize: 11 }} />
+                                Go Back
+                            </CancelBtn>
+                        </Actions>
+                    </CardBody>
+                </Card>
             </DialogContent>
         </Dialog>
     );
@@ -108,61 +75,169 @@ const Logout = () => {
 
 export default Logout;
 
-const scaleIn = keyframes`
-  from { opacity: 0; transform: scale(0.9) translateY(30px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
+/* ── Keyframes ── */
+const scaleIn = keyframes`from{opacity:0;transform:scale(0.92) translateY(24px)}to{opacity:1;transform:scale(1) translateY(0)}`;
+const pulse   = keyframes`0%,100%{opacity:0.6}50%{opacity:1}`;
+
+const Card = styled.div`
+    background: rgba(10, 8, 28, 0.97);
+    border: 1px solid rgba(124,77,255,0.2);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(124,77,255,0.08);
+    animation: ${scaleIn} 0.45s cubic-bezier(0.16,1,0.3,1) both;
 `;
 
-const LogoutCard = styled.div`
-  background: rgba(30, 28, 36, 0.6);
-  backdrop-filter: blur(40px) saturate(180%);
-  padding: 60px 40px 40px;
-  border-radius: 48px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
-  animation: ${scaleIn} 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
+const TopBand = styled.div`
+    height: 3px;
+    background: linear-gradient(90deg, #7C4DFF 0%, #B07AFE 50%, #448AFF 100%);
+`;
+
+const CardBody = styled.div`
+    padding: 32px 32px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+`;
+
+const AvatarWrap = styled.div`
+    position: relative;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+`;
+
+const AvatarPhoto = styled.img`
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(124,77,255,0.35);
+`;
+
+const AvatarInitial = styled.div`
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7C4DFF 0%, #448AFF 100%);
+    border: 2px solid rgba(124,77,255,0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: white;
 `;
 
 const AvatarGlow = styled.div`
-  position: relative;
-  margin-bottom: 32px;
-  
-  &::after {
-    content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 120%;
-    height: 120%;
-    background: var(--gradient-vibrant);
-    filter: blur(30px);
-    opacity: 0.3;
-    z-index: 0;
-  }
+    inset: -8px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(124,77,255,0.25) 0%, transparent 70%);
+    pointer-events: none;
 `;
 
-const StyledAvatar = styled(Avatar)`
-  width: 96px;
-  height: 96px;
-  position: relative;
-  z-index: 1;
-  border: 4px solid rgba(255,255,255,0.1);
-  font-weight: 900;
-  font-family: 'Outfit';
-  font-size: 2.5rem;
+const TextBlock = styled.div`
+    text-align: center;
+    margin-bottom: 16px;
 `;
 
-const ActionStack = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  z-index: 1;
+const Heading = styled.div`
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #F5F5FF;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
 `;
 
+const Sub = styled.div`
+    font-family: Inter, sans-serif;
+    font-size: 0.875rem;
+    color: rgba(226,232,255,0.45);
+    line-height: 1.55;
+    max-width: 280px;
+`;
 
+const Name = styled.span`
+    color: #9B6FF8;
+    font-weight: 600;
+`;
+
+const SessionChip = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(52,211,153,0.8);
+    background: rgba(52,211,153,0.07);
+    border: 1px solid rgba(52,211,153,0.15);
+    border-radius: 100px;
+    padding: 4px 10px;
+    margin-bottom: 24px;
+`;
+
+const Dot = styled.div`
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #34D399;
+    animation: ${pulse} 2s ease-in-out infinite;
+`;
+
+const Actions = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+`;
+
+const SignOutBtn = styled.button`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px;
+    border-radius: 13px;
+    border: none;
+    background: linear-gradient(135deg, #F87171 0%, #FB923C 100%);
+    color: white;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(248,113,113,0.3);
+    transition: all 0.22s cubic-bezier(0.34,1.56,0.64,1);
+    letter-spacing: -0.01em;
+
+    &:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(248,113,113,0.4); }
+    &:active { transform: scale(0.97); }
+`;
+
+const CancelBtn = styled.button`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 11px;
+    border-radius: 13px;
+    border: 1px solid rgba(124,77,255,0.1);
+    background: rgba(255,255,255,0.03);
+    color: rgba(226,232,255,0.45);
+    font-family: Inter, sans-serif;
+    font-size: 0.825rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s ease;
+
+    &:hover { background: rgba(124,77,255,0.06); color: rgba(226,232,255,0.75); border-color: rgba(124,77,255,0.2); }
+`;
