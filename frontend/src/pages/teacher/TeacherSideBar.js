@@ -14,6 +14,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
+
 const TeacherSideBar = ({ open }) => {
     const { currentUser } = useSelector((state) => state.user);
     const sclassName = currentUser.teachSclass;
@@ -28,11 +29,12 @@ const TeacherSideBar = ({ open }) => {
         { text: 'Complains', icon: <AnnouncementOutlinedIcon />, path: '/Teacher/complain' },
     ];
 
+    const isOpenStr = open ? 'true' : 'false';
 
     return (
         <StyledNav>
             <Box sx={{ px: 2, py: 3 }}>
-                {open && <SectionLabel>ACADEMIC MENU</SectionLabel>}
+                <SectionLabel isopen={isOpenStr}>ACADEMIC MENU</SectionLabel>
                 {menuItems.map((item) => {
                     const isActive = location.pathname === item.path || (item.path !== '/Teacher/dashboard' && location.pathname.startsWith(item.path));
                     return (
@@ -41,12 +43,14 @@ const TeacherSideBar = ({ open }) => {
                             component={Link} 
                             to={item.path}
                             className={isActive ? 'active' : ''}
-                            isopen={open ? 'true' : 'false'}
+                            isopen={isOpenStr}
                         >
                             <ListItemIcon className="icon">
                                 {item.icon}
                             </ListItemIcon>
-                            {open && <ListItemText primary={item.text} />}
+                            <LabelText className="text-label" isopen={isOpenStr}>
+                                <ListItemText primary={item.text} />
+                            </LabelText>
                         </StyledListItem>
                     );
                 })}
@@ -54,13 +58,15 @@ const TeacherSideBar = ({ open }) => {
                 {/* Attendance Submenu */}
                 <StyledListItem 
                     onClick={() => setOpenAttendance(!openAttendance)}
-                    isopen={open ? 'true' : 'false'}
+                    isopen={isOpenStr}
                 >
                     <ListItemIcon className="icon">
                         <CheckCircleOutlineIcon />
                     </ListItemIcon>
-                    {open && <ListItemText primary="Attendance" />}
-                    {open && (openAttendance ? <ExpandLess sx={{color:'var(--text-muted)'}} /> : <ExpandMore sx={{color:'var(--text-muted)'}} />)}
+                    <LabelText className="text-label" isopen={isOpenStr}>
+                        <ListItemText primary="Attendance" />
+                    </LabelText>
+                    {open && (openAttendance ? <ExpandLess sx={{color:'rgba(226,232,255,0.4)'}} /> : <ExpandMore sx={{color:'rgba(226,232,255,0.4)'}} />)}
                 </StyledListItem>
                 
                 <Collapse in={openAttendance} timeout="auto" unmountOnExit>
@@ -69,54 +75,63 @@ const TeacherSideBar = ({ open }) => {
                             component={Link} 
                             to="/Teacher/attendance"
                             className={location.pathname === "/Teacher/attendance" ? 'active' : ''}
-                            isopen={open ? 'true' : 'false'}
+                            isopen={isOpenStr}
                             sx={{ pl: open ? 4 : undefined }}
                         >
                             <ListItemIcon className="icon">
                                 <CheckCircleOutlineIcon sx={{ fontSize: 18 }} />
                             </ListItemIcon>
-                            {open && <ListItemText primary="Mark Attendance" />}
+                            <LabelText className="text-label" isopen={isOpenStr}>
+                                <ListItemText primary="Mark Attendance" />
+                            </LabelText>
                         </StyledListItem>
                         <StyledListItem 
                             component={Link} 
                             to="/Teacher/attendance-record"
                             className={location.pathname === "/Teacher/attendance-record" ? 'active' : ''}
-                            isopen={open ? 'true' : 'false'}
+                            isopen={isOpenStr}
+                            sx={{ pl: open ? 4 : undefined }}
                         >
                             <ListItemIcon className="icon">
                                 <HistoryOutlinedIcon sx={{ fontSize: 18 }} />
                             </ListItemIcon>
-                            {open && <ListItemText primary="Attendance Record" />}
+                            <LabelText className="text-label" isopen={isOpenStr}>
+                                <ListItemText primary="Attendance Record" />
+                            </LabelText>
                         </StyledListItem>
                     </List>
                 </Collapse>
             </Box>
             
-            <Divider sx={{ my: 1, borderColor: 'var(--border)', opacity: open ? 1 : 0 }} />
+            <Divider sx={{ my: 1, borderColor: 'rgba(124, 77, 255, 0.08)', opacity: open ? 1 : 0, transition: 'opacity 0.3s' }} />
             
             <Box sx={{ px: 2, py: 2 }}>
-                {open && <SectionLabel>ACCOUNT</SectionLabel>}
+                <SectionLabel isopen={isOpenStr}>ACCOUNT</SectionLabel>
                 <StyledListItem 
                     component={Link} 
                     to="/Teacher/profile"
                     className={location.pathname.startsWith("/Teacher/profile") ? 'active' : ''}
-                    isopen={open ? 'true' : 'false'}
+                    isopen={isOpenStr}
                 >
                     <ListItemIcon className="icon">
                         <AccountCircleOutlinedIcon />
                     </ListItemIcon>
-                    {open && <ListItemText primary="Profile" />}
+                    <LabelText className="text-label" isopen={isOpenStr}>
+                        <ListItemText primary="Profile" />
+                    </LabelText>
                 </StyledListItem>
                 <StyledListItem 
                     component={Link} 
                     to="/logout"
-                    isopen={open ? 'true' : 'false'}
+                    isopen={isOpenStr}
                     className="logout-item"
                 >
                     <ListItemIcon className="icon">
                         <ExitToAppIcon />
                     </ListItemIcon>
-                    {open && <ListItemText primary="Logout" />}
+                    <LabelText className="text-label" isopen={isOpenStr}>
+                        <ListItemText primary="Logout" />
+                    </LabelText>
                 </StyledListItem>
             </Box>
         </StyledNav>
@@ -126,13 +141,17 @@ const TeacherSideBar = ({ open }) => {
 export default TeacherSideBar;
 
 const SectionLabel = styled(MuiTypography)`
-  padding: 8px 16px;
+  padding: ${p => p.isopen === 'true' ? '8px 16px' : '0px 16px'};
+  height: ${p => p.isopen === 'true' ? '28px' : '0px'};
+  opacity: ${p => p.isopen === 'true' ? 1 : 0};
+  overflow: hidden;
   font-size: 0.7rem !important;
   font-weight: 800 !important;
   color: var(--text-muted) !important;
   letter-spacing: 2px !important;
   text-transform: uppercase;
   white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 `;
 
 const StyledNav = styled.div`
@@ -141,15 +160,27 @@ const StyledNav = styled.div`
   color: var(--text-secondary);
 `;
 
+const LabelText = styled.div`
+  opacity: ${p => p.isopen === 'true' ? 1 : 0};
+  max-width: ${p => p.isopen === 'true' ? '180px' : '0px'};
+  visibility: ${p => p.isopen === 'true' ? 'visible' : 'hidden'};
+  transition: opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), max-width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  flex-grow: 1;
+`;
+
 const StyledListItem = styled(ListItemButton)`
   && {
     margin: 2px 4px !important;
     border-radius: 12px !important;
-    transition: all 0.22s cubic-bezier(0.25,0.46,0.45,0.94) !important;
-    padding: ${p => p.isopen === 'true' ? '10px 12px' : '10px'} !important;
+    padding: ${p => p.isopen === 'true' ? '10px 12px' : '10px 20px'} !important;
     min-height: 44px;
-    justify-content: ${p => p.isopen === 'true' ? 'flex-start' : 'center'} !important;
-    color: rgba(226,232,255,0.6) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    color: rgba(226, 232, 255, 0.6) !important;
+    transition: padding 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.22s, color 0.22s !important;
 
     &:hover {
       background: rgba(255,255,255,0.04) !important;
@@ -171,12 +202,12 @@ const StyledListItem = styled(ListItemButton)`
 
     .icon {
       min-width: 0 !important;
-      width: ${p => p.isopen === 'true' ? 'auto' : '100%'} !important;
       display: flex !important;
       justify-content: center !important;
+      align-items: center !important;
       margin-right: ${p => p.isopen === 'true' ? '12px' : '0'} !important;
-      color: rgba(226,232,255,0.35) !important;
-      transition: color 0.2s ease !important;
+      color: rgba(226, 232, 255, 0.35) !important;
+      transition: margin-right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.2s ease !important;
       svg { font-size: 20px; }
     }
 

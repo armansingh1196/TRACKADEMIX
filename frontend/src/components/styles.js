@@ -20,7 +20,7 @@ export const AppBar = styled(MuiAppBar, {
     WebkitBackdropFilter: 'blur(40px) saturate(180%)',
     borderBottom: '1px solid rgba(124, 77, 255, 0.1)',
     boxShadow: 'none !important',
-    transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+    transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important, margin 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important',
     width: '100%',
     [theme.breakpoints.down('sm')]: {
         padding: '0 8px',
@@ -35,7 +35,7 @@ export const Drawer = styled(MuiDrawer, {
         position: 'fixed',
         whiteSpace: 'nowrap',
         width: drawerWidth,
-        transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+        transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important, transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important, background-color 0.3s !important',
         boxSizing: 'border-box',
         background: 'rgba(6, 8, 24, 0.92) !important',
         backdropFilter: 'blur(40px) saturate(180%)',
@@ -62,7 +62,7 @@ export const MainContent = styled('main', {
     height: '100vh',
     overflow: 'auto',
     backgroundColor: 'var(--bg-base)',
-    transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+    transition: 'margin-left 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important, padding 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important',
     marginLeft: open ? drawerWidth : collapsedWidth,
     [theme.breakpoints.down('md')]: {
         marginLeft: 0,

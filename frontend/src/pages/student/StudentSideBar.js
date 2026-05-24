@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Divider, ListItemButton, ListItemIcon, ListItemText, Box, Typography as MuiTypography } from '@mui/material';
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 
 import HomeIcon from '@mui/icons-material/Home';
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -13,6 +12,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 
 const StudentSideBar = ({ open }) => {
     const location = useLocation();
+    const isOpenStr = open ? 'true' : 'false';
 
     const menuItems = [
         { text: 'Dashboard', icon: <HomeIcon />, path: '/Student/dashboard' },
@@ -25,22 +25,22 @@ const StudentSideBar = ({ open }) => {
         <StyledNav>
             {/* Academic Menu section */}
             <Box sx={{ px: 2, pt: 3, pb: 1 }}>
-                {open && <SectionLabel>Academic Menu</SectionLabel>}
+                <SectionLabel isopen={isOpenStr}>Academic Menu</SectionLabel>
                 {menuItems.map((item) => {
                     const isActive = location.pathname === item.path ||
                         (item.path !== '/Student/dashboard' && location.pathname.startsWith(item.path));
                     return (
-                        <NavItem
+                        <StyledListItem
                             key={item.text}
                             component={Link}
                             to={item.path}
-                            isactive={isActive ? 'true' : 'false'}
-                            sx={{ justifyContent: open ? 'initial' : 'center' }}
+                            className={isActive ? 'active' : ''}
+                            isopen={isOpenStr}
                         >
-                            <NavIcon isactive={isActive ? 'true' : 'false'} sx={{ mr: open ? 2 : 'auto' }}>
+                            <ListItemIcon className="icon">
                                 {item.icon}
-                            </NavIcon>
-                            {open && (
+                            </ListItemIcon>
+                            <LabelText className="text-label" isopen={isOpenStr}>
                                 <ListItemText
                                     primary={item.text}
                                     primaryTypographyProps={{
@@ -49,31 +49,31 @@ const StudentSideBar = ({ open }) => {
                                             fontWeight: isActive ? 600 : 500,
                                             fontSize: '0.9375rem',
                                             letterSpacing: '-0.01em',
-                                            color: isActive ? '#F5F5FF' : 'rgba(226,232,255,0.6)',
+                                            color: 'inherit'
                                         }
                                     }}
                                 />
-                            )}
-                        </NavItem>
+                            </LabelText>
+                        </StyledListItem>
                     );
                 })}
             </Box>
 
-            <Divider sx={{ mx: 2, borderColor: 'rgba(84,84,88,0.4)', opacity: open ? 1 : 0 }} />
+            <Divider sx={{ mx: 2, borderColor: 'rgba(84,84,88,0.4)', opacity: open ? 1 : 0, transition: 'opacity 0.3s' }} />
 
             {/* Account section */}
             <Box sx={{ px: 2, pt: 2, pb: 3 }}>
-                {open && <SectionLabel>Account</SectionLabel>}
-                <NavItem
+                <SectionLabel isopen={isOpenStr}>Account</SectionLabel>
+                <StyledListItem
                     component={Link}
                     to="/Student/profile"
-                    isactive={location.pathname.startsWith('/Student/profile') ? 'true' : 'false'}
-                    sx={{ justifyContent: open ? 'initial' : 'center' }}
+                    className={location.pathname.startsWith('/Student/profile') ? 'active' : ''}
+                    isopen={isOpenStr}
                 >
-                    <NavIcon isactive={location.pathname.startsWith('/Student/profile') ? 'true' : 'false'} sx={{ mr: open ? 2 : 'auto' }}>
+                    <ListItemIcon className="icon">
                         <AccountCircleOutlinedIcon />
-                    </NavIcon>
-                    {open && (
+                    </ListItemIcon>
+                    <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText
                             primary="Profile"
                             primaryTypographyProps={{
@@ -82,22 +82,23 @@ const StudentSideBar = ({ open }) => {
                                     fontWeight: location.pathname.startsWith('/Student/profile') ? 600 : 500,
                                     fontSize: '0.9375rem',
                                     letterSpacing: '-0.01em',
-                                    color: location.pathname.startsWith('/Student/profile') ? '#F5F5FF' : 'rgba(226,232,255,0.6)',
+                                    color: 'inherit'
                                 }
                             }}
                         />
-                    )}
-                </NavItem>
+                    </LabelText>
+                </StyledListItem>
 
-                <LogoutItem
+                <StyledListItem
                     component={Link}
                     to="/logout"
-                    sx={{ justifyContent: open ? 'initial' : 'center' }}
+                    isopen={isOpenStr}
+                    className="logout-item"
                 >
-                    <NavIcon isactive="false" sx={{ mr: open ? 2 : 'auto' }} logout="true">
+                    <ListItemIcon className="icon">
                         <ExitToAppIcon />
-                    </NavIcon>
-                    {open && (
+                    </ListItemIcon>
+                    <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText
                             primary="Logout"
                             primaryTypographyProps={{
@@ -106,12 +107,12 @@ const StudentSideBar = ({ open }) => {
                                     fontWeight: 500,
                                     fontSize: '0.9375rem',
                                     letterSpacing: '-0.01em',
-                                    color: 'rgba(226,232,255,0.5)',
+                                    color: 'inherit'
                                 }
                             }}
                         />
-                    )}
-                </LogoutItem>
+                    </LabelText>
+                </StyledListItem>
             </Box>
         </StyledNav>
     );
@@ -120,7 +121,10 @@ const StudentSideBar = ({ open }) => {
 export default StudentSideBar;
 
 const SectionLabel = styled(MuiTypography)`
-  padding: 0 8px 8px;
+  padding: ${p => p.isopen === 'true' ? '0 8px 8px' : '0px 8px'};
+  height: ${p => p.isopen === 'true' ? '24px' : '0px'};
+  opacity: ${p => p.isopen === 'true' ? 1 : 0};
+  overflow: hidden;
   font-family: var(--font-heading) !important;
   font-size: 0.6875rem !important;  /* 11px */
   font-weight: 700 !important;
@@ -128,6 +132,7 @@ const SectionLabel = styled(MuiTypography)`
   letter-spacing: 0.1em !important;
   text-transform: uppercase;
   white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 `;
 
 const StyledNav = styled.div`
@@ -137,56 +142,62 @@ const StyledNav = styled.div`
   height: 100%;
 `;
 
-const NavItem = styled(ListItemButton)`
+const LabelText = styled.div`
+  opacity: ${p => p.isopen === 'true' ? 1 : 0};
+  max-width: ${p => p.isopen === 'true' ? '180px' : '0px'};
+  visibility: ${p => p.isopen === 'true' ? 'visible' : 'hidden'};
+  transition: opacity 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), max-width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  flex-grow: 1;
+`;
+
+const StyledListItem = styled(ListItemButton)`
   && {
     margin: 2px 4px !important;
     border-radius: 12px !important;
-    transition: all 0.25s cubic-bezier(0.25,0.46,0.45,0.94) !important;
-    padding: 10px 12px !important;
+    padding: ${p => p.isopen === 'true' ? '10px 12px' : '10px 20px'} !important;
     min-height: 44px;
-    background: ${props => props.isactive === 'true'
-        ? 'rgba(124, 77, 255, 0.14) !important'
-        : 'transparent !important'};
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    color: rgba(226, 232, 255, 0.6) !important;
+    transition: padding 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.22s, color 0.22s !important;
 
     &:hover {
-      background: ${props => props.isactive === 'true'
-        ? 'rgba(124,77,255,0.18) !important'
-        : 'rgba(255,255,255,0.04) !important'};
-    }
-  }
-`;
-
-const LogoutItem = styled(ListItemButton)`
-  && {
-    margin: 2px 4px !important;
-    border-radius: 12px !important;
-    transition: all 0.25s ease !important;
-    padding: 10px 12px !important;
-    min-height: 44px;
-
-    &:hover {
-      background: rgba(255,69,58,0.08) !important;
-
-      .logout-icon { color: #FF453A !important; }
-    }
-  }
-`;
-
-const NavIcon = styled(ListItemIcon)`
-  && {
-    min-width: 0 !important;
-    color: ${props => {
-        if (props.logout === 'true') return 'rgba(226,232,255,0.3)';
-        return props.isactive === 'true' ? '#9B6FF8' : 'rgba(226,232,255,0.35)';
-    }} !important;
-    transition: color 0.2s ease !important;
-
-    svg {
-      font-size: 22px;
+      background: rgba(255,255,255,0.04) !important;
+      color: #F5F5FF !important;
+      .icon { color: rgba(124,77,255,0.9) !important; }
     }
 
-    &.logout-icon {
-      color: rgba(226,232,255,0.3);
+    &.active {
+      background: rgba(124,77,255,0.14) !important;
+      color: #F5F5FF !important;
+      .icon { color: #9B6FF8 !important; }
+      .MuiListItemText-primary { font-weight: 700 !important; color: #F5F5FF !important; }
+    }
+
+    &.logout-item:hover {
+      background: rgba(248,113,113,0.08) !important;
+      .icon { color: #F87171 !important; }
+    }
+
+    .icon {
+      min-width: 0 !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      margin-right: ${p => p.isopen === 'true' ? '12px' : '0'} !important;
+      color: rgba(226, 232, 255, 0.35) !important;
+      transition: margin-right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.2s ease !important;
+      svg { font-size: 22px; }
+    }
+
+    .MuiListItemText-primary {
+      font-size: 0.9rem !important;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: -0.01em;
     }
   }
 `;
