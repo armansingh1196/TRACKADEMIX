@@ -3,6 +3,7 @@ import { Container, Grid, Box, Typography, Button, TextField } from '@mui/materi
 import { api } from '../../api/client';
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { calculateOverallAttendancePercentage } from '../../components/attendanceCalculator';
 import CustomPieChart from '../../components/CustomPieChart';
 import { getUserDetails } from '../../redux/userRelated/userHandle';
@@ -17,6 +18,7 @@ import styled from 'styled-components';
 
 const StudentHomePage = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { userDetails, currentUser } = useSelector((state) => state.user);
     const { subjectsList } = useSelector((state) => state.sclass);
 
@@ -176,7 +178,10 @@ const StudentHomePage = () => {
                 <Grid item xs={12} md={4}>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                         {/* Part 1: AI Recommendations */}
-                        <ChartPaper sx={{ p: 3, display: 'flex', flexDirection: 'column' }}>
+                        <ChartPaper
+                            onClick={() => navigate('/Student/ai-insights')}
+                            sx={{ p: 3, display: 'flex', flexDirection: 'column', cursor: 'pointer', '&:hover': { borderColor: 'rgba(124,77,255,0.3) !important' } }}
+                        >
                             <Typography variant="overline" sx={{ fontWeight: 800, mb: 1, display: 'block', textAlign: 'center', color: 'var(--secondary)', letterSpacing: 1, fontFamily: 'var(--font-heading)' }}>
                                 AI Performance Summary
                             </Typography>
@@ -221,6 +226,13 @@ const StudentHomePage = () => {
                                                 <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 600 }}>THEORY AVG</Typography>
                                                 <Typography variant="body2" sx={{ fontWeight: 700, color: '#10b981' }}>{Math.round((aiInsight.features?.external_avg_theory / 70) * 100 || 0)}%</Typography>
                                             </Box>
+                                        </Box>
+
+                                        {/* CTA footer */}
+                                        <Box sx={{ mt: 1.5, pt: 1.5, borderTop: '1px solid rgba(124,77,255,0.08)', width: '100%', textAlign: 'center' }}>
+                                            <Typography variant="caption" sx={{ color: 'var(--primary)', fontWeight: 700, letterSpacing: 0.3, opacity: 0.8 }}>
+                                                View full analysis →
+                                            </Typography>
                                         </Box>
                                     </>
                                 ) : (

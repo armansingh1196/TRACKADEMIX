@@ -257,7 +257,12 @@ p {
   transition: var(--transition) !important;
 }
 
-.MuiPaper-root:hover {
+/* 
+ * Hover border — only on standalone card surfaces, NOT on structural chrome.
+ * Excluded: AppBar, Drawer, BottomNavigation, Popover/Menu/Select papers,
+ *           Tooltip, Dialog, Autocomplete dropdown, Snackbar.
+ */
+.MuiPaper-root:not(.MuiAppBar-root):not(.MuiDrawer-paper):not(.MuiBottomNavigation-root):not([role="tooltip"]):not([role="dialog"]):not(.MuiPopover-paper):not(.MuiMenu-paper):not(.MuiAutocomplete-paper):not(.MuiSnackbarContent-root):hover {
   border-color: var(--separator-strong) !important;
 }
 

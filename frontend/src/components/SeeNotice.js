@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllNotices } from '../redux/noticeRelated/noticeHandle';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Dialog, DialogContent, Backdrop } from '@mui/material';
 import styled, { keyframes } from 'styled-components';
 import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 
 /* 
  * Monochromatic purple-spectrum tints — feel cohesive, not rainbow.
@@ -22,6 +24,7 @@ const SeeNotice = () => {
     const dispatch = useDispatch();
     const { currentUser, currentRole } = useSelector(state => state.user);
     const { noticesList, loading, response } = useSelector(state => state.notice);
+    const [selected, setSelected] = useState(null);
 
     useEffect(() => {
         if (currentRole === 'Admin') {
@@ -78,7 +81,14 @@ const SeeNotice = () => {
                             : null;
 
                         return (
-                            <NoticeCard key={notice._id || idx} delay={idx * 0.05}>
+                            <NoticeCard
+                                key={notice._id || idx}
+                                delay={idx * 0.05}
+                                onClick={() => setSelected({ notice, dotColor, date, isValid, dateLabel })}
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={e => e.key === 'Enter' && setSelected({ notice, dotColor, date, isValid, dateLabel })}
+                            >
                                 {/* Subtle frosted left border flash */}
                                 <Stripe color={dotColor} />
 
@@ -95,11 +105,90 @@ const SeeNotice = () => {
                                         <Detail>{notice.details}</Detail>
                                     )}
                                 </CardInner>
+                                <ChevronHint>›</ChevronHint>
                             </NoticeCard>
                         );
                     })}
                 </Feed>
             )}
+
+            {/* ── Notice Detail Dialog ── */}
+            <Dialog
+                open={!!selected}
+                onClose={() => setSelected(null)}
+                maxWidth="sm"
+                fullWidth
+                slots={{ backdrop: Backdrop }}
+                slotProps={{
+                    backdrop: {
+                        sx: {
+                            backgroundColor: 'rgba(6, 8, 24, 0.75)',
+                            backdropFilter: 'blur(8px)',
+                        }
+                    }
+                }}
+                PaperProps={{
+                    sx: {
+                        background: 'rgba(13, 11, 34, 0.96) !important',
+                        border: '1px solid rgba(124, 77, 255, 0.2) !important',
+                        borderRadius: '20px !important',
+                        boxShadow: '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(124,77,255,0.1) !important',
+                        backdropFilter: 'blur(40px) !important',
+                        overflow: 'visible',
+                        m: 2,
+                    }
+                }}
+            >
+                {selected && (
+                    <DialogContent sx={{ p: 0, overflow: 'hidden', borderRadius: '20px' }}>
+                        <ModalInner>
+                            {/* Top accent band */}
+                            <ModalBand color={selected.dotColor} />
+
+                            {/* Close button */}
+                            <CloseBtn onClick={() => setSelected(null)} aria-label="Close">
+                                <CloseRoundedIcon sx={{ fontSize: 16 }} />
+                            </CloseBtn>
+
+                            <ModalBody>
+                                {/* Icon + category chip */}
+                                <ModalTopRow>
+                                    <ModalIconWrap color={selected.dotColor}>
+                                        <CampaignOutlinedIcon sx={{ fontSize: 18, color: selected.dotColor }} />
+                                    </ModalIconWrap>
+                                    <CategoryChip>Institutional Notice</CategoryChip>
+                                </ModalTopRow>
+
+                                {/* Title */}
+                                <ModalTitle>{selected.notice.title || 'Untitled Notice'}</ModalTitle>
+
+                                {/* Date row */}
+                                {selected.isValid && (
+                                    <ModalMeta>
+                                        <CalendarTodayOutlinedIcon sx={{ fontSize: 13, opacity: 0.5 }} />
+                                        <ModalMetaText>
+                                            {selected.date.toLocaleDateString('en-IN', {
+                                                weekday: 'long',
+                                                day: 'numeric',
+                                                month: 'long',
+                                                year: 'numeric',
+                                            })}
+                                        </ModalMetaText>
+                                    </ModalMeta>
+                                )}
+
+                                {/* Divider */}
+                                <ModalDivider />
+
+                                {/* Details body */}
+                                <ModalDetails>
+                                    {selected.notice.details || 'No further details were provided for this notice.'}
+                                </ModalDetails>
+                            </ModalBody>
+                        </ModalInner>
+                    </DialogContent>
+                )}
+            </Dialog>
         </Wrapper>
     );
 };
@@ -243,7 +332,7 @@ const NoticeCard = styled.div`
     border: 1px solid rgba(255, 255, 255, 0.045);
     animation: ${slideUp} 0.38s ${p => p.delay || 0}s cubic-bezier(0.16, 1, 0.3, 1) both;
     transition: background 0.18s ease, border-color 0.18s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    cursor: default;
+    cursor: pointer;
 
     &:hover {
         background: rgba(124, 77, 255, 0.05);
@@ -325,4 +414,134 @@ const Detail = styled.div`
     -webkit-box-orient: vertical;
     overflow: hidden;
     opacity: 0.75;
+`;
+
+/* ─── Chevron hint on card ─── */
+const ChevronHint = styled.div`
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
+    color: rgba(124, 77, 255, 0.35);
+    font-size: 1.1rem;
+    font-weight: 300;
+    transition: color 0.18s ease, transform 0.18s ease;
+    flex-shrink: 0;
+    align-self: center;
+
+    ${NoticeCard}:hover & {
+        color: rgba(124, 77, 255, 0.7);
+        transform: translateX(2px);
+    }
+`;
+
+/* ─── Modal internals ─── */
+const ModalInner = styled.div`
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+`;
+
+const ModalBand = styled.div`
+    height: 4px;
+    background: ${p => p.color || 'var(--primary)'};
+    opacity: 0.7;
+    width: 100%;
+`;
+
+const CloseBtn = styled.button`
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease;
+    z-index: 10;
+
+    &:hover {
+        background: rgba(124, 77, 255, 0.15);
+        color: var(--text-1);
+    }
+`;
+
+const ModalBody = styled.div`
+    padding: 24px 28px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+`;
+
+const ModalTopRow = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+`;
+
+const ModalIconWrap = styled.div`
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: ${p => p.color ? `${p.color.replace(')', ', 0.12)').replace('rgba', 'rgba')}` : 'rgba(124,77,255,0.12)'};
+    border: 1px solid ${p => p.color ? `${p.color.replace(')', ', 0.2)').replace('rgba', 'rgba')}` : 'rgba(124,77,255,0.2)'};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+`;
+
+const CategoryChip = styled.div`
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--primary);
+    background: rgba(124, 77, 255, 0.08);
+    border: 1px solid rgba(124, 77, 255, 0.18);
+    border-radius: 100px;
+    padding: 3px 10px;
+`;
+
+const ModalTitle = styled.div`
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-1);
+    letter-spacing: -0.025em;
+    line-height: 1.3;
+`;
+
+const ModalMeta = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+`;
+
+const ModalMetaText = styled.div`
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-muted);
+`;
+
+const ModalDivider = styled.div`
+    height: 1px;
+    background: rgba(124, 77, 255, 0.1);
+    margin: 2px 0;
+`;
+
+const ModalDetails = styled.div`
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text-2);
+    line-height: 1.75;
+    white-space: pre-wrap;
+    word-break: break-word;
 `;
