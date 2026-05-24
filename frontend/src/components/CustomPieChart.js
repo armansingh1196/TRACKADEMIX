@@ -23,7 +23,7 @@ const ChartWrapper = styled.div`
 
 const CenterLabel = styled.div`
   position: absolute;
-  top: 40%; /* slightly adjusted for Recharts centering alignment */
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
@@ -165,8 +165,8 @@ const CustomPieChart = ({ data }) => {
               data={data}
               cx="50%"
               cy="50%"
-              innerRadius={72}
-              outerRadius={88}
+              innerRadius={64}
+              outerRadius={92}
               dataKey="value"
               onMouseEnter={onPieEnter}
               stroke="rgba(10, 10, 26, 0.4)"
