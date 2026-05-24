@@ -1,159 +1,218 @@
-// import React from 'react';
-// import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
-
-// const data = [
-//     { name: 'Group A', value: 400 },
-//     { name: 'Group B', value: 300 },
-//     { name: 'Group C', value: 300 },
-//     { name: 'Group D', value: 200 },
-// ];
-
-// const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
-
-// const RADIAN = Math.PI / 180;
-// const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-//     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-//     const x = cx + radius * Math.cos(-midAngle * RADIAN);
-//     const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-//     return (
-//         <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-//             {`${(percent * 100).toFixed(0)}%`}
-//         </text>
-//     );
-// };
-
-// const PieChart = () => {
-//     return (
-//         <ResponsiveContainer width="100%" height={400}>
-//             <PieChart>
-//                 <Pie
-//                     data={data}
-//                     cx="50%"
-//                     cy="50%"
-//                     labelLine={false}
-//                     label={renderCustomizedLabel}
-//                     outerRadius={80}
-//                     fill="#8884d8"
-//                     dataKey="value"
-//                 >
-//                     {data.map((entry, index) => (
-//                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-//                     ))}
-//                 </Pie>
-//             </PieChart>
-//         </ResponsiveContainer>
-//     );
-// };
-
-// export default PieChart;
-
 import React, { useState } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Sector } from 'recharts';
+import { PieChart, Pie, Cell, ResponsiveContainer, Sector } from 'recharts';
+import styled from 'styled-components';
 
-const COLORS = ['#845EC2', '#FF9671', '#FFC75F', '#F9F871', '#00C9A7', '#4D8076', '#C34A36'];
+const COLORS = [
+  '#7C4DFF', // Electric Indigo
+  '#2DD4BF', // Cyan / Teal
+  '#FBBF24', // Amber
+  '#3B82F6', // Blue
+  '#EC4899', // Rose Pink
+  '#10B981', // Emerald
+  '#8B5CF6'  // Deep Violet
+];
 
-const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+const ChartWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
 
-    return (
-        <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-            {`${(percent * 100).toFixed(0)}%`}
-        </text>
-    );
-};
+const CenterLabel = styled.div`
+  position: absolute;
+  top: 40%; /* slightly adjusted for Recharts centering alignment */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const BatchName = styled.div`
+  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #F5F5FF;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+`;
+
+const BatchValue = styled.div`
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgba(226, 232, 255, 0.45);
+  margin-top: 4px;
+`;
+
+const BatchPercentage = styled.div`
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: ${props => props.color};
+  background: ${props => props.color}12;
+  border: 1px solid ${props => props.color}25;
+  padding: 3px 8px;
+  border-radius: 100px;
+  margin-top: 8px;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+`;
+
+const LegendGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+  margin-top: 24px;
+  width: 100%;
+  max-width: 380px;
+  padding: 0 8px;
+`;
+
+const LegendItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  opacity: ${props => props.active ? 1 : 0.45};
+  transform: scale(${props => props.active ? 1.03 : 1});
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    opacity: 0.9;
+  }
+`;
+
+const LegendColor = styled.div`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: ${props => props.color};
+  box-shadow: 0 0 10px ${props => props.color}50;
+`;
+
+const LegendLabel = styled.div`
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: ${props => props.active ? '#F5F5FF' : 'rgba(226, 232, 255, 0.6)'};
+  white-space: nowrap;
+`;
+
+const LegendValue = styled.span`
+  color: rgba(226, 232, 255, 0.35);
+  font-weight: 500;
+  margin-left: auto;
+  font-size: 0.75rem;
+`;
 
 const renderActiveShape = (props) => {
-    const RADIAN = Math.PI / 180;
-    const { cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, payload, percent, value } = props;
-    const sin = Math.sin(-RADIAN * midAngle);
-    const cos = Math.cos(-RADIAN * midAngle);
-    const sx = cx + (outerRadius + 10) * cos;
-    const sy = cy + (outerRadius + 10) * sin;
-    const mx = cx + (outerRadius + 30) * cos;
-    const my = cy + (outerRadius + 30) * sin;
-    const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-    const ey = my;
-    const textAnchor = cos >= 0 ? 'start' : 'end';
-
-    return (
-        <g>
-            <text x={cx} y={cy} dy={8} textAnchor="middle" fill={fill} style={{ fontSize: '1.2rem', fontWeight: 800, fontFamily: 'Outfit' }}>
-                {payload.name}
-            </text>
-            <Sector
-                cx={cx}
-                cy={cy}
-                innerRadius={innerRadius}
-                outerRadius={outerRadius}
-                startAngle={startAngle}
-                endAngle={endAngle}
-                fill={fill}
-            />
-            <Sector
-                cx={cx}
-                cy={cy}
-                startAngle={startAngle}
-                endAngle={endAngle}
-                innerRadius={outerRadius + 6}
-                outerRadius={outerRadius + 10}
-                fill={fill}
-            />
-            <path d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`} stroke={fill} fill="none" />
-            <circle cx={ex} cy={ey} r={2} fill={fill} stroke="none" />
-            <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} textAnchor={textAnchor} fill="#fff">{`${value}`}</text>
-            <text x={ex + (cos >= 0 ? 1 : -1) * 12} y={ey} dy={18} textAnchor={textAnchor} fill="var(--text-muted)">
-                {`(${(percent * 100).toFixed(2)}%)`}
-            </text>
-        </g>
-    );
+  const { cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill } = props;
+  return (
+    <g>
+      {/* Premium ambient glow behind the segment */}
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius}
+        outerRadius={outerRadius}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+        opacity={0.2}
+        style={{ filter: 'drop-shadow(0 0 8px ' + fill + ')' }}
+      />
+      {/* Main active segment with slight expansion */}
+      <Sector
+        cx={cx}
+        cy={cy}
+        innerRadius={innerRadius - 3}
+        outerRadius={outerRadius + 3}
+        startAngle={startAngle}
+        endAngle={endAngle}
+        fill={fill}
+      />
+    </g>
+  );
 };
 
 const CustomPieChart = ({ data }) => {
-    const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-    const onPieEnter = (_, index) => {
-        setActiveIndex(index);
-    };
+  const onPieEnter = (_, index) => {
+    setActiveIndex(index);
+  };
 
-    return (
-        <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-                <Tooltip 
-                    contentStyle={{ 
-                        borderRadius: '12px', 
-                        background: 'rgba(13, 11, 34, 0.92)', 
-                        border: '1px solid rgba(124, 77, 255, 0.25)',
-                        backdropFilter: 'blur(16px)',
-                        boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
-                        fontFamily: 'Inter, sans-serif',
-                        fontSize: '0.78rem',
-                    }}
-                    itemStyle={{ color: 'var(--text-1)', fontWeight: 600 }}
-                    labelStyle={{ color: 'var(--primary)', fontWeight: 800 }}
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+  const activeItem = data[activeIndex] || data[0] || { name: 'N/A', value: 0 };
+  const activePercentage = total > 0 ? ((activeItem.value / total) * 100).toFixed(1) : 0;
+  const activeColor = COLORS[activeIndex % COLORS.length];
+
+  return (
+    <ChartWrapper>
+      <div style={{ width: '100%', height: 220, position: 'relative' }}>
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              activeIndex={activeIndex}
+              activeShape={renderActiveShape}
+              data={data}
+              cx="50%"
+              cy="50%"
+              innerRadius={72}
+              outerRadius={88}
+              dataKey="value"
+              onMouseEnter={onPieEnter}
+              stroke="rgba(10, 10, 26, 0.4)"
+              strokeWidth={3}
+            >
+              {data.map((entry, index) => (
+                <Cell 
+                  key={`cell-${index}`} 
+                  fill={COLORS[index % COLORS.length]} 
+                  style={{
+                    outline: 'none',
+                    filter: activeIndex === index ? `drop-shadow(0 0 4px ${COLORS[index % COLORS.length]}40)` : 'none',
+                    transition: 'all 0.2s ease'
+                  }}
                 />
-                <Pie
-                    activeIndex={activeIndex}
-                    activeShape={renderActiveShape}
-                    data={data}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={80}
-                    outerRadius={110}
-                    fill="#8884d8"
-                    dataKey="value"
-                    onMouseEnter={onPieEnter}
-                >
-                    {data.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                </Pie>
-            </PieChart>
+              ))}
+            </Pie>
+          </PieChart>
         </ResponsiveContainer>
-    );
+
+        <CenterLabel>
+          <BatchName>{activeItem.name}</BatchName>
+          <BatchValue>{activeItem.value} {activeItem.value === 1 ? 'Class' : 'Classes'}</BatchValue>
+          <BatchPercentage color={activeColor}>{activePercentage}% Share</BatchPercentage>
+        </CenterLabel>
+      </div>
+
+      <LegendGrid>
+        {data.map((entry, index) => {
+          const color = COLORS[index % COLORS.length];
+          const active = activeIndex === index;
+          return (
+            <LegendItem 
+              key={entry.name} 
+              active={active}
+              onMouseEnter={() => setActiveIndex(index)}
+            >
+              <LegendColor color={color} />
+              <LegendLabel active={active}>{entry.name}</LegendLabel>
+              <LegendValue>{entry.value}</LegendValue>
+            </LegendItem>
+          );
+        })}
+      </LegendGrid>
+    </ChartWrapper>
+  );
 };
 
 export default CustomPieChart;

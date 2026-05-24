@@ -69,25 +69,29 @@ const AdminHomePage = () => {
                     </GlassCard>
                 </Grid>
                 <Grid item xs={12} md={5}>
-                    <GlassCard sx={{ height: '100%', p: 3, display: 'flex', flexDirection: 'column' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-                            <AssessmentOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 28 }} />
-                            <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: 'Outfit', color: 'white' }}>
-                                Batch Distribution
-                            </Typography>
+                    <GlassCard sx={{ height: '100%', p: 4, display: 'flex', flexDirection: 'column', boxSizing: 'border-box' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 36, height: 36, borderRadius: '10px', background: 'rgba(124, 77, 255, 0.08)', border: '1px solid rgba(124, 77, 255, 0.15)' }}>
+                                <AssessmentOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 20 }} />
+                            </Box>
+                            <Box>
+                                <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: 'Outfit', color: '#F5F5FF', fontSize: '1.1rem', letterSpacing: '-0.01em' }}>
+                                    Batch Distribution
+                                </Typography>
+                            </Box>
                         </Box>
                         
-                        <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 250 }}>
+                        <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             {chartData.length > 0 ? (
                                 <CustomPieChart data={chartData} />
                             ) : (
-                                <Typography sx={{ color: 'var(--text-muted)' }}>No batch data available</Typography>
+                                <Typography variant="body2" sx={{ color: 'rgba(226, 232, 255, 0.4)' }}>No batch data available</Typography>
                             )}
                         </Box>
                         
-                        <Box sx={{ mt: 4 }}>
-                            <Typography variant="body2" sx={{ color: 'var(--text-muted)', textAlign: 'center', fontStyle: 'italic' }}>
-                                Analytics represent the current active enrollment across all 8 semesters.
+                        <Box sx={{ mt: 3 }}>
+                            <Typography variant="caption" sx={{ color: 'rgba(226, 232, 255, 0.35)', display: 'block', textAlign: 'center', lineHeight: 1.4, letterSpacing: '0.01em' }}>
+                                Analytics represent the current active class structures across all branches.
                             </Typography>
                         </Box>
                     </GlassCard>
