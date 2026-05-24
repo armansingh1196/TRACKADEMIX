@@ -41,9 +41,9 @@ const TeacherSideBar = ({ open }) => {
                             component={Link} 
                             to={item.path}
                             className={isActive ? 'active' : ''}
-                            sx={{ justifyContent: open ? 'initial' : 'center' }}
+                            isopen={open ? 'true' : 'false'}
                         >
-                            <ListItemIcon className="icon" sx={{ mr: open ? 3 : 'auto' }}>
+                            <ListItemIcon className="icon">
                                 {item.icon}
                             </ListItemIcon>
                             {open && <ListItemText primary={item.text} />}
@@ -54,9 +54,9 @@ const TeacherSideBar = ({ open }) => {
                 {/* Attendance Submenu */}
                 <StyledListItem 
                     onClick={() => setOpenAttendance(!openAttendance)}
-                    sx={{ justifyContent: open ? 'initial' : 'center' }}
+                    isopen={open ? 'true' : 'false'}
                 >
-                    <ListItemIcon className="icon" sx={{ mr: open ? 3 : 'auto' }}>
+                    <ListItemIcon className="icon">
                         <CheckCircleOutlineIcon />
                     </ListItemIcon>
                     {open && <ListItemText primary="Attendance" />}
@@ -69,9 +69,10 @@ const TeacherSideBar = ({ open }) => {
                             component={Link} 
                             to="/Teacher/attendance"
                             className={location.pathname === "/Teacher/attendance" ? 'active' : ''}
-                            sx={{ pl: open ? 4 : 'initial', justifyContent: open ? 'initial' : 'center' }}
+                            isopen={open ? 'true' : 'false'}
+                            sx={{ pl: open ? 4 : undefined }}
                         >
-                            <ListItemIcon className="icon" sx={{ mr: open ? 3 : 'auto' }}>
+                            <ListItemIcon className="icon">
                                 <CheckCircleOutlineIcon sx={{ fontSize: 18 }} />
                             </ListItemIcon>
                             {open && <ListItemText primary="Mark Attendance" />}
@@ -80,9 +81,9 @@ const TeacherSideBar = ({ open }) => {
                             component={Link} 
                             to="/Teacher/attendance-record"
                             className={location.pathname === "/Teacher/attendance-record" ? 'active' : ''}
-                            sx={{ pl: open ? 4 : 'initial', justifyContent: open ? 'initial' : 'center' }}
+                            isopen={open ? 'true' : 'false'}
                         >
-                            <ListItemIcon className="icon" sx={{ mr: open ? 3 : 'auto' }}>
+                            <ListItemIcon className="icon">
                                 <HistoryOutlinedIcon sx={{ fontSize: 18 }} />
                             </ListItemIcon>
                             {open && <ListItemText primary="Attendance Record" />}
@@ -99,9 +100,9 @@ const TeacherSideBar = ({ open }) => {
                     component={Link} 
                     to="/Teacher/profile"
                     className={location.pathname.startsWith("/Teacher/profile") ? 'active' : ''}
-                    sx={{ justifyContent: open ? 'initial' : 'center' }}
+                    isopen={open ? 'true' : 'false'}
                 >
-                    <ListItemIcon className="icon" sx={{ mr: open ? 3 : 'auto' }}>
+                    <ListItemIcon className="icon">
                         <AccountCircleOutlinedIcon />
                     </ListItemIcon>
                     {open && <ListItemText primary="Profile" />}
@@ -109,12 +110,10 @@ const TeacherSideBar = ({ open }) => {
                 <StyledListItem 
                     component={Link} 
                     to="/logout"
-                    sx={{ 
-                        '&:hover .icon': { color: 'var(--secondary) !important' },
-                        justifyContent: open ? 'initial' : 'center'
-                    }}
+                    isopen={open ? 'true' : 'false'}
+                    className="logout-item"
                 >
-                    <ListItemIcon className="icon" sx={{ mr: open ? 3 : 'auto' }}>
+                    <ListItemIcon className="icon">
                         <ExitToAppIcon />
                     </ListItemIcon>
                     {open && <ListItemText primary="Logout" />}
@@ -143,47 +142,49 @@ const StyledNav = styled.div`
 `;
 
 const StyledListItem = styled(ListItemButton)`
-  margin: 4px 12px !important;
-  border-radius: 14px !important;
-  transition: var(--transition) !important;
-  padding: 10px 16px !important;
-  color: var(--text-secondary) !important;
-  min-height: 48px;
+  && {
+    margin: 2px 4px !important;
+    border-radius: 12px !important;
+    transition: all 0.22s cubic-bezier(0.25,0.46,0.45,0.94) !important;
+    padding: ${p => p.isopen === 'true' ? '10px 12px' : '10px'} !important;
+    min-height: 44px;
+    justify-content: ${p => p.isopen === 'true' ? 'flex-start' : 'center'} !important;
+    color: rgba(226,232,255,0.6) !important;
 
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.03) !important;
-    color: white !important;
-    
-    .icon {
-      color: var(--primary) !important;
+    &:hover {
+      background: rgba(255,255,255,0.04) !important;
+      color: #F5F5FF !important;
+      .icon { color: rgba(124,77,255,0.9) !important; }
     }
-  }
 
-  &.active {
-    background: var(--gradient-vibrant) !important;
-    color: white !important;
-    box-shadow: 0 8px 16px rgba(255, 128, 102, 0.2) !important;
-    
-    .icon {
-      color: white !important;
+    &.active {
+      background: rgba(124,77,255,0.14) !important;
+      color: #F5F5FF !important;
+      .icon { color: #9B6FF8 !important; }
+      .MuiListItemText-primary { font-weight: 700 !important; color: #F5F5FF !important; }
     }
-    
+
+    &.logout-item:hover {
+      background: rgba(248,113,113,0.08) !important;
+      .icon { color: #F87171 !important; }
+    }
+
+    .icon {
+      min-width: 0 !important;
+      width: ${p => p.isopen === 'true' ? 'auto' : '100%'} !important;
+      display: flex !important;
+      justify-content: center !important;
+      margin-right: ${p => p.isopen === 'true' ? '12px' : '0'} !important;
+      color: rgba(226,232,255,0.35) !important;
+      transition: color 0.2s ease !important;
+      svg { font-size: 20px; }
+    }
+
     .MuiListItemText-primary {
-      font-weight: 800 !important;
+      font-size: 0.9rem !important;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: -0.01em;
     }
-  }
-
-  .icon {
-    min-width: 0 !important;
-    color: var(--text-muted) !important;
-    transition: var(--transition) !important;
-    
-    svg { font-size: 20px; }
-  }
-
-  .MuiListItemText-primary {
-    font-size: 0.9rem !important;
-    font-weight: 600;
-    font-family: 'Inter', sans-serif;
   }
 `;
