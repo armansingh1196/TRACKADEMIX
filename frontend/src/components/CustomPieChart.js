@@ -123,8 +123,17 @@ const CustomPieChart = ({ data }) => {
         <ResponsiveContainer width="100%" height={300}>
             <PieChart>
                 <Tooltip 
-                    contentStyle={{ borderRadius: '12px', background: 'rgba(0,0,0,0.8)', border: '1px solid rgba(255,255,255,0.1)' }}
-                    itemStyle={{ color: 'white' }}
+                    contentStyle={{ 
+                        borderRadius: '12px', 
+                        background: 'rgba(13, 11, 34, 0.92)', 
+                        border: '1px solid rgba(124, 77, 255, 0.25)',
+                        backdropFilter: 'blur(16px)',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+                        fontFamily: 'Inter, sans-serif',
+                        fontSize: '0.78rem',
+                    }}
+                    itemStyle={{ color: 'var(--text-1)', fontWeight: 600 }}
+                    labelStyle={{ color: 'var(--primary)', fontWeight: 800 }}
                 />
                 <Pie
                     activeIndex={activeIndex}
