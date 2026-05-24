@@ -97,19 +97,21 @@ const fadeIn = keyframes`
 
 const SectionPaper = styled(Box)`
   background: var(--bg-card);
-  border-radius: 32px;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  border: 1px solid rgba(124,77,255,0.1);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,77,255,0.06), inset 0 1px 0 rgba(255,255,255,0.1);
+  backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
   animation: ${fadeIn} 0.6s ease-out;
 `;
 
 const GlassCard = styled(Paper)`
-  background: var(--bg-card) !important;
-  backdrop-filter: blur(24px);
-  border-radius: 32px !important;
-  border: 1px solid var(--border) !important;
-  box-shadow: var(--shadow-xl) !important;
+  background: rgba(255,255,255,0.055) !important;
+  backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
+  border-radius: 20px !important;
+  border: 1px solid rgba(124,77,255,0.1) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,77,255,0.06), inset 0 1px 0 rgba(255,255,255,0.1) !important;
   animation: ${fadeIn} 0.8s ease-out;
 `;
 
