@@ -141,10 +141,10 @@ const StudentProfile = () => {
                                 </FieldValue>
                             </FieldBlock>
                             <FieldBlock>
-                                <FieldLabel>Registration No.</FieldLabel>
+                                <FieldLabel>Roll Number</FieldLabel>
                                 <FieldValue>
                                     <BadgeOutlinedIcon sx={{ fontSize: 16, color: 'rgba(124,77,255,0.7)' }} />
-                                    #{currentUser?.rollNum}
+                                    {currentUser?.rollNum || currentUser?.roll_num || '—'}
                                 </FieldValue>
                             </FieldBlock>
                             <FieldBlock>

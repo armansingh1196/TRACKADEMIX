@@ -82,6 +82,7 @@ const studentLogIn = async (req, res) => {
                 ...student,
                 _id: student.id,
                 role: "Student",
+                rollNum: student.roll_num,
                 school: {
                     _id: student.admins.id,
                     schoolName: student.admins.school_name
