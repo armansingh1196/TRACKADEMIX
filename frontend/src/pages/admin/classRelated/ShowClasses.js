@@ -170,6 +170,7 @@ const ShowClasses = () => {
                     variant="contained" 
                     startIcon={<AddCardIcon />}
                     onClick={() => navigate("/Admin/addclass")}
+                    sx={{ background: 'var(--gradient-primary) !important', borderRadius: '10px' }}
                 >
                     Establish Section
                 </AppButton>
@@ -181,44 +182,64 @@ const ShowClasses = () => {
                 <CircularProgress sx={{ color: 'var(--primary)' }} />
             </Box>
         ) : (
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mt: 3 }}>
                 {Object.keys(groupedClasses).length === 0 ? (
                     <EmptyStateBox className="fade-in">
-                        <Typography variant="h6" sx={{ color: 'var(--text-muted)', mb: 2, fontFamily: 'var(--font-heading)' }}>
-                            No active batches found in the system.
+                        <Box sx={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(124, 77, 255, 0.06)', display: 'flex', alignItems: 'center', justify: 'center', mb: 2, border: '1px solid rgba(124, 77, 255, 0.12)' }}>
+                            <SchoolOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 32 }} />
+                        </Box>
+                        <Typography variant="h6" sx={{ color: '#F5F5FF', mb: 1, fontFamily: 'Outfit', fontWeight: 700 }}>
+                            No Active Batches
                         </Typography>
-                        <AppButton variant="contained" onClick={() => navigate("/Admin/addclass")}>
+                        <Typography variant="body2" sx={{ color: 'rgba(226, 232, 255, 0.4)', mb: 3, maxWidth: 300, textAlign: 'center', fontSize: '0.875rem' }}>
+                            Create your first academic sections to track courses, students, and semester grades.
+                        </Typography>
+                        <AppButton variant="contained" onClick={() => navigate("/Admin/addclass")} sx={{ background: 'var(--gradient-primary) !important', borderRadius: '10px' }}>
                             Establish Your First Section
                         </AppButton>
                     </EmptyStateBox>
                 ) : (
-                    <Grid container spacing={4}>
+                    <Grid container spacing={3}>
                         {Object.entries(groupedClasses).map(([batchName, classes]) => (
                             <Grid item xs={12} key={batchName}>
-                                <BatchGroup className="fade-in">
+                                <PremiumBatchCard className="fade-in">
                                     <BatchHeader>
-                                        <Box>
-                                            <Typography variant="h5" sx={{ fontWeight: 800, mb: 0.5, fontFamily: 'var(--font-heading)' }}>
-                                                Batch {batchName}
-                                            </Typography>
-                                            <Chip 
-                                                label={`${classes.length} Active Sections`} 
-                                                size="small" 
-                                                sx={{ background: 'rgba(132, 94, 194, 0.1)', color: 'var(--primary)', fontWeight: 700 }} 
-                                            />
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                            <IconBadge>
+                                                <SchoolOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 20 }} />
+                                            </IconBadge>
+                                            <Box>
+                                                <Typography variant="h5" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px', fontFamily: 'Outfit' }}>
+                                                    Batch {batchName}
+                                                </Typography>
+                                                <StatusChip 
+                                                    label={`${classes.length} Active ${classes.length === 1 ? 'Section' : 'Sections'}`} 
+                                                    size="small" 
+                                                />
+                                            </Box>
                                         </Box>
                                         <AppButton 
                                             variant="outlined" 
                                             startIcon={promoting ? <CircularProgress size={16} /> : <TrendingUpIcon />}
                                             onClick={() => handlePromoteBatch(batchName)}
                                             disabled={promoting}
-                                            sx={{ borderColor: 'var(--primary)', color: 'var(--primary)' }}
+                                            sx={{ 
+                                                borderColor: 'rgba(124, 77, 255, 0.3)', 
+                                                color: '#B07AFE', 
+                                                borderRadius: '10px',
+                                                textTransform: 'none',
+                                                fontWeight: 600,
+                                                '&:hover': {
+                                                    borderColor: 'rgba(124, 77, 255, 0.5)',
+                                                    background: 'rgba(124, 77, 255, 0.04)'
+                                                }
+                                            }}
                                         >
                                             Promote Semester
                                         </AppButton>
                                     </BatchHeader>
                                     
-                                    <GlassCard sx={{ mt: 2 }}>
+                                    <TableWrapper>
                                         <TableTemplate 
                                             buttonHaver={SclassButtonHaver} 
                                             columns={sclassColumns} 
@@ -229,8 +250,8 @@ const ShowClasses = () => {
                                                 id: s._id
                                             }))} 
                                         />
-                                    </GlassCard>
-                                </BatchGroup>
+                                    </TableWrapper>
+                                </PremiumBatchCard>
                             </Grid>
                         ))}
                     </Grid>
@@ -245,31 +266,88 @@ const ShowClasses = () => {
 
 export default ShowClasses;
 
-const GlassCard = styled(Paper)`
-  background: var(--bg-card) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 20px !important;
-  overflow: hidden;
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 `;
 
-const BatchGroup = styled(Box)`
-  margin-bottom: 8px;
+const PremiumBatchCard = styled(Paper)`
+  background: rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
+  border-radius: 24px !important;
+  border: 1px solid rgba(124, 77, 255, 0.08) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06) !important;
+  padding: 28px !important;
+  box-sizing: border-box;
+  animation: ${fadeIn} 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    border-color: rgba(124, 77, 255, 0.16) !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.08) !important;
+  }
+
+  @media (max-width: 600px) {
+    padding: 18px !important;
+    border-radius: 16px !important;
+  }
 `;
 
 const BatchHeader = styled(Box)`
   display: flex;
   justify-content: space-between;
-  align-items: flex-end;
-  padding: 0 8px;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
 `;
 
-const EmptyStateBox = styled(Box)`
+const IconBadge = styled(Box)`
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(124, 77, 255, 0.08);
+  border: 1px solid rgba(124, 77, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const StatusChip = styled(Chip)`
+  background: rgba(124, 77, 255, 0.12) !important;
+  color: #B07AFE !important;
+  border: 1px solid rgba(124, 77, 255, 0.2) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 0.6875rem !important;
+  height: 20px !important;
+  margin-top: 4px;
+`;
+
+const TableWrapper = styled(Box)`
+  & > div {
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    background: rgba(255, 255, 255, 0.01) !important;
+    box-shadow: none !important;
+    border-radius: 16px !important;
+  }
+`;
+
+const EmptyStateBox = styled(Paper)`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 400px;
-  background: rgba(255, 255, 255, 0.01);
-  border-radius: 32px;
-  border: 2px dashed var(--border);
+  min-height: 350px;
+  background: rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
+  border-radius: 24px !important;
+  border: 1px solid rgba(124, 77, 255, 0.08) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
+  padding: 40px !important;
+  box-sizing: border-box;
+  animation: ${fadeIn} 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 `;
