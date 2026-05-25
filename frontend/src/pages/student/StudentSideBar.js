@@ -3,17 +3,17 @@ import { Divider, ListItemButton, ListItemIcon, ListItemText, Box, Typography as
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { Home, LogOut, User, Megaphone, ClipboardList, Sparkles } from 'lucide-react';
+import { SquaresFour, Books, Sparkle, Megaphone, User, SignOut } from '@phosphor-icons/react';
 
 const StudentSideBar = ({ open }) => {
     const location = useLocation();
     const isOpenStr = open ? 'true' : 'false';
 
     const menuItems = [
-        { text: 'Dashboard', icon: <Home size={22} strokeWidth={2} />, path: '/Student/dashboard' },
-        { text: 'Subjects', icon: <ClipboardList size={22} strokeWidth={2} />, path: '/Student/subjects' },
-        { text: 'AI Insights', icon: <Sparkles size={22} strokeWidth={2} />, path: '/Student/ai-insights' },
-        { text: 'Complains', icon: <Megaphone size={22} strokeWidth={2} />, path: '/Student/complain' },
+        { text: 'Dashboard', icon: <SquaresFour weight="fill" size={22} />, path: '/Student/dashboard' },
+        { text: 'Subjects', icon: <Books weight="fill" size={22} />, path: '/Student/subjects' },
+        { text: 'AI Insights', icon: <Sparkle weight="fill" size={22} />, path: '/Student/ai-insights' },
+        { text: 'Complains', icon: <Megaphone weight="fill" size={22} />, path: '/Student/complain' },
     ];
 
     return (
@@ -66,7 +66,7 @@ const StudentSideBar = ({ open }) => {
                     isopen={isOpenStr}
                 >
                     <ListItemIcon className="icon">
-                        <User size={22} strokeWidth={2} />
+                        <User weight="fill" size={22} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText
@@ -91,7 +91,7 @@ const StudentSideBar = ({ open }) => {
                     className="logout-item"
                 >
                     <ListItemIcon className="icon">
-                        <LogOut size={22} strokeWidth={2} />
+                        <SignOut weight="fill" size={22} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText

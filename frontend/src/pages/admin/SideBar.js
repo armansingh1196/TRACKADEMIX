@@ -4,20 +4,20 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-import { Home, LogOut, User, Users, Megaphone, Presentation, GraduationCap, AlertTriangle, ClipboardList } from 'lucide-react';
+import { SquaresFour, PresentationChart, Books, GraduationCap, Student, Megaphone, WarningCircle, User, SignOut } from '@phosphor-icons/react';
 
 const SideBar = ({ open }) => {
     const location = useLocation();
     const { currentUser } = useSelector(state => state.user);
 
     const menuItems = [
-        { text: 'Dashboard', icon: <Home size={22} strokeWidth={2} />, path: '/Admin/dashboard' },
-        { text: 'Classes', icon: <Presentation size={22} strokeWidth={2} />, path: '/Admin/classes' },
-        { text: 'Subjects', icon: <ClipboardList size={22} strokeWidth={2} />, path: '/Admin/subjects' },
-        { text: 'Professors', icon: <GraduationCap size={22} strokeWidth={2} />, path: '/Admin/teachers' },
-        { text: 'Students', icon: <Users size={22} strokeWidth={2} />, path: '/Admin/students' },
-        { text: 'Notices', icon: <Megaphone size={22} strokeWidth={2} />, path: '/Admin/notices' },
-        { text: 'Complains', icon: <AlertTriangle size={22} strokeWidth={2} />, path: '/Admin/complains' },
+        { text: 'Dashboard', icon: <SquaresFour weight="fill" size={22} />, path: '/Admin/dashboard' },
+        { text: 'Classes', icon: <PresentationChart weight="fill" size={22} />, path: '/Admin/classes' },
+        { text: 'Subjects', icon: <Books weight="fill" size={22} />, path: '/Admin/subjects' },
+        { text: 'Professors', icon: <GraduationCap weight="fill" size={22} />, path: '/Admin/teachers' },
+        { text: 'Students', icon: <Student weight="fill" size={22} />, path: '/Admin/students' },
+        { text: 'Notices', icon: <Megaphone weight="fill" size={22} />, path: '/Admin/notices' },
+        { text: 'Complains', icon: <WarningCircle weight="fill" size={22} />, path: '/Admin/complains' },
     ];
 
     const isOpenStr = open ? 'true' : 'false';
@@ -66,7 +66,7 @@ const SideBar = ({ open }) => {
                     isopen={isOpenStr}
                 >
                     <ListItemIcon className="icon">
-                        <User size={22} strokeWidth={2} />
+                        <User weight="fill" size={22} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText primary="Profile" />
@@ -79,7 +79,7 @@ const SideBar = ({ open }) => {
                     className="logout-item"
                 >
                     <ListItemIcon className="icon">
-                        <LogOut size={22} strokeWidth={2} />
+                        <SignOut weight="fill" size={22} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText primary="Logout" />

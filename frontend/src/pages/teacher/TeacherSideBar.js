@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-import { Home, LogOut, User, Megaphone, Presentation, CheckCircle, ClipboardList, ChevronUp, ChevronDown, History } from 'lucide-react';
+import { SquaresFour, PresentationChart, ClipboardText, Megaphone, CheckCircle, ClockCounterClockwise, CaretUp, CaretDown, User, SignOut } from '@phosphor-icons/react';
 
 const TeacherSideBar = ({ open }) => {
     const { currentUser } = useSelector((state) => state.user);
@@ -14,10 +14,10 @@ const TeacherSideBar = ({ open }) => {
     const [openAttendance, setOpenAttendance] = React.useState(false);
 
     const menuItems = [
-        { text: 'Dashboard', icon: <Home size={22} strokeWidth={2} />, path: '/Teacher/dashboard' },
-        { text: `Class ${sclassName?.sclassName || ''}`, icon: <Presentation size={22} strokeWidth={2} />, path: '/Teacher/class' },
-        { text: 'Upload Marks', icon: <ClipboardList size={22} strokeWidth={2} />, path: '/Teacher/marks' },
-        { text: 'Complains', icon: <Megaphone size={22} strokeWidth={2} />, path: '/Teacher/complain' },
+        { text: 'Dashboard', icon: <SquaresFour weight="fill" size={22} />, path: '/Teacher/dashboard' },
+        { text: `Class ${sclassName?.sclassName || ''}`, icon: <PresentationChart weight="fill" size={22} />, path: '/Teacher/class' },
+        { text: 'Upload Marks', icon: <ClipboardText weight="fill" size={22} />, path: '/Teacher/marks' },
+        { text: 'Complains', icon: <Megaphone weight="fill" size={22} />, path: '/Teacher/complain' },
     ];
 
     const isOpenStr = open ? 'true' : 'false';
@@ -52,12 +52,12 @@ const TeacherSideBar = ({ open }) => {
                     isopen={isOpenStr}
                 >
                     <ListItemIcon className="icon">
-                        <CheckCircle size={22} strokeWidth={2} />
+                        <CheckCircle weight="fill" size={22} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText primary="Attendance" />
                     </LabelText>
-                    {open && (openAttendance ? <ChevronUp size={16} strokeWidth={2} color="rgba(226,232,255,0.4)" /> : <ChevronDown size={16} strokeWidth={2} color="rgba(226,232,255,0.4)" />)}
+                    {open && (openAttendance ? <CaretUp weight="bold" size={16} color="rgba(226,232,255,0.4)" /> : <CaretDown weight="bold" size={16} color="rgba(226,232,255,0.4)" />)}
                 </StyledListItem>
                 
                 <Collapse in={openAttendance} timeout="auto" unmountOnExit>
@@ -70,7 +70,7 @@ const TeacherSideBar = ({ open }) => {
                             sx={{ pl: open ? 4 : undefined }}
                         >
                             <ListItemIcon className="icon">
-                                <CheckCircle size={18} strokeWidth={2.5} />
+                                <CheckCircle weight="fill" size={18} />
                             </ListItemIcon>
                             <LabelText className="text-label" isopen={isOpenStr}>
                                 <ListItemText primary="Mark Attendance" />
@@ -84,7 +84,7 @@ const TeacherSideBar = ({ open }) => {
                             sx={{ pl: open ? 4 : undefined }}
                         >
                             <ListItemIcon className="icon">
-                                <History size={18} strokeWidth={2.5} />
+                                <ClockCounterClockwise weight="fill" size={18} />
                             </ListItemIcon>
                             <LabelText className="text-label" isopen={isOpenStr}>
                                 <ListItemText primary="Attendance Record" />
@@ -105,7 +105,7 @@ const TeacherSideBar = ({ open }) => {
                     isopen={isOpenStr}
                 >
                     <ListItemIcon className="icon">
-                        <User size={22} strokeWidth={2} />
+                        <User weight="fill" size={22} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText primary="Profile" />
@@ -118,7 +118,7 @@ const TeacherSideBar = ({ open }) => {
                     className="logout-item"
                 >
                     <ListItemIcon className="icon">
-                        <LogOut size={22} strokeWidth={2} />
+                        <SignOut weight="fill" size={22} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText primary="Logout" />
