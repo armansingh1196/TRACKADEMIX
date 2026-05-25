@@ -75,7 +75,7 @@ const AdminHomePage = () => {
                                 <AssessmentOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 20 }} />
                             </Box>
                             <Box>
-                                <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: 'Outfit', color: '#F5F5FF', fontSize: '1.1rem', letterSpacing: '-0.01em' }}>
+                                <Typography variant="h6" sx={{ fontWeight: 800, fontFamily: 'Plus Jakarta Sans', color: '#F5F5FF', fontSize: '1.1rem', letterSpacing: '-0.01em' }}>
                                     Batch Distribution
                                 </Typography>
                             </Box>

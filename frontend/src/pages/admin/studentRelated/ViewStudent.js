@@ -127,7 +127,7 @@ const ViewStudent = () => {
 
     const SectionHeader = ({ title, onToggle, currentView, showToggle = true }) => (
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-            <Typography variant="h5" sx={{ fontWeight: 800, fontFamily: 'Outfit', color: 'white' }}>{title}</Typography>
+            <Typography variant="h5" sx={{ fontWeight: 800, fontFamily: 'Plus Jakarta Sans', color: 'white' }}>{title}</Typography>
             {showToggle && (
                 <ToggleGroup>
                     <ToggleButton 
@@ -399,7 +399,7 @@ const ViewStudent = () => {
                         {userDetails?.name ? userDetails.name.charAt(0).toUpperCase() : 'S'}
                     </Avatar>
                     <Box sx={{ ml: { xs: 0, sm: 4 }, mt: { xs: 2, sm: 0 }, textAlign: { xs: 'center', sm: 'left' } }}>
-                        <Typography variant="h3" sx={{ fontWeight: 800, color: 'white', fontFamily: 'Outfit' }}>
+                        <Typography variant="h3" sx={{ fontWeight: 800, color: 'white', fontFamily: 'Plus Jakarta Sans' }}>
                             {userDetails.name}
                         </Typography>
                         <Typography variant="subtitle1" sx={{ color: 'var(--secondary)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
@@ -473,7 +473,7 @@ const ViewStudent = () => {
     return (
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <HeaderBox>
-                <Typography variant="h4" sx={{ fontWeight: 800, fontFamily: 'Outfit' }}>
+                <Typography variant="h4" sx={{ fontWeight: 800, fontFamily: 'Plus Jakarta Sans' }}>
                     Student Management
                 </Typography>
                 <Typography variant="body1" sx={{ color: 'var(--text-muted)' }}>

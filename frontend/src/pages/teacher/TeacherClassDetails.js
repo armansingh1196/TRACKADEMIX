@@ -167,7 +167,7 @@ const TeacherClassDetails = () => {
                     ) : (
                         <GlassCard sx={{ mt: 4 }}>
                             <Box sx={{ p: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white' }}>
+                                <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Plus Jakarta Sans', color: 'white' }}>
                                     Enrolled Students
                                 </Typography>
                             </Box>

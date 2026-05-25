@@ -189,7 +189,7 @@ const ShowClasses = () => {
                         <Box sx={{ width: 64, height: 64, borderRadius: '50%', background: 'rgba(124, 77, 255, 0.06)', display: 'flex', alignItems: 'center', justify: 'center', mb: 2, border: '1px solid rgba(124, 77, 255, 0.12)' }}>
                             <SchoolOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 32 }} />
                         </Box>
-                        <Typography variant="h6" sx={{ color: '#F5F5FF', mb: 1, fontFamily: 'Outfit', fontWeight: 700 }}>
+                        <Typography variant="h6" sx={{ color: '#F5F5FF', mb: 1, fontFamily: 'Plus Jakarta Sans', fontWeight: 700 }}>
                             No Active Batches
                         </Typography>
                         <Typography variant="body2" sx={{ color: 'rgba(226, 232, 255, 0.4)', mb: 3, maxWidth: 300, textAlign: 'center', fontSize: '0.875rem' }}>
@@ -210,7 +210,7 @@ const ShowClasses = () => {
                                                 <SchoolOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 20 }} />
                                             </IconBadge>
                                             <Box>
-                                                <Typography variant="h5" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px', fontFamily: 'Outfit' }}>
+                                                <Typography variant="h5" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px', fontFamily: 'Plus Jakarta Sans' }}>
                                                     Batch {batchName}
                                                 </Typography>
                                                 <StatusChip 

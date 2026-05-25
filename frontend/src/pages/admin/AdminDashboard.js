@@ -85,7 +85,7 @@ const AdminDashboard = () => {
                         sx={{ 
                             flexGrow: 1, 
                             fontWeight: 800, 
-                            fontFamily: 'Outfit', 
+                            fontFamily: 'Plus Jakarta Sans', 
                             color: 'white',
                             opacity: 0.8,
                             fontSize: { xs: '0.8rem', sm: '1rem' },
@@ -168,7 +168,7 @@ export default AdminDashboard
 const BrandLogo = styled(Typography)`
   font-weight: 900 !important;
   color: white !important;
-  font-family: 'Outfit', sans-serif !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
   letter-spacing: 1px !important;
   font-size: 1.25rem !important;
 

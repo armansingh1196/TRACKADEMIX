@@ -56,7 +56,7 @@ const makeActiveShape = (total) => (props) => {
         textAnchor="middle"
         dominantBaseline="central"
         style={{
-          fontFamily: "'Plus Jakarta Sans', 'Outfit', sans-serif",
+          fontFamily: "'Plus Jakarta Sans', 'Plus Jakarta Sans', sans-serif",
           fontSize: '1.2rem',
           fontWeight: 800,
           fill: '#F5F5FF',

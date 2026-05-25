@@ -124,7 +124,7 @@ const ViewSubject = () => {
 
     return (
       <StyledPaper elevation={0}>
-        <Typography variant="h4" align="center" sx={{ fontWeight: 900, fontFamily: 'Outfit', mb: 4, letterSpacing: '-1px' }}>
+        <Typography variant="h4" align="center" sx={{ fontWeight: 900, fontFamily: 'Plus Jakarta Sans', mb: 4, letterSpacing: '-1px' }}>
           Subject <span>Details</span>
         </Typography>
         
@@ -224,7 +224,7 @@ const ViewSubject = () => {
                   borderBottom: '1px solid rgba(255, 255, 255, 0.05)',
                   '& .MuiTab-root': {
                     color: 'rgba(255, 255, 255, 0.6)',
-                    fontFamily: 'Outfit',
+                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: 600,
                     fontSize: '0.95rem',
                     py: 2
@@ -318,7 +318,7 @@ const Value = styled.div`
   font-size: 1.2rem;
   font-weight: 700;
   color: white;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 `;
 
 export default ViewSubject

@@ -93,7 +93,7 @@ const AttendanceRecord = () => {
     return (
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <HeaderBox>
-                <Typography variant="h4" sx={{ fontWeight: 800, fontFamily: 'Outfit' }}>
+                <Typography variant="h4" sx={{ fontWeight: 800, fontFamily: 'Plus Jakarta Sans' }}>
                     Attendance Summary
                 </Typography>
                 <Typography variant="body1" sx={{ color: 'var(--text-muted)' }}>
@@ -238,7 +238,7 @@ const StatCard = styled(Box)`
     .value {
         font-size: 2.5rem;
         font-weight: 800;
-        font-family: 'Outfit', sans-serif;
+        font-family: 'Plus Jakarta Sans', sans-serif;
         line-height: 1;
         color: var(--text-main);
 

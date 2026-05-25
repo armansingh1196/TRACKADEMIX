@@ -238,7 +238,7 @@ const ClassDetails = () => {
                                     <Typography variant="body2" sx={{ color: 'var(--text-muted)', fontWeight: 600 }}>
                                         {stat.label}
                                     </Typography>
-                                    <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: 'Outfit' }}>
+                                    <Typography variant="h4" sx={{ fontWeight: 900, fontFamily: 'Plus Jakarta Sans' }}>
                                         {stat.value}
                                     </Typography>
                                 </Box>
@@ -248,7 +248,7 @@ const ClassDetails = () => {
                 </Grid>
                 
                 <GlassBox sx={{ mt: 4, p: 4 }}>
-                    <Typography variant="h5" sx={{ fontWeight: 800, mb: 2, fontFamily: 'Outfit' }}>
+                    <Typography variant="h5" sx={{ fontWeight: 800, mb: 2, fontFamily: 'Plus Jakarta Sans' }}>
                         Quick Actions
                     </Typography>
                     <Stack direction="row" spacing={2}>
@@ -285,7 +285,7 @@ const ClassDetails = () => {
                                     '& .MuiTab-root': { 
                                         color: 'var(--text-muted)', 
                                         fontWeight: 800,
-                                        fontFamily: 'Outfit',
+                                        fontFamily: 'Plus Jakarta Sans',
                                         px: 4
                                     },
                                     '& .Mui-selected': { 
@@ -364,7 +364,7 @@ const EmptyStateBox = styled(Box)`
 `;
 
 const SectionHeading = styled(Typography)`
-  font-family: 'Outfit', sans-serif !important;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
   font-weight: 800 !important;
   color: white !important;
   margin-bottom: 16px !important;

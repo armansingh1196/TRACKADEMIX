@@ -101,7 +101,7 @@ const StudentAttendance = ({ situation }) => {
                             <IconCircle>
                                 <HowToRegOutlinedIcon sx={{ fontSize: 32, color: 'var(--primary)' }} />
                             </IconCircle>
-                            <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white', mb: 1 }}>
+                            <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Plus Jakarta Sans', color: 'white', mb: 1 }}>
                                 {userDetails?.name}
                             </Typography>
                             <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>

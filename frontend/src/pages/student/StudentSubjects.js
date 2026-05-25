@@ -75,7 +75,7 @@ const StudentSubjects = () => {
                     <GlassCard sx={{ p: 4 }} key={semester}>
                         <SectionHeader>
                             <TableChartIcon sx={{ color: 'var(--primary)', fontSize: 32 }} />
-                            <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white' }}>
+                            <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Plus Jakarta Sans', color: 'white' }}>
                                 Semester {semester} Performance
                             </Typography>
                         </SectionHeader>
@@ -199,7 +199,7 @@ const StudentSubjects = () => {
             <GlassCard sx={{ p: 4, minHeight: 400, display: 'flex', flexDirection: 'column' }}>
                 <SectionHeader>
                     <InsertChartIcon sx={{ color: 'var(--secondary)', fontSize: 32 }} />
-                    <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white' }}>
+                    <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Plus Jakarta Sans', color: 'white' }}>
                         Cumulative Performance Analytics
                     </Typography>
                 </SectionHeader>
@@ -249,7 +249,7 @@ const StudentSubjects = () => {
                         </>
                     ) : subjectsList && subjectsList.length > 0 ? (
                         <GlassCard sx={{ p: 4 }}>
-                            <Typography variant="h5" sx={{ fontWeight: 800, color: 'white', mb: 3, fontFamily: 'Outfit' }}>
+                            <Typography variant="h5" sx={{ fontWeight: 800, color: 'white', mb: 3, fontFamily: 'Plus Jakarta Sans' }}>
                                 Assigned Subjects
                             </Typography>
                             <Grid container spacing={2}>
@@ -351,7 +351,7 @@ const StyledNavItem = styled(BottomNavigationAction)`
     font-weight: 800;
   }
   .MuiBottomNavigationAction-label {
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Plus Jakarta Sans', sans-serif;
     font-weight: 600;
     margin-top: 4px;
   }

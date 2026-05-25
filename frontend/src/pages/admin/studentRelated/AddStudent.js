@@ -93,7 +93,7 @@ const AddStudent = ({ situation }) => {
                             <IconCircle>
                                 <PersonAddAlt1OutlinedIcon sx={{ fontSize: 48, color: 'var(--primary)' }} />
                             </IconCircle>
-                            <Typography variant="h5" sx={{ fontWeight: 800, color: 'white', mb: 2, fontFamily: 'Outfit' }}>
+                            <Typography variant="h5" sx={{ fontWeight: 800, color: 'white', mb: 2, fontFamily: 'Plus Jakarta Sans' }}>
                                 New Enrollment
                             </Typography>
                             <Typography variant="body2" sx={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>

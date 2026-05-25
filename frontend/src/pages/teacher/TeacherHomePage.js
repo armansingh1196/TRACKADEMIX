@@ -54,7 +54,7 @@ const TeacherHomePage = () => {
                 </Grid>
                 <Grid item xs={12} md={4}>
                     <GlassCard sx={{ p: 4, height: '100%' }}>
-                        <Typography variant="h6" sx={{ fontWeight: 900, fontFamily: 'Outfit', color: 'white', mb: 3 }}>
+                        <Typography variant="h6" sx={{ fontWeight: 900, fontFamily: 'Plus Jakarta Sans', color: 'white', mb: 3 }}>
                             Course Quick-Links
                         </Typography>
                         <Stack spacing={2}>
