@@ -114,7 +114,7 @@ const TeacherClassDetails = () => {
                                     transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom',
                                 }}
                             >
-                                <Paper sx={{ mt: 1, minWidth: '160px', background: 'var(--bg-surface) !important' }}>
+                                <Paper sx={{ mt: 1, minWidth: '160px', background: 'rgba(6, 8, 24, 0.95) !important', backdropFilter: 'blur(24px)', border: '1px solid rgba(124, 77, 255, 0.2)', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.6)' }}>
                                     <ClickAwayListener onClickAway={handleClose}>
                                         <MenuList id="split-button-menu" autoFocusItem>
                                             {options.map((option, index) => (
