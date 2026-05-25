@@ -212,9 +212,6 @@ const StudentHomePage = () => {
                                                 </Typography>
                                             </Box>
                                         </Box>
-                                        <Typography variant="body2" sx={{ textAlign: 'center', color: 'var(--text-main)', fontWeight: 500, fontSize: '0.85rem', mt: 1, maxWidth: '100%', wordBreak: 'break-word' }}>
-                                            {frontendRecommendation}
-                                        </Typography>
 
                                         {/* Summary Metrics Row */}
                                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mt: 1.5, width: '100%', justifyContent: 'space-around', borderTop: '1px solid rgba(255,255,255,0.05)', pt: 1.5 }}>
@@ -247,7 +244,7 @@ const StudentHomePage = () => {
                                 Theory Performance
                             </Typography>
                             {theoryRadarData.length > 0 ? (
-                                <ResponsiveContainer width="100%" height={200}>
+                                <ResponsiveContainer width="100%" height={170}>
                                     <RadarChart cx="50%" cy="50%" outerRadius="80%" data={theoryRadarData}>
                                         <PolarGrid stroke="rgba(255,255,255,0.1)" />
                                         <PolarAngleAxis dataKey="subject" stroke="var(--text-muted)" tick={{ fontSize: 10 }} />
@@ -268,7 +265,7 @@ const StudentHomePage = () => {
                                 Practical Performance
                             </Typography>
                             {practicalRadarData.length > 0 ? (
-                                <ResponsiveContainer width="100%" height={200}>
+                                <ResponsiveContainer width="100%" height={170}>
                                     <RadarChart cx="50%" cy="50%" outerRadius="80%" data={practicalRadarData}>
                                         <PolarGrid stroke="rgba(255,255,255,0.1)" />
                                         <PolarAngleAxis dataKey="subject" stroke="var(--text-muted)" tick={{ fontSize: 10 }} />
