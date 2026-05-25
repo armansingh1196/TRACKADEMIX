@@ -4,28 +4,20 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-import HomeIcon from "@mui/icons-material/Home";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
-import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
-import SupervisorAccountOutlinedIcon from '@mui/icons-material/SupervisorAccountOutlined';
-import ReportIcon from '@mui/icons-material/Report';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import { Home, LogOut, User, Users, Megaphone, Presentation, GraduationCap, AlertTriangle, ClipboardList } from 'lucide-react';
 
 const SideBar = ({ open }) => {
     const location = useLocation();
     const { currentUser } = useSelector(state => state.user);
 
     const menuItems = [
-        { text: 'Dashboard', icon: <HomeIcon />, path: '/Admin/dashboard' },
-        { text: 'Classes', icon: <ClassOutlinedIcon />, path: '/Admin/classes' },
-        { text: 'Subjects', icon: <AssignmentIcon />, path: '/Admin/subjects' },
-        { text: 'Professors', icon: <SupervisorAccountOutlinedIcon />, path: '/Admin/teachers' },
-        { text: 'Students', icon: <PersonOutlineIcon />, path: '/Admin/students' },
-        { text: 'Notices', icon: <AnnouncementOutlinedIcon />, path: '/Admin/notices' },
-        { text: 'Complains', icon: <ReportIcon />, path: '/Admin/complains' },
+        { text: 'Dashboard', icon: <Home size={22} strokeWidth={2} />, path: '/Admin/dashboard' },
+        { text: 'Classes', icon: <Presentation size={22} strokeWidth={2} />, path: '/Admin/classes' },
+        { text: 'Subjects', icon: <ClipboardList size={22} strokeWidth={2} />, path: '/Admin/subjects' },
+        { text: 'Professors', icon: <GraduationCap size={22} strokeWidth={2} />, path: '/Admin/teachers' },
+        { text: 'Students', icon: <Users size={22} strokeWidth={2} />, path: '/Admin/students' },
+        { text: 'Notices', icon: <Megaphone size={22} strokeWidth={2} />, path: '/Admin/notices' },
+        { text: 'Complains', icon: <AlertTriangle size={22} strokeWidth={2} />, path: '/Admin/complains' },
     ];
 
     const isOpenStr = open ? 'true' : 'false';
@@ -74,7 +66,7 @@ const SideBar = ({ open }) => {
                     isopen={isOpenStr}
                 >
                     <ListItemIcon className="icon">
-                        <AccountCircleOutlinedIcon />
+                        <User size={22} strokeWidth={2} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText primary="Profile" />
@@ -87,7 +79,7 @@ const SideBar = ({ open }) => {
                     className="logout-item"
                 >
                     <ListItemIcon className="icon">
-                        <ExitToAppIcon />
+                        <LogOut size={22} strokeWidth={2} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText primary="Logout" />
@@ -193,7 +185,6 @@ const StyledListItem = styled(ListItemButton)`
       margin-right: ${p => p.isopen === 'true' ? '12px' : '0'} !important;
       color: rgba(226, 232, 255, 0.35) !important;
       transition: margin-right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.2s ease !important;
-      svg { font-size: 20px; }
     }
 
     .MuiListItemText-primary {

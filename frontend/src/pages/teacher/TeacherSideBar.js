@@ -4,16 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-import HomeIcon from '@mui/icons-material/Home';
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
-import ClassOutlinedIcon from '@mui/icons-material/ClassOutlined';
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import HistoryOutlinedIcon from '@mui/icons-material/HistoryOutlined';
+import { Home, LogOut, User, Megaphone, Presentation, CheckCircle, ClipboardList, ChevronUp, ChevronDown, History } from 'lucide-react';
 
 const TeacherSideBar = ({ open }) => {
     const { currentUser } = useSelector((state) => state.user);
@@ -23,10 +14,10 @@ const TeacherSideBar = ({ open }) => {
     const [openAttendance, setOpenAttendance] = React.useState(false);
 
     const menuItems = [
-        { text: 'Dashboard', icon: <HomeIcon />, path: '/Teacher/dashboard' },
-        { text: `Class ${sclassName?.sclassName || ''}`, icon: <ClassOutlinedIcon />, path: '/Teacher/class' },
-        { text: 'Upload Marks', icon: <AssignmentIcon />, path: '/Teacher/marks' },
-        { text: 'Complains', icon: <AnnouncementOutlinedIcon />, path: '/Teacher/complain' },
+        { text: 'Dashboard', icon: <Home size={22} strokeWidth={2} />, path: '/Teacher/dashboard' },
+        { text: `Class ${sclassName?.sclassName || ''}`, icon: <Presentation size={22} strokeWidth={2} />, path: '/Teacher/class' },
+        { text: 'Upload Marks', icon: <ClipboardList size={22} strokeWidth={2} />, path: '/Teacher/marks' },
+        { text: 'Complains', icon: <Megaphone size={22} strokeWidth={2} />, path: '/Teacher/complain' },
     ];
 
     const isOpenStr = open ? 'true' : 'false';
@@ -61,12 +52,12 @@ const TeacherSideBar = ({ open }) => {
                     isopen={isOpenStr}
                 >
                     <ListItemIcon className="icon">
-                        <CheckCircleOutlineIcon />
+                        <CheckCircle size={22} strokeWidth={2} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText primary="Attendance" />
                     </LabelText>
-                    {open && (openAttendance ? <ExpandLess sx={{color:'rgba(226,232,255,0.4)'}} /> : <ExpandMore sx={{color:'rgba(226,232,255,0.4)'}} />)}
+                    {open && (openAttendance ? <ChevronUp size={16} strokeWidth={2} color="rgba(226,232,255,0.4)" /> : <ChevronDown size={16} strokeWidth={2} color="rgba(226,232,255,0.4)" />)}
                 </StyledListItem>
                 
                 <Collapse in={openAttendance} timeout="auto" unmountOnExit>
@@ -79,7 +70,7 @@ const TeacherSideBar = ({ open }) => {
                             sx={{ pl: open ? 4 : undefined }}
                         >
                             <ListItemIcon className="icon">
-                                <CheckCircleOutlineIcon sx={{ fontSize: 18 }} />
+                                <CheckCircle size={18} strokeWidth={2.5} />
                             </ListItemIcon>
                             <LabelText className="text-label" isopen={isOpenStr}>
                                 <ListItemText primary="Mark Attendance" />
@@ -93,7 +84,7 @@ const TeacherSideBar = ({ open }) => {
                             sx={{ pl: open ? 4 : undefined }}
                         >
                             <ListItemIcon className="icon">
-                                <HistoryOutlinedIcon sx={{ fontSize: 18 }} />
+                                <History size={18} strokeWidth={2.5} />
                             </ListItemIcon>
                             <LabelText className="text-label" isopen={isOpenStr}>
                                 <ListItemText primary="Attendance Record" />
@@ -114,7 +105,7 @@ const TeacherSideBar = ({ open }) => {
                     isopen={isOpenStr}
                 >
                     <ListItemIcon className="icon">
-                        <AccountCircleOutlinedIcon />
+                        <User size={22} strokeWidth={2} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText primary="Profile" />
@@ -127,7 +118,7 @@ const TeacherSideBar = ({ open }) => {
                     className="logout-item"
                 >
                     <ListItemIcon className="icon">
-                        <ExitToAppIcon />
+                        <LogOut size={22} strokeWidth={2} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText primary="Logout" />
@@ -208,7 +199,6 @@ const StyledListItem = styled(ListItemButton)`
       margin-right: ${p => p.isopen === 'true' ? '12px' : '0'} !important;
       color: rgba(226, 232, 255, 0.35) !important;
       transition: margin-right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.2s ease !important;
-      svg { font-size: 20px; }
     }
 
     .MuiListItemText-primary {

@@ -3,22 +3,17 @@ import { Divider, ListItemButton, ListItemIcon, ListItemText, Box, Typography as
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import HomeIcon from '@mui/icons-material/Home';
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
+import { Home, LogOut, User, Megaphone, ClipboardList, Sparkles } from 'lucide-react';
 
 const StudentSideBar = ({ open }) => {
     const location = useLocation();
     const isOpenStr = open ? 'true' : 'false';
 
     const menuItems = [
-        { text: 'Dashboard', icon: <HomeIcon />, path: '/Student/dashboard' },
-        { text: 'Subjects', icon: <AssignmentIcon />, path: '/Student/subjects' },
-        { text: 'AI Insights', icon: <AutoAwesomeIcon />, path: '/Student/ai-insights' },
-        { text: 'Complains', icon: <AnnouncementOutlinedIcon />, path: '/Student/complain' },
+        { text: 'Dashboard', icon: <Home size={22} strokeWidth={2} />, path: '/Student/dashboard' },
+        { text: 'Subjects', icon: <ClipboardList size={22} strokeWidth={2} />, path: '/Student/subjects' },
+        { text: 'AI Insights', icon: <Sparkles size={22} strokeWidth={2} />, path: '/Student/ai-insights' },
+        { text: 'Complains', icon: <Megaphone size={22} strokeWidth={2} />, path: '/Student/complain' },
     ];
 
     return (
@@ -71,7 +66,7 @@ const StudentSideBar = ({ open }) => {
                     isopen={isOpenStr}
                 >
                     <ListItemIcon className="icon">
-                        <AccountCircleOutlinedIcon />
+                        <User size={22} strokeWidth={2} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText
@@ -96,7 +91,7 @@ const StudentSideBar = ({ open }) => {
                     className="logout-item"
                 >
                     <ListItemIcon className="icon">
-                        <ExitToAppIcon />
+                        <LogOut size={22} strokeWidth={2} />
                     </ListItemIcon>
                     <LabelText className="text-label" isopen={isOpenStr}>
                         <ListItemText
@@ -190,7 +185,6 @@ const StyledListItem = styled(ListItemButton)`
       margin-right: ${p => p.isopen === 'true' ? '12px' : '0'} !important;
       color: rgba(226, 232, 255, 0.35) !important;
       transition: margin-right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.2s ease !important;
-      svg { font-size: 22px; }
     }
 
     .MuiListItemText-primary {
