@@ -204,7 +204,7 @@ const StudentAIInsights = () => {
 
                     {/* Right - AI Recommendations */}
                     <Grid item xs={12} md={8}>
-                        <GlassCard>
+                        <GlassCard sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
                                 <IconBadge>
                                     <AutoAwesomeIcon sx={{ color: 'var(--primary)', fontSize: 20 }} />
