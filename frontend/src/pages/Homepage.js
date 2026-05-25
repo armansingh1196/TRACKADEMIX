@@ -53,27 +53,7 @@ const Homepage = () => {
                                         fontWeight: 600,
                                     }}
                                 >
-                                    Get Started
-                                </AppButton>
-                                <AppButton
-                                    variant="outlined"
-                                    size="large"
-                                    onClick={() => navigate('/chooseasguest')}
-                                    sx={{
-                                        px: 4.5, py: 1.6,
-                                        fontSize: '0.9375rem !important',
-                                        borderRadius: '12px !important',
-                                        color: 'rgba(226,232,255,0.8) !important',
-                                        borderColor: 'rgba(124,77,255,0.2) !important',
-                                        borderWidth: '1.5px !important',
-                                        background: 'rgba(124,77,255,0.04) !important',
-                                        '&:hover': {
-                                            borderColor: 'rgba(124,77,255,0.4) !important',
-                                            background: 'rgba(124,77,255,0.08) !important',
-                                        }
-                                    }}
-                                >
-                                    Guest Demo
+                                    Access Platform
                                 </AppButton>
                             </CTARow>
 
