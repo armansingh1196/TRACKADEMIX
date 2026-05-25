@@ -40,7 +40,7 @@ const SideBar = ({ open }) => {
             
             <Divider sx={{ mb: 2, borderColor: 'rgba(124, 77, 255, 0.08)', opacity: open ? 1 : 0, transition: 'opacity 0.3s' }} />
 
-            <Box sx={{ px: 2, pb: 2, flexGrow: 1 }}>
+            <Box sx={{ px: open ? 2 : 1, pb: 2, flexGrow: 1 }}>
                 <SectionLabel isopen={isOpenStr}>MAIN MENU</SectionLabel>
                 {menuItems.map((item) => {
                     const isActive = location.pathname === item.path || (item.path !== '/Admin/dashboard' && location.pathname.startsWith(item.path));
@@ -65,7 +65,7 @@ const SideBar = ({ open }) => {
             
             <Divider sx={{ my: 1, borderColor: 'rgba(124, 77, 255, 0.08)', opacity: open ? 1 : 0, transition: 'opacity 0.3s' }} />
             
-            <Box sx={{ px: 2, py: 2 }}>
+            <Box sx={{ px: open ? 2 : 1, py: 2 }}>
                 <SectionLabel isopen={isOpenStr}>ACCOUNT</SectionLabel>
                 <StyledListItem 
                     component={Link} 
@@ -159,11 +159,11 @@ const StyledListItem = styled(ListItemButton)`
   && {
     margin: 2px 4px !important;
     border-radius: 12px !important;
-    padding: ${p => p.isopen === 'true' ? '10px 12px' : '10px 20px'} !important;
+    padding: ${p => p.isopen === 'true' ? '10px 12px' : '10px 0'} !important;
     min-height: 44px;
     display: flex !important;
     align-items: center !important;
-    justify-content: flex-start !important;
+    justify-content: ${p => p.isopen === 'true' ? 'flex-start' : 'center'} !important;
     color: rgba(226, 232, 255, 0.6) !important;
     transition: padding 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.22s, color 0.22s !important;
 

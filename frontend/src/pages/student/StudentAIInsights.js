@@ -15,6 +15,7 @@ import WarningAmberRoundedIcon from '@mui/icons-material/WarningAmberRounded';
 import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
 
 const StudentAIInsights = () => {
     const { currentUser } = useSelector((state) => state.user);
@@ -146,6 +147,14 @@ const StudentAIInsights = () => {
 
     const bandTheme = getBandTheme(calculatedBand);
 
+    const radarData = insights && insights.features ? [
+        { subject: 'Attendance', score: Math.round(insights.features.attendance_rate || 0), fullMark: 100 },
+        { subject: 'Internals', score: Math.round(((insights.features.internal_avg_theory || 0) / 30) * 100), fullMark: 100 },
+        { subject: 'Externals', score: Math.round(((insights.features.external_avg_theory || 0) / 70) * 100), fullMark: 100 },
+        { subject: 'Past CGPA', score: Math.round((insights.features.previous_gpa || 0) * 10), fullMark: 100 },
+        { subject: 'Consistency', score: Math.round(Math.min((insights.features.attendance_rate || 0), ((insights.features.previous_gpa || 0) * 10))), fullMark: 100 }
+    ] : [];
+
     return (
         <Container maxWidth="lg" sx={{ mt: 1, mb: 2 }}>
             <AppHeader 
@@ -259,61 +268,105 @@ const StudentAIInsights = () => {
                         </Grid>
                     )}
 
-                    {/* Analyzed Metrics */}
+                    {/* Analyzed Features & Radar Matrix */}
                     <Grid item xs={12}>
-                        <GlassCard>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
-                                <IconBadge>
-                                    <InsightsOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 20 }} />
-                                </IconBadge>
-                                <Box>
-                                    <Typography variant="h6" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px' }}>
-                                        Analyzed Features
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontSize: '0.75rem' }}>
-                                        Key performance indicators processed as feature vectors in the ML model.
-                                    </Typography>
-                                </Box>
-                            </Box>
-
-                            <Grid container spacing={3}>
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <MetricWidget>
-                                        <MetricTitle>Attendance Rate</MetricTitle>
-                                        <MetricValue sx={{ my: 1 }}>{insights.features?.attendance_rate ? Math.round(insights.features.attendance_rate) : 0}%</MetricValue>
-                                        <LinearProgress variant="determinate" value={insights.features?.attendance_rate || 0} sx={{ height: 6, borderRadius: 3, bgcolor: 'rgba(255,255,255,0.04)', '& .MuiLinearProgress-bar': { background: 'var(--gradient-primary)' } }} />
-                                        <MetricSub>Minimum required: 75%</MetricSub>
-                                    </MetricWidget>
-                                </Grid>
-
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <MetricWidget>
-                                        <MetricTitle>Theory Internals</MetricTitle>
-                                        <MetricValue sx={{ my: 1 }}>{insights.features?.internal_avg_theory ? Math.round((insights.features.internal_avg_theory / 30) * 100) : 0}%</MetricValue>
-                                        <LinearProgress variant="determinate" value={insights.features?.internal_avg_theory ? (insights.features.internal_avg_theory / 30) * 100 : 0} sx={{ height: 6, borderRadius: 3, bgcolor: 'rgba(255,255,255,0.04)', '& .MuiLinearProgress-bar': { background: 'linear-gradient(90deg, #FBBF24 0%, #F59E0B 100%)' } }} />
-                                        <MetricSub>Avg out of 30 marks</MetricSub>
-                                    </MetricWidget>
-                                </Grid>
-
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <MetricWidget>
-                                        <MetricTitle>Theory Externals</MetricTitle>
-                                        <MetricValue sx={{ my: 1 }}>{insights.features?.external_avg_theory ? Math.round((insights.features.external_avg_theory / 70) * 100) : 0}%</MetricValue>
-                                        <LinearProgress variant="determinate" value={insights.features?.external_avg_theory ? (insights.features.external_avg_theory / 70) * 100 : 0} sx={{ height: 6, borderRadius: 3, bgcolor: 'rgba(255,255,255,0.04)', '& .MuiLinearProgress-bar': { background: 'linear-gradient(90deg, #34D399 0%, #10B981 100%)' } }} />
-                                        <MetricSub>Avg out of 70 marks</MetricSub>
-                                    </MetricWidget>
-                                </Grid>
-
-                                <Grid item xs={12} sm={6} md={3}>
-                                    <MetricWidget>
-                                        <MetricTitle>Academic CGPA</MetricTitle>
-                                        <MetricValue sx={{ my: 1 }}>{insights.features?.previous_gpa || 0}</MetricValue>
-                                        <LinearProgress variant="determinate" value={(insights.features?.previous_gpa || 0) * 10} sx={{ height: 6, borderRadius: 3, bgcolor: 'rgba(255,255,255,0.04)', '& .MuiLinearProgress-bar': { background: 'linear-gradient(90deg, #818CF8 0%, #6366F1 100%)' } }} />
-                                        <MetricSub>Historical scale out of 10.0</MetricSub>
-                                    </MetricWidget>
-                                </Grid>
+                        <Grid container spacing={3}>
+                            {/* Left: Radar Matrix */}
+                            <Grid item xs={12} md={5}>
+                                <GlassCard sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+                                        <IconBadge>
+                                            <InsightsOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 20 }} />
+                                        </IconBadge>
+                                        <Box>
+                                            <Typography variant="h6" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px' }}>
+                                                Performance Matrix
+                                            </Typography>
+                                            <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontSize: '0.75rem' }}>
+                                                Multi-dimensional capability breakdown.
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                    <Box sx={{ flexGrow: 1, minHeight: 280, position: 'relative' }}>
+                                        <ResponsiveContainer width="100%" height="100%">
+                                            <RadarChart cx="50%" cy="50%" outerRadius="65%" data={radarData}>
+                                                <PolarGrid stroke="rgba(255,255,255,0.08)" />
+                                                <PolarAngleAxis dataKey="subject" tick={{ fill: 'rgba(226,232,255,0.6)', fontSize: 11, fontFamily: 'var(--font-heading)', fontWeight: 600 }} />
+                                                <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
+                                                <RechartsTooltip 
+                                                    contentStyle={{ 
+                                                        backgroundColor: 'rgba(6, 8, 24, 0.9)', 
+                                                        backdropFilter: 'blur(10px)',
+                                                        border: '1px solid rgba(124, 77, 255, 0.2)',
+                                                        borderRadius: '12px',
+                                                        color: '#F5F5FF',
+                                                        fontFamily: 'var(--font-body)'
+                                                    }}
+                                                    itemStyle={{ color: 'var(--primary)' }}
+                                                />
+                                                <Radar name="Score" dataKey="score" stroke="var(--primary)" strokeWidth={2} fill="var(--primary)" fillOpacity={0.35} />
+                                            </RadarChart>
+                                        </ResponsiveContainer>
+                                        {/* Subtle glow behind radar */}
+                                        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '120px', height: '120px', background: 'var(--primary)', filter: 'blur(60px)', opacity: 0.15, pointerEvents: 'none', zIndex: -1 }} />
+                                    </Box>
+                                </GlassCard>
                             </Grid>
-                        </GlassCard>
+
+                            {/* Right: Feature Metrics */}
+                            <Grid item xs={12} md={7}>
+                                <GlassCard sx={{ height: '100%' }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+                                        <Box>
+                                            <Typography variant="h6" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px' }}>
+                                                Analyzed Features
+                                            </Typography>
+                                            <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontSize: '0.75rem' }}>
+                                                Key performance indicators processed as feature vectors in the ML model.
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12} sm={6}>
+                                            <MetricWidget>
+                                                <MetricTitle>Attendance Rate</MetricTitle>
+                                                <MetricValue sx={{ my: 1 }}>{insights.features?.attendance_rate ? Math.round(insights.features.attendance_rate) : 0}%</MetricValue>
+                                                <LinearProgress variant="determinate" value={insights.features?.attendance_rate || 0} sx={{ height: 6, borderRadius: 3, bgcolor: 'rgba(255,255,255,0.04)', '& .MuiLinearProgress-bar': { background: 'var(--gradient-primary)' } }} />
+                                                <MetricSub>Minimum required: 75%</MetricSub>
+                                            </MetricWidget>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            <MetricWidget>
+                                                <MetricTitle>Theory Internals</MetricTitle>
+                                                <MetricValue sx={{ my: 1 }}>{insights.features?.internal_avg_theory ? Math.round((insights.features.internal_avg_theory / 30) * 100) : 0}%</MetricValue>
+                                                <LinearProgress variant="determinate" value={insights.features?.internal_avg_theory ? (insights.features.internal_avg_theory / 30) * 100 : 0} sx={{ height: 6, borderRadius: 3, bgcolor: 'rgba(255,255,255,0.04)', '& .MuiLinearProgress-bar': { background: 'linear-gradient(90deg, #FBBF24 0%, #F59E0B 100%)' } }} />
+                                                <MetricSub>Avg out of 30 marks</MetricSub>
+                                            </MetricWidget>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            <MetricWidget>
+                                                <MetricTitle>Theory Externals</MetricTitle>
+                                                <MetricValue sx={{ my: 1 }}>{insights.features?.external_avg_theory ? Math.round((insights.features.external_avg_theory / 70) * 100) : 0}%</MetricValue>
+                                                <LinearProgress variant="determinate" value={insights.features?.external_avg_theory ? (insights.features.external_avg_theory / 70) * 100 : 0} sx={{ height: 6, borderRadius: 3, bgcolor: 'rgba(255,255,255,0.04)', '& .MuiLinearProgress-bar': { background: 'linear-gradient(90deg, #34D399 0%, #10B981 100%)' } }} />
+                                                <MetricSub>Avg out of 70 marks</MetricSub>
+                                            </MetricWidget>
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={6}>
+                                            <MetricWidget>
+                                                <MetricTitle>Academic CGPA</MetricTitle>
+                                                <MetricValue sx={{ my: 1 }}>{insights.features?.previous_gpa || 0}</MetricValue>
+                                                <LinearProgress variant="determinate" value={(insights.features?.previous_gpa || 0) * 10} sx={{ height: 6, borderRadius: 3, bgcolor: 'rgba(255,255,255,0.04)', '& .MuiLinearProgress-bar': { background: 'linear-gradient(90deg, #818CF8 0%, #6366F1 100%)' } }} />
+                                                <MetricSub>Historical scale out of 10.0</MetricSub>
+                                            </MetricWidget>
+                                        </Grid>
+                                    </Grid>
+                                </GlassCard>
+                            </Grid>
+                        </Grid>
                     </Grid>
 
                     {/* AI Model Performance Specs Banner */}

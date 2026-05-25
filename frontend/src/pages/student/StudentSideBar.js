@@ -24,7 +24,7 @@ const StudentSideBar = ({ open }) => {
     return (
         <StyledNav>
             {/* Academic Menu section */}
-            <Box sx={{ px: 2, pt: 3, pb: 1 }}>
+            <Box sx={{ px: open ? 2 : 1, pt: 3, pb: 1 }}>
                 <SectionLabel isopen={isOpenStr}>Academic Menu</SectionLabel>
                 {menuItems.map((item) => {
                     const isActive = location.pathname === item.path ||
@@ -62,7 +62,7 @@ const StudentSideBar = ({ open }) => {
             <Divider sx={{ mx: 2, borderColor: 'rgba(84,84,88,0.4)', opacity: open ? 1 : 0, transition: 'opacity 0.3s' }} />
 
             {/* Account section */}
-            <Box sx={{ px: 2, pt: 2, pb: 3 }}>
+            <Box sx={{ px: open ? 2 : 1, pt: 2, pb: 3 }}>
                 <SectionLabel isopen={isOpenStr}>Account</SectionLabel>
                 <StyledListItem
                     component={Link}
@@ -156,11 +156,11 @@ const StyledListItem = styled(ListItemButton)`
   && {
     margin: 2px 4px !important;
     border-radius: 12px !important;
-    padding: ${p => p.isopen === 'true' ? '10px 12px' : '10px 20px'} !important;
+    padding: ${p => p.isopen === 'true' ? '10px 12px' : '10px 0'} !important;
     min-height: 44px;
     display: flex !important;
     align-items: center !important;
-    justify-content: flex-start !important;
+    justify-content: ${p => p.isopen === 'true' ? 'flex-start' : 'center'} !important;
     color: rgba(226, 232, 255, 0.6) !important;
     transition: padding 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), background-color 0.22s, color 0.22s !important;
 
