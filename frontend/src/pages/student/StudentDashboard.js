@@ -35,8 +35,12 @@ const StudentDashboard = () => {
     const toggleDrawer = () => setOpen(!open);
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'var(--bg-base)' }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'var(--bg-base)', position: 'relative', overflow: 'hidden' }}>
             <CssBaseline />
+            {/* ── Ambient orbs — ChooseUser aesthetic ── */}
+            <div className="ambient-orb" style={{ top: '-10%', right: '-5%', width: 650, height: 650, background: 'radial-gradient(circle, rgba(68,138,255,0.13) 0%, transparent 65%)', animationDuration: '24s' }} />
+            <div className="ambient-orb" style={{ bottom: '-15%', left: '-6%', width: 550, height: 550, background: 'radial-gradient(circle, rgba(124,77,255,0.12) 0%, transparent 65%)', animationDelay: '-9s', animationDuration: '28s' }} />
+            <div className="ambient-orb" style={{ top: '45%', left: '42%', width: 400, height: 400, background: 'radial-gradient(circle, rgba(45,212,191,0.06) 0%, transparent 65%)', animationDelay: '-17s', animationDuration: '32s' }} />
             <AppBar open={open} position='fixed' elevation={0}>
                 <Toolbar sx={{ pr: '24px', display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', minWidth: '240px' }}>

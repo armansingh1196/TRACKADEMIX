@@ -58,8 +58,12 @@ const AdminDashboard = () => {
     const toggleDrawer = () => setOpen(!open);
 
     return (
-        <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'var(--bg-main)' }}>
+        <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'var(--bg-main)', position: 'relative', overflow: 'hidden' }}>
             <CssBaseline />
+            {/* ── Ambient orbs — ChooseUser aesthetic ── */}
+            <div className="ambient-orb" style={{ top: '-12%', right: '-6%', width: 700, height: 700, background: 'radial-gradient(circle, rgba(124,77,255,0.14) 0%, transparent 65%)', animationDuration: '22s' }} />
+            <div className="ambient-orb" style={{ bottom: '-18%', left: '-8%', width: 600, height: 600, background: 'radial-gradient(circle, rgba(68,138,255,0.12) 0%, transparent 65%)', animationDelay: '-7s', animationDuration: '26s' }} />
+            <div className="ambient-orb" style={{ top: '40%', left: '38%', width: 450, height: 450, background: 'radial-gradient(circle, rgba(45,212,191,0.07) 0%, transparent 65%)', animationDelay: '-14s', animationDuration: '30s' }} />
             <AppBar open={open} position='fixed' elevation={0}>
                 <Toolbar sx={{ pr: '24px', display: 'flex', alignItems: 'center' }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', minWidth: '240px' }}>
