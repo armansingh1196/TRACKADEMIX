@@ -10,12 +10,13 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import AddCardIcon from '@mui/icons-material/AddCard';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import SpeedDialTemplate from '../../../components/SpeedDialTemplate';
 import Popup from '../../../components/Popup';
 import AppHeader from '../../../components/common/AppHeader';
 import AppButton from '../../../components/common/AppButton';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import { api } from '../../../api/client';
 
 const ShowClasses = () => {
