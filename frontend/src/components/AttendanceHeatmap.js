@@ -391,10 +391,10 @@ const CellGrid = styled.div`
 
 const levelColors = {
     0: 'rgba(255, 255, 255, 0.05)',
-    1: '#2e1f48',
-    2: '#4e2e7a',
-    3: '#7C4DFF',
-    4: '#B392E6',
+    1: '#ef4444', // Red (very low attendance)
+    2: '#f59e0b', // Orange (medium-low)
+    3: '#84cc16', // Lime (medium-high)
+    4: '#10b981', // Green (perfect/high)
 };
 
 const Cell = styled.div`
@@ -412,7 +412,7 @@ const Cell = styled.div`
     &:hover {
         transform: scale(1.35);
         z-index: 10;
-        box-shadow: 0 0 8px rgba(132, 94, 194, 0.7);
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
         border-color: rgba(255, 255, 255, 0.35);
     }
 `;
