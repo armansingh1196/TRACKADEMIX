@@ -26,7 +26,8 @@ const {
     clearAllStudentsAttendance,
     removeStudentAttendanceBySubject,
     removeStudentAttendance,
-    getAttendanceHeatmap } = require('../controllers/student_controller.js');
+    getAttendanceHeatmap,
+    resyncStudentPasswords } = require('../controllers/student_controller.js');
 const { subjectCreate, classSubjects, deleteSubjectsByClass, getSubjectDetail, deleteSubject, freeSubjectList, allSubjects, deleteSubjects } = require('../controllers/subject-controller.js');
 const { teacherRegister, teacherLogIn, getTeachers, getTeacherDetail, deleteTeachers, deleteTeachersByClass, deleteTeacher, updateTeacherSubject, teacherAttendance, bulkMarkAttendance, getAttendanceRecords, bulkMarkMarks } = require('../controllers/teacher-controller.js');
 
@@ -72,6 +73,7 @@ router.put('/RemoveAllStudentsAtten/:id', clearAllStudentsAttendance);
 router.put('/RemoveStudentSubAtten/:id', removeStudentAttendanceBySubject);
 router.put('/RemoveStudentAtten/:id', removeStudentAttendance)
 router.get("/Student/Heatmap/:id", getAttendanceHeatmap)
+router.post("/Students/ResyncPasswords/:id", resyncStudentPasswords)
 
 // Teacher
 

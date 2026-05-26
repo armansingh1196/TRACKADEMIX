@@ -2,6 +2,18 @@ const supabase = require('../supabaseClient.js');
 const bcrypt = require('bcryptjs');
 const { signAuthToken } = require('../lib/auth.js');
 
+// Deterministic password formula shared by bulk register, update, and resync.
+// Format: `${CapitalizedFirstName}@${BirthYear}${last3OfRollNum}`
+const buildStudentPassword = ({ name, dob, rollNum }) => {
+    const firstName = String(name || '').trim().split(/\s+/)[0] || '';
+    const capitalizedFirst = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
+    const yearMatch = String(dob || '').match(/\d{4}/);
+    const year = yearMatch ? yearMatch[0] : '0000';
+    const rollStr = String(rollNum ?? '');
+    const rollSuffix = rollStr.length >= 3 ? rollStr.slice(-3) : rollStr;
+    return `${capitalizedFirst}@${year}${rollSuffix}`;
+};
+
 const studentRegister = async (req, res) => {
     try {
         const { name, rollNum, password, sclassName, adminID, attendance, examResult } = req.body;
@@ -58,14 +70,13 @@ const studentRegister = async (req, res) => {
 const studentLogIn = async (req, res) => {
     try {
         const { rollNum, studentName, password } = req.body;
-        
-        let { data: student, error } = await supabase
+
+        const { data: student, error } = await supabase
             .from('students')
             .select(`
-                *,
+                id, name, roll_num, dob, password,
                 admins ( id, school_name ),
-                sclasses ( id, sclass_name, semester, batch ),
-                exam_results ( subject_id, internal_marks, external_marks, marks_obtained, subjects ( sub_name, semester, subject_type ) )
+                sclasses ( id, sclass_name, semester, batch )
             `)
             .eq('roll_num', rollNum)
             .eq('name', studentName)
@@ -76,32 +87,29 @@ const studentLogIn = async (req, res) => {
         }
 
         const isPasswordValid = await bcrypt.compare(password, student.password);
-
-        if (isPasswordValid) {
-            const result = {
-                ...student,
-                _id: student.id,
-                role: "Student",
-                rollNum: student.roll_num,
-                school: {
-                    _id: student.admins.id,
-                    schoolName: student.admins.school_name
-                },
-                sclassName: {
-                    _id: student.sclasses.id,
-                    sclassName: student.sclasses.sclass_name,
-                    semester: student.sclasses.semester,
-                    batch: student.sclasses.batch
-                },
-                password: undefined,
-                examResult: undefined,
-                attendance: undefined
-            };
-            const token = signAuthToken({ sub: student.id, role: "Student" });
-            res.send({ ...result, token });
-        } else {
-            res.send({ message: "Invalid password" });
+        if (!isPasswordValid) {
+            return res.send({ message: "Invalid password" });
         }
+
+        const result = {
+            _id: student.id,
+            role: "Student",
+            name: student.name,
+            rollNum: student.roll_num,
+            dob: student.dob,
+            school: {
+                _id: student.admins.id,
+                schoolName: student.admins.school_name,
+            },
+            sclassName: {
+                _id: student.sclasses.id,
+                sclassName: student.sclasses.sclass_name,
+                semester: student.sclasses.semester,
+                batch: student.sclasses.batch,
+            },
+        };
+        const token = signAuthToken({ sub: student.id, role: "Student" });
+        res.send({ ...result, token });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -243,9 +251,43 @@ const deleteStudentsByClass = async (req, res) => {
 
 const updateStudent = async (req, res) => {
     try {
+        // Normalize incoming field aliases (frontend uses rollNum/sclassName).
+        const body = { ...req.body };
+        if (body.rollNum !== undefined && body.roll_num === undefined) {
+            body.roll_num = body.rollNum;
+        }
+        delete body.rollNum;
+        delete body.sclassName;
+        delete body._id;
+        delete body.role;
+        delete body.school;
+        delete body.id;
+
+        // If any field that feeds the deterministic password changes, rehash.
+        const passwordInputsTouched =
+            body.roll_num !== undefined || body.name !== undefined || body.dob !== undefined;
+
+        if (passwordInputsTouched) {
+            const { data: existing, error: fetchErr } = await supabase
+                .from('students')
+                .select('name, dob, roll_num')
+                .eq('id', req.params.id)
+                .single();
+            if (fetchErr) throw fetchErr;
+
+            const merged = {
+                name: body.name ?? existing.name,
+                dob: body.dob ?? existing.dob,
+                rollNum: body.roll_num ?? existing.roll_num,
+            };
+            const newPassword = buildStudentPassword(merged);
+            const salt = await bcrypt.genSalt(10);
+            body.password = await bcrypt.hash(newPassword, salt);
+        }
+
         const { data, error } = await supabase
             .from('students')
-            .update(req.body)
+            .update(body)
             .eq('id', req.params.id)
             .select()
             .single();
@@ -254,6 +296,50 @@ const updateStudent = async (req, res) => {
         res.send({ ...data, password: undefined });
     } catch (error) {
         res.status(500).json(error);
+    }
+};
+
+// Recompute and rehash passwords for every student under an admin using the
+// deterministic formula and their CURRENT name/dob/roll_num. Use this once
+// after editing roll numbers to bring all login passwords back into pattern.
+const resyncStudentPasswords = async (req, res) => {
+    try {
+        const adminId = req.params.id;
+        const { data: students, error } = await supabase
+            .from('students')
+            .select('id, name, dob, roll_num')
+            .eq('admin_id', adminId);
+        if (error) throw error;
+
+        const salt = await bcrypt.genSalt(10);
+        let updated = 0;
+        const skipped = [];
+
+        for (const s of students || []) {
+            if (!s.name || !s.dob || s.roll_num === null || s.roll_num === undefined) {
+                skipped.push({ id: s.id, reason: 'missing name/dob/roll_num' });
+                continue;
+            }
+            const newPassword = buildStudentPassword({
+                name: s.name,
+                dob: s.dob,
+                rollNum: s.roll_num,
+            });
+            const hashed = await bcrypt.hash(newPassword, salt);
+            const { error: updErr } = await supabase
+                .from('students')
+                .update({ password: hashed })
+                .eq('id', s.id);
+            if (updErr) {
+                skipped.push({ id: s.id, reason: updErr.message });
+            } else {
+                updated += 1;
+            }
+        }
+
+        res.send({ updated, skippedCount: skipped.length, skipped });
+    } catch (err) {
+        res.status(500).json(err.message ? { message: err.message } : err);
     }
 };
 
@@ -288,24 +374,31 @@ const updateExamResult = async (req, res) => {
     }
 };
 
+// All attendance read/write now flows through attendance_records (the new
+// single source of truth used by AI predictions, heatmap, and teacher views).
+// The legacy students.attendance JSONB column is no longer touched.
+
 const studentAttendance = async (req, res) => {
-    const { subName, status, date } = req.body;
+    // Frontend sends `subName` containing the subject UUID (see StudentAttendance.js).
+    const { subName: subjectId, status, date } = req.body;
     try {
         const { data: student } = await supabase
             .from('students')
-            .select('attendance')
+            .select('id, sclass_id')
             .eq('id', req.params.id)
             .single();
 
         if (!student) return res.send({ message: 'Student not found' });
 
-        let attendance = student.attendance || [];
-        attendance.push({ date, status, subName });
-
         const { data, error } = await supabase
-            .from('students')
-            .update({ attendance })
-            .eq('id', req.params.id)
+            .from('attendance_records')
+            .upsert({
+                student_id: student.id,
+                subject_id: subjectId,
+                sclass_id: student.sclass_id,
+                date,
+                status,
+            }, { onConflict: 'student_id,subject_id,date' })
             .select()
             .single();
 
@@ -318,15 +411,12 @@ const studentAttendance = async (req, res) => {
 
 const clearAllStudentsAttendanceBySubject = async (req, res) => {
     try {
-        // This is complex with JSONB, but for simplicity:
-        const { data: students } = await supabase
-            .from('students')
-            .select('id, attendance');
-        
-        for (let student of students) {
-            const filtered = (student.attendance || []).filter(a => a.subName !== req.params.id);
-            await supabase.from('students').update({ attendance: filtered }).eq('id', student.id);
-        }
+        const { error } = await supabase
+            .from('attendance_records')
+            .delete()
+            .eq('subject_id', req.params.id);
+
+        if (error) throw error;
         res.send({ message: "Attendance cleared" });
     } catch (error) {
         res.status(500).json(error);
@@ -335,38 +425,37 @@ const clearAllStudentsAttendanceBySubject = async (req, res) => {
 
 const clearAllStudentsAttendance = async (req, res) => {
     try {
-        const { data, error } = await supabase
+        const { data: students, error: fetchErr } = await supabase
             .from('students')
-            .update({ attendance: [] })
-            .eq('admin_id', req.params.id)
-            .select();
+            .select('id')
+            .eq('admin_id', req.params.id);
+        if (fetchErr) throw fetchErr;
+
+        const ids = (students || []).map(s => s.id);
+        if (ids.length === 0) return res.send({ message: "No students" });
+
+        const { error } = await supabase
+            .from('attendance_records')
+            .delete()
+            .in('student_id', ids);
+
         if (error) throw error;
-        res.send(data);
+        res.send({ message: "Attendance cleared" });
     } catch (error) {
         res.status(500).json(error);
     }
 };
 
 const removeStudentAttendanceBySubject = async (req, res) => {
-    const studentId = req.params.id;
-    const subName = req.body.subId;
     try {
-        const { data: student } = await supabase
-            .from('students')
-            .select('attendance')
-            .eq('id', studentId)
-            .single();
-        
-        const filtered = (student.attendance || []).filter(a => a.subName !== subName);
-        const { data, error } = await supabase
-            .from('students')
-            .update({ attendance: filtered })
-            .eq('id', studentId)
-            .select()
-            .single();
-        
+        const { error } = await supabase
+            .from('attendance_records')
+            .delete()
+            .eq('student_id', req.params.id)
+            .eq('subject_id', req.body.subId);
+
         if (error) throw error;
-        res.send(data);
+        res.send({ message: "Attendance cleared" });
     } catch (error) {
         res.status(500).json(error);
     }
@@ -374,14 +463,13 @@ const removeStudentAttendanceBySubject = async (req, res) => {
 
 const removeStudentAttendance = async (req, res) => {
     try {
-        const { data, error } = await supabase
-            .from('students')
-            .update({ attendance: [] })
-            .eq('id', req.params.id)
-            .select()
-            .single();
+        const { error } = await supabase
+            .from('attendance_records')
+            .delete()
+            .eq('student_id', req.params.id);
+
         if (error) throw error;
-        res.send(data);
+        res.send({ message: "Attendance cleared" });
     } catch (error) {
         res.status(500).json(error);
     }
@@ -419,34 +507,32 @@ const getAttendanceHeatmap = async (req, res) => {
 const studentBulkRegister = async (req, res) => {
     try {
         const { students, adminID } = req.body;
-        
-        const salt = await bcrypt.genSalt(10);
-        const processedStudents = await Promise.all(students.map(async (student) => {
-            // Generate Deterministic Password
-            const firstName = student.name.split(' ')[0];
-            const capitalizedFirst = firstName.charAt(0).toUpperCase() + firstName.slice(1).toLowerCase();
-            
-            // Extract Year from DOB (assumes YYYY-MM-DD or DD-MM-YYYY)
-            // A simple regex to find a 4 digit year
-            const yearMatch = student.dob.match(/\d{4}/);
-            const year = yearMatch ? yearMatch[0] : "0000";
-            
-            const rollStr = String(student.rollNum);
-            const rollSuffix = rollStr.length >= 3 ? rollStr.slice(-3) : rollStr;
-            const generatedPassword = `${capitalizedFirst}@${year}${rollSuffix}`;
 
+        // bcrypt.hash is CPU-bound and serialises on Node's libuv pool — wrapping
+        // in Promise.all gives the illusion of parallelism with no real speed-up.
+        // A sequential loop with a shared salt is clearer and uses the same time.
+        const salt = await bcrypt.genSalt(10);
+        const processedStudents = [];
+        for (const student of students) {
+            const generatedPassword = buildStudentPassword({
+                name: student.name,
+                dob: student.dob,
+                rollNum: student.rollNum,
+            });
             const hashedPassword = await bcrypt.hash(generatedPassword, salt);
-            return {
+            processedStudents.push({
                 name: student.name,
                 roll_num: student.rollNum,
                 dob: student.dob,
                 password: hashedPassword,
                 sclass_id: student.sclassName,
                 admin_id: adminID,
+                // Legacy JSONB columns kept for schema compatibility — no longer
+                // the source of truth (see attendance_records).
                 attendance: [],
-                exam_marks: []
-            };
-        }));
+                exam_marks: [],
+            });
+        }
 
         const { data, error } = await supabase
             .from('students')
@@ -550,5 +636,6 @@ module.exports = {
     clearAllStudentsAttendance,
     removeStudentAttendanceBySubject,
     removeStudentAttendance,
-    getAttendanceHeatmap
+    getAttendanceHeatmap,
+    resyncStudentPasswords
 };

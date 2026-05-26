@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Container, CircularProgress, Backdrop, Typography } from '@mui/material';
 import styled, { keyframes } from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../redux/userRelated/userHandle';
+import { useSelector } from 'react-redux';
 import Popup from '../components/Popup';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
@@ -57,11 +56,8 @@ const ROLES = [
     },
 ];
 
-const ChooseUser = ({ visitor }) => {
-    const dispatch = useDispatch();
+const ChooseUser = () => {
     const navigate = useNavigate();
-    const password = 'zxc';
-    const guestEnabled = import.meta.env.VITE_ENABLE_GUEST_DEMO === 'true';
     const { status, currentUser, currentRole } = useSelector(state => state.user);
     const [loader, setLoader] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
@@ -69,25 +65,9 @@ const ChooseUser = ({ visitor }) => {
     const [hovered, setHovered] = useState(null);
 
     const navigateHandler = (user) => {
-        if (user === 'Admin') {
-            if (visitor === 'guest') {
-                if (!guestEnabled) { navigate('/Adminlogin'); return; }
-                setLoader(true);
-                dispatch(loginUser({ email: 'yogendra@12', password }, user));
-            } else { navigate('/Adminlogin'); }
-        } else if (user === 'Student') {
-            if (visitor === 'guest') {
-                if (!guestEnabled) { navigate('/Studentlogin'); return; }
-                setLoader(true);
-                dispatch(loginUser({ rollNum: '1', studentName: 'Dipesh Awasthi', password }, user));
-            } else { navigate('/Studentlogin'); }
-        } else if (user === 'Teacher') {
-            if (visitor === 'guest') {
-                if (!guestEnabled) { navigate('/Teacherlogin'); return; }
-                setLoader(true);
-                dispatch(loginUser({ email: 'tony@12', password }, user));
-            } else { navigate('/Teacherlogin'); }
-        }
+        if (user === 'Admin') navigate('/Adminlogin');
+        else if (user === 'Student') navigate('/Studentlogin');
+        else if (user === 'Teacher') navigate('/Teacherlogin');
     };
 
     useEffect(() => {

@@ -45,9 +45,15 @@ const noticeList = async (req, res) => {
 
 const updateNotice = async (req, res) => {
     try {
+        const { title, details, date } = req.body;
+        const updateData = {};
+        if (title !== undefined) updateData.title = title;
+        if (details !== undefined) updateData.details = details;
+        if (date !== undefined) updateData.date = date;
+
         const { data, error } = await supabase
             .from('notices')
-            .update(req.body)
+            .update(updateData)
             .eq('id', req.params.id)
             .select()
             .single();

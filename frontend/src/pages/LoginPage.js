@@ -74,6 +74,7 @@ const LoginPage = ({ role }) => {
     const [showPopup, setShowPopup] = useState(false);
     const [message, setMessage]     = useState('');
     const [errors, setErrors]       = useState({});
+    const [remember, setRemember]   = useState(true);
 
     const clearErr = name => setErrors(p => ({ ...p, [name]: false }));
 
@@ -88,7 +89,7 @@ const LoginPage = ({ role }) => {
             if (!password) errs.password = true;
             if (Object.keys(errs).length) { setErrors(errs); return; }
             setLoader(true);
-            dispatch(loginUser({ rollNum, studentName, password }, role));
+            dispatch(loginUser({ rollNum, studentName, password }, role, remember));
         } else {
             const email = fd.get('email'), password = fd.get('password');
             const errs = {};
@@ -96,7 +97,7 @@ const LoginPage = ({ role }) => {
             if (!password) errs.password = true;
             if (Object.keys(errs).length) { setErrors(errs); return; }
             setLoader(true);
-            dispatch(loginUser({ email, password }, role));
+            dispatch(loginUser({ email, password }, role, remember));
         }
     };
 
@@ -185,7 +186,7 @@ const LoginPage = ({ role }) => {
 
                         <FormRow>
                             <FormControlLabel
-                                control={<Checkbox size="small" sx={{ color: 'rgba(226,232,255,0.2)', '&.Mui-checked': { color: cfg.color }, p: '5px' }} />}
+                                control={<Checkbox size="small" checked={remember} onChange={e => setRemember(e.target.checked)} sx={{ color: 'rgba(226,232,255,0.2)', '&.Mui-checked': { color: cfg.color }, p: '5px' }} />}
                                 label={<Typography sx={{ fontSize: '0.8rem', color: 'rgba(226,232,255,0.4)', fontFamily: 'Inter' }}>Keep me signed in</Typography>}
                             />
                             <Link to="/" style={{ fontSize: '0.8rem', color: cfg.color, fontWeight: 600, textDecoration: 'none', fontFamily: 'Inter' }}>

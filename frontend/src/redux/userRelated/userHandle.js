@@ -13,96 +13,12 @@ import {
     getError,
 } from './userSlice';
 
-// Mock data for Guest Demo to ensure it always works
-const mockUsers = {
-    "Admin": {
-        _id: "mock_admin_123",
-        name: "Yogendra Singh",
-        email: "yogendra@12",
-        role: "Admin",
-        schoolName: "BIT Mesra",
-        branch: "Computer Science",
-        school: { _id: "school_123", schoolName: "BIT Mesra" }
-    },
-    "Student": {
-        _id: "mock_student_123",
-        name: "Dipesh Awasthi",
-        rollNum: "1",
-        role: "Student",
-        schoolName: "BIT Mesra",
-        school: { _id: "school_123", schoolName: "BIT Mesra" },
-        sclassName: { _id: "class_123", sclassName: "CSE-A", semester: 6 },
-        attendance: [
-            { date: "2024-03-01", status: "Present", subName: "Data Structures", subId: "sub1" },
-            { date: "2024-03-02", status: "Present", subName: "Algorithms", subId: "sub2" },
-            { date: "2024-03-03", status: "Absent", subName: "Database Systems", subId: "sub3" },
-            { date: "2024-03-04", status: "Present", subName: "Operating Systems", subId: "sub4" }
-        ],
-        examResult: [
-            {
-                subject_id: "sub1",
-                internal_marks: 25,
-                external_marks: 55,
-                marks_obtained: 80,
-                subjects: { sub_name: "Data Structures", semester: 6, subject_type: "Theory" }
-            },
-            {
-                subject_id: "sub2",
-                internal_marks: 22,
-                external_marks: 48,
-                marks_obtained: 70,
-                subjects: { sub_name: "Algorithms", semester: 6, subject_type: "Theory" }
-            },
-            {
-                subject_id: "sub3",
-                internal_marks: 18,
-                external_marks: 35,
-                marks_obtained: 53,
-                subjects: { sub_name: "Database Systems", semester: 6, subject_type: "Theory" }
-            },
-            {
-                subject_id: "sub4",
-                internal_marks: 10,
-                external_marks: 20,
-                marks_obtained: 30, // Failing grade to trigger "Needs Effort" or "At Risk"
-                subjects: { sub_name: "Operating Systems", semester: 6, subject_type: "Theory" }
-            }
-        ]
-    },
-    "Teacher": {
-        _id: "mock_teacher_123",
-        name: "Tony Stark",
-        email: "tony@12",
-        role: "Teacher",
-        schoolName: "BIT Mesra",
-        school: { _id: "school_123", schoolName: "BIT Mesra" },
-        teachSclass: { _id: "class_123", sclassName: "CSE-A" },
-        teachSubject: { _id: "sub_123", subName: "Data Structures" }
-    }
-};
-
-export const loginUser = (fields, role) => async (dispatch) => {
+export const loginUser = (fields, role, remember = true) => async (dispatch) => {
     dispatch(authRequest());
-
-    const guestEnabled = import.meta.env.VITE_ENABLE_GUEST_DEMO === "true";
-
-    // Guest Demo (opt-in via env)
-    if (guestEnabled && fields.password === "zxc") {
-        setTimeout(() => {
-            const mockUser = mockUsers[role];
-            if (mockUser) {
-                dispatch(authSuccess(mockUser));
-            } else {
-                dispatch(authFailed("Guest user not configured"));
-            }
-        }, 1000);
-        return;
-    }
-
     try {
         const result = await api.post(`/${role}Login`, fields);
         if (result.data.role) {
-            dispatch(authSuccess(result.data));
+            dispatch(authSuccess({ ...result.data, _remember: remember }));
         } else {
             dispatch(authFailed(result.data.message));
         }
@@ -135,13 +51,6 @@ export const logoutUser = () => (dispatch) => {
 };
 
 export const getUserDetails = (id, address) => async (dispatch) => {
-    if (id.startsWith("mock_")) {
-        // Return mock details if it's a mock user
-        const mockUser = Object.values(mockUsers).find(u => u._id === id);
-        dispatch(doneSuccess(mockUser || {}));
-        return;
-    }
-
     dispatch(getRequest());
     try {
         const result = await api.get(`/${address}/${id}`);

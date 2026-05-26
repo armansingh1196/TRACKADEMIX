@@ -11,7 +11,7 @@ export const api = axios.create({
 
 api.interceptors.request.use((config) => {
   try {
-    const raw = localStorage.getItem("user");
+    const raw = localStorage.getItem("user") || sessionStorage.getItem("user");
     if (!raw) return config;
     const user = JSON.parse(raw);
     const token = user?.token;

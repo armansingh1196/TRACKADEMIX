@@ -59,7 +59,7 @@ const teacherLogIn = async (req, res) => {
         const { data: teacher, error } = await supabase
             .from('teachers')
             .select(`
-                *,
+                id, name, email, password,
                 admins ( id, school_name ),
                 sclasses ( id, sclass_name, semester, batch ),
                 subjects!teachers_teach_subject_id_fkey ( id, sub_name, sessions, subject_type )
@@ -72,35 +72,34 @@ const teacherLogIn = async (req, res) => {
         }
 
         const isPasswordValid = await bcrypt.compare(password, teacher.password);
-
-        if (isPasswordValid) {
-            const result = {
-                ...teacher,
-                _id: teacher.id,
-                role: "Teacher",
-                teachSubject: teacher.subjects ? {
-                    _id: teacher.subjects.id,
-                    subName: teacher.subjects.sub_name,
-                    sessions: teacher.subjects.sessions,
-                    subjectType: teacher.subjects.subject_type
-                } : null,
-                school: teacher.admins ? {
-                    _id: teacher.admins.id,
-                    schoolName: teacher.admins.school_name
-                } : null,
-                teachSclass: teacher.sclasses ? {
-                    _id: teacher.sclasses.id,
-                    sclassName: teacher.sclasses.sclass_name,
-                    semester: teacher.sclasses.semester,
-                    batch: teacher.sclasses.batch
-                } : null,
-                password: undefined
-            };
-            const token = signAuthToken({ sub: teacher.id, role: "Teacher" });
-            res.send({ ...result, token });
-        } else {
-            res.send({ message: "Invalid password" });
+        if (!isPasswordValid) {
+            return res.send({ message: "Invalid password" });
         }
+
+        const result = {
+            _id: teacher.id,
+            role: "Teacher",
+            name: teacher.name,
+            email: teacher.email,
+            teachSubject: teacher.subjects ? {
+                _id: teacher.subjects.id,
+                subName: teacher.subjects.sub_name,
+                sessions: teacher.subjects.sessions,
+                subjectType: teacher.subjects.subject_type,
+            } : null,
+            school: teacher.admins ? {
+                _id: teacher.admins.id,
+                schoolName: teacher.admins.school_name,
+            } : null,
+            teachSclass: teacher.sclasses ? {
+                _id: teacher.sclasses.id,
+                sclassName: teacher.sclasses.sclass_name,
+                semester: teacher.sclasses.semester,
+                batch: teacher.sclasses.batch,
+            } : null,
+        };
+        const token = signAuthToken({ sub: teacher.id, role: "Teacher" });
+        res.send({ ...result, token });
     } catch (err) {
         res.status(500).json(err);
     }

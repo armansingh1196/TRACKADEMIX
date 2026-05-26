@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const getUserFromStorage = () => {
     try {
-        const user = localStorage.getItem('user');
-        return user ? JSON.parse(user) : null;
+        const raw = localStorage.getItem('user') || sessionStorage.getItem('user');
+        return raw ? JSON.parse(raw) : null;
     } catch (e) {
         return null;
     }
@@ -41,10 +41,19 @@ const userSlice = createSlice({
             state.tempDetails = action.payload;
         },
         authSuccess: (state, action) => {
+            const { _remember, ...user } = action.payload || {};
             state.status = 'success';
-            state.currentUser = action.payload;
-            state.currentRole = action.payload.role;
-            localStorage.setItem('user', JSON.stringify(action.payload));
+            state.currentUser = user;
+            state.currentRole = user.role;
+            const persist = _remember !== false; // default true for backwards compat
+            const payload = JSON.stringify(user);
+            if (persist) {
+                localStorage.setItem('user', payload);
+                sessionStorage.removeItem('user');
+            } else {
+                sessionStorage.setItem('user', payload);
+                localStorage.removeItem('user');
+            }
             state.response = null;
             state.error = null;
         },
@@ -58,6 +67,7 @@ const userSlice = createSlice({
         },
         authLogout: (state) => {
             localStorage.removeItem('user');
+            sessionStorage.removeItem('user');
             state.currentUser = null;
             state.status = 'idle';
             state.error = null;
