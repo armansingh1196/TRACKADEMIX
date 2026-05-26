@@ -183,6 +183,7 @@ const getSclassStudents = async (req, res) => {
             const result = students.map(student => ({
                 ...student,
                 _id: student.id,
+                rollNum: student.roll_num,
                 sclassName: student.sclass_id,
                 password: undefined
             }));
