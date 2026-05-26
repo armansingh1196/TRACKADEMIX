@@ -11,7 +11,7 @@ The **Documents** module is a centralized document distribution system that enab
 | Capability | Description |
 |---|---|
 | **File Upload** | HOD and professors can upload PDFs, DOCs, Excel sheets, and images |
-| **Category System** | Documents are tagged into 6 categories for easy organization |
+| **Category System** | Documents are tagged into 5 categories for easy organization |
 | **Class Targeting** | Files can be targeted to specific classes or made available globally |
 | **Student Access** | Students see only documents relevant to their class (+ general documents) |
 | **Role-Based Access** | Admin/Teachers can upload & delete; Students can view & download |
@@ -23,7 +23,6 @@ The **Documents** module is a centralized document distribution system that enab
 
 | Category | Color | Use Case |
 |---|---|---|
-| 🟢 **Marksheet** | Green | Semester marksheets, result declarations |
 | 🟡 **Exam Schedule** | Amber | Exam timetables, date sheets |
 | 🔵 **Exam Form** | Blue | Exam registration forms, application forms |
 | 🔴 **Important Notice** | Red | Urgent circulars, deadline notifications |
@@ -32,9 +31,19 @@ The **Documents** module is a centralized document distribution system that enab
 
 ---
 
-## Architecture
+## Secure Marksheets (Bulk Upload)
 
-### Database Schema
+In addition to general documents, Trackademics includes a highly secure, automated flow for distributing confidential marksheets:
+
+1. **Bulk Uploading**: Administrators and Teachers can use the **"Bulk Upload Marksheets"** tab. They simply drop multiple PDFs named by roll number (e.g., `2022027.pdf`), select the semester, and click upload.
+2. **Auto-Mapping**: The backend automatically parses the roll numbers from the filenames and links each document directly to the respective student's UUID in the `personal_documents` table.
+3. **Password-Protected Access**: Students accessing the **"My Marksheets"** tab are met with a secure gate. They must re-enter their Trackademics password to unlock the vault. The backend uses `bcrypt` to verify the hash before transmitting any confidential files.
+
+---
+
+## Database Architecture
+
+### `documents` (Shared Repository)
 
 ```sql
 CREATE TABLE public.documents (

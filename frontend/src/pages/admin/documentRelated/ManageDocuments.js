@@ -16,10 +16,9 @@ import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
-const CATEGORIES = ['Marksheet', 'Exam Schedule', 'Exam Form', 'Important Notice', 'Syllabus', 'General'];
+const CATEGORIES = ['Exam Schedule', 'Exam Form', 'Important Notice', 'Syllabus', 'General'];
 
 const CATEGORY_COLORS = {
-    'Marksheet': '#34D399',
     'Exam Schedule': '#FBBF24',
     'Exam Form': '#60A5FA',
     'Important Notice': '#F87171',

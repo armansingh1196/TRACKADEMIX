@@ -23,10 +23,9 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
 
-const CATEGORIES = ['Marksheet', 'Exam Schedule', 'Exam Form', 'Important Notice', 'Syllabus', 'General'];
+const CATEGORIES = ['Exam Schedule', 'Exam Form', 'Important Notice', 'Syllabus', 'General'];
 
 const CATEGORY_COLORS = {
-    'Marksheet': '#34D399',
     'Exam Schedule': '#FBBF24',
     'Exam Form': '#60A5FA',
     'Important Notice': '#F87171',
@@ -35,7 +34,6 @@ const CATEGORY_COLORS = {
 };
 
 const CATEGORY_ICONS = {
-    'Marksheet': <SchoolOutlinedIcon sx={{ fontSize: 18 }} />,
     'Exam Schedule': <EventNoteOutlinedIcon sx={{ fontSize: 18 }} />,
     'Exam Form': <AssignmentOutlinedIcon sx={{ fontSize: 18 }} />,
     'Important Notice': <CampaignOutlinedIcon sx={{ fontSize: 18 }} />,
