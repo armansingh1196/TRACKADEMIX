@@ -6,6 +6,7 @@ const { adminRegister, adminLogIn, getAdminDetail, updateAdmin } = require('../c
 const { sclassCreate, sclassList, promoteBatch, deleteSclass, deleteSclasses, getSclassDetail, getSclassStudents } = require('../controllers/class-controller.js');
 const { complainCreate, complainList } = require('../controllers/complain-controller.js');
 const { noticeCreate, noticeList, deleteNotices, deleteNotice, updateNotice } = require('../controllers/notice-controller.js');
+const { documentUpload, documentList, documentListForStudent, deleteDocument, deleteDocuments, getUploadUrl } = require('../controllers/document-controller.js');
 const {
     studentRegister,
     studentBulkRegister,
@@ -132,5 +133,16 @@ router.get("/Subject/:id", getSubjectDetail)
 router.delete("/Subject/:id", deleteSubject)
 router.delete("/Subjects/:id", deleteSubjects)
 router.delete("/SubjectsClass/:id", deleteSubjectsByClass)
+
+// Documents
+
+router.post('/DocumentUpload', documentUpload);
+router.post('/DocumentUploadUrl', getUploadUrl);
+
+router.get('/DocumentList/:id', documentList);
+router.get('/DocumentListStudent/:adminId/:classId', documentListForStudent);
+
+router.delete('/Document/:id', deleteDocument);
+router.delete('/Documents/:id', deleteDocuments);
 
 module.exports = router;

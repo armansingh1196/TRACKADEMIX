@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-import { SquaresFour, PresentationChart, ClipboardText, Megaphone, CheckCircle, ClockCounterClockwise, CaretUp, CaretDown, User, SignOut } from '@phosphor-icons/react';
+import { SquaresFour, PresentationChart, ClipboardText, Megaphone, CheckCircle, ClockCounterClockwise, CaretUp, CaretDown, User, SignOut, FileText } from '@phosphor-icons/react';
 
 const TeacherSideBar = ({ open }) => {
     const { currentUser } = useSelector((state) => state.user);
@@ -17,6 +17,7 @@ const TeacherSideBar = ({ open }) => {
         { text: 'Dashboard', icon: <SquaresFour weight="fill" size={22} />, path: '/Teacher/dashboard' },
         { text: `Class ${sclassName?.sclassName || ''}`, icon: <PresentationChart weight="fill" size={22} />, path: '/Teacher/class' },
         { text: 'Upload Marks', icon: <ClipboardText weight="fill" size={22} />, path: '/Teacher/marks' },
+        { text: 'Documents', icon: <FileText weight="fill" size={22} />, path: '/Teacher/documents' },
         { text: 'Complains', icon: <Megaphone weight="fill" size={22} />, path: '/Teacher/complain' },
     ];
 

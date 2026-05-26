@@ -20,6 +20,7 @@ import StudentProfile from './StudentProfile';
 import StudentSubjects from './StudentSubjects';
 import StudentComplain from './StudentComplain';
 import StudentAIInsights from './StudentAIInsights';
+import StudentDocuments from './StudentDocuments';
 import AccountMenu from '../../components/AccountMenu';
 import styled from 'styled-components';
 
@@ -96,6 +97,7 @@ const StudentDashboard = () => {
                         <Route path="/Student/subjects" element={<StudentSubjects />} />
                         <Route path="/Student/complain" element={<StudentComplain />} />
                         <Route path="/Student/ai-insights" element={<StudentAIInsights />} />
+                        <Route path="/Student/documents" element={<StudentDocuments />} />
                         <Route path="/logout" element={<Logout />} />
 
                     </Routes>

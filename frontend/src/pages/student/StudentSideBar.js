@@ -3,7 +3,7 @@ import { Divider, ListItemButton, ListItemIcon, ListItemText, Box, Typography as
 import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { SquaresFour, Books, Sparkle, Megaphone, User, SignOut } from '@phosphor-icons/react';
+import { SquaresFour, Books, Sparkle, Megaphone, User, SignOut, FileText } from '@phosphor-icons/react';
 
 const StudentSideBar = ({ open }) => {
     const location = useLocation();
@@ -12,6 +12,7 @@ const StudentSideBar = ({ open }) => {
     const menuItems = [
         { text: 'Dashboard', icon: <SquaresFour weight="fill" size={22} />, path: '/Student/dashboard' },
         { text: 'Subjects', icon: <Books weight="fill" size={22} />, path: '/Student/subjects' },
+        { text: 'Documents', icon: <FileText weight="fill" size={22} />, path: '/Student/documents' },
         { text: 'AI Insights', icon: <Sparkle weight="fill" size={22} />, path: '/Student/ai-insights' },
         { text: 'Complains', icon: <Megaphone weight="fill" size={22} />, path: '/Student/complain' },
     ];

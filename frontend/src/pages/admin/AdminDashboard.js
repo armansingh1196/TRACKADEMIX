@@ -29,6 +29,7 @@ import BulkImportStudents from './studentRelated/BulkImportStudents';
 
 import AddNotice from './noticeRelated/AddNotice';
 import ShowNotices from './noticeRelated/ShowNotices';
+import ManageDocuments from './documentRelated/ManageDocuments';
 
 import ShowSubjects from './subjectRelated/ShowSubjects';
 import SubjectForm from './subjectRelated/SubjectForm';
@@ -123,6 +124,9 @@ const AdminDashboard = () => {
                         {/* Notice */}
                         <Route path="/Admin/addnotice" element={<AddNotice />} />
                         <Route path="/Admin/notices" element={<ShowNotices />} />
+
+                        {/* Documents */}
+                        <Route path="/Admin/documents" element={<ManageDocuments />} />
 
                         {/* Subject */}
                         <Route path="/Admin/subjects" element={<ShowSubjects />} />

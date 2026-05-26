@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 
-import { SquaresFour, PresentationChart, Books, GraduationCap, Student, Megaphone, WarningCircle, User, SignOut } from '@phosphor-icons/react';
+import { SquaresFour, PresentationChart, Books, GraduationCap, Student, Megaphone, WarningCircle, User, SignOut, FileText } from '@phosphor-icons/react';
 
 const SideBar = ({ open }) => {
     const location = useLocation();
@@ -16,6 +16,7 @@ const SideBar = ({ open }) => {
         { text: 'Subjects', icon: <Books weight="fill" size={22} />, path: '/Admin/subjects' },
         { text: 'Professors', icon: <GraduationCap weight="fill" size={22} />, path: '/Admin/teachers' },
         { text: 'Students', icon: <Student weight="fill" size={22} />, path: '/Admin/students' },
+        { text: 'Documents', icon: <FileText weight="fill" size={22} />, path: '/Admin/documents' },
         { text: 'Notices', icon: <Megaphone weight="fill" size={22} />, path: '/Admin/notices' },
         { text: 'Complains', icon: <WarningCircle weight="fill" size={22} />, path: '/Admin/complains' },
     ];
