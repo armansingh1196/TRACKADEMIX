@@ -112,36 +112,63 @@ const StudentAIInsights = () => {
     
     if (insights && insights.features) {
         let failedSubjects = 0;
+        let pendingWithLowInternals = 0;
         let totalActiveSubjects = 0;
         
-        if (insights.examResults) {
-            insights.examResults.forEach(exam => {
-                const total = (exam.internal_marks || 0) + (exam.external_marks || 0);
-                if (total > 0) {
-                    totalActiveSubjects++;
-                    const maxMarks = exam.subjects?.subject_type === 'Practical' ? 50 : 100;
-                    if ((total / maxMarks) * 100 < 40) failedSubjects++;
+        if (insights.examResults && insights.examResults.length > 0) {
+            // Find active (latest) semester
+            let maxSem = 1;
+            insights.examResults.forEach(e => {
+                const sem = parseInt(e.subjects?.semester || 1);
+                if (sem > maxSem) maxSem = sem;
+            });
+            const activeExams = insights.examResults.filter(e => parseInt(e.subjects?.semester || 1) === maxSem);
+
+            activeExams.forEach(exam => {
+                totalActiveSubjects++;
+                const isPractical = exam.subjects?.subject_type === 'Practical';
+                const internal = exam.internal_marks;
+                const external = exam.external_marks;
+
+                const passInternal = isPractical ? 8 : 12;
+                const passExternal = isPractical ? 12 : 28;
+                const maxTotal = isPractical ? 50 : 100;
+
+                if (external === null) {
+                    // Mid-term state
+                    if (internal !== null && internal < passInternal) {
+                        pendingWithLowInternals++;
+                    }
+                } else {
+                    // Final state
+                    const total = (internal || 0) + external;
+                    const isIntPass = (internal || 0) >= passInternal;
+                    const isExtPass = external >= passExternal;
+                    if (!isIntPass || !isExtPass || (total / maxTotal) * 100 < 40) {
+                        failedSubjects++;
+                    }
                 }
             });
         }
         
         const attendanceRate = insights.features.attendance_rate || 0;
         
-        if (totalActiveSubjects > 0 && failedSubjects === 0 && attendanceRate >= 75) {
+        if (totalActiveSubjects > 0 && failedSubjects === 0 && pendingWithLowInternals === 0 && attendanceRate >= 75) {
             calculatedBand = "High";
             recommendations.push("Excellent academic and attendance record. You are completely on track! 🚀");
-            recommendations.push("Consider mentoring peers who might be struggling in your strong subjects.");
-            recommendations.push("Keep maintaining your regular attendance.");
-        } else if (failedSubjects > 1 || attendanceRate < 60) {
+            recommendations.push("Keep maintaining your regular attendance and strong internal scores.");
+        } else if (failedSubjects > 1 || attendanceRate < 60 || pendingWithLowInternals > 1) {
             calculatedBand = "Low";
-            recommendations.push("You are currently at risk. Please schedule a mentoring session immediately.");
+            recommendations.push("You are currently at high risk. Immediate action is required.");
             if (attendanceRate < 60) recommendations.push(`Your attendance is critically low (${Math.round(attendanceRate)}%). This strongly correlates with exam failure.`);
-            recommendations.push("Review your weak subjects and complete all pending assignments.");
+            if (pendingWithLowInternals > 1) recommendations.push(`You have critically low internal scores in ${pendingWithLowInternals} subjects. You must score exceptionally high in finals to pass!`);
+            if (failedSubjects > 0) recommendations.push(`You have failed ${failedSubjects} subjects this semester. Review your weak areas and seek faculty help.`);
         } else {
             calculatedBand = "Medium";
-            recommendations.push("You need some extra effort to get on track. Focus on your upcoming tests.");
-            if (failedSubjects === 1) recommendations.push("You have one weak subject dragging down your average. Dedicate more study hours to it.");
-            if (attendanceRate < 75) recommendations.push("Try to improve your attendance to reach the 75% threshold.");
+            recommendations.push("You need some extra effort to secure your academic standing.");
+            if (failedSubjects === 1) recommendations.push("You have one weak subject dragging down your performance. Dedicate more study hours to it.");
+            if (pendingWithLowInternals === 1) recommendations.push("One of your mid-term internal scores is low. Focus heavily on acing the external final for that subject.");
+            if (attendanceRate < 75) recommendations.push("Try to improve your attendance to reach the 75% threshold before finals.");
         }
     }
 

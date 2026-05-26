@@ -38,9 +38,19 @@ const getAIRecommendations = async (req, res) => {
         let internalAvgPractical = 18;
         let externalAvgPractical = 18;
 
+        let activeExams = [];
         if (student.exam_results && student.exam_results.length > 0) {
-            const theoryExams = student.exam_results.filter(e => e.subjects?.subject_type === 'Theory' || !e.subjects?.subject_type);
-            const practicalExams = student.exam_results.filter(e => e.subjects?.subject_type === 'Practical');
+            // Find max semester available in exam results
+            let maxSem = 1;
+            student.exam_results.forEach(e => {
+                const sem = parseInt(e.subjects?.semester || 1);
+                if (sem > maxSem) maxSem = sem;
+            });
+            
+            activeExams = student.exam_results.filter(e => parseInt(e.subjects?.semester || 1) === maxSem);
+
+            const theoryExams = activeExams.filter(e => e.subjects?.subject_type === 'Theory' || !e.subjects?.subject_type);
+            const practicalExams = activeExams.filter(e => e.subjects?.subject_type === 'Practical');
 
             if (theoryExams.length > 0) {
                 const internals = theoryExams.filter(e => e.internal_marks !== null).map(e => e.internal_marks);
@@ -61,18 +71,22 @@ const getAIRecommendations = async (req, res) => {
 
         // Subject Specific Alerts
         const subjectAlerts = [];
-        if (student.exam_results && student.exam_results.length > 0) {
-            student.exam_results.forEach(exam => {
+        if (activeExams.length > 0) {
+            activeExams.forEach(exam => {
                 const subName = exam.subjects?.sub_name || "Unknown Subject";
                 const isPractical = exam.subjects?.subject_type === 'Practical';
                 const internal = exam.internal_marks;
                 const external = exam.external_marks;
                 
-                const minInternal = isPractical ? 10 : 12; // 40%
-                const minExternal = isPractical ? 10 : 28; // 40%
+                const minInternal = isPractical ? 8 : 12; // 40%
+                const minExternal = isPractical ? 12 : 28; // 40%
                 
                 if (internal !== null && internal < minInternal) {
-                    subjectAlerts.push(`Low internal score in ${subName}. Focus on continuous assessment.`);
+                    if (external === null) {
+                        subjectAlerts.push(`Mid-term warning: Low internal score (${internal}) in ${subName}. You must perform exceptionally well in external finals to pass.`);
+                    } else {
+                        subjectAlerts.push(`Low internal score in ${subName}. Focus on continuous assessment.`);
+                    }
                 }
                 if (external !== null && external < minExternal) {
                     subjectAlerts.push(`Weak performance in ${subName} external exams. Needs targeted study.`);
