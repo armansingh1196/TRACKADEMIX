@@ -275,8 +275,7 @@ const StudentSubjects = () => {
                                             Analytics
                                         </ToggleButton>
                                     </ViewToggle>
-                                </Box>
-                            )}
+                            </Box>
 
                             {selectedSection === 'table' ? renderTableSection() : renderChartSection()}
                         </>
