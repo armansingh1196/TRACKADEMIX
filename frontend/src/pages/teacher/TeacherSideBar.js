@@ -18,7 +18,7 @@ const TeacherSideBar = ({ open }) => {
         { text: `Class ${sclassName?.sclassName || ''}`, icon: <PresentationChart weight="fill" size={22} />, path: '/Teacher/class' },
         { text: 'Upload Marks', icon: <ClipboardText weight="fill" size={22} />, path: '/Teacher/marks' },
         { text: 'Documents', icon: <FileText weight="fill" size={22} />, path: '/Teacher/documents' },
-        { text: 'Complains', icon: <Megaphone weight="fill" size={22} />, path: '/Teacher/complain' },
+        { text: 'Complaints', icon: <Megaphone weight="fill" size={22} />, path: '/Teacher/complain' },
     ];
 
     const isOpenStr = open ? 'true' : 'false';
