@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Container, Grid, CircularProgress, Select, MenuItem, FormControl, InputLabel, Stack, IconButton, Chip } from '@mui/material';
+import { Box, Typography, Container, Grid, CircularProgress, Select, MenuItem, FormControl, InputLabel, Stack, IconButton, Chip, Tabs, Tab } from '@mui/material';
 import { useSelector } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
 import { api } from '../../../api/client';
@@ -14,6 +14,7 @@ import DeleteOutlineRoundedIcon from '@mui/icons-material/DeleteOutlineRounded';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import FolderOpenOutlinedIcon from '@mui/icons-material/FolderOpenOutlined';
 import InsertDriveFileOutlinedIcon from '@mui/icons-material/InsertDriveFileOutlined';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 
 const CATEGORIES = ['Marksheet', 'Exam Schedule', 'Exam Form', 'Important Notice', 'Syllabus', 'General'];
 
@@ -30,6 +31,8 @@ const ManageDocuments = () => {
     const { currentUser } = useSelector((state) => state.user);
     const adminID = currentUser?._id;
 
+    const [tabIndex, setTabIndex] = useState(0);
+
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [uploading, setUploading] = useState(false);
@@ -44,6 +47,11 @@ const ManageDocuments = () => {
     const [classList, setClassList] = useState([]);
     const [targetClass, setTargetClass] = useState('');
     const [filterCategory, setFilterCategory] = useState('All');
+
+    // Bulk Marksheet State
+    const [bulkFiles, setBulkFiles] = useState([]);
+    const [semester, setSemester] = useState('1');
+    const [bulkUploading, setBulkUploading] = useState(false);
 
     useEffect(() => {
         fetchDocuments();
@@ -93,22 +101,19 @@ const ManageDocuments = () => {
 
         setUploading(true);
         try {
-            // Step 1: Get signed upload URL
             const urlRes = await api.post('/DocumentUploadUrl', {
                 fileName: selectedFile.name,
                 fileType: selectedFile.type
             });
             
-            const { signedUrl, token, path, publicUrl } = urlRes.data;
+            const { signedUrl, path, publicUrl } = urlRes.data;
 
-            // Step 2: Upload file directly to Supabase Storage
             await fetch(signedUrl, {
                 method: 'PUT',
                 headers: { 'Content-Type': selectedFile.type },
                 body: selectedFile
             });
 
-            // Step 3: Save document metadata
             await api.post('/DocumentUpload', {
                 title,
                 category,
@@ -132,7 +137,7 @@ const ManageDocuments = () => {
             fetchDocuments();
         } catch (err) {
             console.error("Upload error:", err);
-            setMessage("Failed to upload document. Please try again.");
+            setMessage("Failed to upload document.");
             setShowPopup(true);
         } finally {
             setUploading(false);
@@ -148,6 +153,66 @@ const ManageDocuments = () => {
         } catch (err) {
             setMessage("Failed to delete document.");
             setShowPopup(true);
+        }
+    };
+
+    // Bulk upload logic
+    const handleBulkFileSelect = (e) => {
+        if (e.target.files) {
+            setBulkFiles(Array.from(e.target.files));
+        }
+    };
+
+    const handleBulkUpload = async (e) => {
+        e.preventDefault();
+        if (bulkFiles.length === 0) {
+            setMessage("Please select PDF files named by Roll Number.");
+            setShowPopup(true);
+            return;
+        }
+        setBulkUploading(true);
+        try {
+            const uploadedDocs = [];
+            for (let file of bulkFiles) {
+                const rollNum = file.name.split('.')[0];
+                const urlRes = await api.post('/DocumentUploadUrl', {
+                    fileName: file.name,
+                    fileType: file.type
+                });
+                const { signedUrl, publicUrl } = urlRes.data;
+
+                await fetch(signedUrl, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': file.type },
+                    body: file
+                });
+
+                uploadedDocs.push({
+                    rollNum,
+                    title: `Semester ${semester} Marksheet`,
+                    semester: semester,
+                    file_url: publicUrl,
+                    file_name: file.name,
+                    file_size: file.size
+                });
+            }
+
+            const bulkRes = await api.post('/PersonalDocumentBulkUpload', {
+                documents: uploadedDocs,
+                admin_id: adminID,
+                uploaded_by: currentUser?.name || 'Admin'
+            });
+
+            setMessage(bulkRes.data.message || "Bulk upload completed.");
+            setShowPopup(true);
+            setBulkFiles([]);
+            setSemester('1');
+        } catch (err) {
+            console.error("Bulk upload error:", err);
+            setMessage("Failed to bulk upload documents.");
+            setShowPopup(true);
+        } finally {
+            setBulkUploading(false);
         }
     };
 
@@ -169,221 +234,208 @@ const ManageDocuments = () => {
                 subtitle="Upload and manage marksheets, exam schedules, and important documents for students."
             />
 
-            <Grid container spacing={3} sx={{ mt: 1 }}>
-                {/* Upload Form */}
-                <Grid item xs={12} md={5}>
-                    <GlassCard>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
-                            <IconBadge>
-                                <CloudUploadOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 20 }} />
-                            </IconBadge>
-                            <Box>
-                                <Typography variant="h6" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px' }}>
-                                    Upload Document
-                                </Typography>
-                                <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontSize: '0.75rem' }}>
-                                    Distribute files to students
-                                </Typography>
-                            </Box>
-                        </Box>
+            <Box sx={{ borderBottom: 1, borderColor: 'rgba(255,255,255,0.1)', mb: 3, mt: 2 }}>
+                <Tabs value={tabIndex} onChange={(e, v) => setTabIndex(v)} sx={{
+                    '& .MuiTab-root': { color: 'rgba(255,255,255,0.5)', fontWeight: 600, textTransform: 'none' },
+                    '& .Mui-selected': { color: '#F5F5FF' },
+                    '& .MuiTabs-indicator': { backgroundColor: 'var(--primary)' }
+                }}>
+                    <Tab label="General Documents" />
+                    <Tab label="Bulk Upload Marksheets" />
+                </Tabs>
+            </Box>
 
-                        <form onSubmit={handleUpload}>
-                            <Stack spacing={2.5}>
-                                <AppTextField
-                                    fullWidth
-                                    label="Document Title"
-                                    placeholder="e.g., Semester 3 Marksheet"
-                                    value={title}
-                                    onChange={(e) => setTitle(e.target.value)}
-                                    required
-                                />
-
-                                <FormControl fullWidth>
-                                    <InputLabel sx={{ color: 'var(--text-muted)' }}>Category</InputLabel>
-                                    <StyledSelect
-                                        value={category}
-                                        label="Category"
-                                        onChange={(e) => setCategory(e.target.value)}
-                                    >
-                                        {CATEGORIES.map(c => (
-                                            <MenuItem key={c} value={c}>
-                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                                    <Box sx={{ width: 8, height: 8, borderRadius: '50%', background: CATEGORY_COLORS[c] }} />
-                                                    {c}
-                                                </Box>
-                                            </MenuItem>
-                                        ))}
-                                    </StyledSelect>
-                                </FormControl>
-
-                                <FormControl fullWidth>
-                                    <InputLabel sx={{ color: 'var(--text-muted)' }}>Target Class (Optional)</InputLabel>
-                                    <StyledSelect
-                                        value={targetClass}
-                                        label="Target Class (Optional)"
-                                        onChange={(e) => setTargetClass(e.target.value)}
-                                    >
-                                        <MenuItem value="">All Classes</MenuItem>
-                                        {classList.map(cls => (
-                                            <MenuItem key={cls._id} value={cls._id}>{cls.sclassName}</MenuItem>
-                                        ))}
-                                    </StyledSelect>
-                                </FormControl>
-
-                                <AppTextField
-                                    fullWidth
-                                    label="Description (Optional)"
-                                    placeholder="Brief description of the document"
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                    multiline
-                                    rows={2}
-                                />
-
-                                <DropZone onClick={() => document.getElementById('file-input').click()}>
-                                    <input
-                                        id="file-input"
-                                        type="file"
-                                        hidden
-                                        accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.webp"
-                                        onChange={handleFileSelect}
-                                    />
-                                    {selectedFile ? (
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                            <InsertDriveFileOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 24 }} />
-                                            <Box>
-                                                <Typography variant="body2" sx={{ color: '#F5F5FF', fontWeight: 600, fontSize: '0.8rem' }}>
-                                                    {selectedFile.name}
-                                                </Typography>
-                                                <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.4)' }}>
-                                                    {formatFileSize(selectedFile.size)}
-                                                </Typography>
-                                            </Box>
-                                        </Box>
-                                    ) : (
-                                        <Box sx={{ textAlign: 'center' }}>
-                                            <CloudUploadOutlinedIcon sx={{ color: 'rgba(124,77,255,0.5)', fontSize: 32, mb: 1 }} />
-                                            <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.5)', fontWeight: 600, fontSize: '0.8rem' }}>
-                                                Click to select a file
-                                            </Typography>
-                                            <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.3)' }}>
-                                                PDF, DOC, XLS, JPG, PNG (Max 10MB)
-                                            </Typography>
-                                        </Box>
-                                    )}
-                                </DropZone>
-
-                                <AppButton
-                                    type="submit"
-                                    variant="contained"
-                                    disabled={uploading || !selectedFile || !title}
-                                    sx={{ py: 1.5, background: 'var(--gradient-primary) !important' }}
-                                >
-                                    {uploading ? <CircularProgress size={22} color="inherit" /> : 'Upload Document'}
-                                </AppButton>
-                            </Stack>
-                        </form>
-                    </GlassCard>
-                </Grid>
-
-                {/* Document List */}
-                <Grid item xs={12} md={7}>
-                    <GlassCard>
-                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1.5, mb: 3, flexWrap: 'wrap' }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+            {tabIndex === 0 && (
+                <Grid container spacing={3}>
+                    {/* Upload Form */}
+                    <Grid item xs={12} md={5}>
+                        <GlassCard>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
                                 <IconBadge>
-                                    <FolderOpenOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 20 }} />
+                                    <CloudUploadOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 20 }} />
                                 </IconBadge>
                                 <Box>
                                     <Typography variant="h6" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px' }}>
-                                        All Documents
+                                        Upload Document
                                     </Typography>
                                     <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontSize: '0.75rem' }}>
-                                        {documents.length} document{documents.length !== 1 ? 's' : ''} uploaded
+                                        Distribute files to students
                                     </Typography>
                                 </Box>
                             </Box>
-                            <FormControl size="small" sx={{ minWidth: 130 }}>
-                                <StyledSelect
-                                    value={filterCategory}
-                                    onChange={(e) => setFilterCategory(e.target.value)}
-                                    displayEmpty
-                                    sx={{ fontSize: '0.8rem' }}
-                                >
-                                    <MenuItem value="All">All Categories</MenuItem>
-                                    {CATEGORIES.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
-                                </StyledSelect>
-                            </FormControl>
-                        </Box>
 
-                        {loading ? (
-                            <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
-                                <CircularProgress sx={{ color: 'var(--primary)' }} />
+                            <form onSubmit={handleUpload}>
+                                <Stack spacing={2.5}>
+                                    <AppTextField fullWidth label="Document Title" placeholder="e.g., Semester 3 Marksheet" value={title} onChange={(e) => setTitle(e.target.value)} required />
+
+                                    <FormControl fullWidth>
+                                        <InputLabel sx={{ color: 'var(--text-muted)' }}>Category</InputLabel>
+                                        <StyledSelect value={category} label="Category" onChange={(e) => setCategory(e.target.value)}>
+                                            {CATEGORIES.map(c => (
+                                                <MenuItem key={c} value={c}>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                        <Box sx={{ width: 8, height: 8, borderRadius: '50%', background: CATEGORY_COLORS[c] }} />
+                                                        {c}
+                                                    </Box>
+                                                </MenuItem>
+                                            ))}
+                                        </StyledSelect>
+                                    </FormControl>
+
+                                    <FormControl fullWidth>
+                                        <InputLabel sx={{ color: 'var(--text-muted)' }}>Target Class (Optional)</InputLabel>
+                                        <StyledSelect value={targetClass} label="Target Class (Optional)" onChange={(e) => setTargetClass(e.target.value)}>
+                                            <MenuItem value="">All Classes</MenuItem>
+                                            {classList.map(cls => (
+                                                <MenuItem key={cls._id} value={cls._id}>{cls.sclassName}</MenuItem>
+                                            ))}
+                                        </StyledSelect>
+                                    </FormControl>
+
+                                    <AppTextField fullWidth label="Description (Optional)" placeholder="Brief description of the document" value={description} onChange={(e) => setDescription(e.target.value)} multiline rows={2} />
+
+                                    <DropZone onClick={() => document.getElementById('file-input').click()}>
+                                        <input id="file-input" type="file" hidden accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.webp" onChange={handleFileSelect} />
+                                        {selectedFile ? (
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                                <InsertDriveFileOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 24 }} />
+                                                <Box>
+                                                    <Typography variant="body2" sx={{ color: '#F5F5FF', fontWeight: 600, fontSize: '0.8rem' }}>{selectedFile.name}</Typography>
+                                                    <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.4)' }}>{formatFileSize(selectedFile.size)}</Typography>
+                                                </Box>
+                                            </Box>
+                                        ) : (
+                                            <Box sx={{ textAlign: 'center' }}>
+                                                <CloudUploadOutlinedIcon sx={{ color: 'rgba(124,77,255,0.5)', fontSize: 32, mb: 1 }} />
+                                                <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.5)', fontWeight: 600, fontSize: '0.8rem' }}>Click to select a file</Typography>
+                                                <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.3)' }}>PDF, DOC, XLS, JPG, PNG (Max 10MB)</Typography>
+                                            </Box>
+                                        )}
+                                    </DropZone>
+
+                                    <AppButton type="submit" variant="contained" disabled={uploading || !selectedFile || !title} sx={{ py: 1.5, background: 'var(--gradient-primary) !important' }}>
+                                        {uploading ? <CircularProgress size={22} color="inherit" /> : 'Upload Document'}
+                                    </AppButton>
+                                </Stack>
+                            </form>
+                        </GlassCard>
+                    </Grid>
+
+                    {/* Document List */}
+                    <Grid item xs={12} md={7}>
+                        <GlassCard>
+                            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1.5, mb: 3, flexWrap: 'wrap' }}>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                    <IconBadge><FolderOpenOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 20 }} /></IconBadge>
+                                    <Box>
+                                        <Typography variant="h6" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px' }}>All Documents</Typography>
+                                        <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontSize: '0.75rem' }}>{documents.length} document{documents.length !== 1 ? 's' : ''} uploaded</Typography>
+                                    </Box>
+                                </Box>
+                                <FormControl size="small" sx={{ minWidth: 130 }}>
+                                    <StyledSelect value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} displayEmpty sx={{ fontSize: '0.8rem' }}>
+                                        <MenuItem value="All">All Categories</MenuItem>
+                                        {CATEGORIES.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+                                    </StyledSelect>
+                                </FormControl>
                             </Box>
-                        ) : filteredDocs.length === 0 ? (
-                            <EmptyState>
-                                <DescriptionOutlinedIcon sx={{ fontSize: 40, color: 'rgba(124,77,255,0.3)', mb: 1 }} />
-                                <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontWeight: 600 }}>
-                                    No documents uploaded yet
-                                </Typography>
-                            </EmptyState>
-                        ) : (
-                            <DocList>
-                                {filteredDocs.map((doc, idx) => (
-                                    <DocCard key={doc._id || idx} delay={idx * 0.04}>
-                                        <CategoryStripe color={CATEGORY_COLORS[doc.category] || '#94A3B8'} />
-                                        <Box sx={{ flex: 1, minWidth: 0, p: '14px 16px' }}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-                                                <Typography variant="body2" sx={{ fontWeight: 700, color: '#F5F5FF', fontSize: '0.85rem', flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                                    {doc.title}
-                                                </Typography>
-                                                <Chip
-                                                    label={doc.category}
-                                                    size="small"
-                                                    sx={{
-                                                        background: `${CATEGORY_COLORS[doc.category]}14`,
-                                                        color: CATEGORY_COLORS[doc.category],
-                                                        border: `1px solid ${CATEGORY_COLORS[doc.category]}30`,
-                                                        fontWeight: 700,
-                                                        fontSize: '0.6rem',
-                                                        height: 22,
-                                                        flexShrink: 0
-                                                    }}
-                                                />
-                                            </Box>
-                                            {doc.description && (
-                                                <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.4)', display: 'block', mb: 0.5, lineHeight: 1.3 }}>
-                                                    {doc.description}
-                                                </Typography>
-                                            )}
-                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 0.5 }}>
-                                                <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.3)', display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                                    <CalendarTodayOutlinedIcon sx={{ fontSize: 11 }} />
-                                                    {new Date(doc.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                                </Typography>
-                                                {doc.file_name && (
-                                                    <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.3)' }}>
-                                                        {doc.file_name}
-                                                    </Typography>
+
+                            {loading ? (
+                                <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}><CircularProgress sx={{ color: 'var(--primary)' }} /></Box>
+                            ) : filteredDocs.length === 0 ? (
+                                <EmptyState>
+                                    <DescriptionOutlinedIcon sx={{ fontSize: 40, color: 'rgba(124,77,255,0.3)', mb: 1 }} />
+                                    <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontWeight: 600 }}>No documents uploaded yet</Typography>
+                                </EmptyState>
+                            ) : (
+                                <DocList>
+                                    {filteredDocs.map((doc, idx) => (
+                                        <DocCard key={doc._id || idx} delay={idx * 0.04}>
+                                            <CategoryStripe color={CATEGORY_COLORS[doc.category] || '#94A3B8'} />
+                                            <Box sx={{ flex: 1, minWidth: 0, p: '14px 16px' }}>
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+                                                    <Typography variant="body2" sx={{ fontWeight: 700, color: '#F5F5FF', fontSize: '0.85rem', flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{doc.title}</Typography>
+                                                    <Chip label={doc.category} size="small" sx={{ background: `${CATEGORY_COLORS[doc.category]}14`, color: CATEGORY_COLORS[doc.category], border: `1px solid ${CATEGORY_COLORS[doc.category]}30`, fontWeight: 700, fontSize: '0.6rem', height: 22, flexShrink: 0 }} />
+                                                </Box>
+                                                {doc.description && (
+                                                    <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.4)', display: 'block', mb: 0.5, lineHeight: 1.3 }}>{doc.description}</Typography>
                                                 )}
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mt: 0.5 }}>
+                                                    <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.3)', display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                                        <CalendarTodayOutlinedIcon sx={{ fontSize: 11 }} />
+                                                        {new Date(doc.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                    </Typography>
+                                                    {doc.file_name && (
+                                                        <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.3)' }}>{doc.file_name}</Typography>
+                                                    )}
+                                                </Box>
                                             </Box>
-                                        </Box>
-                                        <Box sx={{ display: 'flex', alignItems: 'center', pr: 1, gap: 0.5 }}>
-                                            <IconButton
-                                                size="small"
-                                                onClick={() => handleDelete(doc._id)}
-                                                sx={{ color: 'rgba(248,113,113,0.5)', '&:hover': { color: '#F87171', background: 'rgba(248,113,113,0.08)' } }}
-                                            >
-                                                <DeleteOutlineRoundedIcon sx={{ fontSize: 18 }} />
-                                            </IconButton>
-                                        </Box>
-                                    </DocCard>
-                                ))}
-                            </DocList>
-                        )}
-                    </GlassCard>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', pr: 1, gap: 0.5 }}>
+                                                <IconButton size="small" onClick={() => handleDelete(doc._id)} sx={{ color: 'rgba(248,113,113,0.5)', '&:hover': { color: '#F87171', background: 'rgba(248,113,113,0.08)' } }}>
+                                                    <DeleteOutlineRoundedIcon sx={{ fontSize: 18 }} />
+                                                </IconButton>
+                                            </Box>
+                                        </DocCard>
+                                    ))}
+                                </DocList>
+                            )}
+                        </GlassCard>
+                    </Grid>
                 </Grid>
-            </Grid>
+            )}
+
+            {tabIndex === 1 && (
+                <Grid container spacing={3}>
+                    <Grid item xs={12} md={6}>
+                        <GlassCard>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 3 }}>
+                                <IconBadge>
+                                    <PeopleAltOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 20 }} />
+                                </IconBadge>
+                                <Box>
+                                    <Typography variant="h6" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px' }}>
+                                        Bulk Upload Marksheets
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontSize: '0.75rem' }}>
+                                        Upload PDFs named by student roll number (e.g. 2022027.pdf)
+                                    </Typography>
+                                </Box>
+                            </Box>
+
+                            <form onSubmit={handleBulkUpload}>
+                                <Stack spacing={2.5}>
+                                    <FormControl fullWidth>
+                                        <InputLabel sx={{ color: 'var(--text-muted)' }}>Semester</InputLabel>
+                                        <StyledSelect value={semester} label="Semester" onChange={(e) => setSemester(e.target.value)}>
+                                            {[1,2,3,4,5,6,7,8].map(s => <MenuItem key={s} value={s.toString()}>Semester {s}</MenuItem>)}
+                                        </StyledSelect>
+                                    </FormControl>
+
+                                    <DropZone onClick={() => document.getElementById('bulk-file-input').click()}>
+                                        <input id="bulk-file-input" type="file" hidden multiple accept=".pdf" onChange={handleBulkFileSelect} />
+                                        {bulkFiles.length > 0 ? (
+                                            <Box sx={{ textAlign: 'center' }}>
+                                                <Typography variant="body2" sx={{ color: '#F5F5FF', fontWeight: 600, fontSize: '1rem', mb: 1 }}>{bulkFiles.length} files selected</Typography>
+                                                <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.4)' }}>Ready to upload for Semester {semester}</Typography>
+                                            </Box>
+                                        ) : (
+                                            <Box sx={{ textAlign: 'center' }}>
+                                                <CloudUploadOutlinedIcon sx={{ color: 'rgba(124,77,255,0.5)', fontSize: 32, mb: 1 }} />
+                                                <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.5)', fontWeight: 600, fontSize: '0.8rem' }}>Click to select multiple PDFs</Typography>
+                                                <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.3)' }}>Name files by roll number (e.g. 2022027.pdf)</Typography>
+                                            </Box>
+                                        )}
+                                    </DropZone>
+
+                                    <AppButton type="submit" variant="contained" disabled={bulkUploading || bulkFiles.length === 0} sx={{ py: 1.5, background: 'var(--gradient-primary) !important' }}>
+                                        {bulkUploading ? <CircularProgress size={22} color="inherit" /> : `Upload ${bulkFiles.length} Marksheets`}
+                                    </AppButton>
+                                </Stack>
+                            </form>
+                        </GlassCard>
+                    </Grid>
+                </Grid>
+            )}
 
             <Popup message={message} setShowPopup={setShowPopup} showPopup={showPopup} />
         </Container>

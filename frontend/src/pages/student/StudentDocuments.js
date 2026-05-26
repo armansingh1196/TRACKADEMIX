@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, Container, Grid, CircularProgress, Chip, Select, MenuItem, FormControl } from '@mui/material';
+import { Box, Typography, Container, Grid, CircularProgress, Chip, Tabs, Tab, TextField, InputAdornment, IconButton } from '@mui/material';
 import { useSelector } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
 import { api } from '../../api/client';
@@ -18,6 +18,10 @@ import AssignmentOutlinedIcon from '@mui/icons-material/AssignmentOutlined';
 import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
 import WidgetsOutlinedIcon from '@mui/icons-material/WidgetsOutlined';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import VpnKeyOutlinedIcon from '@mui/icons-material/VpnKeyOutlined';
 
 const CATEGORIES = ['Marksheet', 'Exam Schedule', 'Exam Form', 'Important Notice', 'Syllabus', 'General'];
 
@@ -44,9 +48,20 @@ const StudentDocuments = () => {
     const adminID = currentUser?.school?._id || currentUser?.school;
     const classID = currentUser?.sclassName?._id || currentUser?.sclassName;
 
+    const [tabIndex, setTabIndex] = useState(0);
+
+    // General Docs
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [filterCategory, setFilterCategory] = useState('All');
+
+    // Personal Docs
+    const [personalDocs, setPersonalDocs] = useState([]);
+    const [isVerified, setIsVerified] = useState(false);
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [verifyLoading, setVerifyLoading] = useState(false);
+    const [verifyError, setVerifyError] = useState('');
 
     useEffect(() => {
         if (adminID && classID) fetchDocuments();
@@ -65,6 +80,32 @@ const StudentDocuments = () => {
             console.error("Error fetching documents:", err);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleVerify = async (e) => {
+        e.preventDefault();
+        if (!password) return;
+        setVerifyLoading(true);
+        setVerifyError('');
+        try {
+            const res = await api.post('/VerifyAndFetchPersonalDocs', {
+                studentId: currentUser._id,
+                password
+            });
+            if (res.data.message && (res.data.message === "Invalid password" || res.data.message === "Student not found")) {
+                setVerifyError(res.data.message);
+            } else if (res.data.message === "No documents found") {
+                setIsVerified(true);
+                setPersonalDocs([]);
+            } else {
+                setIsVerified(true);
+                setPersonalDocs(res.data);
+            }
+        } catch (err) {
+            setVerifyError("Verification failed. Try again.");
+        } finally {
+            setVerifyLoading(false);
         }
     };
 
@@ -89,143 +130,303 @@ const StudentDocuments = () => {
                 subtitle="Access marksheets, exam schedules, and important institutional documents."
             />
 
-            {/* Category Summary Cards */}
-            <Grid container spacing={1.5} sx={{ mb: 3 }}>
-                {CATEGORIES.map(cat => (
-                    <Grid item xs={6} sm={4} md={2} key={cat}>
-                        <CategoryCard
-                            active={filterCategory === cat ? 'true' : 'false'}
-                            color={CATEGORY_COLORS[cat]}
-                            onClick={() => setFilterCategory(filterCategory === cat ? 'All' : cat)}
-                        >
-                            <Box sx={{ color: CATEGORY_COLORS[cat], display: 'flex', alignItems: 'center', mb: 0.5 }}>
-                                {CATEGORY_ICONS[cat]}
-                            </Box>
-                            <Typography variant="caption" sx={{ fontWeight: 700, color: '#F5F5FF', fontSize: '0.7rem', letterSpacing: '-0.01em' }}>
-                                {cat}
-                            </Typography>
-                            <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.3)', fontSize: '0.65rem' }}>
-                                {categoryCounts[cat]} file{categoryCounts[cat] !== 1 ? 's' : ''}
-                            </Typography>
-                        </CategoryCard>
-                    </Grid>
-                ))}
-            </Grid>
+            <Box sx={{ borderBottom: 1, borderColor: 'rgba(255,255,255,0.1)', mb: 3, mt: 2 }}>
+                <Tabs value={tabIndex} onChange={(e, v) => setTabIndex(v)} sx={{
+                    '& .MuiTab-root': { color: 'rgba(255,255,255,0.5)', fontWeight: 600, textTransform: 'none' },
+                    '& .Mui-selected': { color: '#F5F5FF' },
+                    '& .MuiTabs-indicator': { backgroundColor: 'var(--primary)' }
+                }}>
+                    <Tab label="General Documents" />
+                    <Tab label="My Marksheets" />
+                </Tabs>
+            </Box>
 
-            {/* Documents */}
-            <GlassCard>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1.5, mb: 3, flexWrap: 'wrap' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                        <IconBadge>
-                            <FolderOpenOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 20 }} />
-                        </IconBadge>
-                        <Box>
-                            <Typography variant="h6" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px' }}>
-                                {filterCategory === 'All' ? 'All Documents' : filterCategory}
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontSize: '0.75rem' }}>
-                                {filteredDocs.length} document{filteredDocs.length !== 1 ? 's' : ''} available
-                            </Typography>
-                        </Box>
-                    </Box>
-                    {filterCategory !== 'All' && (
-                        <Chip
-                            label="Show All"
-                            size="small"
-                            onClick={() => setFilterCategory('All')}
-                            sx={{
-                                background: 'rgba(124,77,255,0.1)',
-                                color: 'var(--primary)',
-                                border: '1px solid rgba(124,77,255,0.2)',
-                                fontWeight: 700,
-                                fontSize: '0.7rem',
-                                cursor: 'pointer',
-                                '&:hover': { background: 'rgba(124,77,255,0.2)' }
-                            }}
-                        />
-                    )}
-                </Box>
-
-                {loading ? (
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', py: 8, gap: 2 }}>
-                        <CircularProgress size={36} sx={{ color: 'var(--primary)' }} />
-                        <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontWeight: 500 }}>Loading documents...</Typography>
-                    </Box>
-                ) : filteredDocs.length === 0 ? (
-                    <EmptyState>
-                        <DescriptionOutlinedIcon sx={{ fontSize: 48, color: 'rgba(124,77,255,0.25)', mb: 1.5 }} />
-                        <Typography variant="body1" sx={{ color: 'rgba(226,232,255,0.5)', fontWeight: 700, mb: 0.5 }}>
-                            No Documents Available
-                        </Typography>
-                        <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.3)', fontSize: '0.8rem' }}>
-                            Documents uploaded by your institution will appear here.
-                        </Typography>
-                    </EmptyState>
-                ) : (
-                    <Grid container spacing={2}>
-                        {filteredDocs.map((doc, idx) => (
-                            <Grid item xs={12} sm={6} key={doc._id || idx}>
-                                <DocumentCard delay={idx * 0.05}>
-                                    <CategoryStripe color={CATEGORY_COLORS[doc.category] || '#94A3B8'} />
-                                    <Box sx={{ flex: 1, minWidth: 0, p: '16px 18px' }}>
-                                        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mb: 1 }}>
-                                            <FileIcon color={CATEGORY_COLORS[doc.category]}>
-                                                {CATEGORY_ICONS[doc.category] || <InsertDriveFileOutlinedIcon sx={{ fontSize: 16 }} />}
-                                            </FileIcon>
-                                            <Box sx={{ flex: 1, minWidth: 0 }}>
-                                                <Typography variant="body2" sx={{ fontWeight: 700, color: '#F5F5FF', fontSize: '0.85rem', mb: 0.3, lineHeight: 1.3 }}>
-                                                    {doc.title}
-                                                </Typography>
-                                                <Chip
-                                                    label={doc.category}
-                                                    size="small"
-                                                    sx={{
-                                                        background: `${CATEGORY_COLORS[doc.category]}14`,
-                                                        color: CATEGORY_COLORS[doc.category],
-                                                        border: `1px solid ${CATEGORY_COLORS[doc.category]}25`,
-                                                        fontWeight: 700,
-                                                        fontSize: '0.58rem',
-                                                        height: 20,
-                                                    }}
-                                                />
-                                            </Box>
-                                        </Box>
-
-                                        {doc.description && (
-                                            <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.45)', display: 'block', mb: 1, lineHeight: 1.4, fontSize: '0.75rem' }}>
-                                                {doc.description}
-                                            </Typography>
-                                        )}
-
-                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
-                                            <MetaItem>
-                                                <CalendarTodayOutlinedIcon sx={{ fontSize: 11 }} />
-                                                {new Date(doc.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
-                                            </MetaItem>
-                                            {doc.uploaded_by && (
-                                                <MetaItem>
-                                                    <PersonOutlineRoundedIcon sx={{ fontSize: 12 }} />
-                                                    {doc.uploaded_by}
-                                                </MetaItem>
-                                            )}
-                                            {doc.file_size && (
-                                                <MetaItem>{formatFileSize(doc.file_size)}</MetaItem>
-                                            )}
-                                        </Box>
-
-                                        <Box sx={{ mt: 1.5 }}>
-                                            <DownloadButton onClick={() => window.open(doc.file_url, '_blank')}>
-                                                <DownloadRoundedIcon sx={{ fontSize: 15 }} />
-                                                Download
-                                            </DownloadButton>
-                                        </Box>
+            {tabIndex === 0 && (
+                <>
+                    {/* Category Summary Cards */}
+                    <Grid container spacing={1.5} sx={{ mb: 3 }}>
+                        {CATEGORIES.map(cat => (
+                            <Grid item xs={6} sm={4} md={2} key={cat}>
+                                <CategoryCard
+                                    active={filterCategory === cat ? 'true' : 'false'}
+                                    color={CATEGORY_COLORS[cat]}
+                                    onClick={() => setFilterCategory(filterCategory === cat ? 'All' : cat)}
+                                >
+                                    <Box sx={{ color: CATEGORY_COLORS[cat], display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                                        {CATEGORY_ICONS[cat]}
                                     </Box>
-                                </DocumentCard>
+                                    <Typography variant="caption" sx={{ fontWeight: 700, color: '#F5F5FF', fontSize: '0.7rem', letterSpacing: '-0.01em' }}>
+                                        {cat}
+                                    </Typography>
+                                    <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.3)', fontSize: '0.65rem' }}>
+                                        {categoryCounts[cat]} file{categoryCounts[cat] !== 1 ? 's' : ''}
+                                    </Typography>
+                                </CategoryCard>
                             </Grid>
                         ))}
                     </Grid>
-                )}
-            </GlassCard>
+
+                    {/* Documents */}
+                    <GlassCard>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1.5, mb: 3, flexWrap: 'wrap' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                <IconBadge>
+                                    <FolderOpenOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 20 }} />
+                                </IconBadge>
+                                <Box>
+                                    <Typography variant="h6" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px' }}>
+                                        {filterCategory === 'All' ? 'All Documents' : filterCategory}
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontSize: '0.75rem' }}>
+                                        {filteredDocs.length} document{filteredDocs.length !== 1 ? 's' : ''} available
+                                    </Typography>
+                                </Box>
+                            </Box>
+                            {filterCategory !== 'All' && (
+                                <Chip
+                                    label="Show All"
+                                    size="small"
+                                    onClick={() => setFilterCategory('All')}
+                                    sx={{
+                                        background: 'rgba(124,77,255,0.1)',
+                                        color: 'var(--primary)',
+                                        border: '1px solid rgba(124,77,255,0.2)',
+                                        fontWeight: 700,
+                                        fontSize: '0.7rem',
+                                        cursor: 'pointer',
+                                        '&:hover': { background: 'rgba(124,77,255,0.2)' }
+                                    }}
+                                />
+                            )}
+                        </Box>
+
+                        {loading ? (
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', py: 8, gap: 2 }}>
+                                <CircularProgress size={36} sx={{ color: 'var(--primary)' }} />
+                                <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontWeight: 500 }}>Loading documents...</Typography>
+                            </Box>
+                        ) : filteredDocs.length === 0 ? (
+                            <EmptyState>
+                                <DescriptionOutlinedIcon sx={{ fontSize: 48, color: 'rgba(124,77,255,0.25)', mb: 1.5 }} />
+                                <Typography variant="body1" sx={{ color: 'rgba(226,232,255,0.5)', fontWeight: 700, mb: 0.5 }}>
+                                    No Documents Available
+                                </Typography>
+                                <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.3)', fontSize: '0.8rem' }}>
+                                    Documents uploaded by your institution will appear here.
+                                </Typography>
+                            </EmptyState>
+                        ) : (
+                            <Grid container spacing={2}>
+                                {filteredDocs.map((doc, idx) => (
+                                    <Grid item xs={12} sm={6} key={doc._id || idx}>
+                                        <DocumentCard delay={idx * 0.05}>
+                                            <CategoryStripe color={CATEGORY_COLORS[doc.category] || '#94A3B8'} />
+                                            <Box sx={{ flex: 1, minWidth: 0, p: '16px 18px' }}>
+                                                <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mb: 1 }}>
+                                                    <FileIcon color={CATEGORY_COLORS[doc.category]}>
+                                                        {CATEGORY_ICONS[doc.category] || <InsertDriveFileOutlinedIcon sx={{ fontSize: 16 }} />}
+                                                    </FileIcon>
+                                                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                                                        <Typography variant="body2" sx={{ fontWeight: 700, color: '#F5F5FF', fontSize: '0.85rem', mb: 0.3, lineHeight: 1.3 }}>
+                                                            {doc.title}
+                                                        </Typography>
+                                                        <Chip
+                                                            label={doc.category}
+                                                            size="small"
+                                                            sx={{
+                                                                background: `${CATEGORY_COLORS[doc.category]}14`,
+                                                                color: CATEGORY_COLORS[doc.category],
+                                                                border: `1px solid ${CATEGORY_COLORS[doc.category]}25`,
+                                                                fontWeight: 700,
+                                                                fontSize: '0.58rem',
+                                                                height: 20,
+                                                            }}
+                                                        />
+                                                    </Box>
+                                                </Box>
+
+                                                {doc.description && (
+                                                    <Typography variant="caption" sx={{ color: 'rgba(226,232,255,0.45)', display: 'block', mb: 1, lineHeight: 1.4, fontSize: '0.75rem' }}>
+                                                        {doc.description}
+                                                    </Typography>
+                                                )}
+
+                                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap' }}>
+                                                    <MetaItem>
+                                                        <CalendarTodayOutlinedIcon sx={{ fontSize: 11 }} />
+                                                        {new Date(doc.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                    </MetaItem>
+                                                    {doc.uploaded_by && (
+                                                        <MetaItem>
+                                                            <PersonOutlineRoundedIcon sx={{ fontSize: 12 }} />
+                                                            {doc.uploaded_by}
+                                                        </MetaItem>
+                                                    )}
+                                                    {doc.file_size && (
+                                                        <MetaItem>{formatFileSize(doc.file_size)}</MetaItem>
+                                                    )}
+                                                </Box>
+
+                                                <Box sx={{ mt: 1.5 }}>
+                                                    <DownloadButton onClick={() => window.open(doc.file_url, '_blank')}>
+                                                        <DownloadRoundedIcon sx={{ fontSize: 15 }} />
+                                                        Download
+                                                    </DownloadButton>
+                                                </Box>
+                                            </Box>
+                                        </DocumentCard>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        )}
+                    </GlassCard>
+                </>
+            )}
+
+            {tabIndex === 1 && (
+                <Grid container spacing={3} justifyContent="center">
+                    <Grid item xs={12} md={8}>
+                        <GlassCard>
+                            {!isVerified ? (
+                                <Box sx={{ p: 4, textAlign: 'center', maxWidth: 400, mx: 'auto' }}>
+                                    <LockBadge>
+                                        <LockOutlinedIcon sx={{ fontSize: 32, color: 'var(--primary)' }} />
+                                    </LockBadge>
+                                    <Typography variant="h5" sx={{ color: '#F5F5FF', fontWeight: 800, mb: 1 }}>
+                                        Secure Access
+                                    </Typography>
+                                    <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.5)', mb: 4, lineHeight: 1.6 }}>
+                                        Your marksheets are confidential. Please enter your account password to verify your identity.
+                                    </Typography>
+
+                                    <form onSubmit={handleVerify}>
+                                        <StyledTextField
+                                            fullWidth
+                                            type={showPassword ? 'text' : 'password'}
+                                            placeholder="Enter your password"
+                                            value={password}
+                                            onChange={(e) => setPassword(e.target.value)}
+                                            InputProps={{
+                                                startAdornment: (
+                                                    <InputAdornment position="start">
+                                                        <VpnKeyOutlinedIcon sx={{ color: 'rgba(255,255,255,0.3)', fontSize: 20 }} />
+                                                    </InputAdornment>
+                                                ),
+                                                endAdornment: (
+                                                    <InputAdornment position="end">
+                                                        <IconButton
+                                                            onClick={() => setShowPassword(!showPassword)}
+                                                            edge="end"
+                                                            sx={{ color: 'rgba(255,255,255,0.3)' }}
+                                                        >
+                                                            {showPassword ? <VisibilityOff sx={{ fontSize: 20 }} /> : <Visibility sx={{ fontSize: 20 }} />}
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                )
+                                            }}
+                                            sx={{ mb: 3 }}
+                                        />
+
+                                        {verifyError && (
+                                            <Typography variant="caption" sx={{ color: '#F87171', display: 'block', mb: 2, textAlign: 'left' }}>
+                                                {verifyError}
+                                            </Typography>
+                                        )}
+
+                                        <AppButton type="submit" fullWidth disabled={verifyLoading || !password} sx={{ py: 1.5 }}>
+                                            {verifyLoading ? <CircularProgress size={24} color="inherit" /> : 'Unlock Marksheets'}
+                                        </AppButton>
+                                    </form>
+                                </Box>
+                            ) : (
+                                <Box>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4 }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                                            <IconBadge sx={{ background: 'rgba(52, 211, 153, 0.1)', borderColor: 'rgba(52, 211, 153, 0.2)' }}>
+                                                <SchoolOutlinedIcon sx={{ color: '#34D399', fontSize: 20 }} />
+                                            </IconBadge>
+                                            <Box>
+                                                <Typography variant="h6" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px' }}>
+                                                    My Marksheets
+                                                </Typography>
+                                                <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)', fontSize: '0.75rem' }}>
+                                                    Confidential • {currentUser.name} ({currentUser.rollNum})
+                                                </Typography>
+                                            </Box>
+                                        </Box>
+                                        <AppButton variant="outlined" onClick={() => setIsVerified(false)} sx={{ fontSize: '0.75rem', py: 0.5 }}>
+                                            Lock Session
+                                        </AppButton>
+                                    </Box>
+
+                                    {personalDocs.length === 0 ? (
+                                        <EmptyState>
+                                            <InsertDriveFileOutlinedIcon sx={{ fontSize: 48, color: 'rgba(52, 211, 153, 0.2)', mb: 1.5 }} />
+                                            <Typography variant="body1" sx={{ color: 'rgba(226,232,255,0.5)', fontWeight: 700, mb: 0.5 }}>
+                                                No Marksheets Found
+                                            </Typography>
+                                            <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.3)', fontSize: '0.8rem' }}>
+                                                Your marksheets have not been uploaded yet.
+                                            </Typography>
+                                        </EmptyState>
+                                    ) : (
+                                        <Grid container spacing={2}>
+                                            {personalDocs.map((doc, idx) => (
+                                                <Grid item xs={12} sm={6} key={doc._id || idx}>
+                                                    <DocumentCard delay={idx * 0.05} sx={{ borderLeft: '3px solid #34D399' }}>
+                                                        <Box sx={{ flex: 1, minWidth: 0, p: '16px 18px' }}>
+                                                            <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1, mb: 1 }}>
+                                                                <FileIcon color="#34D399">
+                                                                    <SchoolOutlinedIcon sx={{ fontSize: 16 }} />
+                                                                </FileIcon>
+                                                                <Box sx={{ flex: 1, minWidth: 0 }}>
+                                                                    <Typography variant="body2" sx={{ fontWeight: 700, color: '#F5F5FF', fontSize: '0.85rem', mb: 0.3, lineHeight: 1.3 }}>
+                                                                        {doc.title}
+                                                                    </Typography>
+                                                                    <Chip
+                                                                        label={`Semester ${doc.semester}`}
+                                                                        size="small"
+                                                                        sx={{
+                                                                            background: `#34D39914`,
+                                                                            color: '#34D399',
+                                                                            border: `1px solid #34D39925`,
+                                                                            fontWeight: 700,
+                                                                            fontSize: '0.58rem',
+                                                                            height: 20,
+                                                                        }}
+                                                                    />
+                                                                </Box>
+                                                            </Box>
+
+                                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexWrap: 'wrap', mt: 1 }}>
+                                                                <MetaItem>
+                                                                    <CalendarTodayOutlinedIcon sx={{ fontSize: 11 }} />
+                                                                    {new Date(doc.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                                </MetaItem>
+                                                                {doc.file_size && (
+                                                                    <MetaItem>{formatFileSize(doc.file_size)}</MetaItem>
+                                                                )}
+                                                            </Box>
+
+                                                            <Box sx={{ mt: 1.5 }}>
+                                                                <DownloadButton onClick={() => window.open(doc.file_url, '_blank')} style={{ color: '#34D399', background: 'rgba(52, 211, 153, 0.1)', borderColor: 'rgba(52, 211, 153, 0.2)' }}>
+                                                                    <DownloadRoundedIcon sx={{ fontSize: 15 }} />
+                                                                    Download PDF
+                                                                </DownloadButton>
+                                                            </Box>
+                                                        </Box>
+                                                    </DocumentCard>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                    )}
+                                </Box>
+                            )}
+                        </GlassCard>
+                    </Grid>
+                </Grid>
+            )}
+
         </Container>
     );
 };
@@ -265,6 +466,19 @@ const IconBadge = styled(Box)`
   flex-shrink: 0;
 `;
 
+const LockBadge = styled(Box)`
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: rgba(124, 77, 255, 0.05);
+  border: 1px solid rgba(124, 77, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 24px rgba(124, 77, 255, 0.1);
+`;
+
 const CategoryCard = styled(Box)`
   background: ${p => p.active === 'true' ? `${p.color}10` : 'rgba(255, 255, 255, 0.02)'};
   border: 1px solid ${p => p.active === 'true' ? `${p.color}30` : 'rgba(124, 77, 255, 0.06)'};
@@ -286,7 +500,7 @@ const CategoryCard = styled(Box)`
   }
 `;
 
-const DocumentCard = styled.div`
+const DocumentCard = styled(Box)`
   display: flex;
   align-items: stretch;
   border-radius: 14px;
@@ -368,4 +582,28 @@ const EmptyState = styled(Box)`
   border: 1px dashed rgba(124, 77, 255, 0.12);
   border-radius: 14px;
   text-align: center;
+`;
+
+const StyledTextField = styled(TextField)`
+  & .MuiOutlinedInput-root {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.2s ease;
+  }
+  & .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+  & .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(124, 77, 255, 0.5);
+  }
+  & .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: var(--primary);
+    border-width: 2px;
+  }
+  & input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+    opacity: 1;
+  }
 `;
