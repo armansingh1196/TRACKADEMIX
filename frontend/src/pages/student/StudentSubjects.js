@@ -4,7 +4,7 @@ import { getSubjectList } from '../../redux/sclassRelated/sclassHandle';
 import { 
     BottomNavigation, BottomNavigationAction, Container, 
     Box, Typography, CircularProgress, Grid, Paper, Stack,
-    Table, TableHead, TableBody, TableContainer
+    Table, TableHead, TableBody, TableContainer, TableCell, TableRow, Chip
 } from '@mui/material';
 import { getUserDetails } from '../../redux/userRelated/userHandle';
 import CustomBarChart from '../../components/CustomBarChart'
@@ -16,7 +16,7 @@ import InsertChartOutlinedIcon from '@mui/icons-material/InsertChartOutlined';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import AssignmentIcon from '@mui/icons-material/Assignment';
-import { StyledTableCell, StyledTableRow } from '../../components/styles';
+import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 
 const StudentSubjects = () => {
     const dispatch = useDispatch();
@@ -29,6 +29,7 @@ const StudentSubjects = () => {
 
     const [subjectMarks, setSubjectMarks] = useState([]);
     const [selectedSection, setSelectedSection] = useState('table');
+    const [selectedSemester, setSelectedSemester] = useState(null);
 
     useEffect(() => {
         if (userDetails) {
@@ -60,150 +61,146 @@ const StudentSubjects = () => {
 
     const sortedSemesters = Object.keys(groupedMarks).sort((a, b) => parseInt(a) - parseInt(b));
 
+    // Auto-select the most recent semester
+    useEffect(() => {
+        if (sortedSemesters.length > 0 && !selectedSemester) {
+            setSelectedSemester(sortedSemesters[sortedSemesters.length - 1]);
+        }
+    }, [sortedSemesters, selectedSemester]);
+
     const handleSectionChange = (event, newSection) => {
         setSelectedSection(newSection);
     };
 
-    const renderTableSection = () => (
-        <Stack spacing={4}>
-            {sortedSemesters.map(semester => {
-                const semesterMarks = groupedMarks[semester];
-                const theoryMarks = semesterMarks.filter(r => r.subjects?.subject_type === 'Theory' || !r.subjects?.subject_type);
-                const practicalMarks = semesterMarks.filter(r => r.subjects?.subject_type === 'Practical');
+    const renderTableSection = () => {
+        if (!selectedSemester || !groupedMarks[selectedSemester]) return null;
 
-                return (
-                    <GlassCard sx={{ p: 4 }} key={semester}>
-                        <SectionHeader>
-                            <TableChartIcon sx={{ color: 'var(--primary)', fontSize: 32 }} />
-                            <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Plus Jakarta Sans', color: 'white' }}>
-                                Semester {semester} Performance
-                            </Typography>
-                        </SectionHeader>
+        const semesterMarks = groupedMarks[selectedSemester];
+        const theoryMarks = semesterMarks.filter(r => r.subjects?.subject_type === 'Theory' || !r.subjects?.subject_type);
+        const practicalMarks = semesterMarks.filter(r => r.subjects?.subject_type === 'Practical');
 
-                        {/* Theory Table */}
-                        <Typography variant="subtitle1" sx={{ color: 'var(--primary)', mt: 2, mb: 1, fontWeight: 700 }}>
-                            THEORY SUBJECTS
+        const calculatePercentage = (marks, total) => {
+            return Math.round((marks / total) * 100);
+        };
+
+        const renderMarksTable = (marksArray, isPractical) => {
+            if (marksArray.length === 0) return null;
+            
+            const maxInternal = isPractical ? 20 : 30;
+            const maxExternal = isPractical ? 30 : 70;
+            const passInternal = isPractical ? 8 : 12;
+            const passExternal = isPractical ? 12 : 28;
+            const maxTotal = isPractical ? 50 : 100;
+
+            return (
+                <Box sx={{ mb: 4 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, gap: 1 }}>
+                        <TypeDot color={isPractical ? '#60A5FA' : '#A78BFA'} />
+                        <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.6)', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+                            {isPractical ? 'Practical / Lab Assessment' : 'Theory Assessment'}
                         </Typography>
-                        <TableContainer sx={{ overflowX: 'auto', background: 'transparent', boxShadow: 'none' }}>
-                            <Table sx={{ mt: 1, minWidth: 500 }}>
-                                <TableHead>
-                                    <StyledTableRow>
-                                        <StyledTableCell>Subject Name</StyledTableCell>
-                                        <StyledTableCell align="center">Internal (30)</StyledTableCell>
-                                        <StyledTableCell align="center">External (70)</StyledTableCell>
-                                        <StyledTableCell align="center">Total Marks</StyledTableCell>
-                                        <StyledTableCell align="right">Status</StyledTableCell>
-                                    </StyledTableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {theoryMarks.map((result, index) => {
-                                        const internal = result.internal_marks || 0;
-                                        const external = result.external_marks || 0;
-                                        const marks = result.marks_obtained || 0;
-                                        const isIntPass = internal >= 12;
-                                        const isExtPass = external >= 28;
-                                        const isPassing = marks >= 40 && isIntPass && isExtPass;
-                                        
-                                        return (
-                                            <StyledTableRow key={index}>
-                                                <StyledTableCell sx={{ color: 'white', fontWeight: 600 }}>
-                                                    {result.subjects.sub_name}
-                                                </StyledTableCell>
-                                                <StyledTableCell align="center" sx={{ color: isIntPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
-                                                    {internal} {isIntPass ? '' : '(Fail)'}
-                                                </StyledTableCell>
-                                                <StyledTableCell align="center" sx={{ color: isExtPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
-                                                    {external} {isExtPass ? '' : '(Fail)'}
-                                                </StyledTableCell>
-                                                <StyledTableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800, fontSize: '1.1rem' }}>
-                                                    {marks}
-                                                </StyledTableCell>
-                                                <StyledTableCell align="right">
-                                                    <StatusBadge className={isPassing ? 'pass' : 'fail'}>
-                                                        {isPassing ? 'Qualified' : 'Requires Improvement'}
-                                                    </StatusBadge>
-                                                </StyledTableCell>
-                                            </StyledTableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                    </Box>
+                    <SleekTableContainer>
+                        <Table size="small">
+                            <TableHead>
+                                <TableRow>
+                                    <HeaderCell>Subject Name</HeaderCell>
+                                    <HeaderCell align="center">Internal ({maxInternal})</HeaderCell>
+                                    <HeaderCell align="center">External ({maxExternal})</HeaderCell>
+                                    <HeaderCell align="center">Total ({maxTotal})</HeaderCell>
+                                    <HeaderCell align="center">Score %</HeaderCell>
+                                    <HeaderCell align="right">Status</HeaderCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {marksArray.map((result, index) => {
+                                    const internal = result.internal_marks || 0;
+                                    const external = result.external_marks || 0;
+                                    const totalMarks = result.marks_obtained || 0;
+                                    
+                                    const isIntPass = internal >= passInternal;
+                                    const isExtPass = external >= passExternal;
+                                    const isPassing = totalMarks >= (maxTotal * 0.4) && isIntPass && isExtPass;
+                                    const percentage = calculatePercentage(totalMarks, maxTotal);
 
-                        {/* Practical Table */}
-                        {practicalMarks.length > 0 && (
-                            <>
-                                <Typography variant="subtitle1" sx={{ color: 'var(--secondary)', mt: 4, mb: 1, fontWeight: 700 }}>
-                                    PRACTICAL / LAB SUBJECTS
-                                </Typography>
-                                <TableContainer sx={{ overflowX: 'auto', background: 'transparent', boxShadow: 'none' }}>
-                                    <Table sx={{ mt: 1, minWidth: 500 }}>
-                                        <TableHead>
-                                            <StyledTableRow>
-                                                <StyledTableCell>Subject Name</StyledTableCell>
-                                                <StyledTableCell align="center">Internal (20)</StyledTableCell>
-                                                <StyledTableCell align="center">External (30)</StyledTableCell>
-                                                <StyledTableCell align="center">Total Marks</StyledTableCell>
-                                                <StyledTableCell align="right">Status</StyledTableCell>
-                                            </StyledTableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {practicalMarks.map((result, index) => {
-                                                const internal = result.internal_marks || 0;
-                                                const external = result.external_marks || 0;
-                                                const marks = result.marks_obtained || 0;
-                                                const isIntPass = internal >= 8;
-                                                const isExtPass = external >= 12;
-                                                const isPassing = marks >= 20 && isIntPass && isExtPass;
-                                                return (
-                                                    <StyledTableRow key={index}>
-                                                        <StyledTableCell sx={{ color: 'white', fontWeight: 600 }}>
-                                                            {result.subjects.sub_name}
-                                                        </StyledTableCell>
-                                                        <StyledTableCell align="center" sx={{ color: isIntPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
-                                                            {internal} {isIntPass ? '' : '(Fail)'}
-                                                        </StyledTableCell>
-                                                        <StyledTableCell align="center" sx={{ color: isExtPass ? 'var(--text-main)' : '#ff4b2b', fontWeight: 600 }}>
-                                                            {external} {isExtPass ? '' : '(Fail)'}
-                                                        </StyledTableCell>
-                                                        <StyledTableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800, fontSize: '1.1rem' }}>
-                                                            {marks}
-                                                        </StyledTableCell>
-                                                        <StyledTableCell align="right">
-                                                            <StatusBadge className={isPassing ? 'pass' : 'fail'}>
-                                                                {isPassing ? 'Qualified' : 'Requires Improvement'}
-                                                            </StatusBadge>
-                                                        </StyledTableCell>
-                                                    </StyledTableRow>
-                                                );
-                                            })}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </>
-                        )}
-                    </GlassCard>
-                );
-            })}
-        </Stack>
-    );
+                                    return (
+                                        <TableRow key={index} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                            <DataCell sx={{ fontWeight: 600, color: '#F5F5FF' }}>
+                                                {result.subjects.sub_name}
+                                            </DataCell>
+                                            <DataCell align="center" sx={{ color: isIntPass ? 'rgba(255,255,255,0.8)' : '#F87171' }}>
+                                                {internal} {isIntPass ? '' : <FailTag>(F)</FailTag>}
+                                            </DataCell>
+                                            <DataCell align="center" sx={{ color: isExtPass ? 'rgba(255,255,255,0.8)' : '#F87171' }}>
+                                                {external} {isExtPass ? '' : <FailTag>(F)</FailTag>}
+                                            </DataCell>
+                                            <DataCell align="center" sx={{ fontWeight: 800, color: isPassing ? 'var(--primary)' : '#F87171', fontSize: '0.95rem' }}>
+                                                {totalMarks}
+                                            </DataCell>
+                                            <DataCell align="center" sx={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.8rem' }}>
+                                                {percentage}%
+                                            </DataCell>
+                                            <DataCell align="right">
+                                                <MiniStatus className={isPassing ? 'pass' : 'fail'}>
+                                                    {isPassing ? 'Qualified' : 'Requires Impr.'}
+                                                </MiniStatus>
+                                            </DataCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableBody>
+                        </Table>
+                    </SleekTableContainer>
+                </Box>
+            );
+        };
+
+        return (
+            <GlassCard sx={{ p: { xs: 3, md: 5 } }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                        <IconBadge>
+                            <SchoolOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 24 }} />
+                        </IconBadge>
+                        <Box>
+                            <Typography variant="h5" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
+                                Semester {selectedSemester} Transcript
+                            </Typography>
+                            <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)' }}>
+                                Detailed view of internal and external assessments
+                            </Typography>
+                        </Box>
+                    </Box>
+                </Box>
+
+                {renderMarksTable(theoryMarks, false)}
+                {renderMarksTable(practicalMarks, true)}
+            </GlassCard>
+        );
+    };
 
     const renderChartSection = () => {
-        // Flatten marks and rename properties for the chart to consume them easily
         const chartData = subjectMarks.map(result => ({
             subName: { subName: result.subjects?.sub_name || "Unknown" },
             marksObtained: result.marks_obtained || 0
         }));
 
         return (
-            <GlassCard sx={{ p: 4, minHeight: 400, display: 'flex', flexDirection: 'column' }}>
-                <SectionHeader>
-                    <InsertChartIcon sx={{ color: 'var(--secondary)', fontSize: 32 }} />
-                    <Typography variant="h5" sx={{ fontWeight: 900, fontFamily: 'Plus Jakarta Sans', color: 'white' }}>
-                        Cumulative Performance Analytics
-                    </Typography>
-                </SectionHeader>
-                <Box sx={{ flexGrow: 1, mt: 4, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <GlassCard sx={{ p: { xs: 3, md: 5 }, minHeight: 400, display: 'flex', flexDirection: 'column' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 4 }}>
+                    <IconBadge style={{ background: 'rgba(167, 139, 250, 0.1)', borderColor: 'rgba(167, 139, 250, 0.2)' }}>
+                        <InsertChartIcon sx={{ color: '#A78BFA', fontSize: 24 }} />
+                    </IconBadge>
+                    <Box>
+                        <Typography variant="h5" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
+                            Cumulative Performance
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)' }}>
+                            Historical marks distribution across all semesters
+                        </Typography>
+                    </Box>
+                </Box>
+                <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 2 }}>
                     <CustomBarChart chartData={chartData} dataKey="marksObtained" />
                 </Box>
             </GlassCard>
@@ -211,9 +208,9 @@ const StudentSubjects = () => {
     };
 
     return (
-        <Container maxWidth="lg" sx={{ mt: 2, mb: 10 }}>
+        <Container maxWidth="lg" sx={{ mt: 1, mb: 12 }}>
             <AppHeader 
-                title="Subject Analytics" 
+                title="Academic Records" 
                 subtitle={`Current Semester: ${currentSemester} | Batch: ${currentBatch}`} 
             />
 
@@ -222,12 +219,31 @@ const StudentSubjects = () => {
                     <CircularProgress sx={{ color: 'var(--primary)' }} />
                 </Box>
             ) : (
-                <Stack spacing={4} sx={{ mt: 4 }}>
+                <Stack spacing={4} sx={{ mt: 2 }}>
                     {subjectMarks.length > 0 ? (
                         <>
+                            {/* Semester Selector Row */}
+                            {selectedSection === 'table' && sortedSemesters.length > 0 && (
+                                <Box sx={{ 
+                                    display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1, 
+                                    '&::-webkit-scrollbar': { height: '4px' },
+                                    '&::-webkit-scrollbar-thumb': { background: 'rgba(255,255,255,0.1)', borderRadius: '10px' }
+                                }}>
+                                    {sortedSemesters.map(sem => (
+                                        <SemesterChip 
+                                            key={sem}
+                                            active={selectedSemester === sem}
+                                            onClick={() => setSelectedSemester(sem)}
+                                        >
+                                            Semester {sem}
+                                        </SemesterChip>
+                                    ))}
+                                </Box>
+                            )}
+
                             {selectedSection === 'table' ? renderTableSection() : renderChartSection()}
                             
-                            <NavigationWrapper elevation={3}>
+                            <NavigationWrapper elevation={0}>
                                 <BottomNavigation 
                                     value={selectedSection} 
                                     onChange={handleSectionChange} 
@@ -235,12 +251,12 @@ const StudentSubjects = () => {
                                     sx={{ background: 'transparent' }}
                                 >
                                     <StyledNavItem
-                                        label="Tabular View"
+                                        label="Transcripts"
                                         value="table"
                                         icon={selectedSection === 'table' ? <TableChartIcon /> : <TableChartOutlinedIcon />}
                                     />
                                     <StyledNavItem
-                                        label="Visual Trends"
+                                        label="Analytics"
                                         value="chart"
                                         icon={selectedSection === 'chart' ? <InsertChartIcon /> : <InsertChartOutlinedIcon />}
                                     />
@@ -249,8 +265,8 @@ const StudentSubjects = () => {
                         </>
                     ) : subjectsList && subjectsList.length > 0 ? (
                         <GlassCard sx={{ p: 4 }}>
-                            <Typography variant="h5" sx={{ fontWeight: 800, color: 'white', mb: 3, fontFamily: 'Plus Jakarta Sans' }}>
-                                Assigned Subjects
+                            <Typography variant="h6" sx={{ fontWeight: 800, color: 'white', mb: 3, fontFamily: 'Plus Jakarta Sans' }}>
+                                Currently Enrolled Subjects
                             </Typography>
                             <Grid container spacing={2}>
                                 {subjectsList.map((sub, index) => (
@@ -269,12 +285,12 @@ const StudentSubjects = () => {
                         </GlassCard>
                     ) : (
                         <GlassCard sx={{ p: 8, textAlign: 'center' }}>
-                            <AssignmentIcon sx={{ fontSize: 64, color: 'var(--text-muted)', mb: 3 }} />
+                            <AssignmentIcon sx={{ fontSize: 64, color: 'rgba(255,255,255,0.1)', mb: 3 }} />
                             <Typography variant="h5" sx={{ fontWeight: 800, color: 'white', mb: 1 }}>
-                                No Records Found
+                                No Records Available
                             </Typography>
-                            <Typography variant="body1" sx={{ color: 'var(--text-muted)' }}>
-                                Your exam results haven't been published by the faculty yet.
+                            <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
+                                Your academic records have not been uploaded to the portal yet.
                             </Typography>
                         </GlassCard>
                     )}
@@ -286,45 +302,118 @@ const StudentSubjects = () => {
 
 export default StudentSubjects;
 
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
+const fadeUp = keyframes`
+  from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 `;
 
 const GlassCard = styled(Paper)`
-  background: var(--bg-card) !important;
-  backdrop-filter: blur(24px);
-  border-radius: 32px !important;
-  border: 1px solid var(--border) !important;
-  box-shadow: var(--shadow-xl) !important;
-  animation: ${fadeIn} 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
+  -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
+  border-radius: 24px !important;
+  border: 1px solid rgba(124, 77, 255, 0.08) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06) !important;
+  animation: ${fadeUp} 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 `;
 
-const SectionHeader = styled(Box)`
+const IconBadge = styled(Box)`
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(124, 77, 255, 0.1);
+  border: 1px solid rgba(124, 77, 255, 0.2);
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
+  justify-content: center;
 `;
 
-const StatusBadge = styled('span')`
-  padding: 6px 16px;
+const SemesterChip = styled.button`
+  background: ${p => p.active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.03)'};
+  color: ${p => p.active ? '#FFF' : 'rgba(255, 255, 255, 0.6)'};
+  border: 1px solid ${p => p.active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.1)'};
   border-radius: 12px;
-  font-size: 0.75rem;
+  padding: 10px 20px;
+  font-family: 'Inter', sans-serif;
+  font-weight: ${p => p.active ? 700 : 500};
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: ${p => p.active ? '0 4px 12px rgba(124, 77, 255, 0.3)' : 'none'};
+
+  &:hover {
+    background: ${p => p.active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.06)'};
+    color: #FFF;
+  }
+`;
+
+const SleekTableContainer = styled(TableContainer)`
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  overflow-x: auto;
+`;
+
+const HeaderCell = styled(TableCell)`
+  && {
+    background: rgba(255, 255, 255, 0.02);
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 12px 16px;
+  }
+`;
+
+const DataCell = styled(TableCell)`
+  && {
+    color: rgba(255, 255, 255, 0.8);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 14px 16px;
+    transition: background 0.2s ease;
+  }
+`;
+
+const FailTag = styled.span`
+  color: #F87171;
+  font-size: 0.7rem;
+  font-weight: 800;
+  margin-left: 4px;
+`;
+
+const TypeDot = styled.div`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: ${p => p.color};
+  box-shadow: 0 0 8px ${p => p.color};
+`;
+
+const MiniStatus = styled.div`
+  display: inline-flex;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.65rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.05em;
   
   &.pass {
-    background: rgba(75, 181, 67, 0.1);
-    color: #4BB543;
-    border: 1px solid rgba(75, 181, 67, 0.2);
+    background: rgba(52, 211, 153, 0.1);
+    color: #34D399;
+    border: 1px solid rgba(52, 211, 153, 0.2);
   }
   
   &.fail {
-    background: rgba(255, 75, 43, 0.1);
-    color: #ff4b2b;
-    border: 1px solid rgba(255, 75, 43, 0.2);
+    background: rgba(248, 113, 113, 0.1);
+    color: #F87171;
+    border: 1px solid rgba(248, 113, 113, 0.2);
   }
 `;
 
@@ -333,26 +422,37 @@ const NavigationWrapper = styled(Paper)`
   bottom: 24px;
   left: 50%;
   transform: translateX(-50%);
-  width: auto;
-  min-width: 320px;
-  background: rgba(26, 24, 31, 0.8) !important;
-  backdrop-filter: blur(16px);
-  border-radius: 24px !important;
-  border: 1px solid var(--border) !important;
-  overflow: hidden;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.4) !important;
+  background: rgba(16, 14, 23, 0.85) !important;
+  backdrop-filter: blur(24px) saturate(200%);
+  -webkit-backdrop-filter: blur(24px) saturate(200%);
+  border-radius: 20px !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding: 4px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05) !important;
   z-index: 1000;
+  min-width: 280px;
 `;
 
 const StyledNavItem = styled(BottomNavigationAction)`
-  color: var(--text-muted) !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+  border-radius: 16px;
+  transition: all 0.2s ease !important;
+  
   &.Mui-selected {
     color: var(--primary) !important;
-    font-weight: 800;
+    background: rgba(124, 77, 255, 0.1);
   }
+  
   .MuiBottomNavigationAction-label {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 600;
+    font-size: 0.7rem;
     margin-top: 4px;
+    letter-spacing: 0.02em;
   }
-`;
+  
+  &.Mui-selected .MuiBottomNavigationAction-label {
+    font-weight: 700;
+    font-size: 0.7rem;
+  }
+`;
