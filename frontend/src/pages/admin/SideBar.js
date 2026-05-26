@@ -18,7 +18,7 @@ const SideBar = ({ open }) => {
         { text: 'Students', icon: <Student weight="fill" size={22} />, path: '/Admin/students' },
         { text: 'Documents', icon: <FileText weight="fill" size={22} />, path: '/Admin/documents' },
         { text: 'Notices', icon: <Megaphone weight="fill" size={22} />, path: '/Admin/notices' },
-        { text: 'Complains', icon: <WarningCircle weight="fill" size={22} />, path: '/Admin/complains' },
+        { text: 'Complaints', icon: <WarningCircle weight="fill" size={22} />, path: '/Admin/complains' },
     ];
 
     const isOpenStr = open ? 'true' : 'false';
