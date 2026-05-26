@@ -345,22 +345,24 @@ const IconBadge = styled(Box)`
 `;
 
 const SemesterChip = styled.button`
-  background: ${p => p.active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.03)'};
-  color: ${p => p.active ? '#FFF' : 'rgba(255, 255, 255, 0.6)'};
-  border: 1px solid ${p => p.active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.1)'};
-  border-radius: 12px;
-  padding: 10px 20px;
+  background: ${p => p.active ? 'rgba(124, 77, 255, 0.15)' : 'transparent'};
+  color: ${p => p.active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.4)'};
+  border: 1px solid ${p => p.active ? 'rgba(124, 77, 255, 0.4)' : 'rgba(255, 255, 255, 0.07)'};
+  border-radius: 8px;
+  padding: 5px 13px;
   font-family: 'Inter', sans-serif;
   font-weight: ${p => p.active ? 700 : 500};
-  font-size: 0.85rem;
+  font-size: 0.72rem;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.2s ease;
-  box-shadow: ${p => p.active ? '0 4px 12px rgba(124, 77, 255, 0.3)' : 'none'};
+  transition: all 0.18s ease;
+  letter-spacing: 0.02em;
+  box-shadow: ${p => p.active ? '0 0 10px rgba(124, 77, 255, 0.2)' : 'none'};
 
   &:hover {
-    background: ${p => p.active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.06)'};
-    color: #FFF;
+    background: rgba(124, 77, 255, 0.08);
+    color: rgba(255, 255, 255, 0.8);
+    border-color: rgba(124, 77, 255, 0.25);
   }
 `;
 
