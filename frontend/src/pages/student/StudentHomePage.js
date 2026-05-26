@@ -69,8 +69,19 @@ const StudentHomePage = () => {
         }
     }, [userDetails, currentUser]);
 
-    /* ── Derived metrics ── */
-    const overallAttendancePercentage = calculateOverallAttendancePercentage(subjectAttendance);
+    /* ── Derived metrics ──
+       The shared `calculateOverallAttendancePercentage` divides Present
+       count by `subjects.sessions` (the *declared* number of sessions for
+       each subject). In real data the actual record count routinely
+       exceeds that figure, which blows the result well past 100% — we
+       saw 10238% on the live data. For the headline dashboard figure,
+       compute % directly from the records and clamp to [0, 100]. */
+    const presentRecords = subjectAttendance.filter(a => a.status === 'Present').length;
+    const totalRecords   = subjectAttendance.filter(a => a.status === 'Present' || a.status === 'Absent').length;
+    const overallAttendancePercentage = totalRecords > 0
+        ? Math.min(100, Math.max(0, (presentRecords / totalRecords) * 100))
+        : 0;
+    const absentPercentage  = totalRecords > 0 ? 100 - overallAttendancePercentage : 0;
     const attendanceOK = overallAttendancePercentage >= 75;
 
     const theoryRadarData = aiInsight?.examResults
@@ -88,6 +99,31 @@ const StudentHomePage = () => {
         }) || [];
 
     const theoryAvg = Math.round((aiInsight?.features?.external_avg_theory / 70) * 100 || 0);
+
+    /* ── Top subjects (latest semester, theory + practical) ── */
+    const topSubjects = (() => {
+        const results = aiInsight?.examResults || [];
+        if (!results.length) return [];
+        // Pick the active semester (max) so we surface the most recent context.
+        const maxSem = results.reduce((m, e) => Math.max(m, parseInt(e.subjects?.semester || 1)), 1);
+        const active = results.filter(e => parseInt(e.subjects?.semester || 1) === maxSem);
+        return active
+            .map(e => {
+                const isPractical = e.subjects?.subject_type === 'Practical';
+                const max = isPractical ? 50 : 100;
+                const obtained = e.marks_obtained ?? ((e.internal_marks || 0) + (e.external_marks || 0));
+                const pct = Math.min(100, Math.max(0, (obtained / max) * 100));
+                return {
+                    name: e.subjects?.sub_name || 'Subject',
+                    type: isPractical ? 'Practical' : 'Theory',
+                    score: Math.round(pct),
+                    obtained,
+                    max,
+                };
+            })
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 4);
+    })();
 
     /* ── AI Performance band ── */
     let band = "Medium";
@@ -263,11 +299,11 @@ const StudentHomePage = () => {
                                 <BreakdownRow>
                                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', mb: '6px' }}>
                                         <span className="lab">Absent</span>
-                                        <span className="val" style={{ color: '#F87171' }}>{Math.round(100 - overallAttendancePercentage)}%</span>
+                                        <span className="val" style={{ color: '#F87171' }}>{Math.round(absentPercentage)}%</span>
                                     </Box>
                                     <LinearProgress
                                         variant="determinate"
-                                        value={100 - overallAttendancePercentage}
+                                        value={absentPercentage}
                                         sx={{
                                             height: 5, borderRadius: 3,
                                             bgcolor: 'rgba(255,255,255,0.04)',
@@ -351,6 +387,71 @@ const StudentHomePage = () => {
                             ) : (
                                 <Box sx={{ textAlign: 'center', py: 4, color: 'rgba(226,232,255,0.3)' }}>
                                     <Typography variant="body2" sx={{ fontWeight: 600 }}>No data available</Typography>
+                                </Box>
+                            )}
+                        </GlassCard>
+
+                        {/* Subject performance — fills the right column gap */}
+                        <GlassCard sx={{ p: 3 }}>
+                            <SectionHead>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                                    <BookOutlinedIcon sx={{ fontSize: 13, color: '#A78BFA' }} />
+                                    <SectionLabel>Subject Performance</SectionLabel>
+                                </Box>
+                                <SectionHint>Active semester</SectionHint>
+                            </SectionHead>
+
+                            {topSubjects.length > 0 ? (
+                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.75, mt: 2 }}>
+                                    {topSubjects.map((s, i) => {
+                                        const color = s.score >= 75 ? '#34D399' : s.score >= 50 ? '#FBBF24' : '#F87171';
+                                        return (
+                                            <SubjectRow key={`${s.name}-${i}`} style={{ animationDelay: `${0.1 + i * 0.06}s` }}>
+                                                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', mb: '6px', gap: 2 }}>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+                                                        <RankPip>{i + 1}</RankPip>
+                                                        <Typography
+                                                            noWrap
+                                                            sx={{ fontFamily: 'var(--font-heading)', fontWeight: 700, color: '#F5F5FF', fontSize: '0.82rem', letterSpacing: '-0.015em', minWidth: 0 }}
+                                                        >
+                                                            {s.name}
+                                                        </Typography>
+                                                        <TypeChip>{s.type === 'Practical' ? 'PR' : 'TH'}</TypeChip>
+                                                    </Box>
+                                                    <Typography
+                                                        sx={{
+                                                            fontFamily: 'var(--font-display)',
+                                                            fontWeight: 800,
+                                                            color,
+                                                            fontSize: '0.92rem',
+                                                            letterSpacing: '-0.02em',
+                                                            fontVariantNumeric: 'tabular-nums',
+                                                            flexShrink: 0,
+                                                        }}
+                                                    >
+                                                        {s.score}%
+                                                    </Typography>
+                                                </Box>
+                                                <LinearProgress
+                                                    variant="determinate"
+                                                    value={s.score}
+                                                    sx={{
+                                                        height: 4,
+                                                        borderRadius: 3,
+                                                        bgcolor: 'rgba(255,255,255,0.04)',
+                                                        '& .MuiLinearProgress-bar': {
+                                                            background: `linear-gradient(90deg, ${color}, ${color}cc)`,
+                                                            borderRadius: 3,
+                                                        },
+                                                    }}
+                                                />
+                                            </SubjectRow>
+                                        );
+                                    })}
+                                </Box>
+                            ) : (
+                                <Box sx={{ textAlign: 'center', py: 4, color: 'rgba(226,232,255,0.3)' }}>
+                                    <Typography variant="body2" sx={{ fontWeight: 600 }}>No exam results yet</Typography>
                                 </Box>
                             )}
                         </GlassCard>
@@ -686,6 +787,42 @@ const ThresholdRow = styled(Box)`
     color: ${p => p.$ok ? '#34D399' : '#F87171'};
     letter-spacing: -0.01em;
   }
+`;
+
+const SubjectRow = styled(Box)`
+  opacity: 0;
+  animation: ${fadeUp} 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+`;
+
+const RankPip = styled.span`
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  background: rgba(124, 77, 255, 0.12);
+  border: 1px solid rgba(124, 77, 255, 0.25);
+  color: rgba(155, 111, 248, 0.9);
+  font-family: var(--font-heading);
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+`;
+
+const TypeChip = styled.span`
+  font-family: var(--font-heading);
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: rgba(226, 232, 255, 0.45);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 2px 5px;
+  border-radius: 5px;
+  flex-shrink: 0;
 `;
 
 const BandIcon = styled(Box)`
