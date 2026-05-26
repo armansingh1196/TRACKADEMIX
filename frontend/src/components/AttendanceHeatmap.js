@@ -391,10 +391,10 @@ const CellGrid = styled.div`
 
 const levelColors = {
     0: 'rgba(255, 255, 255, 0.05)',
-    1: '#ef4444', // Red (very low attendance)
-    2: '#f59e0b', // Orange (medium-low)
-    3: '#84cc16', // Lime (medium-high)
-    4: '#10b981', // Green (perfect/high)
+    1: 'rgba(52, 211, 153, 0.25)', 
+    2: 'rgba(52, 211, 153, 0.50)', 
+    3: 'rgba(52, 211, 153, 0.75)', 
+    4: 'rgba(52, 211, 153, 1.00)', 
 };
 
 const Cell = styled.div`
@@ -412,7 +412,7 @@ const Cell = styled.div`
     &:hover {
         transform: scale(1.35);
         z-index: 10;
-        box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+        box-shadow: 0 0 8px rgba(52, 211, 153, 0.6);
         border-color: rgba(255, 255, 255, 0.35);
     }
 `;
