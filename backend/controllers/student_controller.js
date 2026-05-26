@@ -158,7 +158,7 @@ const getStudentDetail = async (req, res) => {
                 admins ( id, school_name ),
                 sclasses ( id, sclass_name, semester, batch ),
                 exam_results ( subject_id, internal_marks, external_marks, marks_obtained, subjects ( sub_name, semester, subject_type ) ),
-                attendance_records ( date, status, subject_id, subjects ( sub_name ) )
+                attendance_records ( date, status, subject_id, subjects ( id, sub_name, sessions ) )
             `)
             .eq('id', req.params.id)
             .single();
@@ -184,10 +184,18 @@ const getStudentDetail = async (req, res) => {
             },
             password: undefined,
             examResult: student.exam_results || [],
+            // Frontend (attendanceCalculator + ViewStdAttendance + admin/teacher
+            // views) expects `subName` as a populated object carrying _id,
+            // subName, and sessions — mirroring the legacy Mongoose populate.
+            // Returning a bare string here breaks overall % calculation.
             attendance: (student.attendance_records || []).map(a => ({
                 date: a.date,
                 status: a.status,
-                subName: a.subjects?.sub_name || "N/A",
+                subName: {
+                    _id: a.subjects?.id || a.subject_id,
+                    subName: a.subjects?.sub_name || "N/A",
+                    sessions: a.subjects?.sessions || 0,
+                },
                 subId: a.subject_id
             }))
         };

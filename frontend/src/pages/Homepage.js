@@ -6,6 +6,8 @@ import SchoolOutlinedIcon from '@mui/icons-material/SchoolOutlined';
 import RocketLaunchOutlinedIcon from '@mui/icons-material/RocketLaunchOutlined';
 import SecurityOutlinedIcon from '@mui/icons-material/SecurityOutlined';
 import InsightsOutlinedIcon from '@mui/icons-material/InsightsOutlined';
+import ArrowForwardRoundedIcon from '@mui/icons-material/ArrowForwardRounded';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import AppButton from '../components/common/AppButton';
 
 const Homepage = () => {
@@ -13,14 +15,18 @@ const Homepage = () => {
 
     return (
         <StyledMain>
-            <Orb style={{ top: '-15%', right: '-8%', width: 700, height: 700, background: 'radial-gradient(circle, rgba(124,77,255,0.4) 0%, rgba(124,77,255,0.1) 50%, transparent 70%)' }} />
+            {/* ── Ambient orbs ── */}
+            <Orb style={{ top: '-15%', right: '-8%',  width: 700, height: 700, background: 'radial-gradient(circle, rgba(124,77,255,0.4) 0%, rgba(124,77,255,0.1) 50%, transparent 70%)' }} />
             <Orb style={{ bottom: '-20%', left: '-10%', width: 600, height: 600, background: 'radial-gradient(circle, rgba(68,138,255,0.3) 0%, rgba(68,138,255,0.08) 55%, transparent 70%)' }} />
-            <Orb style={{ top: '35%', left: '25%', width: 400, height: 400, background: 'radial-gradient(circle, rgba(45,212,191,0.15) 0%, rgba(45,212,191,0.04) 55%, transparent 70%)' }} />
+            <Orb style={{ top: '35%', left: '25%',    width: 400, height: 400, background: 'radial-gradient(circle, rgba(45,212,191,0.15) 0%, rgba(45,212,191,0.04) 55%, transparent 70%)' }} />
+
+            {/* ── Faint editorial grid overlay ── */}
+            <GridOverlay />
 
             <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 2, height: '100%', display: 'flex', alignItems: 'center' }}>
                 <Grid container spacing={{ xs: 4, md: 6 }} alignItems="center">
 
-                    {/* Left — Hero */}
+                    {/* ───── Left — Hero ───── */}
                     <Grid item xs={12} md={6}>
                         <ContentBox>
                             <PillBadge>
@@ -30,9 +36,12 @@ const Homepage = () => {
 
                             <HeroTitle>
                                 TRACAD<AccentSpan>EMIX</AccentSpan>
-                                <br />
-                                Institutional<br />Clarity.
                             </HeroTitle>
+
+                            <HeroTagline>
+                                Institutional clarity,<br />
+                                <span className="gradient-text">delivered with intelligence.</span>
+                            </HeroTagline>
 
                             <HeroSubtitle>
                                 A unified, secure ecosystem for record management,
@@ -44,6 +53,7 @@ const Homepage = () => {
                                     variant="contained"
                                     size="large"
                                     onClick={() => navigate('/choose')}
+                                    endIcon={<ArrowForwardRoundedIcon sx={{ fontSize: 18 }} />}
                                     sx={{
                                         px: 4.5, py: 1.6,
                                         fontSize: '0.9375rem !important',
@@ -57,6 +67,19 @@ const Homepage = () => {
                                 </AppButton>
                             </CTARow>
 
+                            {/* Trust strip — institutional anchor */}
+                            <TrustRow>
+                                <TrustItem>
+                                    <FiberManualRecordIcon className="status" />
+                                    <span>All systems operational</span>
+                                </TrustItem>
+                                <TrustDivider />
+                                <TrustItem>
+                                    <span className="key">SSO</span>
+                                    <span>Single sign-on ready</span>
+                                </TrustItem>
+                            </TrustRow>
+
                             <FooterNote>
                                 Administrator or HOD?{' '}
                                 <span onClick={() => navigate('/Adminregister')}>Establish your portal →</span>
@@ -64,48 +87,41 @@ const Homepage = () => {
                         </ContentBox>
                     </Grid>
 
-                    {/* Right — Glass Cards */}
+                    {/* ───── Right — Editorial card stack ───── */}
                     <Grid item xs={12} md={6} sx={{ display: { xs: 'none', md: 'block' } }}>
                         <CardsStack>
-                            <FeatureCard className="card-1">
-                                <CardIcon style={{ background: 'rgba(124,77,255,0.1)', color: '#9B6FF8' }}>
+
+                            {/* Featured card — slightly larger, leading */}
+                            <FeatureCard className="card-1 featured">
+                                <CardIcon style={{ background: 'rgba(124,77,255,0.12)', color: '#9B6FF8', boxShadow: '0 0 24px rgba(124,77,255,0.18)' }}>
                                     <SchoolOutlinedIcon sx={{ fontSize: 22 }} />
                                 </CardIcon>
-                                <Box>
-                                    <Typography sx={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '0.9375rem', color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px' }}>
-                                        Centralized Control
-                                    </Typography>
-                                    <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '0.8125rem', color: 'rgba(226,232,255,0.5)', lineHeight: 1.45, letterSpacing: '-0.011em' }}>
-                                        Manage every department from one unified dashboard.
-                                    </Typography>
+                                <Box sx={{ flex: 1, minWidth: 0 }}>
+                                    <CardEyebrow style={{ color: 'rgba(155,111,248,0.85)' }}>Module · 01</CardEyebrow>
+                                    <CardTitle>Centralized Control</CardTitle>
+                                    <CardDesc>Manage every department from one unified dashboard with role-based access.</CardDesc>
                                 </Box>
                             </FeatureCard>
 
                             <FeatureCard className="card-2">
-                                <CardIcon style={{ background: 'rgba(68,138,255,0.1)', color: '#448AFF' }}>
+                                <CardIcon style={{ background: 'rgba(68,138,255,0.12)', color: '#82B1FF' }}>
                                     <SecurityOutlinedIcon sx={{ fontSize: 22 }} />
                                 </CardIcon>
-                                <Box>
-                                    <Typography sx={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '0.9375rem', color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px' }}>
-                                        Secure Infrastructure
-                                    </Typography>
-                                    <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '0.8125rem', color: 'rgba(226,232,255,0.5)', lineHeight: 1.45, letterSpacing: '-0.011em' }}>
-                                        Bank-grade encryption for all institutional data.
-                                    </Typography>
+                                <Box sx={{ flex: 1, minWidth: 0 }}>
+                                    <CardEyebrow style={{ color: 'rgba(130,177,255,0.8)' }}>Module · 02</CardEyebrow>
+                                    <CardTitle>Secure Infrastructure</CardTitle>
+                                    <CardDesc>Bank-grade encryption and audit trails across all institutional data.</CardDesc>
                                 </Box>
                             </FeatureCard>
 
                             <FeatureCard className="card-3">
-                                <CardIcon style={{ background: 'rgba(45,212,191,0.1)', color: '#2DD4BF' }}>
+                                <CardIcon style={{ background: 'rgba(45,212,191,0.12)', color: '#5EEAD4' }}>
                                     <InsightsOutlinedIcon sx={{ fontSize: 22 }} />
                                 </CardIcon>
-                                <Box>
-                                    <Typography sx={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '0.9375rem', color: '#F5F5FF', letterSpacing: '-0.02em', mb: '2px' }}>
-                                        AI-Powered Analytics
-                                    </Typography>
-                                    <Typography sx={{ fontFamily: 'var(--font-body)', fontSize: '0.8125rem', color: 'rgba(226,232,255,0.5)', lineHeight: 1.45, letterSpacing: '-0.011em' }}>
-                                        Predict performance trends with intelligent insights.
-                                    </Typography>
+                                <Box sx={{ flex: 1, minWidth: 0 }}>
+                                    <CardEyebrow style={{ color: 'rgba(94,234,212,0.8)' }}>Module · 03</CardEyebrow>
+                                    <CardTitle>AI-Powered Analytics</CardTitle>
+                                    <CardDesc>Predict performance trends with contextual, semester-aware insights.</CardDesc>
                                 </Box>
                             </FeatureCard>
 
@@ -146,6 +162,10 @@ const floatC = keyframes`
   0%, 100% { transform: translateX(-10px) translateY(0px); }
   50%       { transform: translateX(-10px) translateY(-10px); }
 `;
+const pulse = keyframes`
+  0%, 100% { opacity: 0.85; transform: scale(1); }
+  50%       { opacity: 1;    transform: scale(1.15); }
+`;
 
 /* ── Styled Components ── */
 const StyledMain = styled.div`
@@ -175,10 +195,23 @@ const Orb = styled.div`
   z-index: 0;
 `;
 
+const GridOverlay = styled.div`
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image:
+    linear-gradient(rgba(124, 77, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(124, 77, 255, 0.035) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+`;
+
 const ContentBox = styled(Box)`
   position: relative;
   z-index: 2;
-  animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both;
+  animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 `;
 
 const PillBadge = styled.div`
@@ -195,7 +228,7 @@ const PillBadge = styled.div`
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-bottom: 24px;
+  margin-bottom: 22px;
 
   @media (max-width: 600px) {
     font-size: 0.625rem;
@@ -210,13 +243,34 @@ const HeroTitle = styled(Typography)`
   font-size: clamp(2.6rem, 6.5vw, 4.2rem) !important;
   font-weight: 800 !important;
   letter-spacing: -0.045em !important;
-  line-height: 1.02 !important;
+  line-height: 1 !important;
   color: #F5F5FF !important;
-  margin-bottom: 20px !important;
+  margin-bottom: 12px !important;
 `;
 
 const AccentSpan = styled.span`
   color: #7C4DFF;
+`;
+
+const HeroTagline = styled(Typography)`
+  font-family: var(--font-display) !important;
+  font-size: clamp(1.35rem, 3vw, 1.75rem) !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.2 !important;
+  color: rgba(245, 245, 255, 0.88) !important;
+  margin-bottom: 22px !important;
+
+  .gradient-text {
+    background: linear-gradient(135deg, #7C4DFF 0%, #82B1FF 60%, #5EEAD4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  @media (max-width: 600px) {
+    margin-bottom: 18px !important;
+  }
 `;
 
 const HeroSubtitle = styled(Typography)`
@@ -227,11 +281,11 @@ const HeroSubtitle = styled(Typography)`
   line-height: 1.65 !important;
   letter-spacing: -0.011em !important;
   max-width: 480px;
-  margin-bottom: 32px !important;
+  margin-bottom: 30px !important;
 
   @media (max-width: 600px) {
     font-size: 0.9375rem !important;
-    margin-bottom: 24px !important;
+    margin-bottom: 22px !important;
   }
 `;
 
@@ -245,6 +299,49 @@ const CTARow = styled(Box)`
     gap: 10px;
     margin-bottom: 20px;
   }
+`;
+
+const TrustRow = styled(Box)`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+`;
+
+const TrustItem = styled(Box)`
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: rgba(226, 232, 255, 0.5);
+  letter-spacing: -0.005em;
+
+  .status {
+    font-size: 9px;
+    color: #34D399;
+    animation: ${pulse} 2.4s ease-in-out infinite;
+    filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.6));
+  }
+
+  .key {
+    font-family: var(--font-heading);
+    font-size: 0.62rem;
+    font-weight: 800;
+    color: rgba(124, 77, 255, 0.9);
+    background: rgba(124, 77, 255, 0.1);
+    border: 1px solid rgba(124, 77, 255, 0.22);
+    padding: 2px 6px;
+    border-radius: 5px;
+    letter-spacing: 0.05em;
+  }
+`;
+
+const TrustDivider = styled.div`
+  width: 1px;
+  height: 14px;
+  background: rgba(226, 232, 255, 0.12);
 `;
 
 const FooterNote = styled(Typography)`
@@ -282,26 +379,60 @@ const FeatureCard = styled(Box)`
   box-shadow: 0 6px 24px rgba(0,0,0,0.35), 0 0 0 1px rgba(124,77,255,0.05), inset 0 1px 0 rgba(255,255,255,0.08);
   transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 
+  &.featured {
+    background: rgba(124, 77, 255, 0.06);
+    border-color: rgba(124, 77, 255, 0.22);
+    box-shadow: 0 10px 36px rgba(124, 77, 255, 0.18), 0 0 0 1px rgba(124, 77, 255, 0.12), inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+
   &.card-1 { animation: ${floatA} 7s ease-in-out infinite; }
   &.card-2 { animation: ${floatB} 8s ease-in-out infinite; animation-delay: 0.5s; }
   &.card-3 { animation: ${floatC} 9s ease-in-out infinite; animation-delay: 1s; }
 
   &:hover {
-    border-color: rgba(124, 77, 255, 0.25);
+    border-color: rgba(124, 77, 255, 0.3);
     background: rgba(255, 255, 255, 0.07);
     transform: scale(1.02);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(124,77,255,0.1), inset 0 1px 0 rgba(255,255,255,0.12);
+    box-shadow: 0 14px 44px rgba(0,0,0,0.45), 0 0 0 1px rgba(124,77,255,0.14), inset 0 1px 0 rgba(255,255,255,0.12);
   }
 `;
 
 const CardIcon = styled(Box)`
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+`;
+
+const CardEyebrow = styled.span`
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  opacity: 0.85;
+`;
+
+const CardTitle = styled(Typography)`
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+  font-size: 0.9375rem !important;
+  color: #F5F5FF !important;
+  letter-spacing: -0.02em !important;
+  margin-bottom: 2px !important;
+`;
+
+const CardDesc = styled(Typography)`
+  font-family: var(--font-body) !important;
+  font-size: 0.8125rem !important;
+  color: rgba(226, 232, 255, 0.5) !important;
+  line-height: 1.45 !important;
+  letter-spacing: -0.011em !important;
 `;
 
 const StatsRow = styled(Box)`
@@ -331,6 +462,7 @@ const StatPill = styled(Box)`
     color: #F5F5FF;
     letter-spacing: -0.03em;
     line-height: 1;
+    font-variant-numeric: tabular-nums;
   }
 
   .lab {
