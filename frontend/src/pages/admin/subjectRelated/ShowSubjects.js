@@ -41,18 +41,25 @@ const ShowSubjects = () => {
             });
     };
 
+    /* Strip "(YEAR)" / "(Sem N)" cosmetic suffixes for display. */
+    const cleanSubName = (raw) => (raw || 'Subject').replace(/\s*\((?:Sem\s*\d+|\d{4})\)\s*$/i, '').trim();
+
     const subjectColumns = [
-        { id: 'subName', label: 'Subject', minWidth: 170 },
-        { id: 'sessions', label: 'Sessions', minWidth: 100 },
-        { id: 'sclassName', label: 'Class', minWidth: 170 },
+        { id: 'subName',    label: 'Subject',  minWidth: 170 },
+        { id: 'subType',    label: 'Type',     minWidth: 90  },
+        { id: 'semester',   label: 'Semester', minWidth: 90  },
+        { id: 'sessions',   label: 'Sessions', minWidth: 90  },
+        { id: 'sclassName', label: 'Class',    minWidth: 140 },
     ];
 
     const subjectRows = Array.isArray(subjectsList) ? subjectsList.map((subject) => ({
-        subName: subject.subName,
-        sessions: subject.sessions,
+        subName:    cleanSubName(subject.subName || subject.sub_name),
+        subType:    subject.subject_type || subject.subjectType || 'Theory',
+        semester:   subject.semester ?? '—',
+        sessions:   subject.sessions ?? '—',
         sclassName: subject.sclassName?.sclassName || "N/A",
-        sclassID: subject.sclassName?._id,
-        id: subject._id,
+        sclassID:   subject.sclassName?._id,
+        id:         subject._id,
     })) : [];
 
     const SubjectsButtonHaver = ({ row }) => {

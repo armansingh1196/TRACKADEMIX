@@ -34,18 +34,23 @@ const ShowTeachers = () => {
         });
     };
 
+    /* Strip "(YEAR)" / "(Sem N)" cosmetic suffixes from displayed names. */
+    const stripSuffix = (raw) => (raw || '').replace(/\s*\((?:Sem\s*\d+|\d{4})\)\s*$/i, '').trim();
+
     const columns = [
-        { id: 'name', label: 'Name', minWidth: 170 },
-        { id: 'teachSubject', label: 'Subject', minWidth: 100 },
-        { id: 'teachSclass', label: 'Class', minWidth: 170 },
+        { id: 'name',         label: 'Name',    minWidth: 170 },
+        { id: 'email',        label: 'Email',   minWidth: 200 },
+        { id: 'teachSubject', label: 'Subject', minWidth: 140 },
+        { id: 'teachSclass',  label: 'Class',   minWidth: 140 },
     ];
 
     const rows = Array.isArray(teachersList) ? teachersList.map((teacher) => ({
-        name: teacher.name,
-        teachSubject: teacher.teachSubject?.subName || null,
-        teachSclass: teacher.teachSclass?.sclassName,
+        name:          stripSuffix(teacher.name) || teacher.name,
+        email:         teacher.email || '—',
+        teachSubject:  stripSuffix(teacher.teachSubject?.subName) || teacher.teachSubject?.subName || null,
+        teachSclass:   teacher.teachSclass?.sclassName,
         teachSclassID: teacher.teachSclass?._id,
-        id: teacher._id,
+        id:            teacher._id,
     })) : [];
 
     const TeacherButtonHaver = ({ row }) => {

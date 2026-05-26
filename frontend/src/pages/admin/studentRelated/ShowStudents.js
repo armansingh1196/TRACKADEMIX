@@ -38,16 +38,20 @@ const ShowStudents = () => {
     };
 
     const studentColumns = [
-        { id: 'name', label: 'Name', minWidth: 170 },
-        { id: 'rollNum', label: 'Roll Number', minWidth: 100 },
-        { id: 'sclassName', label: 'Class', minWidth: 170 },
+        { id: 'name',       label: 'Name',        minWidth: 170 },
+        { id: 'rollNum',    label: 'Roll Number', minWidth: 110 },
+        { id: 'sclassName', label: 'Class',       minWidth: 140 },
+        { id: 'semester',   label: 'Semester',    minWidth: 90  },
+        { id: 'batch',      label: 'Batch',       minWidth: 90  },
     ];
 
     const studentRows = Array.isArray(studentsList) ? studentsList.map((student) => ({
-        name: student.name,
-        rollNum: student.rollNum,
+        name:       student.name,
+        rollNum:    student.rollNum,
         sclassName: student.sclassName?.sclassName || "N/A",
-        id: student._id,
+        semester:   student.sclassName?.semester ?? '—',
+        batch:      student.sclassName?.batch ?? '—',
+        id:         student._id,
     })) : [];
 
     const StudentButtonHaver = ({ row }) => {
