@@ -43,7 +43,8 @@ const StudentSubjects = () => {
         }
     }, [subjectMarks, dispatch, currentUser?.sclassName]);
 
-    const currentSemester = currentUser?.sclassName?.semester || 1;
+    const currentSemesterString = currentUser?.sclassName?.semester || "1";
+    const currentSemesterNum = parseInt(currentSemesterString) || 1;
     const currentBatch = currentUser?.sclassName?.batch || "N/A";
 
     // Group marks by semester using the new relational structure
@@ -62,12 +63,12 @@ const StudentSubjects = () => {
 
     // Auto-select the current semester
     useEffect(() => {
-        if (!selectedSemester && currentSemester) {
-            setSelectedSemester(currentSemester.toString());
+        if (!selectedSemester) {
+            setSelectedSemester(currentSemesterNum.toString());
         }
-    }, [currentSemester, selectedSemester]);
+    }, [currentSemesterNum, selectedSemester]);
 
-    const allSemesters = Array.from({ length: currentSemester }, (_, i) => (i + 1).toString());
+    const allSemesters = Array.from({ length: currentSemesterNum }, (_, i) => (i + 1).toString());
 
     const handleSectionChange = (newSection) => {
         setSelectedSection(newSection);
@@ -225,7 +226,7 @@ const StudentSubjects = () => {
         <Container maxWidth="lg" sx={{ mt: 1, mb: 12 }}>
             <AppHeader 
                 title="Academic Records" 
-                subtitle={`Current Semester: ${currentSemester} | Batch: ${currentBatch}`} 
+                subtitle={`Current Semester: ${currentSemesterString} | Batch: ${currentBatch}`} 
             />
 
             {loading ? (
