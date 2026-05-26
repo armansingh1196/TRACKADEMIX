@@ -10,6 +10,17 @@ const AppHeader = ({ title, subtitle, showBack = true, rightSide }) => {
   const location = useLocation();
   const pathnames = location.pathname.split('/').filter((x) => x);
 
+  // "ai-insights" → "AI Insights", "complain" → "Complaint", "subjects" → "Subjects"
+  const formatCrumb = (value) => {
+    const overrides = { 'complain': 'Complaint', 'ai-insights': 'AI Insights' };
+    if (overrides[value]) return overrides[value];
+    return value
+      .replace(/-/g, ' ')
+      .split(' ')
+      .map(w => (w.length <= 2 ? w.toUpperCase() : w.charAt(0).toUpperCase() + w.slice(1)))
+      .join(' ');
+  };
+
   return (
     <HeaderWrapper>
       {/* Breadcrumb + Back row */}
@@ -54,7 +65,7 @@ const AppHeader = ({ title, subtitle, showBack = true, rightSide }) => {
                     letterSpacing: '0.01em',
                   }}
                 >
-                  {value.replace(/-/g, ' ')}
+                  {formatCrumb(value)}
                 </Typography>
               ) : (
                 <MuiLink
@@ -67,7 +78,7 @@ const AppHeader = ({ title, subtitle, showBack = true, rightSide }) => {
                     color: 'rgba(226,232,255,0.35) !important',
                   }}
                 >
-                  {value.replace(/-/g, ' ')}
+                  {formatCrumb(value)}
                 </MuiLink>
               );
             })}

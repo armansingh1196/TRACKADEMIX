@@ -14,7 +14,7 @@ const StudentSideBar = ({ open }) => {
         { text: 'Subjects', icon: <Books weight="fill" size={22} />, path: '/Student/subjects' },
         { text: 'Documents', icon: <FileText weight="fill" size={22} />, path: '/Student/documents' },
         { text: 'AI Insights', icon: <Sparkle weight="fill" size={22} />, path: '/Student/ai-insights' },
-        { text: 'Complains', icon: <Megaphone weight="fill" size={22} />, path: '/Student/complain' },
+        { text: 'Complaints', icon: <Megaphone weight="fill" size={22} />, path: '/Student/complain' },
     ];
 
     return (

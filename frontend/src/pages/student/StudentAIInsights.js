@@ -109,19 +109,24 @@ const StudentAIInsights = () => {
     // Calculate deterministic logic
     let calculatedBand = "Medium";
     let recommendations = [];
-    
+    let evaluatedSemester = null;
+
     if (insights && insights.features) {
         let failedSubjects = 0;
         let pendingWithLowInternals = 0;
         let totalActiveSubjects = 0;
-        
+
         if (insights.examResults && insights.examResults.length > 0) {
-            // Find active (latest) semester
-            let maxSem = 1;
+            // Active semester = most recent semester with exam data. Even
+            // if the student is officially in a later semester, evaluate
+            // against what actually exists.
+            let maxSem = 0;
             insights.examResults.forEach(e => {
-                const sem = parseInt(e.subjects?.semester || 1);
+                const sem = parseInt(e.subjects?.semester || 0);
                 if (sem > maxSem) maxSem = sem;
             });
+            if (maxSem === 0) maxSem = 1;
+            evaluatedSemester = maxSem;
             const activeExams = insights.examResults.filter(e => parseInt(e.subjects?.semester || 1) === maxSem);
 
             activeExams.forEach(exam => {
@@ -209,17 +214,24 @@ const StudentAIInsights = () => {
                 <Grid container spacing={3}>
                     {/* Left - Predicted Band Card */}
                     <Grid item xs={12} md={4}>
-                        <BandCard themeConfig={bandTheme}>
-                            <CardLabel>Predictive Analysis</CardLabel>
+                        <BandCard $themeConfig={bandTheme}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <CardLabel>Predictive Analysis</CardLabel>
+                                {evaluatedSemester != null && (
+                                    <Typography sx={{ fontFamily: 'var(--font-heading)', fontSize: '0.6rem', fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase', color: bandTheme.color, background: `${bandTheme.color}14`, border: `1px solid ${bandTheme.color}26`, borderRadius: '6px', px: 1, py: '2px' }}>
+                                        Sem {evaluatedSemester}
+                                    </Typography>
+                                )}
+                            </Box>
                             <Box sx={{ my: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-                                <IconGlow color={bandTheme.color}>
+                                <IconGlow $color={bandTheme.color}>
                                     {getBandIcon(calculatedBand)}
                                 </IconGlow>
                                 <Box sx={{ textAlign: 'center' }}>
                                     <Typography variant="h3" sx={{ fontWeight: 900, color: bandTheme.color, letterSpacing: '-0.04em', lineHeight: 1 }}>
                                         {calculatedBand}
                                     </Typography>
-                                    <StatusPill color={bandTheme.color}>{calculatedBand} Band Risk</StatusPill>
+                                    <StatusPill $color={bandTheme.color}>{calculatedBand} Band Risk</StatusPill>
                                 </Box>
                             </Box>
                             <Divider sx={{ borderColor: 'rgba(255,255,255,0.06)', my: 2 }} />
@@ -466,13 +478,13 @@ const GlassCard = styled(Paper)`
 `;
 
 const BandCard = styled(Paper)`
-  background: ${p => p.themeConfig.bg} !important;
+  background: ${p => p.$themeConfig.bg} !important;
   backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
   -webkit-backdrop-filter: blur(40px) saturate(200%) brightness(1.06);
   border-radius: 20px !important;
-  border: 1px solid ${p => p.themeConfig.border} !important;
+  border: 1px solid ${p => p.$themeConfig.border} !important;
   box-shadow: 0 8px 32px rgba(0,0,0,0.4) !important;
-  --pulse-glow-color: ${p => p.themeConfig.glow};
+  --pulse-glow-color: ${p => p.$themeConfig.glow};
   animation: ${fadeUp} 0.5s cubic-bezier(0.16, 1, 0.3, 1) both, ${pulseGlow} 4s ease-in-out infinite;
   padding: 32px !important;
   display: flex;
@@ -504,7 +516,7 @@ const IconGlow = styled(Box)`
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.2), 0 8px 24px ${p => p.color}15;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.2), 0 8px 24px ${p => p.$color}15;
 `;
 
 const StatusPill = styled.div`
@@ -514,9 +526,9 @@ const StatusPill = styled.div`
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
-  color: ${p => p.color};
-  background: ${p => p.color}14;
-  border: 1px solid ${p => p.color}25;
+  color: ${p => p.$color};
+  background: ${p => p.$color}14;
+  border: 1px solid ${p => p.$color}25;
   border-radius: 100px;
   padding: 4px 12px;
   margin-top: 8px;

@@ -12,7 +12,7 @@ const getAIRecommendations = async (req, res) => {
             .select(`
                 *,
                 sclasses ( sclass_name ),
-                exam_results ( internal_marks, external_marks, marks_obtained, subjects(sub_name, subject_type) ),
+                exam_results ( internal_marks, external_marks, marks_obtained, subjects(sub_name, subject_type, semester) ),
                 attendance_records ( status ),
                 study_logs ( hours_logged ),
                 semester_results ( cgpa )

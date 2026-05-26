@@ -84,64 +84,70 @@ const StudentHomePage = () => {
     const absentPercentage  = totalRecords > 0 ? 100 - overallAttendancePercentage : 0;
     const attendanceOK = overallAttendancePercentage >= 75;
 
-    const theoryRadarData = aiInsight?.examResults
-        ?.filter(e => e.subjects?.subject_type === 'Theory' || !e.subjects?.subject_type)
+    /* Clean cosmetic suffixes that pollute subject names — e.g.
+       "Data Structures (2022)" → "Data Structures". */
+    const cleanSubName = (raw) => (raw || 'Subject').replace(/\s*\((?:Sem\s*\d+|\d{4})\)\s*$/i, '').trim();
+
+    /* The student's *official* semester (from sclasses). Examples and
+       seed data may not be populated for the latest sem yet, so for
+       contextual UI (top subjects, theory radar, AI band, "subjects in
+       active sem" count) fall back to the most recent semester that
+       actually has data. The "Semester" headline still shows the
+       official value (truth from sclasses). */
+    const examResultsArr = aiInsight?.examResults || [];
+    const maxExamSem = examResultsArr.reduce((m, e) => Math.max(m, parseInt(e.subjects?.semester || 0)), 0);
+    const officialSemester = parseInt(currentUser?.sclassName?.semester || 1);
+    const activeSemester = Math.min(officialSemester, maxExamSem || officialSemester);
+
+    const activeExams = examResultsArr.filter(e => parseInt(e.subjects?.semester || 1) === activeSemester);
+
+    const theoryRadarData = activeExams
+        .filter(e => e.subjects?.subject_type === 'Theory' || !e.subjects?.subject_type)
         .slice(0, 6)
         .map(exam => {
-            let s = exam.subjects?.sub_name || "Unknown";
+            let s = cleanSubName(exam.subjects?.sub_name);
             if (s.includes("Software Engineering")) s = "SE";
-            if (s.includes("Operating Systems")) s = "OS";
-            if (s.includes("Database Systems")) s = "DB";
-            if (s.includes("Data Structures")) s = "DSA";
-            if (s.includes("Algorithms")) s = "Algo";
-            if (s.length > 9) s = s.split(' ').map(w => w[0]).join('').toUpperCase();
+            else if (s.includes("Operating Systems")) s = "OS";
+            else if (s.includes("Database Systems") || s.includes("DBMS")) s = "DB";
+            else if (s.includes("Data Structures")) s = "DSA";
+            else if (s.includes("Algorithms")) s = "Algo";
+            else if (s.includes("Computer Networks")) s = "CN";
+            else if (s.length > 12) s = s.split(' ').map(w => w[0]).join('').toUpperCase();
             return { subject: s, marks: exam.marks_obtained || 0, fullMark: 100 };
-        }) || [];
+        });
 
     const theoryAvg = Math.round((aiInsight?.features?.external_avg_theory / 70) * 100 || 0);
 
-    /* ── Top subjects (latest semester, theory + practical) ── */
-    const topSubjects = (() => {
-        const results = aiInsight?.examResults || [];
-        if (!results.length) return [];
-        // Pick the active semester (max) so we surface the most recent context.
-        const maxSem = results.reduce((m, e) => Math.max(m, parseInt(e.subjects?.semester || 1)), 1);
-        const active = results.filter(e => parseInt(e.subjects?.semester || 1) === maxSem);
-        return active
-            .map(e => {
-                const isPractical = e.subjects?.subject_type === 'Practical';
-                const max = isPractical ? 50 : 100;
-                const obtained = e.marks_obtained ?? ((e.internal_marks || 0) + (e.external_marks || 0));
-                const pct = Math.min(100, Math.max(0, (obtained / max) * 100));
-                return {
-                    name: e.subjects?.sub_name || 'Subject',
-                    type: isPractical ? 'Practical' : 'Theory',
-                    score: Math.round(pct),
-                    obtained,
-                    max,
-                };
-            })
-            .sort((a, b) => b.score - a.score)
-            .slice(0, 4);
-    })();
+    /* ── Top subjects (active semester, theory + practical) ── */
+    const topSubjects = activeExams
+        .map(e => {
+            const isPractical = e.subjects?.subject_type === 'Practical';
+            const max = isPractical ? 50 : 100;
+            const obtained = e.marks_obtained ?? ((e.internal_marks || 0) + (e.external_marks || 0));
+            const pct = Math.min(100, Math.max(0, (obtained / max) * 100));
+            return {
+                name: cleanSubName(e.subjects?.sub_name),
+                type: isPractical ? 'Practical' : 'Theory',
+                score: Math.round(pct),
+                obtained,
+                max,
+            };
+        })
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 4);
 
-    /* ── AI Performance band ── */
+    /* ── AI Performance band — assessed against the active semester ── */
     let band = "Medium";
-    if (aiInsight?.examResults) {
+    if (activeExams.length > 0) {
         let failed = 0; let total = 0;
-        let maxSem = 1;
-        aiInsight.examResults.forEach(e => {
-            const s = parseInt(e.subjects?.semester || 1);
-            if (s > maxSem) maxSem = s;
-        });
-        const active = aiInsight.examResults.filter(e => parseInt(e.subjects?.semester || 1) === maxSem);
-        active.forEach(exam => {
+        activeExams.forEach(exam => {
             total++;
             const t = (exam.internal_marks || 0) + (exam.external_marks || 0);
-            if ((t / (exam.subjects?.subject_type === 'Practical' ? 50 : 100)) * 100 < 40) failed++;
+            const max = exam.subjects?.subject_type === 'Practical' ? 50 : 100;
+            if ((t / max) * 100 < 40) failed++;
         });
-        const att = aiInsight.features?.attendance_rate || 100;
-        if (total > 0 && failed === 0 && att >= 75) band = "High";
+        const att = aiInsight?.features?.attendance_rate ?? overallAttendancePercentage ?? 100;
+        if (failed === 0 && att >= 75) band = "High";
         else if (failed > 1 || att < 60) band = "Low";
     }
 
@@ -172,12 +178,24 @@ const StudentHomePage = () => {
     });
     const firstName = currentUser?.name?.split(' ')[0] || 'Student';
 
+    /* ── Subjects in the *active* semester only.
+       Backend returns every subject for the class regardless of semester;
+       counting blindly inflates the headline. If no subjects exist for
+       the official semester yet, fall back to the most recent semester
+       with data so the metric stays meaningful. */
+    const subjectsArr = Array.isArray(subjectsList) ? subjectsList : [];
+    const maxSubjectSem = subjectsArr.reduce((m, s) => Math.max(m, parseInt(s.semester || 0)), 0);
+    const subjectsSem = subjectsArr.some(s => parseInt(s.semester) === officialSemester)
+        ? officialSemester
+        : maxSubjectSem || officialSemester;
+    const subjectsCount = subjectsArr.filter(s => parseInt(s.semester) === subjectsSem).length;
+
     /* ── Unified metric strip ── */
     const metrics = [
         { label: 'Attendance', value: `${Math.round(overallAttendancePercentage)}%`, sub: attendanceOK ? 'Eligible' : 'Below 75%', color: attendanceOK ? '#34D399' : '#F87171' },
         { label: 'Theory Avg', value: `${theoryAvg}%`, sub: theoryAvg >= 60 ? 'On pace' : 'Push harder', color: '#A78BFA' },
-        { label: 'Subjects',   value: subjectsList?.length || 0, sub: 'This semester', color: '#60A5FA' },
-        { label: 'Semester',   value: currentUser?.sclassName?.semester || 1, sub: currentUser?.sclassName?.sclassName || '—', color: '#2DD4BF' },
+        { label: 'Subjects',   value: subjectsCount, sub: subjectsSem === officialSemester ? `Sem ${subjectsSem}` : `Sem ${subjectsSem} · latest`, color: '#60A5FA' },
+        { label: 'Semester',   value: officialSemester, sub: currentUser?.sclassName?.sclassName || '—', color: '#2DD4BF' },
     ];
 
     return (
@@ -398,7 +416,7 @@ const StudentHomePage = () => {
                                     <BookOutlinedIcon sx={{ fontSize: 13, color: '#A78BFA' }} />
                                     <SectionLabel>Subject Performance</SectionLabel>
                                 </Box>
-                                <SectionHint>Active semester</SectionHint>
+                                <SectionHint>{maxExamSem > 0 ? `Semester ${activeSemester}` : 'No data yet'}</SectionHint>
                             </SectionHead>
 
                             {topSubjects.length > 0 ? (

@@ -47,6 +47,10 @@ const StudentSubjects = () => {
     const currentSemesterNum = parseInt(currentSemesterString) || 1;
     const currentBatch = currentUser?.sclassName?.batch || "N/A";
 
+    /* Strip cosmetic suffixes like "(Sem 6)" / "(2022)" that bloat
+       names and duplicate the semester chip context. */
+    const cleanSubName = (raw) => (raw || 'Subject').replace(/\s*\((?:Sem\s*\d+|\d{4})\)\s*$/i, '').trim();
+
     // Group marks by semester using the new relational structure
     // result shape: { subject_id, marks_obtained, subjects: { sub_name, semester } }
     const groupedMarks = subjectMarks.reduce((acc, result) => {
@@ -59,14 +63,25 @@ const StudentSubjects = () => {
         return acc;
     }, {});
 
-    const sortedSemesters = Object.keys(groupedMarks).sort((a, b) => parseInt(a) - parseInt(b));
+    const populatedSemesters = Object.keys(groupedMarks).map(Number).filter(n => !isNaN(n)).sort((a, b) => a - b);
+    const latestPopulatedSem = populatedSemesters.length ? populatedSemesters[populatedSemesters.length - 1] : currentSemesterNum;
 
-    // Auto-select the current semester
+    // Auto-select the most recent semester that has data (so the user
+    // lands on a populated view instead of an empty "Sem 7" state).
+    // Drive this from userDetails directly so we don't race the
+    // subjectMarks setter (which runs in a separate effect tick and
+    // would let "fallback to current sem" win on the first paint).
     useEffect(() => {
-        if (!selectedSemester) {
+        if (selectedSemester) return;
+        if (!userDetails || Array.isArray(userDetails)) return;     // not loaded yet
+        const exams = userDetails.examResult || [];
+        if (exams.length === 0) {
             setSelectedSemester(currentSemesterNum.toString());
+            return;
         }
-    }, [currentSemesterNum, selectedSemester]);
+        const sems = [...new Set(exams.map(e => parseInt(e.subjects?.semester || 0)).filter(n => n > 0))].sort((a, b) => a - b);
+        setSelectedSemester(String(sems[sems.length - 1] || currentSemesterNum));
+    }, [userDetails, selectedSemester, currentSemesterNum]);
 
     const allSemesters = Array.from({ length: currentSemesterNum }, (_, i) => (i + 1).toString());
 
@@ -78,14 +93,29 @@ const StudentSubjects = () => {
         if (!selectedSemester) return null;
         if (!groupedMarks[selectedSemester] || groupedMarks[selectedSemester].length === 0) {
             return (
-                <GlassCard sx={{ p: { xs: 3, md: 5 }, textAlign: 'center' }}>
-                    <AssignmentIcon sx={{ fontSize: 48, color: 'rgba(255,255,255,0.1)', mb: 2 }} />
+                <GlassCard sx={{ p: { xs: 4, md: 6 }, textAlign: 'center' }}>
+                    <AssignmentIcon sx={{ fontSize: 56, color: 'rgba(255,255,255,0.1)', mb: 2 }} />
                     <Typography variant="h6" sx={{ fontWeight: 800, color: 'white', mb: 1 }}>
-                        No Records Available
+                        Records pending publication
                     </Typography>
-                    <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
-                        Exam results for Semester {selectedSemester} have not been published yet.
+                    <Typography variant="body2" sx={{ color: 'var(--text-muted)', mb: latestPopulatedSem !== parseInt(selectedSemester) ? 3 : 0 }}>
+                        Exam results for Semester {selectedSemester} have not been released yet.
                     </Typography>
+                    {latestPopulatedSem !== parseInt(selectedSemester) && populatedSemesters.length > 0 && (
+                        <Typography
+                            onClick={() => setSelectedSemester(String(latestPopulatedSem))}
+                            sx={{
+                                display: 'inline-block', cursor: 'pointer',
+                                color: 'var(--primary)', fontWeight: 700, fontSize: '0.82rem',
+                                px: 2, py: 1, borderRadius: '10px',
+                                border: '1px solid rgba(124,77,255,0.25)',
+                                background: 'rgba(124,77,255,0.06)',
+                                '&:hover': { background: 'rgba(124,77,255,0.12)' },
+                            }}
+                        >
+                            View Semester {latestPopulatedSem} results →
+                        </Typography>
+                    )}
                 </GlassCard>
             );
         }
@@ -141,7 +171,7 @@ const StudentSubjects = () => {
                                     return (
                                         <TableRow key={index} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                             <DataCell sx={{ fontWeight: 600, color: '#F5F5FF' }}>
-                                                {result.subjects.sub_name}
+                                                {cleanSubName(result.subjects.sub_name)}
                                             </DataCell>
                                             <DataCell align="center" sx={{ color: isIntPass ? 'rgba(255,255,255,0.8)' : '#F87171' }}>
                                                 {internal} {isIntPass ? '' : <FailTag>(F)</FailTag>}
@@ -170,33 +200,93 @@ const StudentSubjects = () => {
             );
         };
 
+        /* Semester summary tiles — derived from the same dataset */
+        const totalSubjects = semesterMarks.length;
+        let totalObtained = 0; let totalMax = 0; let qualified = 0; let top = null;
+        semesterMarks.forEach(r => {
+            const isPractical = r.subjects?.subject_type === 'Practical';
+            const max = isPractical ? 50 : 100;
+            const got = r.marks_obtained || 0;
+            const passInt = isPractical ? 8 : 12;
+            const passExt = isPractical ? 12 : 28;
+            totalObtained += got;
+            totalMax += max;
+            const isPass = got >= max * 0.4 && (r.internal_marks || 0) >= passInt && (r.external_marks || 0) >= passExt;
+            if (isPass) qualified++;
+            const pct = (got / max) * 100;
+            if (!top || pct > top.pct) top = { name: cleanSubName(r.subjects?.sub_name), pct, score: got, max };
+        });
+        const semesterPct = totalMax > 0 ? Math.round((totalObtained / totalMax) * 100) : 0;
+        const passRate = totalSubjects > 0 ? Math.round((qualified / totalSubjects) * 100) : 0;
+
         return (
-            <GlassCard sx={{ p: { xs: 3, md: 5 } }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                        <IconBadge>
-                            <SchoolOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 24 }} />
-                        </IconBadge>
-                        <Box>
-                            <Typography variant="h5" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
-                                Semester {selectedSemester} Transcript
-                            </Typography>
-                            <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)' }}>
-                                Detailed view of internal and external assessments
-                            </Typography>
+            <>
+                <GlassCard sx={{ p: { xs: 3, md: 5 } }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                            <IconBadge>
+                                <SchoolOutlinedIcon sx={{ color: 'var(--primary)', fontSize: 24 }} />
+                            </IconBadge>
+                            <Box>
+                                <Typography variant="h5" sx={{ fontWeight: 800, color: '#F5F5FF', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
+                                    Semester {selectedSemester} Transcript
+                                </Typography>
+                                <Typography variant="body2" sx={{ color: 'rgba(226,232,255,0.4)' }}>
+                                    Detailed view of internal and external assessments
+                                </Typography>
+                            </Box>
                         </Box>
                     </Box>
-                </Box>
 
-                {renderMarksTable(theoryMarks, false)}
-                {renderMarksTable(practicalMarks, true)}
-            </GlassCard>
+                    {renderMarksTable(theoryMarks, false)}
+                    {renderMarksTable(practicalMarks, true)}
+                </GlassCard>
+
+                {/* Semester at-a-glance */}
+                <GlassCard sx={{ p: { xs: 3, md: 4 }, mt: 3 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2.5 }}>
+                        <Typography sx={{ fontFamily: 'var(--font-heading)', fontSize: '0.65rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(226,232,255,0.45)' }}>
+                            Semester {selectedSemester} · At a glance
+                        </Typography>
+                    </Box>
+                    <Grid container spacing={2}>
+                        <Grid item xs={6} md={3}>
+                            <SummaryTile>
+                                <span className="lab">Overall</span>
+                                <span className="val" style={{ color: semesterPct >= 60 ? '#34D399' : semesterPct >= 40 ? '#FBBF24' : '#F87171' }}>{semesterPct}%</span>
+                                <span className="sub">aggregate marks</span>
+                            </SummaryTile>
+                        </Grid>
+                        <Grid item xs={6} md={3}>
+                            <SummaryTile>
+                                <span className="lab">Pass Rate</span>
+                                <span className="val" style={{ color: passRate === 100 ? '#34D399' : passRate >= 70 ? '#FBBF24' : '#F87171' }}>{passRate}%</span>
+                                <span className="sub">{qualified} of {totalSubjects} qualified</span>
+                            </SummaryTile>
+                        </Grid>
+                        <Grid item xs={6} md={3}>
+                            <SummaryTile>
+                                <span className="lab">Subjects</span>
+                                <span className="val" style={{ color: '#A78BFA' }}>{totalSubjects}</span>
+                                <span className="sub">{theoryMarks.length} theory · {practicalMarks.length} practical</span>
+                            </SummaryTile>
+                        </Grid>
+                        <Grid item xs={6} md={3}>
+                            <SummaryTile>
+                                <span className="lab">Top Subject</span>
+                                <span className="val topName" style={{ color: '#60A5FA' }}>{top?.name || '—'}</span>
+                                <span className="sub">{top ? `${top.score}/${top.max} · ${Math.round(top.pct)}%` : 'no data'}</span>
+                            </SummaryTile>
+                        </Grid>
+                    </Grid>
+                </GlassCard>
+            </>
         );
     };
 
     const renderChartSection = () => {
         const chartData = subjectMarks.map(result => ({
-            subName: { subName: result.subjects?.sub_name || "Unknown" },
+            subName: { subName: cleanSubName(result.subjects?.sub_name) },
             marksObtained: result.marks_obtained || 0
         }));
 
@@ -246,9 +336,9 @@ const StudentSubjects = () => {
                                         '&::-webkit-scrollbar-thumb': { background: 'rgba(255,255,255,0.1)', borderRadius: '10px' }
                                     }}>
                                         {allSemesters.map(sem => (
-                                            <SemesterChip 
+                                            <SemesterChip
                                                 key={sem}
-                                                active={selectedSemester === sem}
+                                                $active={selectedSemester === sem}
                                                 onClick={() => setSelectedSemester(sem)}
                                             >
                                                 Semester {sem}
@@ -260,15 +350,15 @@ const StudentSubjects = () => {
                                 )}
 
                                 <ViewToggle>
-                                        <ToggleButton 
-                                            active={selectedSection === 'table'} 
+                                        <ToggleButton
+                                            $active={selectedSection === 'table'}
                                             onClick={() => handleSectionChange('table')}
                                         >
                                             <TableChartIcon sx={{ fontSize: 16 }} />
                                             Transcripts
                                         </ToggleButton>
-                                        <ToggleButton 
-                                            active={selectedSection === 'chart'} 
+                                        <ToggleButton
+                                            $active={selectedSection === 'chart'}
                                             onClick={() => handleSectionChange('chart')}
                                         >
                                             <InsertChartIcon sx={{ fontSize: 16 }} />
@@ -345,24 +435,66 @@ const IconBadge = styled(Box)`
 `;
 
 const SemesterChip = styled.button`
-  background: ${p => p.active ? 'rgba(124, 77, 255, 0.15)' : 'transparent'};
-  color: ${p => p.active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.4)'};
-  border: 1px solid ${p => p.active ? 'rgba(124, 77, 255, 0.4)' : 'rgba(255, 255, 255, 0.07)'};
+  background: ${p => p.$active ? 'rgba(124, 77, 255, 0.15)' : 'transparent'};
+  color: ${p => p.$active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.4)'};
+  border: 1px solid ${p => p.$active ? 'rgba(124, 77, 255, 0.4)' : 'rgba(255, 255, 255, 0.07)'};
   border-radius: 8px;
   padding: 5px 13px;
   font-family: 'Inter', sans-serif;
-  font-weight: ${p => p.active ? 700 : 500};
+  font-weight: ${p => p.$active ? 700 : 500};
   font-size: 0.72rem;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.18s ease;
   letter-spacing: 0.02em;
-  box-shadow: ${p => p.active ? '0 0 10px rgba(124, 77, 255, 0.2)' : 'none'};
+  box-shadow: ${p => p.$active ? '0 0 10px rgba(124, 77, 255, 0.2)' : 'none'};
 
   &:hover {
     background: rgba(124, 77, 255, 0.08);
     color: rgba(255, 255, 255, 0.8);
     border-color: rgba(124, 77, 255, 0.25);
+  }
+`;
+
+const SummaryTile = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(124, 77, 255, 0.08);
+  border-radius: 14px;
+  height: 100%;
+
+  .lab {
+    font-family: var(--font-heading);
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(226, 232, 255, 0.4);
+  }
+  .val {
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .val.topName {
+    font-size: 1rem;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    letter-spacing: -0.02em;
+  }
+  .sub {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    color: rgba(226, 232, 255, 0.42);
+    letter-spacing: -0.01em;
   }
 `;
 
@@ -447,8 +579,8 @@ const ToggleButton = styled.button`
   display: flex;
   align-items: center;
   gap: 6px;
-  background: ${p => p.active ? 'var(--primary)' : 'transparent'};
-  color: ${p => p.active ? '#FFF' : 'rgba(255, 255, 255, 0.5)'};
+  background: ${p => p.$active ? 'var(--primary)' : 'transparent'};
+  color: ${p => p.$active ? '#FFF' : 'rgba(255, 255, 255, 0.5)'};
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
@@ -457,10 +589,10 @@ const ToggleButton = styled.button`
   font-size: 0.75rem;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: ${p => p.active ? '0 4px 12px rgba(124, 77, 255, 0.3)' : 'none'};
+  box-shadow: ${p => p.$active ? '0 4px 12px rgba(124, 77, 255, 0.3)' : 'none'};
 
   &:hover {
     color: #FFF;
-    background: ${p => p.active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.05)'};
+    background: ${p => p.$active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.05)'};
   }
 `;
