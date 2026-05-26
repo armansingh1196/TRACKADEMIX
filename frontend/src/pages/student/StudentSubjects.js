@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getSubjectList } from '../../redux/sclassRelated/sclassHandle';
 import { 
-    BottomNavigation, BottomNavigationAction, Container, 
     Box, Typography, CircularProgress, Grid, Paper, Stack,
     Table, TableHead, TableBody, TableContainer, TableCell, TableRow, Chip
 } from '@mui/material';
@@ -61,19 +60,34 @@ const StudentSubjects = () => {
 
     const sortedSemesters = Object.keys(groupedMarks).sort((a, b) => parseInt(a) - parseInt(b));
 
-    // Auto-select the most recent semester
+    // Auto-select the current semester
     useEffect(() => {
-        if (sortedSemesters.length > 0 && !selectedSemester) {
-            setSelectedSemester(sortedSemesters[sortedSemesters.length - 1]);
+        if (!selectedSemester && currentSemester) {
+            setSelectedSemester(currentSemester.toString());
         }
-    }, [sortedSemesters, selectedSemester]);
+    }, [currentSemester, selectedSemester]);
 
-    const handleSectionChange = (event, newSection) => {
+    const allSemesters = Array.from({ length: currentSemester }, (_, i) => (i + 1).toString());
+
+    const handleSectionChange = (newSection) => {
         setSelectedSection(newSection);
     };
 
     const renderTableSection = () => {
-        if (!selectedSemester || !groupedMarks[selectedSemester]) return null;
+        if (!selectedSemester) return null;
+        if (!groupedMarks[selectedSemester] || groupedMarks[selectedSemester].length === 0) {
+            return (
+                <GlassCard sx={{ p: { xs: 3, md: 5 }, textAlign: 'center' }}>
+                    <AssignmentIcon sx={{ fontSize: 48, color: 'rgba(255,255,255,0.1)', mb: 2 }} />
+                    <Typography variant="h6" sx={{ fontWeight: 800, color: 'white', mb: 1 }}>
+                        No Records Available
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'var(--text-muted)' }}>
+                        Exam results for Semester {selectedSemester} have not been published yet.
+                    </Typography>
+                </GlassCard>
+            );
+        }
 
         const semesterMarks = groupedMarks[selectedSemester];
         const theoryMarks = semesterMarks.filter(r => r.subjects?.subject_type === 'Theory' || !r.subjects?.subject_type);
@@ -222,46 +236,48 @@ const StudentSubjects = () => {
                 <Stack spacing={4} sx={{ mt: 2 }}>
                     {subjectMarks.length > 0 ? (
                         <>
-                            {/* Semester Selector Row */}
-                            {selectedSection === 'table' && sortedSemesters.length > 0 && (
-                                <Box sx={{ 
-                                    display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1, 
-                                    '&::-webkit-scrollbar': { height: '4px' },
-                                    '&::-webkit-scrollbar-thumb': { background: 'rgba(255,255,255,0.1)', borderRadius: '10px' }
-                                }}>
-                                    {sortedSemesters.map(sem => (
-                                        <SemesterChip 
-                                            key={sem}
-                                            active={selectedSemester === sem}
-                                            onClick={() => setSelectedSemester(sem)}
+                            {/* Semester Selector & View Toggle Row */}
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, flexWrap: 'wrap', gap: 2 }}>
+                                {selectedSection === 'table' ? (
+                                    <Box sx={{ 
+                                        display: 'flex', gap: 1.5, overflowX: 'auto', pb: 1, flexGrow: 1,
+                                        '&::-webkit-scrollbar': { height: '4px' },
+                                        '&::-webkit-scrollbar-thumb': { background: 'rgba(255,255,255,0.1)', borderRadius: '10px' }
+                                    }}>
+                                        {allSemesters.map(sem => (
+                                            <SemesterChip 
+                                                key={sem}
+                                                active={selectedSemester === sem}
+                                                onClick={() => setSelectedSemester(sem)}
+                                            >
+                                                Semester {sem}
+                                            </SemesterChip>
+                                        ))}
+                                    </Box>
+                                ) : (
+                                    <Box sx={{ flexGrow: 1 }} />
+                                )}
+
+                                <ViewToggle>
+                                        <ToggleButton 
+                                            active={selectedSection === 'table'} 
+                                            onClick={() => handleSectionChange('table')}
                                         >
-                                            Semester {sem}
-                                        </SemesterChip>
-                                    ))}
+                                            <TableChartIcon sx={{ fontSize: 16 }} />
+                                            Transcripts
+                                        </ToggleButton>
+                                        <ToggleButton 
+                                            active={selectedSection === 'chart'} 
+                                            onClick={() => handleSectionChange('chart')}
+                                        >
+                                            <InsertChartIcon sx={{ fontSize: 16 }} />
+                                            Analytics
+                                        </ToggleButton>
+                                    </ViewToggle>
                                 </Box>
                             )}
 
                             {selectedSection === 'table' ? renderTableSection() : renderChartSection()}
-                            
-                            <NavigationWrapper elevation={0}>
-                                <BottomNavigation 
-                                    value={selectedSection} 
-                                    onChange={handleSectionChange} 
-                                    showLabels
-                                    sx={{ background: 'transparent' }}
-                                >
-                                    <StyledNavItem
-                                        label="Transcripts"
-                                        value="table"
-                                        icon={selectedSection === 'table' ? <TableChartIcon /> : <TableChartOutlinedIcon />}
-                                    />
-                                    <StyledNavItem
-                                        label="Analytics"
-                                        value="chart"
-                                        icon={selectedSection === 'chart' ? <InsertChartIcon /> : <InsertChartOutlinedIcon />}
-                                    />
-                                </BottomNavigation>
-                            </NavigationWrapper>
                         </>
                     ) : subjectsList && subjectsList.length > 0 ? (
                         <GlassCard sx={{ p: 4 }}>
@@ -417,42 +433,32 @@ const MiniStatus = styled.div`
   }
 `;
 
-const NavigationWrapper = styled(Paper)`
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(16, 14, 23, 0.85) !important;
-  backdrop-filter: blur(24px) saturate(200%);
-  -webkit-backdrop-filter: blur(24px) saturate(200%);
-  border-radius: 20px !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+const ViewToggle = styled(Box)`
+  display: flex;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 4px;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05) !important;
-  z-index: 1000;
-  min-width: 280px;
 `;
 
-const StyledNavItem = styled(BottomNavigationAction)`
-  color: rgba(255, 255, 255, 0.4) !important;
-  border-radius: 16px;
-  transition: all 0.2s ease !important;
-  
-  &.Mui-selected {
-    color: var(--primary) !important;
-    background: rgba(124, 77, 255, 0.1);
-  }
-  
-  .MuiBottomNavigationAction-label {
-    font-family: 'Inter', sans-serif;
-    font-weight: 600;
-    font-size: 0.7rem;
-    margin-top: 4px;
-    letter-spacing: 0.02em;
-  }
-  
-  &.Mui-selected .MuiBottomNavigationAction-label {
-    font-weight: 700;
-    font-size: 0.7rem;
+const ToggleButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: ${p => p.active ? 'var(--primary)' : 'transparent'};
+  color: ${p => p.active ? '#FFF' : 'rgba(255, 255, 255, 0.5)'};
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: ${p => p.active ? '0 4px 12px rgba(124, 77, 255, 0.3)' : 'none'};
+
+  &:hover {
+    color: #FFF;
+    background: ${p => p.active ? 'var(--primary)' : 'rgba(255, 255, 255, 0.05)'};
   }
 `;
