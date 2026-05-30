@@ -293,7 +293,7 @@ const FormPanel = styled.div`
     border-right: 1px solid rgba(124,77,255,0.07);
     flex-shrink: 0;
 
-    @media(max-width: 768px){ width: 100%; border-right: none; }
+    @media(max-width: 768px){ width: 100%; min-width: 0; border-right: none; }
 `;
 
 const FormCard = styled.div`

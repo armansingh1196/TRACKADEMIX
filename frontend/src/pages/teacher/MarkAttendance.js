@@ -81,7 +81,7 @@ const MarkAttendance = () => {
             />
 
             <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-                <Box sx={{ width: 250 }}>
+                <Box sx={{ width: '100%', maxWidth: 250 }}>
                     <CustomDatePicker date={selectedDate} setDate={setSelectedDate} label="Select Class Date" />
                 </Box>
             </Box>

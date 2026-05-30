@@ -34,7 +34,7 @@ const AppHeader = ({ title, subtitle, showBack = true, rightSide }) => {
           <Breadcrumbs
             separator={<NavigateNextIcon sx={{ fontSize: 12, opacity: 0.4 }} />}
             aria-label="breadcrumb"
-            sx={{ '& .MuiBreadcrumbs-ol': { flexWrap: 'nowrap' } }}
+            sx={{ '& .MuiBreadcrumbs-ol': { flexWrap: 'wrap' } }}
           >
             <MuiLink
               underline="none"
