@@ -6,12 +6,7 @@ import {
     Typography,
     Container,
     Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
+    Grid,
     FormControl,
     Select,
     MenuItem,
@@ -149,33 +144,53 @@ const AttendanceRecord = () => {
             </ContentGrid>
 
             {dates.length > 0 && (
-                <StyledTableContainer component={Paper} elevation={0}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell sx={{ fontWeight: 700 }}>Roll No.</TableCell>
-                                <TableCell sx={{ fontWeight: 700 }}>Student Name</TableCell>
-                                <TableCell align="right" sx={{ fontWeight: 700 }}>Status</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {currentRecords.map((record) => (
-                                <TableRow key={record.id}>
-                                    <TableCell>{record.students?.roll_num}</TableCell>
-                                    <TableCell>{record.students?.name}</TableCell>
-                                    <TableCell align="right">
-                                        <Chip 
-                                            label={record.status} 
-                                            color={record.status === 'Present' ? 'success' : 'error'}
-                                            size="small"
-                                            sx={{ fontWeight: 600, borderRadius: '8px' }}
-                                        />
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </StyledTableContainer>
+                <Grid container spacing={1}>
+                    {currentRecords.map((record) => (
+                        <Grid item xs={12} sm={6} md={3} lg={3} key={record.id || record._id || Math.random()}>
+                            <Paper 
+                                sx={{ 
+                                    p: 1.25, 
+                                    display: 'flex', 
+                                    alignItems: 'center', 
+                                    justifyContent: 'space-between',
+                                    background: 'rgba(20, 20, 30, 0.4)',
+                                    backdropFilter: 'blur(10px)',
+                                    borderRadius: '10px',
+                                    border: '1px solid rgba(255, 255, 255, 0.05)',
+                                    transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                                    '&:hover': { 
+                                        borderColor: 'rgba(255, 255, 255, 0.15)',
+                                        background: 'rgba(255, 255, 255, 0.03)',
+                                        transform: 'translateY(-2px)'
+                                    }
+                            }}>
+                                <Box>
+                                    <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.3px', fontSize: '0.65rem' }}>
+                                        {record.students?.rollNum || record.students?.roll_num || '—'}
+                                    </Typography>
+                                    <Typography variant="body1" sx={{ color: 'white', fontWeight: 600, fontSize: '0.85rem', lineHeight: 1.2, mt: 0.2 }}>
+                                        {record.students?.name || 'Unknown'}
+                                    </Typography>
+                                </Box>
+                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Chip 
+                                        label={record.status} 
+                                        size="small"
+                                        sx={{ 
+                                            fontWeight: 600, 
+                                            borderRadius: '6px',
+                                            fontSize: '0.7rem',
+                                            height: '22px',
+                                            backgroundColor: record.status === 'Present' ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)',
+                                            color: record.status === 'Present' ? '#10B981' : '#EF4444',
+                                            border: `1px solid ${record.status === 'Present' ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`
+                                        }}
+                                    />
+                                </Box>
+                            </Paper>
+                        </Grid>
+                    ))}
+                </Grid>
             )}
         </Container>
     );
@@ -247,21 +262,3 @@ const StatCard = styled(Box)`
     }
 `;
 
-const StyledTableContainer = styled(TableContainer)`
-    background: rgba(255, 255, 255, 0.02) !important;
-    border: 1px solid rgba(255, 255, 255, 0.05) !important;
-    border-radius: 20px !important;
-
-    .MuiTableCell-root {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        color: var(--text-main);
-    }
-    
-    .MuiTableHead-root .MuiTableCell-root {
-        background: rgba(255, 255, 255, 0.03);
-        color: var(--text-muted);
-        text-transform: uppercase;
-        font-size: 0.8rem;
-        letter-spacing: 1px;
-    }
-`;
