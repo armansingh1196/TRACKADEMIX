@@ -106,42 +106,48 @@ const MarkAttendance = () => {
                 </Box>
             ) : (
                 <Stack spacing={4} sx={{ mt: 4 }}>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={1.5}>
                         {attendanceList.map((row) => (
-                            <Grid item xs={12} md={6} key={row.student_id}>
-                                <Paper sx={{ 
-                                    p: 2, 
-                                    display: 'flex', 
-                                    alignItems: 'center', 
-                                    justifyContent: 'space-between',
-                                    background: 'var(--bg-card)',
-                                    borderRadius: '16px',
-                                    border: '1px solid var(--border)',
-                                    transition: 'all 0.3s ease',
-                                    '&:hover': { 
-                                        borderColor: 'var(--primary)',
-                                        transform: 'translateY(-2px)',
-                                        boxShadow: 'var(--shadow-md)'
-                                    }
+                            <Grid item xs={12} sm={6} md={4} lg={4} key={row.student_id}>
+                                <Paper 
+                                    onClick={() => toggleStatus(row.student_id)}
+                                    sx={{ 
+                                        p: 1.5, 
+                                        display: 'flex', 
+                                        alignItems: 'center', 
+                                        justifyContent: 'space-between',
+                                        background: 'rgba(20, 20, 30, 0.4)',
+                                        backdropFilter: 'blur(10px)',
+                                        borderRadius: '12px',
+                                        border: '1px solid rgba(255, 255, 255, 0.05)',
+                                        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                                        cursor: 'pointer',
+                                        '&:hover': { 
+                                            borderColor: 'rgba(99, 102, 241, 0.5)',
+                                            background: 'rgba(99, 102, 241, 0.08)',
+                                            transform: 'translateY(-2px)',
+                                            boxShadow: '0 8px 16px rgba(0,0,0,0.2)'
+                                        }
                                 }}>
                                     <Box>
-                                        <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 700, letterSpacing: '0.5px' }}>
+                                        <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.5px', fontSize: '0.7rem' }}>
                                             {row.rollNum}
                                         </Typography>
-                                        <Typography variant="body1" sx={{ color: 'white', fontWeight: 700 }}>
+                                        <Typography variant="body1" sx={{ color: 'white', fontWeight: 600, fontSize: '0.95rem' }}>
                                             {row.name}
                                         </Typography>
                                     </Box>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                                        <Typography variant="body2" sx={{ color: row.status === 'Present' ? '#4BB543' : '#ff4b2b', fontWeight: 700 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} onClick={(e) => e.stopPropagation()}>
+                                        <Typography variant="body2" sx={{ color: row.status === 'Present' ? '#10B981' : '#EF4444', fontWeight: 600, fontSize: '0.8rem' }}>
                                             {row.status}
                                         </Typography>
                                         <Switch 
+                                            size="small"
                                             checked={row.status === 'Present'} 
                                             onChange={() => toggleStatus(row.student_id)}
                                             sx={{ 
-                                                '& .MuiSwitch-switchBase.Mui-checked': { color: '#4BB543' },
-                                                '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { backgroundColor: '#4BB543' },
+                                                '& .MuiSwitch-switchBase.Mui-checked': { color: '#10B981' },
+                                                '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { backgroundColor: '#10B981' },
                                                 '& .MuiSwitch-track': { backgroundColor: 'rgba(255,255,255,0.1)' }
                                             }}
                                         />
