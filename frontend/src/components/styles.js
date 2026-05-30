@@ -28,9 +28,7 @@ export const AppBar = styled(MuiAppBar, {
 }));
 
 /* ── Sidebar — deep glass panel with accent-tinted border ── */
-export const Drawer = styled(MuiDrawer, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
+export const Drawer = styled(MuiDrawer)(({ theme, open }) => ({
     '& .MuiDrawer-paper': {
         position: 'fixed',
         whiteSpace: 'nowrap',
