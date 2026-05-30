@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { 
     Box, Typography, CircularProgress, Stack, 
-    TextField, Table, TableBody, TableCell, 
-    TableContainer, TableHead, TableRow, Paper 
+    TextField, Grid, Paper 
 } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { getClassStudents } from "../../redux/sclassRelated/sclassHandle";
@@ -24,7 +23,8 @@ const BulkMarkMarks = () => {
 
     const classID = currentUser.teachSclass?._id;
     const subjectID = currentUser.teachSubject?._id;
-    const subName = currentUser.teachSubject?.subName;
+    const cleanSubName = (raw) => (raw || 'Subject').replace(/\s*\((?:Sem\s*\d+|\d{4})\)\s*$/i, '').trim();
+    const displaySubName = `${cleanSubName(currentUser.teachSubject?.subName)} (Sem ${currentUser.teachSclass?.semester || 'N/A'})`;
     const subjectType = currentUser.teachSubject?.subjectType || 'Theory';
     const isPractical = subjectType === 'Practical';
     const maxInternal = isPractical ? 25 : 30;
@@ -83,7 +83,7 @@ const BulkMarkMarks = () => {
         <Box sx={{ p: 4 }}>
             <AppHeader 
                 title="Bulk Marks Entry" 
-                subtitle={`Upload examination marks for ${currentUser.teachSclass?.sclassName} - ${subName}`}
+                subtitle={`Upload examination marks for ${currentUser.teachSclass?.sclassName} - ${displaySubName}`}
             />
 
             {loading ? (
@@ -92,68 +92,79 @@ const BulkMarkMarks = () => {
                 </Box>
             ) : (
                 <Stack spacing={4} sx={{ mt: 4 }}>
-                    <GlassCard>
-                        <TableContainer>
-                            <Table sx={{ minWidth: 650 }}>
-                                <TableHead sx={{ background: 'rgba(132, 94, 194, 0.1)' }}>
-                                    <TableRow>
-                                        <TableCell sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Roll No</TableCell>
-                                        <TableCell sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Student Name</TableCell>
-                                        <TableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>Internal ({maxInternal})</TableCell>
-                                        <TableCell align="center" sx={{ color: 'var(--primary-light)', fontWeight: 800 }}>External ({maxExternal})</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {marksList.map((row) => (
-                                        <StyledTableRow key={row.student_id}>
-                                            <TableCell sx={{ color: 'white', fontWeight: 600 }}>{row.rollNum}</TableCell>
-                                            <TableCell sx={{ color: 'white', fontWeight: 600 }}>{row.name}</TableCell>
-                                            <TableCell align="center">
-                                                <TextField 
-                                                    type="number"
-                                                    variant="outlined"
-                                                    size="small"
-                                                    value={row.internalMarks}
-                                                    onChange={(e) => handleMarkChange(row.student_id, 'internalMarks', e.target.value, maxInternal)}
-                                                    InputProps={{
-                                                        inputProps: { min: 0, max: maxInternal },
-                                                        sx: { 
-                                                            color: 'white', 
-                                                            fontWeight: 800,
-                                                            textAlign: 'center',
-                                                            '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
-                                                            '&:hover fieldset': { borderColor: 'var(--primary) !important' },
-                                                        }
-                                                    }}
-                                                    sx={{ width: 100 }}
-                                                />
-                                            </TableCell>
-                                            <TableCell align="center">
-                                                <TextField 
-                                                    type="number"
-                                                    variant="outlined"
-                                                    size="small"
-                                                    value={row.externalMarks}
-                                                    onChange={(e) => handleMarkChange(row.student_id, 'externalMarks', e.target.value, maxExternal)}
-                                                    InputProps={{
-                                                        inputProps: { min: 0, max: maxExternal },
-                                                        sx: { 
-                                                            color: 'white', 
-                                                            fontWeight: 800,
-                                                            textAlign: 'center',
-                                                            '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
-                                                            '&:hover fieldset': { borderColor: 'var(--primary) !important' },
-                                                        }
-                                                    }}
-                                                    sx={{ width: 100 }}
-                                                />
-                                            </TableCell>
-                                        </StyledTableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </GlassCard>
+                    <Grid container spacing={1}>
+                        {marksList.map((row) => (
+                            <Grid item xs={12} sm={6} md={3} lg={3} key={row.student_id}>
+                                <Paper 
+                                    sx={{ 
+                                        p: 1.5, 
+                                        display: 'flex', 
+                                        flexDirection: 'column',
+                                        background: 'rgba(20, 20, 30, 0.4)',
+                                        backdropFilter: 'blur(10px)',
+                                        borderRadius: '10px',
+                                        border: '1px solid rgba(255, 255, 255, 0.05)',
+                                        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                                        '&:hover': { 
+                                            borderColor: 'rgba(99, 102, 241, 0.5)',
+                                            background: 'rgba(99, 102, 241, 0.08)',
+                                            transform: 'translateY(-2px)'
+                                        }
+                                }}>
+                                    <Box sx={{ mb: 1.5 }}>
+                                        <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.3px', fontSize: '0.65rem' }}>
+                                            {row.rollNum}
+                                        </Typography>
+                                        <Typography variant="body1" sx={{ color: 'white', fontWeight: 600, fontSize: '0.85rem', lineHeight: 1.2, mt: 0.2 }}>
+                                            {row.name}
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', gap: 1 }}>
+                                        <TextField 
+                                            label={`Internal (${maxInternal})`}
+                                            type="number"
+                                            variant="outlined"
+                                            size="small"
+                                            value={row.internalMarks}
+                                            onChange={(e) => handleMarkChange(row.student_id, 'internalMarks', e.target.value, maxInternal)}
+                                            InputLabelProps={{ shrink: true, style: { fontSize: '0.75rem', color: 'var(--text-muted)' } }}
+                                            InputProps={{
+                                                inputProps: { min: 0, max: maxInternal, style: { fontSize: '0.8rem', padding: '6px 8px' } },
+                                                sx: { 
+                                                    color: 'white', 
+                                                    fontWeight: 700,
+                                                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                                                    '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
+                                                    '&:hover fieldset': { borderColor: 'var(--primary) !important' },
+                                                }
+                                            }}
+                                            sx={{ flex: 1 }}
+                                        />
+                                        <TextField 
+                                            label={`External (${maxExternal})`}
+                                            type="number"
+                                            variant="outlined"
+                                            size="small"
+                                            value={row.externalMarks}
+                                            onChange={(e) => handleMarkChange(row.student_id, 'externalMarks', e.target.value, maxExternal)}
+                                            InputLabelProps={{ shrink: true, style: { fontSize: '0.75rem', color: 'var(--text-muted)' } }}
+                                            InputProps={{
+                                                inputProps: { min: 0, max: maxExternal, style: { fontSize: '0.8rem', padding: '6px 8px' } },
+                                                sx: { 
+                                                    color: 'white', 
+                                                    fontWeight: 700,
+                                                    backgroundColor: 'rgba(255, 255, 255, 0.03)',
+                                                    '& fieldset': { borderColor: 'rgba(255,255,255,0.1)' },
+                                                    '&:hover fieldset': { borderColor: 'var(--primary) !important' },
+                                                }
+                                            }}
+                                            sx={{ flex: 1 }}
+                                        />
+                                    </Box>
+                                </Paper>
+                            </Grid>
+                        ))}
+                    </Grid>
 
                     <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
                         <AppButton 
@@ -175,24 +186,4 @@ const BulkMarkMarks = () => {
 
 export default BulkMarkMarks;
 
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
 
-const GlassCard = styled(Paper)`
-  background: var(--bg-card) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 24px !important;
-  overflow: hidden;
-  animation: ${fadeIn} 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-`;
-
-const StyledTableRow = styled(TableRow)`
-  &:hover {
-    background: rgba(255, 255, 255, 0.02);
-  }
-  td {
-    border-bottom: 1px solid rgba(176, 168, 185, 0.05) !important;
-  }
-`;
