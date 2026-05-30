@@ -254,6 +254,7 @@ const HeroTitle = styled(Typography)`
   letter-spacing: -0.045em !important;
   line-height: 1 !important;
   color: #F5F5FF !important;
+  word-break: break-word !important;
   .dot { color: #7C4DFF; }
 `;
 
@@ -324,12 +325,18 @@ const MetricCell = styled(Box)`
     letter-spacing: -0.035em;
     line-height: 1.1;
     font-variant-numeric: tabular-nums;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .sub {
     font-family: var(--font-body);
     font-size: 0.72rem;
     color: rgba(226, 232, 255, 0.42);
     letter-spacing: -0.01em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 

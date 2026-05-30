@@ -35,7 +35,7 @@ export const Drawer = styled(MuiDrawer, {
         position: 'fixed',
         whiteSpace: 'nowrap',
         width: drawerWidth,
-        transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important, transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important, background-color 0.3s !important',
+        transition: 'width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) !important, background-color 0.3s !important',
         boxSizing: 'border-box',
         background: 'rgba(6, 8, 24, 0.92) !important',
         backdropFilter: 'blur(40px) saturate(180%)',
@@ -45,11 +45,9 @@ export const Drawer = styled(MuiDrawer, {
         height: '100vh',
         zIndex: theme.zIndex.drawer,
         ...(!open && {
-            width: collapsedWidth,
-            [theme.breakpoints.down('md')]: {
-                width: 0,
-                transform: 'translateX(-100%)',
-            },
+            [theme.breakpoints.up('md')]: {
+                width: collapsedWidth,
+            }
         }),
     },
 }));

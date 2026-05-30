@@ -268,7 +268,7 @@ const StudentHomePage = () => {
                         </SectionHead>
                         <Grid container spacing={1.5} sx={{ mt: 1.5 }}>
                             {quickLinks.map((q, i) => (
-                                <Grid item xs={6} sm={6} key={q.label}>
+                                <Grid item xs={12} sm={6} key={q.label}>
                                     <QuickLink onClick={() => navigate(q.path)} $color={q.color} style={{ animationDelay: `${i * 0.05}s` }}>
                                         <QuickIcon $color={q.color}>{q.icon}</QuickIcon>
                                         <Box sx={{ flex: 1, minWidth: 0 }}>
@@ -537,6 +537,7 @@ const HeroTitle = styled(Typography)`
   letter-spacing: -0.045em !important;
   line-height: 1 !important;
   color: #F5F5FF !important;
+  word-break: break-word !important;
 
   .dot {
     color: #7C4DFF;
@@ -672,12 +673,18 @@ const MetricCell = styled(Box)`
     letter-spacing: -0.035em;
     line-height: 1.1;
     font-variant-numeric: tabular-nums;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .sub {
     font-family: var(--font-body);
     font-size: 0.72rem;
     color: rgba(226, 232, 255, 0.42);
     letter-spacing: -0.01em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 `;
 

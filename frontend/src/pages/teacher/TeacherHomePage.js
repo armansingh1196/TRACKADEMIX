@@ -242,6 +242,7 @@ const HeroTitle = styled(Typography)`
   letter-spacing: -0.045em !important;
   line-height: 1 !important;
   color: #F5F5FF !important;
+  word-break: break-word !important;
 
   .dot { color: #7C4DFF; }
 `;
