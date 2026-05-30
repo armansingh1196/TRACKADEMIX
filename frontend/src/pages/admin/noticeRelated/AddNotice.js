@@ -8,6 +8,7 @@ import Popup from '../../../components/Popup';
 import AppTextField from '../../../components/common/AppTextField';
 import AppButton from '../../../components/common/AppButton';
 import AppHeader from '../../../components/common/AppHeader';
+import CustomDatePicker from '../../../components/common/CustomDatePicker';
 import styled, { keyframes } from 'styled-components';
 import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 
@@ -81,15 +82,10 @@ const AddNotice = () => {
 
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
-                <AppTextField
-                  fullWidth
-                  type="date"
-                  label="Publish Date"
-                  InputLabelProps={{ shrink: true }}
-                  value={date}
-                  onChange={(event) => setDate(event.target.value)}
-                  required
-                />
+                <Box>
+                  <Typography sx={{ color: 'var(--text-muted)', fontSize: '0.85rem', mb: 1 }}>Publish Date</Typography>
+                  <CustomDatePicker date={date} setDate={setDate} label="Select Publish Date" />
+                </Box>
               </Grid>
             </Grid>
 

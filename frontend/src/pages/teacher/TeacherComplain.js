@@ -10,6 +10,7 @@ import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import CalendarTodayOutlinedIcon from '@mui/icons-material/CalendarTodayOutlined';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import CustomDatePicker from '../../components/common/CustomDatePicker';
 
 const TeacherComplain = () => {
     const dispatch = useDispatch();
@@ -76,12 +77,7 @@ const TeacherComplain = () => {
                             <CalendarTodayOutlinedIcon sx={{ fontSize: 12 }} />
                             Date of Incident
                         </FieldLabel>
-                        <DateInput
-                            type="date"
-                            value={date}
-                            onChange={e => setDate(e.target.value)}
-                            required
-                        />
+                        <CustomDatePicker date={date} setDate={setDate} />
                     </FieldWrap>
 
                     <FieldWrap>
@@ -191,24 +187,7 @@ const FieldLabel = styled.label`
   color: rgba(124, 77, 255, 0.85);
 `;
 
-const DateInput = styled.input`
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  padding: 12px 14px;
-  color: #F5F5FF;
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  letter-spacing: -0.01em;
-  outline: none;
-  transition: all 0.2s ease;
-  color-scheme: dark;
 
-  &:focus {
-    border-color: rgba(124, 77, 255, 0.4);
-    background: rgba(255, 255, 255, 0.04);
-  }
-`;
 
 const TextArea = styled.textarea`
   background: rgba(255, 255, 255, 0.02);

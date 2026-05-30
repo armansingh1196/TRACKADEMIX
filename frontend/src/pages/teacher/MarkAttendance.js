@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { 
     Box, Typography, CircularProgress, Stack, 
-    Paper, TextField, Grid, Switch
+    Paper, Grid, Switch
 } from '@mui/material';
+import CustomDatePicker from '../../components/common/CustomDatePicker';
 import { useDispatch, useSelector } from 'react-redux';
 import { getClassStudents } from "../../redux/sclassRelated/sclassHandle";
 import AppButton from "../../components/common/AppButton";
@@ -80,24 +81,9 @@ const MarkAttendance = () => {
             />
 
             <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-                <TextField
-                    label="Class Date"
-                    type="date"
-                    value={selectedDate}
-                    onChange={(e) => setSelectedDate(e.target.value)}
-                    InputLabelProps={{ shrink: true }}
-                    sx={{ 
-                        minWidth: 200, 
-                        bgcolor: 'rgba(255, 255, 255, 0.03)', 
-                        borderRadius: '12px',
-                        '& .MuiOutlinedInput-root': {
-                            color: 'white',
-                            '& fieldset': { borderColor: 'var(--border)' },
-                            '&:hover fieldset': { borderColor: 'var(--primary)' },
-                        },
-                        '& .MuiInputLabel-root': { color: 'var(--text-muted)' }
-                    }}
-                />
+                <Box sx={{ width: 250 }}>
+                    <CustomDatePicker date={selectedDate} setDate={setSelectedDate} label="Select Class Date" />
+                </Box>
             </Box>
 
             {loading ? (

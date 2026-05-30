@@ -14,6 +14,7 @@ import {
 import AppButton from '../../../components/common/AppButton';
 import AppTextField from '../../../components/common/AppTextField';
 import AppHeader from '../../../components/common/AppHeader';
+import CustomDatePicker from '../../../components/common/CustomDatePicker';
 import Popup from '../../../components/Popup';
 import styled, { keyframes } from 'styled-components';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
@@ -142,15 +143,10 @@ const StudentAttendance = ({ situation }) => {
                                     </StyledSelect>
                                 </FormControl>
 
-                                <AppTextField
-                                    label="Session Date"
-                                    type="date"
-                                    value={date}
-                                    onChange={(event) => setDate(event.target.value)}
-                                    required
-                                    fullWidth
-                                    InputLabelProps={{ shrink: true }}
-                                />
+                                <Box>
+                                    <InputLabel sx={{ color: 'var(--text-muted)', mb: 1, fontSize: '0.85rem' }}>Session Date</InputLabel>
+                                    <CustomDatePicker date={date} setDate={setDate} label="Select Session Date" />
+                                </Box>
 
                                 <Box sx={{ pt: 3 }}>
                                     <AppButton 
