@@ -106,19 +106,19 @@ const MarkAttendance = () => {
                 </Box>
             ) : (
                 <Stack spacing={4} sx={{ mt: 4 }}>
-                    <Grid container spacing={1.5}>
+                    <Grid container spacing={1}>
                         {attendanceList.map((row) => (
-                            <Grid item xs={12} sm={6} md={4} lg={4} key={row.student_id}>
+                            <Grid item xs={12} sm={6} md={3} lg={3} key={row.student_id}>
                                 <Paper 
                                     onClick={() => toggleStatus(row.student_id)}
                                     sx={{ 
-                                        p: 1.5, 
+                                        p: 1.25, 
                                         display: 'flex', 
                                         alignItems: 'center', 
                                         justifyContent: 'space-between',
                                         background: 'rgba(20, 20, 30, 0.4)',
                                         backdropFilter: 'blur(10px)',
-                                        borderRadius: '12px',
+                                        borderRadius: '10px',
                                         border: '1px solid rgba(255, 255, 255, 0.05)',
                                         transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
                                         cursor: 'pointer',
@@ -130,15 +130,15 @@ const MarkAttendance = () => {
                                         }
                                 }}>
                                     <Box>
-                                        <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.5px', fontSize: '0.7rem' }}>
+                                        <Typography variant="caption" sx={{ color: 'var(--text-muted)', fontWeight: 600, letterSpacing: '0.3px', fontSize: '0.65rem' }}>
                                             {row.rollNum}
                                         </Typography>
-                                        <Typography variant="body1" sx={{ color: 'white', fontWeight: 600, fontSize: '0.95rem' }}>
+                                        <Typography variant="body1" sx={{ color: 'white', fontWeight: 600, fontSize: '0.85rem', lineHeight: 1.2, mt: 0.2 }}>
                                             {row.name}
                                         </Typography>
                                     </Box>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }} onClick={(e) => e.stopPropagation()}>
-                                        <Typography variant="body2" sx={{ color: row.status === 'Present' ? '#10B981' : '#EF4444', fontWeight: 600, fontSize: '0.8rem' }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }} onClick={(e) => e.stopPropagation()}>
+                                        <Typography variant="body2" sx={{ color: row.status === 'Present' ? '#10B981' : '#EF4444', fontWeight: 600, fontSize: '0.75rem' }}>
                                             {row.status}
                                         </Typography>
                                         <Switch 
@@ -146,6 +146,7 @@ const MarkAttendance = () => {
                                             checked={row.status === 'Present'} 
                                             onChange={() => toggleStatus(row.student_id)}
                                             sx={{ 
+                                                transform: 'scale(0.8)',
                                                 '& .MuiSwitch-switchBase.Mui-checked': { color: '#10B981' },
                                                 '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': { backgroundColor: '#10B981' },
                                                 '& .MuiSwitch-track': { backgroundColor: 'rgba(255,255,255,0.1)' }
