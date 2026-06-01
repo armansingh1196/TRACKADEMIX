@@ -52,15 +52,26 @@ A critical innovation within Trackademics is the AI-driven Student Performance E
 
 ### 4.1 Methodology & Optimization
 1. **Targeted Data Retrieval**: The engine bypasses heavy global table fetching by querying localized, student-specific exam data directly from the MongoDB clusters, significantly reducing processing latency.
-2. **Data Cleansing & Normalization**: Implements baseline elevation for missing or zero-value exam scores, preventing skewed AI predictions and generating realistic trajectories.
-3. **Dynamic Threshold Calculation**: The model evaluates performance using a percentage-based formula rather than raw integer marks:
-   `Percentage = ((Internal Marks + External Marks) / Maximum Subject Marks) * 100`
+2. **Class Imbalance Correction (SMOTE)**: To ensure realistic predictions, the dataset utilizes Synthetic Minority Over-sampling Technique (SMOTE) integrated within the `imblearn` pipeline. This mitigates bias toward majority classes and radically improves the recall of "Low/Critical" risk identification.
+3. **Trend Analysis Features**: Beyond static current values, the engine mathematically derives `attendance_trend` and `marks_trend` metrics to observe whether a student's performance is plateauing, dropping dynamically, or recovering.
+4. **Data Cleansing & Normalization**: Implements baseline elevation for missing or zero-value exam scores, preventing skewed AI predictions and generating realistic trajectories.
 
-### 4.2 Insight Generation & Risk Classification
-The AI processes the normalized data to generate contextual, human-readable insights categorized into three distinct thresholds:
-* **Critical Risk (< 50%)**: Flags subjects requiring immediate intervention. The system identifies students performing below the passing mark, allowing faculty to implement remedial action plans before final assessments.
-* **Needs Improvement (50% - 70%)**: Highlights plateauing performance. This middle threshold triggers alerts for students who are passing but falling behind the class average, suggesting targeted study areas.
-* **Strong (> 70%)**: Acknowledges academic excellence. This confirms mastery of the subject matter and positive trajectory.
+### 4.2 Insight Generation & Continuous Risk Scoring
+The AI processes the normalized historical data and output two primary metrics:
+* **Predictive Performance Band**: Categorizes students into *Strong*, *Medium*, or *Low* classifications based on Random Forest decision paths.
+* **Continuous Risk Score (0-100)**: Unlike rigid bands, the system calculates an acute risk metric where higher values indicate higher danger. A student may reside in a passing band but flag a high risk score (e.g., 72/100) due to sharp negative attendance or marks trends.
+
+### 4.3 Explainable AI (XAI) & SHAP Integration
+To transition the predictive module from a "black-box" model to a transparent, research-grade engine, **SHAP (SHapley Additive exPlanations)** is utilized.
+* Using a `TreeExplainer`, the system calculates local feature attributions, explaining the *exact* factors driving a specific prediction (e.g., +12% driven by Attendance, -8% driven by DBMS External marks).
+* This provides academic advisors with definitive, statistically sound reasoning for intervention.
+
+### 4.4 Model Comparison & Evaluation
+Formal benchmarking was conducted across multiple regressors and classifiers to validate the Random Forest architecture:
+* **Logistic Regression**: 98.8% Accuracy
+* **Random Forest**: 97.5% Accuracy
+* **XGBoost**: 96.8% Accuracy
+While Logistic Regression exhibited high accuracy, **Random Forest** paired with SMOTE was retained as the primary engine due to its superior handling of non-linear feature interactions (like dynamic attendance drops) and its native support for SHAP tree explainer methodologies.
 
 ### 4.3 Data Structures and Parameters
 The AI engine relies on the following schema arrays to aggregate historical trends:
@@ -68,26 +79,15 @@ The AI engine relies on the following schema arrays to aggregate historical tren
 * `attendance`: Array of objects containing `date`, `status` (Present/Absent), and `subName`.
 By correlating the `attendance` metric with the `exam_marks` output, the platform is able to highlight if a "Critical Risk" flag is primarily driven by chronic absenteeism or a gap in academic comprehension.
 
-### 4.4 Mathematical Implementation
-To provide rigorous academic evaluation, the system employs deterministic mathematical models to calculate and classify student performance.
-
-Let **I_s** denote the Internal Assessment Marks obtained by a student in a specific subject **s**, and **E_s** denote the External Examination Marks for the same subject. Let **M_s** represent the Total Maximum Marks allocated for the subject. The performance percentage **P_s** is calculated as:
-
-**P_s = [ ( I_s + E_s ) / M_s ] × 100**
-
-The system evaluates the Attendance Ratio **A_s** as the quotient of Sessions Attended (**S_attended**) over Total Sessions (**S_total**):
+### 4.6 Mathematical Implementation & Subject Priority
+To provide rigorous academic evaluation, the system evaluates the Attendance Ratio **A_s** as the quotient of Sessions Attended (**S_attended**) over Total Sessions (**S_total**):
 
 **A_s = ( S_attended / S_total ) × 100**
 
-Based on these computed metrics, the AI engine applies a piecewise threshold function **R(P_s)** to classify the risk level for each subject:
+To generate automated recommendations, the engine abandons generic tutoring prompts in favor of a mathematically weighted **Subject Weakness Score**:
+**Weakness Score = (100 - A_s)*0.3 + (100 - I_pct)*0.3 + (100 - E_pct)*0.4**
 
-* **Critical Risk** if **P_s < 50**
-* **Needs Improvement** if **50 ≤ P_s ≤ 70**
-* **Strong** if **P_s > 70**
-
-Furthermore, the engine correlates academic risk with behavioral metrics to isolate causality. If **R(P_s) = Critical Risk** and **A_s < 75%**, the system flags the issue as an **"Attendance-Driven Academic Risk"**, prompting immediate administrative intervention.
-
----
+Where **I_pct** and **E_pct** are the internal and external percentages. The system then sorts subjects by this continuous weakness score, generating prioritized intervention queues for faculty advisors (e.g., *Priority 1: Database Systems (Weakness Score: 68.2/100)*).
 
 ## 5. Core Platform Modules
 
