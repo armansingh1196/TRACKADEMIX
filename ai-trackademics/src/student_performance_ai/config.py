@@ -49,6 +49,8 @@ for sub in BASE_SUBJECTS:
 NUMERIC_FEATURES = [
     "attendance_rate",
     "previous_gpa",
+    "attendance_trend",
+    "marks_trend"
 ] + SUBJECT_FEATURES
 
 CATEGORICAL_FEATURES = [

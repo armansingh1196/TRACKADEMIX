@@ -55,6 +55,10 @@ def generate_mock_dataset(profile: DatasetProfile | None = None) -> pd.DataFrame
     attendance_rate = _bounded(rng.normal(75, 15, profile.size), 0, 100)
     previous_gpa = _bounded(rng.normal(7.5, 1.2, profile.size), 0, 10)
     
+    # Trend Features
+    attendance_trend = rng.normal(0, 10, profile.size) # e.g. dropped by 10% or increased by 10%
+    marks_trend = rng.normal(0, 15, profile.size)
+    
     # Department derived from class name (e.g. CSE-2022 -> CSE)
     departments = []
     for c in student_classes:
@@ -67,7 +71,9 @@ def generate_mock_dataset(profile: DatasetProfile | None = None) -> pd.DataFrame
         "student_id": [f"STU-{i:04d}" for i in range(1, profile.size + 1)],
         "department": departments,
         "attendance_rate": np.round(attendance_rate, 2),
-        "previous_gpa": np.round(previous_gpa, 2)
+        "previous_gpa": np.round(previous_gpa, 2),
+        "attendance_trend": np.round(attendance_trend, 2),
+        "marks_trend": np.round(marks_trend, 2)
     }
     
     # Initialize all subject features to -1.0
@@ -135,6 +141,15 @@ def generate_mock_dataset(profile: DatasetProfile | None = None) -> pd.DataFrame
         "No"
     )
     data_dict["at_risk"] = at_risk
+    
+    # Risk Score Calculation (0-100)
+    # Starts from base inverse performance, penalized by negative trends and low attendance
+    base_risk = 100 - performance_score
+    trend_penalty = np.where(marks_trend < 0, abs(marks_trend) * 1.2, 0) + np.where(attendance_trend < 0, abs(attendance_trend) * 1.5, 0)
+    failing_penalty = np.where(failing_any_subject, 20, 0)
+    
+    risk_score = _bounded(base_risk + trend_penalty + failing_penalty, 0, 100)
+    data_dict["risk_score"] = np.round(risk_score, 1)
     
     return pd.DataFrame(data_dict)
 
